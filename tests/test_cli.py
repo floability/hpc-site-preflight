@@ -100,9 +100,9 @@ def test_unimplemented_command_writes_failed_report(tmp_path: Path) -> None:
     exit_code = main(
         [
             "profile",
-            "build",
-            "--site-info",
-            "examples/fixture/anvil/site-info.json",
+            "validate",
+            "--profile",
+            "site-profile.json",
             "--run-dir",
             str(tmp_path),
             "--quiet",
@@ -115,7 +115,7 @@ def test_unimplemented_command_writes_failed_report(tmp_path: Path) -> None:
     assert len(traces) == 1
 
     report = json.loads(reports[0].read_text(encoding="utf-8"))
-    assert report["command"] == "profile build"
+    assert report["command"] == "profile validate"
     assert report["status"] == "failed"
     assert report["error_type"] == "FeatureNotImplementedError"
     assert report["steps"][0]["name"] == "command_dispatch"
@@ -135,3 +135,44 @@ def test_unimplemented_command_writes_failed_report(tmp_path: Path) -> None:
         "run_error",
         "run_finished",
     ]
+
+
+def test_fixture_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> None:
+    output_dir = tmp_path / "output"
+    run_dir = tmp_path / "runs"
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--site-info",
+            "examples/fixture/anvil/site-info.json",
+            "--measurements",
+            "examples/fixture/anvil/login-measurements.json",
+            "--output-dir",
+            str(output_dir),
+            "--run-dir",
+            str(run_dir),
+            "--quiet",
+        ]
+    )
+
+    assert exit_code == 0
+    profile = json.loads((output_dir / "site-profile.json").read_text(encoding="utf-8"))
+    evidence = json.loads((output_dir / "evidence-report.json").read_text(encoding="utf-8"))
+    assert profile["site_id"] == evidence["site_id"] == "purdue-anvil"
+    assert profile["profile_state"] == "partial"
+
+    report_path = next(run_dir.glob("*/performance.json"))
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report["status"] == "completed"
+    assert [stage["name"] for stage in report["steps"]] == [
+        "site_info_load",
+        "fixture_measurement_load",
+        "fixture_measurement_validate",
+        "measurement_profile_build",
+        "profile_artifact_write",
+    ]
+    assert {artifact["kind"] for artifact in report["artifacts"]} >= {
+        "site_profile",
+        "evidence_report",
+    }

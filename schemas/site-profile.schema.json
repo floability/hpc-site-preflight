@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hpc-site-preflight.dev/schemas/site-profile.schema.json",
+  "title": "HPC Site Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "site_id",
+    "site_name",
+    "profile_state",
+    "generated_at",
+    "scheduler_type",
+    "accounting",
+    "software",
+    "validation",
+    "evidence_report"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1"},
+    "site_id": {"type": "string"},
+    "site_name": {"type": "string"},
+    "aliases": {"type": "array", "items": {"type": "string"}},
+    "profile_state": {"enum": ["complete", "partial"]},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "scheduler_type": {"enum": ["slurm", "htcondor"]},
+    "submit_command": {"type": ["string", "null"]},
+    "scheduler_version": {"type": ["string", "null"]},
+    "submission_options": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/submission_option"}
+    },
+    "partitions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/partition"}
+    },
+    "resource_groups": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/resource_group"}
+    },
+    "resource_shapes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/resource_shape"}
+    },
+    "storage": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/storage"}
+    },
+    "network": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/network"}
+    },
+    "accounting": {"$ref": "#/$defs/accounting"},
+    "software": {"$ref": "#/$defs/software"},
+    "validation": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/validation"}
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/unresolved"}
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/conflict"}
+    },
+    "evidence_report": {"type": "string"},
+    "field_evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence_link"}
+    }
+  },
+  "$defs": {
+    "submission_option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "syntax", "requirement"],
+      "properties": {
+        "name": {"type": "string"},
+        "syntax": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "requirement": {"enum": ["required", "recommended", "optional", "conditional"]},
+        "value": {"type": ["string", "integer", "number", "boolean", "null"]},
+        "example": {"type": ["string", "null"]},
+        "allowed_values": {
+          "type": ["array", "null"],
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "partition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string"},
+        "available": {"type": ["boolean", "null"]},
+        "visible_walltime_seconds": {"type": ["integer", "null"]},
+        "maximum_walltime_seconds": {"type": ["integer", "null"]},
+        "node_count": {"type": ["integer", "null"]}
+      }
+    },
+    "resource_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key"],
+      "properties": {
+        "key": {"type": "string"},
+        "machine_count": {"type": ["integer", "null"]},
+        "slot_count": {"type": ["integer", "null"]},
+        "cpus": {"type": ["integer", "null"]},
+        "memory_mib": {"type": ["integer", "null"]},
+        "disk_kib": {"type": ["integer", "null"]},
+        "gpu_count": {"type": ["integer", "null"]}
+      }
+    },
+    "resource_shape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key"],
+      "properties": {
+        "key": {"type": "string"},
+        "cpus": {"type": ["integer", "null"]},
+        "memory_mib": {"type": ["integer", "null"]},
+        "temporary_disk_mib": {"type": ["integer", "null"]},
+        "gpu_count": {"type": ["integer", "null"]},
+        "gpu_models": {"type": "array", "items": {"type": "string"}},
+        "features": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string"},
+        "path": {"type": ["string", "null"]},
+        "login_readable": {"type": ["boolean", "null"]},
+        "login_writable": {"type": ["boolean", "null"]},
+        "compute_visible": {"type": ["boolean", "null"]},
+        "compute_writable": {"type": ["boolean", "null"]},
+        "available_bytes": {"type": ["integer", "null"]},
+        "purge_after_days": {"type": ["integer", "null"]}
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string"},
+        "available": {"type": ["boolean", "null"]}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allocation_required": {"type": ["boolean", "null"]},
+        "visible_accounts": {"type": "array", "items": {"type": "string"}},
+        "charging_model": {"type": ["string", "null"]}
+      }
+    },
+    "software": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "module_system": {"type": ["string", "null"]},
+        "workflow_tools": {"type": "array", "items": {"type": "string"}},
+        "container_runtimes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section", "state"],
+      "properties": {
+        "section": {
+          "enum": ["scheduler", "submission", "resources", "network", "storage", "accounting", "software"]
+        },
+        "state": {
+          "enum": ["measured", "documented", "pilot_validated", "partial", "requires_pilot", "conflicting", "not_applicable"]
+        }
+      }
+    },
+    "unresolved": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "reason", "next_action", "action_id"],
+      "properties": {
+        "field": {"type": "string"},
+        "reason": {"type": "string"},
+        "next_action": {"enum": ["run_pilot", "additional_documentation", "user_input", "admin_confirmation"]},
+        "action_id": {"type": "string"}
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "selected_evidence", "selection_rule", "note"],
+      "properties": {
+        "field": {"type": "string"},
+        "selected_value": {
+          "anyOf": [
+            {"type": "string"},
+            {"type": "integer"},
+            {"type": "number"},
+            {"type": "boolean"},
+            {
+              "type": "array",
+              "items": {
+                "type": ["string", "integer", "number", "boolean"]
+              }
+            },
+            {"type": "null"}
+          ]
+        },
+        "selected_evidence": {"type": "string"},
+        "other_evidence": {"type": "array", "items": {"type": "string"}},
+        "selection_rule": {"type": "string"},
+        "note": {"type": "string"}
+      }
+    },
+    "evidence_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "evidence_ids"],
+      "properties": {
+        "field": {"type": "string"},
+        "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    }
+  }
+}

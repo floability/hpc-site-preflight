@@ -347,7 +347,7 @@ Do not execute shell commands or build a site profile.
 
 ## Milestone 11 — Actionable site-profile schema
 
-**Status:** Partially completed
+**Status:** Completed
 
 Convert `docs/SITE_PROFILE.md` into strict Pydantic models and checked JSON Schema.
 
@@ -367,7 +367,7 @@ construction.
 
 ## Milestone 12 — Detailed evidence-report contract
 
-**Status:** Partially completed
+**Status:** Completed
 
 Define and implement the detailed artifact referenced by a compact site profile.
 
@@ -386,7 +386,7 @@ The normal trace must not contain secrets or full downloaded page bodies.
 
 ## Milestone 13 — Reconciliation and unresolved-action rule tables
 
-**Status:** Needs more work
+**Status:** Completed
 
 Formalize deterministic field-specific rules before implementing the reconciler.
 
@@ -405,7 +405,7 @@ implement the full pipeline.
 
 ## Milestone 14 — Measurement-only partial profile builder
 
-**Status:** Incomplete
+**Status:** Completed
 
 Construct the first useful partial site profile from validated fixture login measurements only.
 

@@ -8,8 +8,16 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from hpc_site_preflight.config import AppConfig
-from hpc_site_preflight.exceptions import FeatureNotImplementedError, PreflightError
+from hpc_site_preflight.exceptions import (
+    ConfigurationError,
+    FeatureNotImplementedError,
+    PreflightError,
+)
+from hpc_site_preflight.measurements.fixture import FixtureMeasurementProvider
+from hpc_site_preflight.profiles.compiler import compile_profile
+from hpc_site_preflight.reporting.artifacts import write_json
 from hpc_site_preflight.reporting.tracker import RunTracker
+from hpc_site_preflight.site_info.loader import load_site_info
 
 _CONTEXT_MODES = ("full-corpus", "bm25", "schema-expanded-bm25")
 
@@ -43,7 +51,9 @@ def build_parser() -> argparse.ArgumentParser:
     profile_build.add_argument("--pilot-results", type=Path)
     profile_build.add_argument("--profile", type=Path)
     profile_build.add_argument("--profile-url")
+    profile_build.add_argument("--output-dir", type=Path, default=Path("artifacts"))
     _set_handler(profile_build, "profile build")
+    profile_build.set_defaults(handler=_profile_build_handler)
 
     profile_validate = profile_sub.add_parser("validate", help="Validate a site profile.")
     profile_validate.add_argument("--profile", type=Path, required=True)
@@ -101,6 +111,35 @@ def _placeholder_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
             f"The '{args.command_name}' command is defined but not implemented yet. "
             "Follow MILESTONES.md and implement one milestone at a time."
         )
+
+
+def _profile_build_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
+    """Build the Phase C measurement-only profile from reviewed fixtures."""
+
+    if args.mode != "fixture":
+        raise FeatureNotImplementedError("Live profile building is deferred until Phase I.")
+    if args.measurements is None:
+        raise ConfigurationError("Fixture profile building requires --measurements.")
+
+    with tracker.stage("site_info_load"):
+        site = load_site_info(args.site_info)
+
+    measurements = FixtureMeasurementProvider(args.measurements).collect(site, tracker)
+
+    with tracker.stage("measurement_profile_build"):
+        profile, report = compile_profile(site, measurements)
+
+    profile_path = args.output_dir / "site-profile.json"
+    report_path = args.output_dir / "evidence-report.json"
+    with tracker.stage("profile_artifact_write"):
+        write_json(profile_path, profile.model_dump(mode="json"))
+        write_json(report_path, report.model_dump(mode="json"))
+        tracker.add_artifact(kind="site_profile", path=profile_path)
+        tracker.add_artifact(kind="evidence_report", path=report_path)
+
+    if not args.quiet:
+        print(f"Profile:  {profile_path}")
+        print(f"Evidence: {report_path}")
 
 
 def main(argv: Sequence[str] | None = None) -> int:

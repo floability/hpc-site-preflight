@@ -1,15 +1,32 @@
-"""Aggregate all evidence sources behind one fixture/live-neutral contract."""
+"""Detailed evidence-report envelope."""
+
+from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from hpc_site_preflight.evidence.models import EvidenceItem, UnresolvedAction
+from hpc_site_preflight.evidence.models import (
+    ConflictRecord,
+    EvidenceLink,
+    EvidenceRecord,
+    UnresolvedAction,
+)
 
 
-class SiteEvidenceBundle(BaseModel):
-    """Complete evidence state used by reconciliation and evaluation."""
+class EvidenceReport(BaseModel):
+    """Auditable evidence emitted beside a compact site profile."""
 
     model_config = ConfigDict(extra="forbid")
 
+    schema_version: Literal["0.1"]
+    report_id: str
     site_id: str
-    evidence: list[EvidenceItem] = Field(default_factory=list)
+    generated_at: datetime
+    evidence: list[EvidenceRecord] = Field(default_factory=list)
+    conflicts: list[ConflictRecord] = Field(default_factory=list)
+    links: list[EvidenceLink] = Field(default_factory=list)
     unresolved: list[UnresolvedAction] = Field(default_factory=list)
+
+
+class SiteEvidenceBundle(EvidenceReport):
+    """Compatibility name for the complete detailed evidence artifact."""

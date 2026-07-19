@@ -1,7 +1,11 @@
-"""Create stable evidence identifiers and detailed provenance references."""
+"""Stable evidence identifiers."""
 
-from hpc_site_preflight.exceptions import FeatureNotImplementedError
+import hashlib
 
 
-def build_provenance(*args: object, **kwargs: object) -> object:
-    raise FeatureNotImplementedError("Detailed provenance is planned for Milestone 6.")
+def build_evidence_id(source_type: str, site_id: str, field_path: str, source_key: str) -> str:
+    """Return a deterministic short ID without embedding evidence contents."""
+
+    payload = "\x1f".join((source_type, site_id, field_path, source_key)).encode()
+    digest = hashlib.sha256(payload).hexdigest()[:16]
+    return f"{source_type}:{digest}"

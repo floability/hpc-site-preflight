@@ -35,6 +35,15 @@
       "source_reference": "illustrative fixture; not a live observation"
     },
     {
+      "path": "/facts/scheduler/submit_command_available",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "executable_lookup",
+      "command_id": "find_submit_command",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
       "path": "/facts/storage/filesystems/home/path",
       "status": "observed",
       "value": "/home/mockuser",
