@@ -9,7 +9,9 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 
 
 def test_tracker_aggregates_stage_usage(tmp_path: Path) -> None:
-    tracker = RunTracker(command="test", mode="replay", run_root=tmp_path, quiet=True, run_id="run")
+    tracker = RunTracker(
+        command="test", mode="fixture", run_root=tmp_path, quiet=True, run_id="run"
+    )
     initial_report = json.loads(tracker.performance_path.read_text(encoding="utf-8"))
     assert initial_report["status"] == "running"
     assert initial_report["steps"] == []

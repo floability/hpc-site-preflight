@@ -16,9 +16,9 @@ Backpack requirements ───────────────────�
 
 - `site_info`: target-site identity and documentation scope.
 - `profiles`: lookup, storage, freshness, and compilation.
-- `measurements`: live and replay login-node evidence.
+- `measurements`: fixture and live login-node evidence.
 - `documentation`: adapter for bounded discovery and extraction.
-- `probes`: live and replay predefined pilot results.
+- `probes`: fixture and live predefined pilot results.
 - `evidence`: normalized evidence, conflicts, and reconciliation.
 - `backpack`: portable workflow requirement loading.
 - `preflight`: deterministic compatibility checks and remediation.

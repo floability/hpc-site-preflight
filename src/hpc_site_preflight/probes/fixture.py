@@ -1,4 +1,4 @@
-"""Load captured pilot results for laptop replay mode."""
+"""Load reviewed pilot-result fixtures when running from a laptop."""
 
 from pathlib import Path
 
@@ -8,11 +8,11 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.models import SiteInfo
 
 
-class ReplayPilotProvider(PilotProvider):
-    """Read replay pilot results in Milestone 7."""
+class FixturePilotProvider(PilotProvider):
+    """Read fixture pilot results in Milestone 27."""
 
     def __init__(self, path: Path) -> None:
         self.path = path
 
     def collect(self, site: SiteInfo, tracker: RunTracker) -> PilotResultBundle:
-        raise FeatureNotImplementedError("Replay pilot ingestion is planned for Milestone 7.")
+        raise FeatureNotImplementedError("Fixture pilot ingestion is planned for Milestone 27.")

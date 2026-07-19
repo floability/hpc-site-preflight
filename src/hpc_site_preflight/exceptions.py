@@ -11,3 +11,11 @@ class FeatureNotImplementedError(PreflightError):
 
 class ConfigurationError(PreflightError):
     """Raised when command or configuration input is invalid."""
+
+
+class FixtureLoadError(PreflightError):
+    """Raised when a reviewed fixture cannot be read or decoded."""
+
+
+class FixtureValidationError(PreflightError):
+    """Raised when fixture contents do not match the requested site or contract."""

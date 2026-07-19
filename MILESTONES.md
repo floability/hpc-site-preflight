@@ -34,19 +34,20 @@ schema-expanded-bm25
 
 ## Development strategy
 
-Development is mock-first and laptop-first.
+Development is fixture-first and laptop-first.
 
-- `mock` mode uses reviewed JSON fixtures for HPC login measurements and pilot results. It must
+- `fixture` mode uses reviewed JSON fixtures for HPC login measurements and pilot results. It must
   not require access to an HPC system.
 - Documentation tests use captured pages, corpora, and provider responses by default. Explicitly
   marked integration runs may use approved web access and model APIs.
-- `live` mode is deferred until the complete mock pipeline works for all three evaluation sites.
-- Mock and live implementations must eventually conform to the same provider interfaces and
+- `live` mode is deferred until the complete fixture pipeline works for all three evaluation sites.
+- Fixture and live implementations must eventually conform to the same provider interfaces and
   external JSON contracts.
 
-The current `replay` name is provisional and will be replaced by `mock` in a focused milestone.
-Mock evidence represents the shape and behavior of evidence that will later be captured live; it
-must not return invented success values from unfinished operations.
+Fixture evidence represents the shape and behavior of evidence that will later be captured live;
+it must not return invented success values from unfinished operations. Every fixture declares an
+origin of `captured`, `curated`, or `illustrative` so development examples cannot be mistaken for
+authoritative measurements.
 
 Each milestone is intentionally small enough for one focused coding session. For every
 milestone:
@@ -64,11 +65,25 @@ The live-site phase begins only after an explicit decision that the laptop pipel
 experiments are ready. Promotion into a separate production repository, if desired, is a later
 decision rather than an implicit part of a development milestone.
 
+## Status legend
+
+Statuses describe the repository state as of July 18, 2026:
+
+- **Completed:** the milestone acceptance criteria are implemented and verified.
+- **Partially completed:** substantive milestone artifacts or implementation exist in this
+  repository, but the acceptance criteria are not fully met.
+- **Needs more work:** design notes, skeletons, or reusable prototype work exist, but the core
+  milestone deliverable is not yet usable in this repository.
+- **Incomplete:** no substantive milestone implementation exists beyond planning or explicit
+  placeholders.
+
 ---
 
 ## Phase A — Foundation
 
-## Milestone 1 — Package, CLI, and performance tracker — complete
+## Milestone 1 — Package, CLI, and performance tracker
+
+**Status:** Completed
 
 Implemented and verified:
 
@@ -86,10 +101,12 @@ No later pipeline behavior is considered implemented by this milestone.
 
 ## Phase B — Define measurable site evidence
 
-These are the next milestones. The field catalogs and mock files are reviewed before measurement
+These are the next milestones. The field catalogs and fixture files are reviewed before measurement
 loaders or collectors are implemented. They become the source material for the typed contracts.
 
 ## Milestone 2 — Common login-node measurement field catalog
+
+**Status:** Completed
 
 Create a design document that enumerates scheduler-independent facts that can be observed safely
 from a login node.
@@ -124,154 +141,213 @@ Acceptance:
 - every field has a type, unit, and missing-value rule;
 - no field requires a batch allocation or unrestricted probe.
 
-## Milestone 3 — Slurm measurement field catalog
+## Milestone 3 — Slurm measurement catalog
 
-Define the Slurm-specific facts that a future collector may observe without claiming they are
-enforced policy.
+**Status:** Completed
 
-Cover at least:
+Define Slurm-specific facts that can be observed from the login node.
 
-- cluster identity and Slurm version;
-- partitions, default partition, visibility, availability, and state;
-- node counts and node states;
-- CPU, memory, temporary disk, feature, and node-shape summaries;
-- GRES and GPU count/model observations;
-- visible accounts, associations, QoS, reservations, and limits where permitted;
-- visible scheduler configuration values relevant to submission; and
-- permission-denied, hidden, unavailable, and command-missing outcomes.
+Include:
 
-For each field, identify the likely Slurm command and output concept, but do not implement command
-execution. Explicitly document examples where visible configuration may disagree with policy,
-including the walltime-limit case motivating the paper.
+* cluster and Slurm version;
+* partitions and default partition;
+* partition availability and state;
+* node counts and states;
+* CPU, memory, temporary disk, features, and node shapes;
+* GRES and GPU information;
+* visible accounts, QoS, reservations, and limits;
+* useful scheduler configuration values;
+* unavailable, hidden, permission-denied, and missing-command results.
 
-Acceptance:
+For each field, record the likely Slurm command and output source.
 
-- every field maps to the common evidence envelope;
-- partition and node-shape observations are distinct;
-- visible configuration is never labeled as enforced policy.
+Do not treat visible configuration as enforced policy. In particular, preserve cases where a displayed walltime limit differs from the actual accepted limit.
 
-## Milestone 4 — HTCondor measurement field catalog
+**Acceptance:**
 
-Define the HTCondor-specific facts that a future collector may observe from collectors,
-schedulers, and machine ClassAds.
+* fields use the common evidence format;
+* partitions and node shapes remain separate;
+* configuration is labeled as observation, not policy.
 
-Cover at least:
+---
 
-- collector and schedd identity;
-- HTCondor version and visible pool identity;
-- execute machines and slot counts;
-- partitionable, dynamic, and static slot types;
-- slot state and activity;
-- CPUs, memory, disk, GPUs, architecture, and operating-system attributes;
-- machine family and administrator-defined grouping attributes;
-- observable job-submission capabilities; and
-- permission-denied, hidden, unavailable, and command-missing outcomes.
+## Milestone 4 — HTCondor measurement catalog
 
-Define how normalized resource groups are derived from selected ClassAd attributes. Do not call
-them partitions, and do not assume an administrator-defined group exists.
+**Status:** Completed
 
-Acceptance:
+Define HTCondor-specific facts visible from collectors, schedulers, and machine ClassAds.
 
-- every field maps to the common evidence envelope;
-- raw ClassAd observations are distinguishable from derived resource groups;
-- Slurm-only concepts do not appear in the HTCondor contract.
+Include:
 
-## Milestone 5 — Site information and mock evidence envelope
+* collector and schedd identity;
+* HTCondor and pool version;
+* execute machines and slot counts;
+* static, partitionable, and dynamic slots;
+* slot state and activity;
+* CPU, memory, disk, GPU, OS, and architecture;
+* machine grouping attributes;
+* observable submission capabilities;
+* unavailable, hidden, permission-denied, and missing-command results.
 
-Finalize the JSON envelopes shared by the three evaluation sites before writing site-specific
-fixtures.
+Define how resource groups may be derived from selected ClassAd attributes.
+
+Do not call HTCondor resource groups partitions.
+
+**Acceptance:**
+
+* fields use the common evidence format;
+* raw ClassAds and derived groups remain separate;
+* Slurm-only fields are excluded.
+
+---
+
+## Milestone 5 — Site and measurement JSON structure
+
+**Status:** Completed
+
+Finalize the shared JSON structure for site information and measurement fixtures.
 
 Define:
 
-- `site-info.json` identity and approved documentation scope;
-- a measurement-bundle envelope with schema version, site ID, scheduler, timestamps, source mode,
-  collector version, and common/scheduler/storage/software sections;
-- per-observation status and provenance;
-- explicit unavailable and permission-denied representations; and
-- the directory layout under `examples/mock/<site-id>/`.
+* `site-info.json`;
+* the measurement bundle;
+* schema version;
+* site ID and scheduler;
+* collection timestamps;
+* source mode and fixture origin;
+* collector version;
+* observation status and provenance.
 
-Replace the planned execution-mode vocabulary `live|replay` with `live|mock` in design documents
-only. Code and file migration happen in a later milestone.
+Use:
 
-Acceptance:
+```text
+source_mode: fixture | live
+fixture_origin: captured | curated | illustrative
+```
 
-- one envelope can carry both Slurm and HTCondor measurements;
-- no scheduler SDK or command-output type escapes the scheduler section;
-- unknown values remain distinguishable from false, zero, and empty collections.
+Unknown values must remain different from `false`, `0`, or an empty list.
 
-## Milestone 6 — Purdue Anvil mock measurement fixture
+**Acceptance:**
 
-Create reviewed Anvil `site-info.json` and `login-measurements.json` fixtures using the common and
-Slurm catalogs.
+* one structure supports Slurm and HTCondor;
+* scheduler-specific data stays inside its scheduler section;
+* unavailable and permission-denied values are explicit.
+
+---
+
+## Milestone 6 — Purdue Anvil fixture
+
+**Status:** Completed
+
+Create:
+
+```text
+examples/fixture/anvil/site-info.json
+examples/fixture/anvil/login-measurements.json
+```
+
+Include:
+
+* representative partitions;
+* representative node shapes;
+* the visible walltime value used in the motivating conflict example;
+* provenance for every value.
+
+Mark values as captured, curated, illustrative, or unresolved.
+
+Do not treat illustrative values as current policy.
+
+---
+
+## Milestone 7 — Stampede3 fixture
+
+**Status:** Completed
+
+Create:
+
+```text
+examples/fixture/stampede3/site-info.json
+examples/fixture/stampede3/login-measurements.json
+```
+
+Use the same Slurm structure as Anvil.
+
+Site differences should appear only in values, not in new site-specific fields or Python classes.
+
+---
+
+## Milestone 8 — Notre Dame CRC fixture
+
+**Status:** Completed
+
+Create:
+
+```text
+examples/fixture/notre-dame-crc/site-info.json
+examples/fixture/notre-dame-crc/login-measurements.json
+```
+
+Use the common and HTCondor structures.
+
+Include:
+
+* representative machines;
+* representative slot attributes;
+* at least one derived resource group.
+
+Do not use `partitions` for HTCondor.
+
+---
+
+## Milestone 9 — Typed measurement models
+
+**Status:** Completed
+
+Implement Pydantic models for:
+
+* site information;
+* common measurements;
+* Slurm measurements;
+* HTCondor measurements;
+* observation status;
+* provenance;
+* schema version.
+
+Tests should:
+
+* validate all three fixtures;
+* reject Slurm fields in HTCondor data;
+* reject HTCondor fields in Slurm data.
+
+Do not build a site profile yet.
+
+---
+
+## Milestone 10 — Fixture measurement provider
+
+**Status:** Completed
+
+Implement a provider that loads measurement fixtures from disk.
 
 Requirements:
 
-- include representative partitions and node shapes;
-- include the visible walltime observation used by the motivating conflict scenario;
-- label every value as captured, an illustrative mock observation, or intentionally unresolved;
-- do not silently turn illustrative values into authoritative current policy; and
-- validate the JSON syntax and catalog coverage manually.
+* use the shared `MeasurementProvider` interface;
+* validate the fixture;
+* verify site ID and scheduler against `site-info.json`;
+* record loading and validation as separate tracker stages;
+* preserve provenance;
+* use the word `fixture` consistently in code, CLI, examples, and tests.
 
-Do not implement loaders or reconciliation.
+Do not execute shell commands or build a site profile.
 
-## Milestone 7 — TACC Stampede3 mock measurement fixture
-
-Create reviewed Stampede3 `site-info.json` and `login-measurements.json` fixtures using the same
-Slurm contract as Anvil.
-
-The fixture must demonstrate that the contract handles two Slurm sites without adding
-site-specific model fields. Site differences belong in values and evidence, not Python class
-structure.
-
-Do not implement loaders or reconciliation.
-
-## Milestone 8 — Notre Dame CRC mock measurement fixture
-
-Create reviewed Notre Dame CRC `site-info.json` and `login-measurements.json` fixtures using the
-common and HTCondor catalogs.
-
-The fixture must include representative machine and slot attributes and at least one derived
-resource-group example. `partitions` must not be used to represent the HTCondor pool.
-
-Do not implement loaders or reconciliation.
-
-## Milestone 9 — Typed site and measurement contracts
-
-Implement Pydantic models derived from the reviewed catalogs and fixtures.
-
-Implement only:
-
-- site-information validation;
-- common measurement models;
-- Slurm measurement models;
-- HTCondor measurement models;
-- normalized observation status and provenance; and
-- schema-version validation.
-
-Tests must validate all three site fixtures and reject scheduler-specific fields in the wrong
-scheduler contract.
-
-Do not construct a site profile.
-
-## Milestone 10 — Mock measurement provider
-
-Implement a provider that loads and validates mock measurement bundles from the laptop fixtures.
-
-Requirements:
-
-- use the same `MeasurementProvider` interface reserved for live collection;
-- verify that fixture site ID and scheduler match `site-info.json`;
-- record loading and validation as separate tracker stages;
-- preserve observation provenance unchanged; and
-- rename replay-oriented code, CLI choices, examples, and tests to `mock`.
-
-Do not run shell commands or build a site profile.
 
 ---
 
 ## Phase C — Formalize the profile and evidence contracts
 
 ## Milestone 11 — Actionable site-profile schema
+
+**Status:** Partially completed
 
 Convert `docs/SITE_PROFILE.md` into strict Pydantic models and checked JSON Schema.
 
@@ -291,6 +367,8 @@ construction.
 
 ## Milestone 12 — Detailed evidence-report contract
 
+**Status:** Partially completed
+
 Define and implement the detailed artifact referenced by a compact site profile.
 
 Cover:
@@ -307,6 +385,8 @@ Cover:
 The normal trace must not contain secrets or full downloaded page bodies.
 
 ## Milestone 13 — Reconciliation and unresolved-action rule tables
+
+**Status:** Needs more work
 
 Formalize deterministic field-specific rules before implementing the reconciler.
 
@@ -325,7 +405,9 @@ implement the full pipeline.
 
 ## Milestone 14 — Measurement-only partial profile builder
 
-Construct the first useful partial site profile from validated mock login measurements only.
+**Status:** Incomplete
+
+Construct the first useful partial site profile from validated fixture login measurements only.
 
 Requirements:
 
@@ -341,9 +423,11 @@ This milestone deliberately excludes documentation and pilot evidence.
 
 ## Phase D — Documentation evidence on a laptop
 
-## Milestone 15 — Documentation provider contract and mock result
+## Milestone 15 — Documentation provider contract and fixture result
 
-Finalize `DocumentationPolicyProvider` inputs and outputs and create a validated mock
+**Status:** Partially completed
+
+Finalize `DocumentationPolicyProvider` inputs and outputs and create a validated fixture
 documentation result for one site.
 
 The result must contain a partial policy, detailed field evidence, unresolved documentation
@@ -352,6 +436,8 @@ questions, context mode, corpus identity, and provider-reported usage availabili
 Do not migrate discovery yet.
 
 ## Milestone 16 — Prototype migration inventory
+
+**Status:** Partially completed
 
 Inspect `hpc-site-policy-agent` and map reusable modules and tests to this repository's adapter
 boundary.
@@ -369,6 +455,8 @@ Update `docs/MIGRATION_FROM_POLICY_AGENT.md`. Do not copy the old top-level cont
 
 ## Milestone 17 — Bounded agentic documentation discovery
 
+**Status:** Needs more work
+
 Adapt the bounded search/fetch/finish discovery behavior behind the documentation provider.
 
 Requirements:
@@ -383,6 +471,8 @@ Offline tests use recorded search and page fixtures. No unrestricted browsing is
 
 ## Milestone 18 — Site scope, trust, and page normalization
 
+**Status:** Needs more work
+
 Implement deterministic target-site, organization-general, sibling-site, and unrelated scope
 classification. Keep scope independent of trust.
 
@@ -391,6 +481,8 @@ timestamps, hashes, and scope. Sibling pages may be retained as negative control
 used as target-site policy.
 
 ## Milestone 19 — Persistent corpus and chunking
+
+**Status:** Needs more work
 
 Implement the content-hashed persistent corpus:
 
@@ -404,12 +496,16 @@ Implement the content-hashed persistent corpus:
 
 ## Milestone 20 — Full-corpus context mode
 
+**Status:** Incomplete
+
 Implement deterministic `full-corpus` context construction, size accounting, truncation rules,
 and field coverage reporting.
 
 Do not implement BM25 in this milestone.
 
 ## Milestone 21 — BM25 context mode
+
+**Status:** Needs more work
 
 Implement transient CPU-only BM25 retrieval with field-specific queries, scope filtering before
 ranking, local deduplication, and retrieved-but-uncited tracking.
@@ -418,10 +514,14 @@ Do not implement expanded queries in this milestone.
 
 ## Milestone 22 — Schema-expanded BM25 context mode
 
+**Status:** Needs more work
+
 Implement deterministic schema-derived query expansion on top of the same BM25 index. Preserve
 base and expanded query provenance so the paper can compare retrieval behavior.
 
 ## Milestone 23 — Constrained documentation extraction
+
+**Status:** Needs more work
 
 Implement schema-constrained extraction that proposes typed field values and selects field-local
 evidence span IDs.
@@ -430,6 +530,8 @@ Python, not the model, inserts exact quotes, URLs, headings, chunk IDs, and prov
 adapters must report only provider-supplied token usage.
 
 ## Milestone 24 — Field-level documentation evidence validation
+
+**Status:** Needs more work
 
 Validate every extracted field independently:
 
@@ -444,6 +546,8 @@ Discard only invalid fields. Preserve valid fields when another field, extractio
 or model call fails.
 
 ## Milestone 25 — Documentation evaluation command
+
+**Status:** Incomplete
 
 Complete `evaluate documentation` for all three context modes.
 
@@ -461,9 +565,11 @@ integration runs from a laptop.
 
 ---
 
-## Phase E — Mock pilots and deterministic reconciliation
+## Phase E — Fixture pilots and deterministic reconciliation
 
 ## Milestone 26 — Approved pilot catalog
+
+**Status:** Needs more work
 
 Define the fixed pilot registry and its target profile fields:
 
@@ -479,9 +585,11 @@ Define the fixed pilot registry and its target profile fields:
 Specify typed inputs, bounded behavior, expected result schema, scheduler applicability, and
 safety limits. Do not submit jobs.
 
-## Milestone 27 — Mock pilot results and provider
+## Milestone 27 — Fixture pilot results and provider
 
-Create typed mock pilot-result fixtures for the three evaluation sites and implement a mock
+**Status:** Partially completed
+
+Create typed pilot-result fixtures for the three evaluation sites and implement a fixture
 provider that loads them through the future live-pilot interface.
 
 Verify site ID, scheduler, pilot registry membership, timestamps, and target-field association.
@@ -489,7 +597,9 @@ Record loading and validation as tracker stages.
 
 ## Milestone 28 — Full deterministic evidence reconciliation
 
-Combine profile candidates, mock measurements, documentation evidence, and mock pilot results.
+**Status:** Incomplete
+
+Combine profile candidates, fixture measurements, documentation evidence, and fixture pilot results.
 
 Requirements:
 
@@ -508,6 +618,8 @@ Do not load backpacks or perform preflight checks.
 
 ## Milestone 29 — Backpack requirement contract and loader
 
+**Status:** Partially completed
+
 Define and load normalized workflow requirements for scheduler backend, workers, cores, memory,
 GPUs, walltime, storage, temporary space, manager-worker networking, worker-worker networking,
 and outbound access.
@@ -516,6 +628,8 @@ Invalid backpack structure produces a structured validation artifact. It does no
 measurement or documentation work.
 
 ## Milestone 30 — Deterministic compatibility checks
+
+**Status:** Needs more work
 
 Implement field-level checks for:
 
@@ -532,6 +646,8 @@ remediation category.
 
 ## Milestone 31 — Execution-plan rendering
 
+**Status:** Needs more work
+
 For compatible inputs, select documented scheduler option syntax and render a site-specific
 execution plan. Preserve semantic option names and selected syntax in the output for auditing.
 
@@ -542,15 +658,17 @@ remediation. Never submit or launch the workflow.
 
 ## Phase G — Complete laptop pipeline
 
-## Milestone 32 — End-to-end mock profile build
+## Milestone 32 — End-to-end fixture profile build
 
-Complete `profile build --mode mock`:
+**Status:** Incomplete
+
+Complete `profile build --mode fixture`:
 
 ```text
 site information
-→ mock login measurements
+→ fixture login measurements
 → documentation evidence
-→ mock pilot results
+→ fixture pilot results
 → deterministic reconciliation
 → partial or complete site profile
 ```
@@ -559,9 +677,11 @@ Every stage uses one shared `RunTracker`. The command writes a usable profile an
 when at least one valid field is available, while recording recoverable stage failures and
 unresolved fields.
 
-## Milestone 33 — End-to-end mock preflight scenarios
+## Milestone 33 — End-to-end fixture preflight scenarios
 
-Run backpack preflight from a laptop against mock-built profiles for:
+**Status:** Incomplete
+
+Run backpack preflight from a laptop against fixture-built profiles for:
 
 - one compatible Slurm workflow;
 - one early Slurm failure;
@@ -573,7 +693,9 @@ Store expected execution-plan or blocked-result fixtures and test them determini
 
 ## Milestone 34 — Three-site regression suite
 
-Freeze reviewed mock inputs and expected normalized outputs for Anvil, Stampede3, and Notre Dame
+**Status:** Incomplete
+
+Freeze reviewed fixture inputs and expected normalized outputs for Anvil, Stampede3, and Notre Dame
 CRC.
 
 Test:
@@ -594,6 +716,8 @@ This milestone is the laptop-readiness gate. Do not begin live collection automa
 
 ## Milestone 35 — Evaluation dataset and ground-truth protocol
 
+**Status:** Incomplete
+
 Define the evaluated site-profile fields, annotation procedure, acceptable evidence, abstention
 rules, conflict labels, and adjudication process for the three sites.
 
@@ -601,6 +725,8 @@ Separate fixture construction from ground-truth labels to avoid evaluating the s
 own generated output.
 
 ## Milestone 36 — Documentation context-mode experiment
+
+**Status:** Incomplete
 
 Automate repeated `full-corpus`, `bm25`, and `schema-expanded-bm25` runs with identical discovery
 inputs and extraction schema.
@@ -618,7 +744,9 @@ Measure:
 
 ## Milestone 37 — End-to-end paper experiment
 
-Evaluate the complete mock pipeline across all three sites and selected backpacks.
+**Status:** Incomplete
+
+Evaluate the complete fixture pipeline across all three sites and selected backpacks.
 
 Report:
 
@@ -627,7 +755,7 @@ Report:
 - number and type of unresolved fields;
 - profile completeness;
 - preflight success, early failure, and remediation accuracy;
-- pilot count and mocked cost metadata; and
+- pilot count and fixture cost metadata; and
 - total and per-stage runtime and provider usage.
 
 Produce machine-readable result tables suitable for paper analysis. Do not manually edit generated
@@ -639,10 +767,14 @@ metrics.
 
 ## Milestone 38 — Live common login measurements
 
+**Status:** Incomplete
+
 Implement safe scheduler-independent measurements from the reviewed common field catalog. Use
 fixed commands and parsers; never execute model-generated shell commands.
 
 ## Milestone 39 — Live Slurm measurements
+
+**Status:** Incomplete
 
 Implement fixed Slurm command adapters and parsers for the reviewed Slurm catalog. Permission
 failures and unavailable commands become explicit observation states rather than fatal pipeline
@@ -650,22 +782,28 @@ errors.
 
 ## Milestone 40 — Live HTCondor measurements
 
+**Status:** Incomplete
+
 Implement fixed HTCondor command adapters and ClassAd normalization for the reviewed HTCondor
 catalog. Derive resource groups deterministically and never synthesize partitions.
 
 ## Milestone 41 — Live approved pilot jobs
 
+**Status:** Incomplete
+
 Implement scheduler-specific templates only for pilots in the approved registry. Enforce job,
 time, network, candidate-port, and retry budgets. Require explicit authorization before
 submission.
 
-## Milestone 42 — Mock/live agreement and release gate
+## Milestone 42 — Fixture/live agreement and release gate
 
-Capture live evidence for approved evaluation runs and compare it with normalized mock fixtures.
+**Status:** Incomplete
+
+Capture live evidence for approved evaluation runs and compare it with normalized fixtures.
 
 Verify:
 
-- mock and live providers produce the same contracts;
+- fixture and live providers produce the same contracts;
 - reconciliation gives explainable differences when evidence changed;
 - safety limits hold;
 - performance artifacts are complete on success and failure; and

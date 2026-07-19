@@ -1,0 +1,184 @@
+{
+  "schema_version": "0.1",
+  "site_id": "tacc-stampede3",
+  "scheduler_type": "slurm",
+  "collected_at": "2026-07-19T12:00:00Z",
+  "source_mode": "fixture",
+  "fixture_origin": "illustrative",
+  "collector_version": "0.1.0.dev0",
+  "common": [
+    {
+      "path": "/facts/identity/fqdn",
+      "status": "observed",
+      "value": "login2.stampede3.tacc.utexas.edu",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "socket_getfqdn",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/platform/architecture",
+      "status": "observed",
+      "value": "x86_64",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "machine_architecture",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/detected_type",
+      "status": "observed",
+      "value": "slurm",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "executable_lookup",
+      "command_id": "detect_scheduler",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/storage/filesystems/scratch/path",
+      "status": "observed",
+      "value": "/scratch/mockuser",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "collector_function",
+      "command_id": "resolve_reviewed_path",
+      "source_reference": "illustrative fixture; not a live observation"
+    }
+  ],
+  "scheduler": [
+    {
+      "path": "/facts/scheduler/cluster_name",
+      "status": "observed",
+      "value": "stampede3",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "slurm_config",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/version",
+      "status": "observed",
+      "value": "24.05.2",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "slurm_version",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/default_partition",
+      "status": "observed",
+      "value": "spr",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_partitions",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/partitions",
+      "status": "observed",
+      "value": ["spr", "skx", "pvc"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "slurm_partitions",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/partitions/spr/available",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_partitions",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/partitions/spr/visible_walltime_limit",
+      "status": "observed",
+      "value": "2-00:00:00",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_partitions",
+      "source_reference": "illustrative scheduler observation; not enforced policy"
+    },
+    {
+      "path": "/facts/scheduler/partitions/skx/visible_walltime_limit",
+      "status": "observed",
+      "value": "2-00:00:00",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_partitions",
+      "source_reference": "illustrative scheduler observation; not enforced policy"
+    },
+    {
+      "path": "/facts/scheduler/partitions/pvc/visible_walltime_limit",
+      "status": "observed",
+      "value": "2-00:00:00",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_partitions",
+      "source_reference": "illustrative scheduler observation; not enforced policy"
+    },
+    {
+      "path": "/facts/scheduler/node_shapes",
+      "status": "observed",
+      "value": ["spr-cpu", "pvc-gpu"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "slurm_node_shapes",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/node_shapes/spr-cpu/cpus",
+      "status": "observed",
+      "value": 112,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_node_shapes",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/node_shapes/spr-cpu/memory_mib",
+      "status": "observed",
+      "value": 256000,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_node_shapes",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/node_shapes/pvc-gpu/cpus",
+      "status": "observed",
+      "value": 96,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_node_shapes",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/node_shapes/pvc-gpu/gpu_count",
+      "status": "observed",
+      "value": 4,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_node_shapes",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/node_shapes/pvc-gpu/gpu_models",
+      "status": "observed",
+      "value": ["Intel Data Center GPU Max 1550"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_node_shapes",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/visible_accounts",
+      "status": "observed",
+      "value": ["mock-project"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "slurm_associations",
+      "source_reference": "illustrative fixture; not a real allocation"
+    }
+  ]
+}

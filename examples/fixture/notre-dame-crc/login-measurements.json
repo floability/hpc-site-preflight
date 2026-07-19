@@ -1,0 +1,274 @@
+{
+  "schema_version": "0.1",
+  "site_id": "notre-dame-crc",
+  "scheduler_type": "htcondor",
+  "collected_at": "2026-07-19T12:00:00Z",
+  "source_mode": "fixture",
+  "fixture_origin": "illustrative",
+  "collector_version": "0.1.0.dev0",
+  "common": [
+    {
+      "path": "/facts/identity/fqdn",
+      "status": "observed",
+      "value": "condorfe.crc.nd.edu",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "socket_getfqdn",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/platform/architecture",
+      "status": "observed",
+      "value": "x86_64",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "machine_architecture",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/detected_type",
+      "status": "observed",
+      "value": "htcondor",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "executable_lookup",
+      "command_id": "detect_scheduler",
+      "source_reference": "illustrative fixture; not a live observation"
+    }
+  ],
+  "scheduler": [
+    {
+      "path": "/facts/scheduler/collector_host",
+      "status": "observed",
+      "value": "condorfe.crc.nd.edu",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "htcondor_collector_host",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/version",
+      "status": "observed",
+      "value": "24.0.12",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "htcondor_version",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/pool_version",
+      "status": "observed",
+      "value": "24.0.12",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_collectors",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/collector_names",
+      "status": "observed",
+      "value": ["mock-collector@crc.nd.edu"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_collectors",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/schedd_names",
+      "status": "observed",
+      "value": ["condorfe.crc.nd.edu"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_schedds",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/submit_command_available",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "executable_lookup",
+      "command_id": "find_condor_submit",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/execute_machines",
+      "status": "observed",
+      "value": ["mock-cpu-01.crc.nd.edu", "mock-gpu-01.crc.nd.edu"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; hostnames are synthetic"
+    },
+    {
+      "path": "/facts/scheduler/execute_machine_count",
+      "status": "observed",
+      "value": 2,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/slot_count",
+      "status": "observed",
+      "value": 3,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/partitionable_slot_count",
+      "status": "observed",
+      "value": 2,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/dynamic_slot_count",
+      "status": "observed",
+      "value": 1,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live observation"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads",
+      "status": "observed",
+      "value": ["slot1@mock-cpu-01", "slot1@mock-gpu-01", "slot1_1@mock-cpu-01"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; ClassAd identifiers are synthetic"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/slot_kind",
+      "status": "observed",
+      "value": "partitionable",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/state",
+      "status": "observed",
+      "value": "Unclaimed",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/activity",
+      "status": "observed",
+      "value": "Idle",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/cpus",
+      "status": "observed",
+      "value": 32,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/memory_mib",
+      "status": "observed",
+      "value": 128000,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/architecture",
+      "status": "observed",
+      "value": "X86_64",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/operating_system",
+      "status": "observed",
+      "value": "RockyLinux9",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/grouping_attributes",
+      "status": "observed",
+      "value": ["MachineFamily=cpu", "ResourceGroup=general"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative administrator-defined attributes"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-gpu-01/gpu_count",
+      "status": "observed",
+      "value": 4,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-gpu-01/gpu_models",
+      "status": "observed",
+      "value": ["NVIDIA RTX 6000"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "htcondor_slots",
+      "source_reference": "illustrative fixture; not a live ClassAd"
+    },
+    {
+      "path": "/facts/scheduler/resource_groups",
+      "status": "observed",
+      "value": ["general-cpu", "general-gpu"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "derive_htcondor_resource_groups",
+      "source_reference": "illustrative deterministic grouping"
+    },
+    {
+      "path": "/facts/scheduler/resource_groups/general-cpu/key",
+      "status": "observed",
+      "value": "MachineFamily=cpu|ResourceGroup=general|Arch=X86_64|OpSysAndVer=RockyLinux9",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "derive_htcondor_resource_groups",
+      "source_reference": "illustrative deterministic grouping"
+    },
+    {
+      "path": "/facts/scheduler/resource_groups/general-cpu/machine_count",
+      "status": "observed",
+      "value": 1,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "derive_htcondor_resource_groups",
+      "source_reference": "illustrative deterministic grouping"
+    },
+    {
+      "path": "/facts/scheduler/resource_groups/general-cpu/slot_count",
+      "status": "observed",
+      "value": 2,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "derived",
+      "command_id": "derive_htcondor_resource_groups",
+      "source_reference": "illustrative deterministic grouping"
+    }
+  ]
+}

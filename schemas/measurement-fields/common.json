@@ -1,0 +1,505 @@
+{
+  "schema_version": "0.1",
+  "catalog_id": "common-login-node-facts",
+  "statuses": {
+    "observed": "The value was collected successfully.",
+    "unavailable": "The value could not be obtained.",
+    "hidden": "The scheduler is configured not to expose the value.",
+    "command_unavailable": "The required fixed scheduler command is unavailable.",
+    "permission_denied": "The site denied access to the value.",
+    "not_applicable": "The fact does not apply to this environment.",
+    "failed": "The fixed observation method failed."
+  },
+  "categories": {
+    "collection": [
+      {
+        "path": "/observed_at",
+        "type": "string",
+        "description": "UTC timestamp when the login-node facts were observed.",
+        "method": "python_api",
+        "command_id": "utc_now",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/source_mode",
+        "type": "string",
+        "description": "Evidence mode, either fixture or live.",
+        "method": "collector_function",
+        "command_id": "source_mode",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/fixture_origin",
+        "type": "string",
+        "description": "Fixture origin: captured, curated, or illustrative.",
+        "method": "derived",
+        "command_id": "fixture_origin",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      }
+    ],
+    "identity": [
+      {
+        "path": "/facts/identity/hostname",
+        "type": "string",
+        "description": "Short hostname of the login node.",
+        "method": "python_api",
+        "command_id": "socket_gethostname",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/identity/fqdn",
+        "type": "string",
+        "description": "Fully qualified domain name of the login node.",
+        "method": "python_api",
+        "command_id": "socket_getfqdn",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/identity/dns_suffix",
+        "type": "string",
+        "description": "DNS suffix derived from the observed FQDN.",
+        "method": "derived",
+        "command_id": "derive_dns_suffix",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      }
+    ],
+    "platform": [
+      {
+        "path": "/facts/platform/os_id",
+        "type": "string",
+        "description": "Operating-system identifier from standard release metadata.",
+        "method": "fixed_command",
+        "command_id": "read_os_release",
+        "command": ["cat", "/etc/os-release"],
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/platform/os_version",
+        "type": "string",
+        "description": "Operating-system version from standard release metadata.",
+        "method": "fixed_command",
+        "command_id": "read_os_release",
+        "command": ["cat", "/etc/os-release"],
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/platform/kernel_release",
+        "type": "string",
+        "description": "Kernel release visible on the login node.",
+        "method": "fixed_command",
+        "command_id": "kernel_release",
+        "command": ["uname", "-r"],
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/platform/architecture",
+        "type": "string",
+        "description": "Machine architecture of the login node.",
+        "method": "fixed_command",
+        "command_id": "machine_architecture",
+        "command": ["uname", "-m"],
+        "requires_write": false,
+        "optional": true
+      }
+    ],
+    "user": [
+      {
+        "path": "/facts/user/username",
+        "type": "string",
+        "description": "Username of the collecting login session.",
+        "method": "python_api",
+        "command_id": "getpass_getuser",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/user/uid",
+        "type": "integer",
+        "description": "Numeric user identifier of the collecting process.",
+        "method": "python_api",
+        "command_id": "os_getuid",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/user/groups",
+        "type": "array",
+        "description": "Group names visible to the collecting process.",
+        "method": "collector_function",
+        "command_id": "get_group_names",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/user/home_directory",
+        "type": "string",
+        "description": "Home directory from the allowlisted HOME variable.",
+        "method": "environment_variable",
+        "command_id": "HOME",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/user/working_directory",
+        "type": "string",
+        "description": "Current working directory of the collector.",
+        "method": "python_api",
+        "command_id": "os_getcwd",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      }
+    ],
+    "scheduler_detection": [
+      {
+        "path": "/facts/scheduler/detected_type",
+        "type": "string",
+        "description": "Scheduler family detected from reviewed executable names.",
+        "method": "executable_lookup",
+        "command_id": "detect_scheduler",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/scheduler/version",
+        "type": "string",
+        "description": "Version reported by the detected scheduler adapter.",
+        "method": "collector_function",
+        "command_id": "scheduler_version",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/scheduler/available_commands",
+        "type": "array",
+        "description": "Reviewed scheduler executables visible on PATH.",
+        "method": "executable_lookup",
+        "command_id": "find_scheduler_commands",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/scheduler/submit_command_available",
+        "type": "boolean",
+        "description": "Whether the detected scheduler submit executable is visible on PATH.",
+        "method": "executable_lookup",
+        "command_id": "find_submit_command",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      }
+    ],
+    "storage": [
+      {
+        "path": "/facts/storage/filesystems",
+        "type": "array",
+        "description": "Reviewed filesystem paths observed from the login node.",
+        "method": "collector_function",
+        "command_id": "collect_reviewed_filesystems",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/storage/filesystems/*/label",
+        "type": "string",
+        "description": "Stable label for the reviewed filesystem path.",
+        "method": "derived",
+        "command_id": "filesystem_label",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/storage/filesystems/*/role",
+        "type": "string",
+        "description": "Intended role such as home, scratch, or project.",
+        "method": "derived",
+        "command_id": "filesystem_role",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/storage/filesystems/*/path",
+        "type": "string",
+        "description": "Absolute reviewed filesystem path.",
+        "method": "collector_function",
+        "command_id": "resolve_reviewed_path",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/storage/filesystems/*/exists",
+        "type": "boolean",
+        "description": "Whether the reviewed path exists on the login node.",
+        "method": "python_api",
+        "command_id": "path_exists",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/storage/filesystems/*/readable",
+        "type": "boolean",
+        "description": "Whether the reviewed path is readable from the login node.",
+        "method": "python_api",
+        "command_id": "path_readable",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/filesystems/*/writable",
+        "type": "boolean",
+        "description": "Whether the reviewed path is writable from the login node.",
+        "method": "python_api",
+        "command_id": "path_writable",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/filesystems/*/filesystem_type",
+        "type": "string",
+        "description": "Filesystem type reported for the reviewed path.",
+        "method": "fixed_command",
+        "command_id": "filesystem_type",
+        "command": ["stat", "-f", "-c", "%T", "{path}"],
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/filesystems/*/available_bytes",
+        "type": "integer",
+        "description": "Bytes available on the filesystem containing the reviewed path.",
+        "method": "python_api",
+        "command_id": "shutil_disk_usage",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/filesystems/*/symlink_supported",
+        "type": "boolean",
+        "description": "Whether a bounded symbolic-link create and delete test succeeds.",
+        "method": "collector_function",
+        "command_id": "test_symlink",
+        "command": null,
+        "requires_write": true,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/filesystems/*/hardlink_supported",
+        "type": "boolean",
+        "description": "Whether a bounded hard-link create and delete test succeeds.",
+        "method": "collector_function",
+        "command_id": "test_hardlink",
+        "command": null,
+        "requires_write": true,
+        "optional": true
+      }
+    ],
+    "temporary_storage": [
+      {
+        "path": "/facts/storage/temporary_directory/path",
+        "type": "string",
+        "description": "Resolved temporary-directory path for the login session.",
+        "method": "collector_function",
+        "command_id": "resolve_temp_directory",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/temporary_directory/exists",
+        "type": "boolean",
+        "description": "Whether the temporary-directory path exists on the login node.",
+        "method": "python_api",
+        "command_id": "temp_path_exists",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/storage/temporary_directory/writable",
+        "type": "boolean",
+        "description": "Whether the temporary-directory path is writable from the login node.",
+        "method": "python_api",
+        "command_id": "temp_path_writable",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      }
+    ],
+    "software": [
+      {
+        "path": "/facts/software/python_version",
+        "type": "string",
+        "description": "Version of the Python interpreter running the collector.",
+        "method": "python_api",
+        "command_id": "sys_version",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/software/python_executable",
+        "type": "string",
+        "description": "Path of the Python interpreter running the collector.",
+        "method": "python_api",
+        "command_id": "sys_executable",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/software/conda_environment",
+        "type": "string",
+        "description": "Active Conda environment prefix when present.",
+        "method": "environment_variable",
+        "command_id": "CONDA_PREFIX",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/software/virtual_environment",
+        "type": "string",
+        "description": "Active Python virtual-environment path when present.",
+        "method": "environment_variable",
+        "command_id": "VIRTUAL_ENV",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/software/module_system",
+        "type": "string",
+        "description": "Detected environment-module implementation.",
+        "method": "collector_function",
+        "command_id": "detect_module_system",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/software/workflow_tools",
+        "type": "array",
+        "description": "Allowlisted workflow tools visible on PATH.",
+        "method": "executable_lookup",
+        "command_id": "find_workflow_tools",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/software/workflow_tools/*/name",
+        "type": "string",
+        "description": "Semantic name of an available workflow tool.",
+        "method": "derived",
+        "command_id": "workflow_tool_name",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      },
+      {
+        "path": "/facts/software/workflow_tools/*/path",
+        "type": "string",
+        "description": "Resolved executable path of an available workflow tool.",
+        "method": "executable_lookup",
+        "command_id": "lookup_workflow_tool",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/software/container_runtimes",
+        "type": "array",
+        "description": "Allowlisted container runtimes visible on PATH.",
+        "method": "executable_lookup",
+        "command_id": "find_container_runtimes",
+        "command": null,
+        "requires_write": false,
+        "optional": false
+      }
+    ],
+    "networking": [
+      {
+        "path": "/facts/networking/outbound_https_to_allowlisted_target",
+        "type": "boolean",
+        "description": "Whether HTTPS succeeds to one fixed allowlisted target.",
+        "method": "collector_function",
+        "command_id": "test_allowlisted_https",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/networking/local_tcp_loopback",
+        "type": "boolean",
+        "description": "Whether a bounded local TCP bind and loopback connection succeeds.",
+        "method": "collector_function",
+        "command_id": "test_tcp_loopback",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      }
+    ],
+    "system_limits": [
+      {
+        "path": "/facts/system_limits/cpu_count",
+        "type": "integer",
+        "description": "Logical CPU count visible to the login-node process.",
+        "method": "python_api",
+        "command_id": "os_cpu_count",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/system_limits/available_memory_bytes",
+        "type": "integer",
+        "description": "Available memory reported for the login node in bytes.",
+        "method": "fixed_command",
+        "command_id": "read_proc_meminfo",
+        "command": ["cat", "/proc/meminfo"],
+        "requires_write": false,
+        "optional": true
+      },
+      {
+        "path": "/facts/system_limits/process_limits",
+        "type": "object",
+        "description": "Process resource limits reported for the collector process.",
+        "method": "fixed_command",
+        "command_id": "read_process_limits",
+        "command": ["prlimit", "--pid", "{pid}"],
+        "requires_write": false,
+        "optional": true
+      }
+    ]
+  }
+}

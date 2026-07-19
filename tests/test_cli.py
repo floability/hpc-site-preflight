@@ -15,13 +15,28 @@ def test_parser_accepts_profile_build() -> None:
             "profile",
             "build",
             "--mode",
-            "replay",
+            "fixture",
             "--site-info",
-            "examples/replay/anvil/site-info.json",
+            "examples/fixture/anvil/site-info.json",
         ]
     )
     assert args.command_name == "profile build"
-    assert args.mode == "replay"
+    assert args.mode == "fixture"
+
+
+@pytest.mark.parametrize("retired_mode", ["mock", "replay"])
+def test_parser_rejects_retired_mode_names(retired_mode: str) -> None:
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(
+            [
+                "profile",
+                "build",
+                "--mode",
+                retired_mode,
+                "--site-info",
+                "examples/fixture/anvil/site-info.json",
+            ]
+        )
 
 
 @pytest.mark.parametrize(
@@ -87,7 +102,7 @@ def test_unimplemented_command_writes_failed_report(tmp_path: Path) -> None:
             "profile",
             "build",
             "--site-info",
-            "examples/replay/anvil/site-info.json",
+            "examples/fixture/anvil/site-info.json",
             "--run-dir",
             str(tmp_path),
             "--quiet",

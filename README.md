@@ -4,6 +4,8 @@ HPC Site Preflight constructs an evidence-backed profile of an HPC system and us
 
 The working machine-readable site-profile contract, field semantics, evidence boundary, and a
 full illustrative example are described in [docs/SITE_PROFILE.md](docs/SITE_PROFILE.md).
+Common scheduler-independent login-node observations and their safety boundary are defined in
+[docs/MEASUREMENT_FIELDS.md](docs/MEASUREMENT_FIELDS.md).
 
 The project combines four evidence sources:
 
@@ -22,7 +24,7 @@ This repository is an implementation skeleton. Milestone 1 provides:
 - a working CLI and command hierarchy;
 - run-level and step-level performance tracking;
 - typed data contracts;
-- replay examples;
+- fixture examples;
 - tests;
 - explicit `NotImplementedError` messages for unfinished stages.
 
@@ -65,10 +67,11 @@ site information
 
 The planned context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`.
 
-## Live and replay modes
+## Fixture and live modes
 
+- **Fixture mode** runs from a laptop using reviewed JSON evidence. Each fixture identifies its
+  origin as captured, curated, or illustrative.
 - **Live mode** runs measurements and approved pilots on an HPC login node.
-- **Replay mode** runs from a laptop using captured JSON evidence.
 
 Both modes must feed the same normalized evidence interfaces so that downstream policy construction behaves identically.
 

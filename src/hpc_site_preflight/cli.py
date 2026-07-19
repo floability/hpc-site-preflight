@@ -37,7 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
     profile_sub = profile.add_subparsers(dest="profile_command", required=True)
 
     profile_build = profile_sub.add_parser("build", help="Construct or update a site profile.")
-    profile_build.add_argument("--mode", choices=("live", "replay"), default="replay")
+    profile_build.add_argument("--mode", choices=("fixture", "live"), default="fixture")
     profile_build.add_argument("--site-info", type=Path, required=True)
     profile_build.add_argument("--measurements", type=Path)
     profile_build.add_argument("--pilot-results", type=Path)

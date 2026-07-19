@@ -17,11 +17,12 @@ AI may assist documentation discovery and extraction. It must not perform measur
 
 ## Execution modes
 
+- `fixture`: reviewed JSON measurements and pilot results for laptop development. Each fixture
+  declares whether its origin is captured, curated, or illustrative.
 - `live`: real login-node measurements and approved pilot jobs.
-- `replay`: captured JSON evidence, suitable for laptop development and reproducible experiments.
 - documentation evaluation: stops after documentation-derived partial policy construction.
 
-Live and replay implementations must conform to the same provider interfaces.
+Fixture and live implementations must conform to the same provider interfaces.
 
 ## Authoritative files
 

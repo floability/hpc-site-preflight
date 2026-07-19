@@ -5,6 +5,9 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+EvidenceMode = Literal["fixture", "live"]
+FixtureOrigin = Literal["captured", "curated", "illustrative"]
+
 
 class EvidenceItem(BaseModel):
     """One normalized claim or observation about the target site."""

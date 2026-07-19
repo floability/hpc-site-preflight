@@ -5,17 +5,24 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class DocumentationScope(BaseModel):
+    """Bounded documentation-discovery scope for one site."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    allowed_domains: list[str]
+    preferred_path_tokens: list[str]
+
+
 class SiteInfo(BaseModel):
     """Stable identity inputs used to scope evidence collection."""
 
     model_config = ConfigDict(extra="forbid")
 
-    schema_version: str = "0.1"
-    site_id: str
-    site_name: str
-    hostname: str | None = None
-    scheduler_hint: Literal["slurm", "htcondor", "unknown"] = "unknown"
-    aliases: list[str] = Field(default_factory=list)
-    allowed_domains: list[str] = Field(default_factory=list)
-    preferred_path_tokens: list[str] = Field(default_factory=list)
-    excluded_site_tokens: list[str] = Field(default_factory=list)
+    schema_version: Literal["0.1"]
+    site_id: str = Field(min_length=1)
+    site_name: str = Field(min_length=1)
+    scheduler: Literal["slurm", "htcondor", "unknown"]
+    aliases: list[str]
+    hostname_patterns: list[str]
+    documentation: DocumentationScope

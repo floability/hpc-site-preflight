@@ -1,4 +1,4 @@
-"""Aggregate all evidence sources behind one live/replay-neutral contract."""
+"""Aggregate all evidence sources behind one fixture/live-neutral contract."""
 
 from pydantic import BaseModel, ConfigDict, Field
 
