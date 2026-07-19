@@ -1,8 +1,7 @@
 {
   "schema_version": "0.1",
   "site_id": "purdue-anvil",
-  "mode": "fixture",
-  "fixture_origin": "illustrative",
+  "evidence_source": "simulated",
   "results": {
     "note": "Illustrative placeholder. Populate during Milestone 27."
   }

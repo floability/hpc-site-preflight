@@ -15,16 +15,16 @@ def test_parser_accepts_profile_build() -> None:
             "profile",
             "build",
             "--mode",
-            "fixture",
+            "simulate",
             "--site-info",
-            "examples/fixture/anvil/site-info.json",
+            "examples/simulate/anvil/site-info.json",
         ]
     )
     assert args.command_name == "profile build"
-    assert args.mode == "fixture"
+    assert args.mode == "simulate"
 
 
-@pytest.mark.parametrize("retired_mode", ["mock", "replay"])
+@pytest.mark.parametrize("retired_mode", ["fixture", "mock", "replay"])
 def test_parser_rejects_retired_mode_names(retired_mode: str) -> None:
     with pytest.raises(SystemExit):
         build_parser().parse_args(
@@ -34,7 +34,7 @@ def test_parser_rejects_retired_mode_names(retired_mode: str) -> None:
                 "--mode",
                 retired_mode,
                 "--site-info",
-                "examples/fixture/anvil/site-info.json",
+                "examples/simulate/anvil/site-info.json",
             ]
         )
 
@@ -137,7 +137,7 @@ def test_unimplemented_command_writes_failed_report(tmp_path: Path) -> None:
     ]
 
 
-def test_fixture_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> None:
+def test_simulated_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> None:
     output_dir = tmp_path / "output"
     run_dir = tmp_path / "runs"
     exit_code = main(
@@ -145,9 +145,9 @@ def test_fixture_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> None:
             "profile",
             "build",
             "--site-info",
-            "examples/fixture/anvil/site-info.json",
+            "examples/simulate/anvil/site-info.json",
             "--measurements",
-            "examples/fixture/anvil/login-measurements.json",
+            "examples/simulate/anvil/login-measurements.json",
             "--output-dir",
             str(output_dir),
             "--run-dir",
@@ -167,8 +167,8 @@ def test_fixture_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> None:
     assert report["status"] == "completed"
     assert [stage["name"] for stage in report["steps"]] == [
         "site_info_load",
-        "fixture_measurement_load",
-        "fixture_measurement_validate",
+        "simulated_measurement_load",
+        "simulated_measurement_validate",
         "measurement_profile_build",
         "profile_artifact_write",
     ]

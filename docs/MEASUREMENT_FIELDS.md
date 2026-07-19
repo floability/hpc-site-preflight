@@ -79,10 +79,10 @@ is not equivalent to `false`, and an unavailable capacity query is not equivalen
 | `per_run` | Collect for every profile-building run; do not reuse as current evidence. |
 | `session` | May be reused only within the same login session and run context. |
 | `daily` | May be reused for at most 24 hours when its original timestamp is preserved. |
-| `site_change` | Stable enough for a fixture but must be rechecked when the site or collector changes. |
+| `site_change` | Stable until the site or collector changes. |
 
-Timestamps always describe when the value was observed. A fixture preserves its historical
-observation time; loading a fixture must not replace that timestamp with the current time.
+Timestamps always describe when the value was observed. Loading saved evidence must not replace
+its timestamp with the current time.
 
 ## Safe source classes
 
@@ -91,7 +91,7 @@ Source classes are implementation constraints, not suggested free-form commands.
 | Source class | Permitted mechanism |
 | --- | --- |
 | `collector_clock` | Process-local UTC clock. |
-| `collector_metadata` | Package constants and explicit fixture/live configuration. |
+| `collector_metadata` | Package constants and explicit simulate/live configuration. |
 | `host_identity` | Fixed operating-system hostname APIs and local name-service resolution. |
 | `platform_metadata` | Fixed OS APIs and bounded reads of standard release metadata. |
 | `scheduler_detection` | Fixed executable lookup for reviewed Slurm and HTCondor commands. |
@@ -113,18 +113,10 @@ does not authorize general network access.
 
 ### Collection and command provenance
 
-Collection metadata records start/end timestamps, collector identity and version, and whether
-the evidence came from `fixture` or `live` acquisition. Command-result provenance uses stable
+Collection metadata records timestamps, collector version, and whether the evidence source is
+`simulated` or `measured`. Command-result provenance uses stable
 command IDs rather than arbitrary command strings and records status, duration, exit code, and
 hashes or categories instead of placing full output in normal traces.
-
-Fixture evidence also declares an origin:
-
-- `captured`: collected from a real site and retained as a reviewed fixture;
-- `curated`: assembled from reviewed observations without claiming to be a raw capture; or
-- `illustrative`: development-only values that are not authoritative site observations.
-
-Live evidence must not declare a fixture origin.
 
 Full command output may be retained only in a deliberately captured evidence artifact when a
 later contract requires it. It must not contain secrets and must not be copied into ordinary
@@ -134,7 +126,7 @@ later contract requires it. It must not contain secrets and must not be copied i
 
 The common identity group records the login hostname, fully qualified domain name when safely
 available, and DNS suffix. These values can confirm or challenge `site-info.json`, seed bounded
-documentation discovery, and detect a fixture/site mismatch. They cannot select the target site
+documentation discovery, and detect an evidence/site mismatch. They cannot select the target site
 without validation against explicit site information.
 
 Usernames, home-directory contents, SSH configuration, credentials, tokens, environment dumps,
@@ -167,7 +159,7 @@ Each reviewed filesystem path may record:
 - bounded symlink and hard-link creation support.
 
 Candidate paths come only from explicit site information, allowlisted environment variables, or
-reviewed fixture configuration. The collector must not crawl arbitrary parent directories.
+reviewed simulation configuration. The collector must not crawl arbitrary parent directories.
 
 Actual paths can contain usernames, allocation names, or project identifiers. Evidence artifacts
 may retain the path when necessary for actionability, but normal traces should use a redacted or
@@ -189,7 +181,7 @@ temporary-directory behavior requires a pilot.
 
 Workflow tools, module systems, and container runtimes are separate repeated collections. Each
 entry may record its semantic name, login-node availability, executable path, and visible
-version. Discovery is limited to an allowlist chosen by the application or site fixture.
+version. Discovery is limited to an allowlist chosen by the application or site simulation.
 
 The common catalog does not prescribe the allowlist. A later collector milestone will define it
 and its fixed version-query adapters. It must not execute an unknown binary merely because it is
@@ -217,7 +209,7 @@ Milestone 2 defines common field semantics only. It does not:
 
 - implement Pydantic measurement models;
 - change the current measurement-bundle placeholder;
-- populate Anvil, Stampede3, or Notre Dame fixtures;
+- populate Anvil, Stampede3, or Notre Dame simulations;
 - define Slurm partitions or HTCondor ClassAds;
 - execute a login-node command; or
 - construct a site profile.

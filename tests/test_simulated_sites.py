@@ -1,4 +1,4 @@
-"""Checks for the three laptop-development site fixtures."""
+"""Checks for the three laptop-development site simulations."""
 
 import json
 from pathlib import Path
@@ -11,7 +11,7 @@ from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.site_info.models import SiteInfo
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURE_ROOT = ROOT / "examples" / "fixture"
+SIMULATE_ROOT = ROOT / "examples" / "simulate"
 SITE_IDS = {
     "anvil": ("purdue-anvil", "slurm"),
     "stampede3": ("tacc-stampede3", "slurm"),
@@ -49,11 +49,11 @@ def test_site_info_schema_describes_the_shared_shape() -> None:
     assert schema["properties"]["scheduler"]["enum"] == ["slurm", "htcondor", "unknown"]
 
 
-@pytest.mark.parametrize("fixture_name", SITE_IDS)
-def test_site_fixture_pair_validates(fixture_name: str) -> None:
-    expected_site_id, expected_scheduler = SITE_IDS[fixture_name]
-    site_payload = _load(FIXTURE_ROOT / fixture_name / "site-info.json")
-    measurement_payload = _load(FIXTURE_ROOT / fixture_name / "login-measurements.json")
+@pytest.mark.parametrize("simulation_name", SITE_IDS)
+def test_site_simulation_pair_validates(simulation_name: str) -> None:
+    expected_site_id, expected_scheduler = SITE_IDS[simulation_name]
+    site_payload = _load(SIMULATE_ROOT / simulation_name / "site-info.json")
+    measurement_payload = _load(SIMULATE_ROOT / simulation_name / "login-measurements.json")
     site = SiteInfo.model_validate(site_payload)
     measurements = MeasurementBundle.model_validate(measurement_payload)
 
@@ -62,8 +62,7 @@ def test_site_fixture_pair_validates(fixture_name: str) -> None:
     assert _object_depth(measurement_payload) <= 2
     assert site.site_id == measurements.site_id == expected_site_id
     assert site.scheduler == measurements.scheduler_type == expected_scheduler
-    assert measurements.source_mode == "fixture"
-    assert measurements.fixture_origin == "illustrative"
+    assert measurements.evidence_source == "simulated"
 
     observations = [*measurements.common, *measurements.scheduler]
     assert observations
@@ -71,9 +70,9 @@ def test_site_fixture_pair_validates(fixture_name: str) -> None:
     assert all(item.source_reference for item in observations)
 
 
-def test_anvil_fixture_preserves_visible_walltime_conflict_input() -> None:
+def test_anvil_simulation_preserves_visible_walltime_conflict_input() -> None:
     bundle = MeasurementBundle.model_validate(
-        _load(FIXTURE_ROOT / "anvil" / "login-measurements.json")
+        _load(SIMULATE_ROOT / "anvil" / "login-measurements.json")
     )
     observations = {item.path: item for item in bundle.scheduler}
     walltime = observations["/facts/scheduler/partitions/shared/visible_walltime_limit"]
@@ -83,9 +82,9 @@ def test_anvil_fixture_preserves_visible_walltime_conflict_input() -> None:
     assert "not enforced policy" in walltime.source_reference
 
 
-def test_stampede3_fixture_uses_the_slurm_structure() -> None:
+def test_stampede3_simulation_uses_the_slurm_structure() -> None:
     bundle = MeasurementBundle.model_validate(
-        _load(FIXTURE_ROOT / "stampede3" / "login-measurements.json")
+        _load(SIMULATE_ROOT / "stampede3" / "login-measurements.json")
     )
     paths = {item.path for item in bundle.scheduler}
 
@@ -93,9 +92,9 @@ def test_stampede3_fixture_uses_the_slurm_structure() -> None:
     assert "/facts/scheduler/node_shapes" in paths
 
 
-def test_notre_dame_fixture_uses_classads_and_resource_groups() -> None:
+def test_notre_dame_simulation_uses_classads_and_resource_groups() -> None:
     bundle = MeasurementBundle.model_validate(
-        _load(FIXTURE_ROOT / "notre-dame-crc" / "login-measurements.json")
+        _load(SIMULATE_ROOT / "notre-dame-crc" / "login-measurements.json")
     )
     paths = {item.path for item in bundle.scheduler}
 
@@ -106,12 +105,12 @@ def test_notre_dame_fixture_uses_classads_and_resource_groups() -> None:
 
 
 def test_scheduler_models_reject_cross_scheduler_fields() -> None:
-    slurm_payload = _load(FIXTURE_ROOT / "anvil" / "login-measurements.json")
+    slurm_payload = _load(SIMULATE_ROOT / "anvil" / "login-measurements.json")
     slurm_payload["scheduler_type"] = "htcondor"
     with pytest.raises(ValidationError, match="not HTCondor measurements"):
         MeasurementBundle.model_validate(slurm_payload)
 
-    htcondor_payload = _load(FIXTURE_ROOT / "notre-dame-crc" / "login-measurements.json")
+    htcondor_payload = _load(SIMULATE_ROOT / "notre-dame-crc" / "login-measurements.json")
     htcondor_payload["scheduler_type"] = "slurm"
     with pytest.raises(ValidationError, match="not Slurm measurements"):
         MeasurementBundle.model_validate(htcondor_payload)

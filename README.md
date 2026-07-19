@@ -18,13 +18,14 @@ AI is restricted to documentation discovery and structured extraction. Measureme
 
 ## Project status
 
-This repository is an implementation skeleton. Milestone 1 provides:
+The deterministic foundation and first measurement-only profile builder are complete:
 
 - an installable `src/` package;
 - a working CLI and command hierarchy;
 - run-level and step-level performance tracking;
-- typed data contracts;
-- fixture examples;
+- typed site, measurement, profile, and evidence contracts;
+- simulated Anvil, Stampede3, and Notre Dame CRC inputs;
+- measurement-only partial profile construction;
 - tests;
 - explicit `NotImplementedError` messages for unfinished stages.
 
@@ -67,11 +68,13 @@ site information
 
 The planned context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`.
 
-## Fixture and live modes
+## Simulate and live modes
 
-- **Fixture mode** runs from a laptop using reviewed JSON evidence. Each fixture identifies its
-  origin as captured, curated, or illustrative.
-- **Live mode** runs measurements and approved pilots on an HPC login node.
+- **Simulate mode** is the default. It requires site-information and measurement files and never
+  queries the current hardware.
+- **Live mode** reuses supplied inputs and will measure any missing inputs on the HPC login node.
+  Pilot jobs remain explicitly authorized operations.
+- Evidence records their source as **simulated** or **measured**.
 
 Both modes must feed the same normalized evidence interfaces so that downstream policy construction behaves identically.
 
@@ -101,7 +104,8 @@ hpc-site-preflight evaluate documentation --help
 hpc-site-preflight preflight --help
 ```
 
-The commands currently parse arguments, create run reports, and fail explicitly where behavior has not yet been implemented.
+`profile build` currently constructs measurement-only partial profiles in simulate mode. Other
+unfinished commands create run reports and fail explicitly.
 
 ## Performance reporting
 

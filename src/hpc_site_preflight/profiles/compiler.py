@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
+from typing import Literal
 
 from hpc_site_preflight.evidence.bundle import EvidenceReport
 from hpc_site_preflight.evidence.models import (
@@ -151,7 +152,9 @@ def compile_profile(
 def _evidence_record(
     site_id: str, bundle: MeasurementBundle, observation: MeasurementObservation
 ) -> EvidenceRecord:
-    trust = bundle.fixture_origin or "captured"
+    trust: Literal["illustrative", "captured"] = (
+        "illustrative" if bundle.evidence_source == "simulated" else "captured"
+    )
     source_key = f"{observation.observed_at.isoformat()}:{observation.command_id}"
     evidence_id = build_evidence_id("measurement", site_id, observation.path, source_key)
     accepted = observation.status == "observed"

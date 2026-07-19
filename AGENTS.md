@@ -15,14 +15,16 @@ The system has four layers:
 
 AI may assist documentation discovery and extraction. It must not perform measurement, write arbitrary probes, reconcile conflicts, or approve deployment.
 
-## Execution modes
+## Execution modes and evidence sources
 
-- `fixture`: reviewed JSON measurements and pilot results for laptop development. Each fixture
-  declares whether its origin is captured, curated, or illustrative.
-- `live`: real login-node measurements and approved pilot jobs.
-- documentation evaluation: stops after documentation-derived partial policy construction.
+- `simulate` is the default. It requires site-information and measurement files and never queries
+  the current hardware.
+- `live` reuses supplied inputs and will measure missing inputs from the real login node. Pilot
+  jobs always require explicit approval.
+- Evidence declares `simulated` or `measured` independently of the execution mode.
+- Documentation evaluation stops after documentation-derived partial policy construction.
 
-Fixture and live implementations must conform to the same provider interfaces.
+Simulated and live implementations must conform to the same provider interfaces.
 
 ## Authoritative files
 

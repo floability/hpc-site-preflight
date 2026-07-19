@@ -23,24 +23,14 @@
         "optional": false
       },
       {
-        "path": "/source_mode",
+        "path": "/evidence_source",
         "type": "string",
-        "description": "Evidence mode, either fixture or live.",
+        "description": "Whether the evidence is simulated or measured from real hardware.",
         "method": "collector_function",
-        "command_id": "source_mode",
+        "command_id": "evidence_source",
         "command": null,
         "requires_write": false,
         "optional": false
-      },
-      {
-        "path": "/fixture_origin",
-        "type": "string",
-        "description": "Fixture origin: captured, curated, or illustrative.",
-        "method": "derived",
-        "command_id": "fixture_origin",
-        "command": null,
-        "requires_write": false,
-        "optional": true
       }
     ],
     "identity": [

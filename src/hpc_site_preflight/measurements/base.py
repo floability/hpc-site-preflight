@@ -6,7 +6,7 @@ from typing import Literal, Self, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel, model_validator
 
-from hpc_site_preflight.evidence.models import EvidenceMode, FixtureOrigin
+from hpc_site_preflight.evidence.models import EvidenceSource
 from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.models import SiteInfo
 
@@ -168,20 +168,15 @@ class MeasurementBundle(BaseModel):
     site_id: str
     scheduler_type: Literal["slurm", "htcondor", "unknown"]
     collected_at: datetime
-    source_mode: EvidenceMode
-    fixture_origin: FixtureOrigin | None = None
+    evidence_source: EvidenceSource
     collector_version: str
     common: list[MeasurementObservation] = Field(default_factory=list)
     scheduler: list[MeasurementObservation] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validate_fixture_origin(self) -> Self:
-        """Validate acquisition mode and scheduler-specific paths."""
+    def validate_bundle(self) -> Self:
+        """Validate scheduler-specific paths."""
 
-        if self.source_mode == "fixture" and self.fixture_origin is None:
-            raise ValueError("fixture_origin is required when source_mode is 'fixture'.")
-        if self.source_mode == "live" and self.fixture_origin is not None:
-            raise ValueError("fixture_origin must be omitted when source_mode is 'live'.")
         CommonMeasurements.model_validate(self.common)
         if self.scheduler_type == "slurm":
             SlurmMeasurements.model_validate(self.scheduler)
@@ -202,7 +197,7 @@ class MeasurementProvider(ABC):
 
 def _is_common_path(path: str) -> bool:
     return (
-        path in {"/observed_at", "/source_mode", "/fixture_origin"}
+        path in {"/observed_at", "/evidence_source"}
         or path in COMMON_SCHEDULER_PATHS
         or path.startswith(COMMON_PATH_PREFIXES)
     )

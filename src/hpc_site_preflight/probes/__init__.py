@@ -1,1 +1,1 @@
-"""Approved fixture and live pilot-result providers."""
+"""Approved simulated and live pilot-result providers."""

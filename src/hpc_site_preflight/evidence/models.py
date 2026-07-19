@@ -5,8 +5,7 @@ from typing import Literal, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field
 
-EvidenceMode = Literal["fixture", "live"]
-FixtureOrigin = Literal["captured", "curated", "illustrative"]
+EvidenceSource = Literal["simulated", "measured"]
 EvidenceScalar: TypeAlias = str | int | float | bool
 EvidenceValue: TypeAlias = EvidenceScalar | list[EvidenceScalar]
 

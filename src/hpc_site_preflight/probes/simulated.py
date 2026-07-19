@@ -1,4 +1,4 @@
-"""Load reviewed pilot-result fixtures when running from a laptop."""
+"""Load simulated pilot results when running from a laptop."""
 
 from pathlib import Path
 
@@ -8,11 +8,11 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.models import SiteInfo
 
 
-class FixturePilotProvider(PilotProvider):
-    """Read fixture pilot results in Milestone 27."""
+class SimulatedPilotProvider(PilotProvider):
+    """Read simulated pilot results in a future milestone."""
 
     def __init__(self, path: Path) -> None:
         self.path = path
 
     def collect(self, site: SiteInfo, tracker: RunTracker) -> PilotResultBundle:
-        raise FeatureNotImplementedError("Fixture pilot ingestion is planned for Milestone 27.")
+        raise FeatureNotImplementedError("Simulated pilot ingestion is not implemented yet.")

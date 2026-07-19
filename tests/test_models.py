@@ -1,4 +1,4 @@
-"""Typed contract smoke tests using fixture examples."""
+"""Typed contract smoke tests using simulated examples."""
 
 import json
 from pathlib import Path
@@ -18,22 +18,21 @@ def _load(path: str) -> dict:
 
 
 def test_example_site_info_validates() -> None:
-    model = SiteInfo.model_validate(_load("examples/fixture/anvil/site-info.json"))
+    model = SiteInfo.model_validate(_load("examples/simulate/anvil/site-info.json"))
     assert model.site_id == "purdue-anvil"
     assert model.scheduler == "slurm"
 
 
 def test_example_measurements_validate() -> None:
     model = MeasurementBundle.model_validate(
-        _load("examples/fixture/anvil/login-measurements.json")
+        _load("examples/simulate/anvil/login-measurements.json")
     )
-    assert model.source_mode == "fixture"
-    assert model.fixture_origin == "illustrative"
+    assert model.evidence_source == "simulated"
     assert model.scheduler_type == "slurm"
 
 
 def test_measurement_bundle_supports_both_scheduler_types() -> None:
-    payload = _load("examples/fixture/anvil/login-measurements.json")
+    payload = _load("examples/simulate/anvil/login-measurements.json")
     payload["scheduler_type"] = "htcondor"
     payload["scheduler"] = []
 
@@ -49,57 +48,34 @@ def test_measurement_json_has_at_most_two_object_layers() -> None:
             return max((object_depth(item) for item in value), default=0)
         return 0
 
-    payload = _load("examples/fixture/anvil/login-measurements.json")
+    payload = _load("examples/simulate/anvil/login-measurements.json")
     assert object_depth(payload) <= 2
 
 
 def test_example_pilot_results_validate() -> None:
-    model = PilotResultBundle.model_validate(_load("examples/fixture/anvil/pilot-results.json"))
+    model = PilotResultBundle.model_validate(_load("examples/simulate/anvil/pilot-results.json"))
     assert model.site_id == "purdue-anvil"
-    assert model.fixture_origin == "illustrative"
+    assert model.evidence_source == "simulated"
 
 
-@pytest.mark.parametrize("model", [MeasurementBundle, PilotResultBundle])
-def test_fixture_evidence_requires_an_origin(
-    model: type[MeasurementBundle | PilotResultBundle],
-) -> None:
-    payload = {"site_id": "example", "mode": "fixture"}
-    if model is MeasurementBundle:
-        payload = {
-            "schema_version": "0.1",
-            "site_id": "example",
-            "scheduler_type": "slurm",
-            "collected_at": "2026-07-19T12:00:00Z",
-            "source_mode": "fixture",
-            "collector_version": "test",
-        }
+def test_measurement_evidence_source_is_simulated_or_measured() -> None:
+    payload = _load("examples/simulate/anvil/login-measurements.json")
+    payload["evidence_source"] = "measured"
+    assert MeasurementBundle.model_validate(payload).evidence_source == "measured"
 
-    with pytest.raises(ValidationError, match="fixture_origin is required"):
-        model.model_validate(payload)
+    payload["evidence_source"] = "fixture"
+    with pytest.raises(ValidationError):
+        MeasurementBundle.model_validate(payload)
 
 
-@pytest.mark.parametrize("model", [MeasurementBundle, PilotResultBundle])
-def test_live_evidence_rejects_a_fixture_origin(
-    model: type[MeasurementBundle | PilotResultBundle],
-) -> None:
-    payload = {
-        "site_id": "example",
-        "mode": "live",
-        "fixture_origin": "captured",
-    }
-    if model is MeasurementBundle:
-        payload = {
-            "schema_version": "0.1",
-            "site_id": "example",
-            "scheduler_type": "htcondor",
-            "collected_at": "2026-07-19T12:00:00Z",
-            "source_mode": "live",
-            "fixture_origin": "captured",
-            "collector_version": "test",
-        }
+def test_pilot_evidence_source_is_simulated_or_measured() -> None:
+    payload = _load("examples/simulate/anvil/pilot-results.json")
+    payload["evidence_source"] = "measured"
+    assert PilotResultBundle.model_validate(payload).evidence_source == "measured"
 
-    with pytest.raises(ValidationError, match="fixture_origin must be omitted"):
-        model.model_validate(payload)
+    payload["evidence_source"] = "live"
+    with pytest.raises(ValidationError):
+        PilotResultBundle.model_validate(payload)
 
 
 @pytest.mark.parametrize("value", [False, 0, []])

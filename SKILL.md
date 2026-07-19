@@ -8,7 +8,8 @@ Key boundaries:
 
 - AI assists documentation discovery and extraction only.
 - Measurements, probes, validation, reconciliation, and final planning are deterministic.
-- Fixture and live modes must share the same interfaces.
+- Simulate and live modes must share the same interfaces.
+- Evidence sources are `simulated` or `measured`.
 - One `RunTracker` records time, tokens, retries, tool calls, artifacts, and failures by stage.
 - Unimplemented features must fail explicitly; never fabricate output.
 - Follow one milestone at a time from `MILESTONES.md`.

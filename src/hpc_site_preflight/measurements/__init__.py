@@ -1,4 +1,4 @@
-"""Fixture and live login-environment measurements."""
+"""Simulated and live login-environment measurements."""
 
 from hpc_site_preflight.measurements.base import (
     CommonMeasurements,
@@ -9,11 +9,11 @@ from hpc_site_preflight.measurements.base import (
     MeasurementProvider,
     SlurmMeasurements,
 )
-from hpc_site_preflight.measurements.fixture import FixtureMeasurementProvider
+from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 
 __all__ = [
     "CommonMeasurements",
-    "FixtureMeasurementProvider",
+    "SimulatedMeasurementProvider",
     "HTCondorMeasurements",
     "MeasurementBundle",
     "MeasurementObservation",

@@ -13,7 +13,7 @@ from hpc_site_preflight.exceptions import (
     FeatureNotImplementedError,
     PreflightError,
 )
-from hpc_site_preflight.measurements.fixture import FixtureMeasurementProvider
+from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 from hpc_site_preflight.profiles.compiler import compile_profile
 from hpc_site_preflight.reporting.artifacts import write_json
 from hpc_site_preflight.reporting.tracker import RunTracker
@@ -45,7 +45,7 @@ def build_parser() -> argparse.ArgumentParser:
     profile_sub = profile.add_subparsers(dest="profile_command", required=True)
 
     profile_build = profile_sub.add_parser("build", help="Construct or update a site profile.")
-    profile_build.add_argument("--mode", choices=("fixture", "live"), default="fixture")
+    profile_build.add_argument("--mode", choices=("simulate", "live"), default="simulate")
     profile_build.add_argument("--site-info", type=Path, required=True)
     profile_build.add_argument("--measurements", type=Path)
     profile_build.add_argument("--pilot-results", type=Path)
@@ -114,17 +114,17 @@ def _placeholder_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
 
 
 def _profile_build_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
-    """Build the Phase C measurement-only profile from reviewed fixtures."""
+    """Build the Phase C measurement-only profile from simulated evidence."""
 
-    if args.mode != "fixture":
+    if args.mode != "simulate":
         raise FeatureNotImplementedError("Live profile building is deferred until Phase I.")
     if args.measurements is None:
-        raise ConfigurationError("Fixture profile building requires --measurements.")
+        raise ConfigurationError("Simulate mode requires --measurements.")
 
     with tracker.stage("site_info_load"):
         site = load_site_info(args.site_info)
 
-    measurements = FixtureMeasurementProvider(args.measurements).collect(site, tracker)
+    measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
 
     with tracker.stage("measurement_profile_build"):
         profile, report = compile_profile(site, measurements)

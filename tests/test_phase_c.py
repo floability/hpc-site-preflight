@@ -19,15 +19,15 @@ from hpc_site_preflight.profiles.models import SiteProfile, SubmissionOption
 from hpc_site_preflight.site_info.models import SiteInfo
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURE_ROOT = ROOT / "examples" / "fixture"
+SIMULATE_ROOT = ROOT / "examples" / "simulate"
 
 
 def _load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _compile(fixture_name: str) -> tuple[SiteProfile, EvidenceReport]:
-    root = FIXTURE_ROOT / fixture_name
+def _compile(simulation_name: str) -> tuple[SiteProfile, EvidenceReport]:
+    root = SIMULATE_ROOT / simulation_name
     site = SiteInfo.model_validate(_load(root / "site-info.json"))
     measurements = MeasurementBundle.model_validate(_load(root / "login-measurements.json"))
     return compile_profile(site, measurements)
@@ -110,7 +110,7 @@ def test_slurm_partition_rules_are_not_applicable_to_htcondor() -> None:
 
 
 @pytest.mark.parametrize(
-    ("fixture_name", "scheduler", "submit_command"),
+    ("simulation_name", "scheduler", "submit_command"),
     [
         ("anvil", "slurm", "sbatch"),
         ("stampede3", "slurm", "sbatch"),
@@ -118,9 +118,9 @@ def test_slurm_partition_rules_are_not_applicable_to_htcondor() -> None:
     ],
 )
 def test_measurement_only_builder_supports_all_sites(
-    fixture_name: str, scheduler: str, submit_command: str
+    simulation_name: str, scheduler: str, submit_command: str
 ) -> None:
-    profile, report = _compile(fixture_name)
+    profile, report = _compile(simulation_name)
     profile_payload = profile.model_dump(mode="json")
     report_payload = report.model_dump(mode="json")
 
