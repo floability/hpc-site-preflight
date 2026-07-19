@@ -6,6 +6,7 @@ import re
 from collections.abc import Callable
 from typing import Literal
 
+from hpc_site_preflight.documentation.models import DocumentationEvidence
 from hpc_site_preflight.evidence.bundle import EvidenceReport
 from hpc_site_preflight.evidence.models import (
     EvidenceLink,
@@ -15,6 +16,7 @@ from hpc_site_preflight.evidence.models import (
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.exceptions import ConfigurationError
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementObservation
+from hpc_site_preflight.profiles.documentation import apply_documentation
 from hpc_site_preflight.profiles.models import (
     AccountingProfile,
     FieldEvidenceLink,
@@ -35,9 +37,11 @@ _STORAGE_PATH = re.compile(r"^/facts/storage/filesystems/([^/]+)/path$")
 
 
 def compile_profile(
-    site: SiteInfo, measurements: MeasurementBundle
+    site: SiteInfo,
+    measurements: MeasurementBundle,
+    documentation: DocumentationEvidence | None = None,
 ) -> tuple[SiteProfile, EvidenceReport]:
-    """Build a partial profile and detailed report from measurements only."""
+    """Build a partial profile from measurements and optional documentation."""
 
     if site.site_id != measurements.site_id or site.scheduler != measurements.scheduler_type:
         raise ConfigurationError("Site information and measurements do not identify the same site.")
@@ -146,6 +150,8 @@ def compile_profile(
         links=report_links,
         unresolved=report_unresolved,
     )
+    if documentation is not None:
+        return apply_documentation(profile, report, documentation)
     return profile, report
 
 

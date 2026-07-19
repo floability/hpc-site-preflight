@@ -1,0 +1,94 @@
+{
+  "schema_version": "0.1",
+  "note": "Synthetic documentation search and page data for offline simulation.",
+  "search_results": [
+    {
+      "url": "https://docs.rcac.purdue.edu/anvil/jobs",
+      "title": "Anvil Job Submission",
+      "snippet": "Submitting Slurm jobs and documented queue limits on Anvil."
+    },
+    {
+      "url": "https://docs.rcac.purdue.edu/anvil/policies",
+      "title": "Anvil Allocation and Storage Policies",
+      "snippet": "Allocation charging and scratch purge policies for Anvil."
+    },
+    {
+      "url": "https://docs.rcac.purdue.edu/userguides/negishi/jobs",
+      "title": "Negishi Job Submission",
+      "snippet": "Job submission guidance for the Negishi cluster."
+    },
+    {
+      "url": "https://example.net/anvil",
+      "title": "Unofficial Anvil Notes",
+      "snippet": "An external page outside the approved domains."
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://docs.rcac.purdue.edu/anvil/jobs",
+      "title": "Anvil Job Submission",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["Anvil User Guide", "Job Submission"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Anvil jobs are submitted with sbatch. Every Anvil job must request an account and partition."
+            }
+          ]
+        },
+        {
+          "heading_path": ["Anvil User Guide", "Queue Limits"],
+          "blocks": [
+            {
+              "kind": "table",
+              "text": "Partition | Maximum walltime\nshared | 345600 seconds\nwholenode | 345600 seconds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "https://docs.rcac.purdue.edu/anvil/policies",
+      "title": "Anvil Allocation and Storage Policies",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["Anvil User Guide", "Allocation and Charging"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Anvil requires an ACCESS allocation before jobs can be submitted. CPU work is charged against ACCESS service units."
+            }
+          ]
+        },
+        {
+          "heading_path": ["Anvil User Guide", "Scratch Purge"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Files in Anvil scratch that have not been accessed for 60 days may be purged."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "https://docs.rcac.purdue.edu/userguides/negishi/jobs",
+      "title": "Negishi Job Submission",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["Negishi User Guide", "Job Submission"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Negishi jobs require a site-specific QoS value."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "resp_partial",
+  "output": [
+    {
+      "type": "function_call",
+      "name": "submit_result",
+      "arguments": "{\"value\":\"unknown\",\"evidence\":null,\"source_url\":null}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 80,
+    "output_tokens": 12
+  }
+}

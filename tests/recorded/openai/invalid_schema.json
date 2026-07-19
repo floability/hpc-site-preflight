@@ -1,0 +1,14 @@
+{
+  "id": "resp_invalid_schema",
+  "output": [
+    {
+      "type": "function_call",
+      "name": "submit_result",
+      "arguments": "{\"value\":\"unsupported\"}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 75,
+    "output_tokens": 7
+  }
+}

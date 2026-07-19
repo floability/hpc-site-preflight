@@ -1,27 +1,14 @@
-"""Provider-neutral interface for the documentation policy subsystem."""
+"""Provider-neutral interface for documentation policy construction."""
 
 from abc import ABC, abstractmethod
-from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
-
+from hpc_site_preflight.documentation.models import ContextMode, DocumentationEvidence
 from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.models import SiteInfo
 
 
-class DocumentationEvidence(BaseModel):
-    """Documentation-derived partial policy plus detailed provenance references."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    site_id: str
-    context_mode: str
-    partial_policy: dict[str, Any] = Field(default_factory=dict)
-    evidence_report: dict[str, Any] = Field(default_factory=dict)
-
-
 class DocumentationPolicyProvider(ABC):
-    """Build documentation evidence without exposing provider-specific SDK types."""
+    """Build validated documentation evidence behind one stable interface."""
 
     @abstractmethod
     def build(
@@ -29,6 +16,9 @@ class DocumentationPolicyProvider(ABC):
         site: SiteInfo,
         tracker: RunTracker,
         *,
-        context_mode: str,
+        context_mode: ContextMode,
     ) -> DocumentationEvidence:
-        """Return validated documentation evidence."""
+        """Return documentation findings with exact local citations."""
+
+
+__all__ = ["DocumentationEvidence", "DocumentationPolicyProvider"]

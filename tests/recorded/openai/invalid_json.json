@@ -1,0 +1,14 @@
+{
+  "id": "resp_invalid_json",
+  "output": [
+    {
+      "type": "function_call",
+      "name": "submit_result",
+      "arguments": "{not json"
+    }
+  ],
+  "usage": {
+    "input_tokens": 70,
+    "output_tokens": 5
+  }
+}

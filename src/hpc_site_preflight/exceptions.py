@@ -19,3 +19,11 @@ class SimulationLoadError(PreflightError):
 
 class SimulationValidationError(PreflightError):
     """Raised when simulated evidence does not match the site or contract."""
+
+
+class ModelProviderError(PreflightError):
+    """Raised when a model request or structured response is invalid."""
+
+
+class DocumentationError(PreflightError):
+    """Raised when bounded documentation processing cannot validate an operation."""

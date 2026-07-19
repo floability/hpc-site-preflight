@@ -118,11 +118,19 @@ class RunTracker:
         self._require_non_negative("retry count", count)
         self._require_stage("retry").retries += count
 
-    def record_tool_call(self, count: int = 1) -> None:
-        """Append tool-call events to the active stage."""
+    def record_tool_call(
+        self,
+        count: int = 1,
+        *,
+        tool_name: str | None = None,
+        details: dict[str, str] | None = None,
+    ) -> None:
+        """Append tool-call metrics and optional body-free trace details."""
 
         self._require_non_negative("tool-call count", count)
         self._require_stage("tool call").tool_calls += count
+        if tool_name is not None:
+            self._trace.write("tool_call", tool=tool_name, details=details or {})
 
     def add_artifact(self, *, kind: str, path: Path) -> None:
         """Record an artifact produced by the run."""

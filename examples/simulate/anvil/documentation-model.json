@@ -1,0 +1,120 @@
+{
+  "schema_version": "0.1",
+  "note": "Synthetic model outputs for offline simulation; no live model was called.",
+  "responses": [
+    {
+      "output_name": "discovery_action",
+      "response_id": "anvil-discovery-1",
+      "data": {
+        "action": "search_web",
+        "query": "Anvil job submission allocation storage policy",
+        "url": null,
+        "source_urls": [],
+        "summary": null,
+        "unanswered_topics": []
+      }
+    },
+    {
+      "output_name": "discovery_action",
+      "response_id": "anvil-discovery-2",
+      "data": {
+        "action": "fetch_page",
+        "query": null,
+        "url": "https://docs.rcac.purdue.edu/anvil/jobs",
+        "source_urls": [],
+        "summary": null,
+        "unanswered_topics": []
+      }
+    },
+    {
+      "output_name": "discovery_action",
+      "response_id": "anvil-discovery-3",
+      "data": {
+        "action": "fetch_page",
+        "query": null,
+        "url": "https://docs.rcac.purdue.edu/anvil/policies",
+        "source_urls": [],
+        "summary": null,
+        "unanswered_topics": []
+      }
+    },
+    {
+      "output_name": "discovery_action",
+      "response_id": "anvil-discovery-4",
+      "data": {
+        "action": "finish_discovery",
+        "query": null,
+        "url": null,
+        "source_urls": [
+          "https://docs.rcac.purdue.edu/anvil/jobs",
+          "https://docs.rcac.purdue.edu/anvil/policies"
+        ],
+        "summary": "Selected target-site job and policy documentation.",
+        "unanswered_topics": ["Compute-node networking behavior is not documented."]
+      }
+    },
+    {
+      "output_name": "extract_submission",
+      "response_id": "anvil-extraction-submission",
+      "data": {
+        "findings": [
+          {
+            "field": "allocation_required",
+            "resource": null,
+            "value": true,
+            "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
+            "note": "An ACCESS allocation is required."
+          },
+          {
+            "field": "required_submission_options",
+            "resource": null,
+            "value": ["account", "partition"],
+            "evidence_span_ids": ["doc-anvil-jobs:c1:s2"],
+            "note": "The account and partition are mandatory."
+          },
+          {
+            "field": "maximum_walltime_seconds",
+            "resource": "shared",
+            "value": 345600,
+            "evidence_span_ids": ["doc-anvil-jobs:c2:s2"],
+            "note": "The documented shared limit is four days."
+          },
+          {
+            "field": "maximum_walltime_seconds",
+            "resource": "wholenode",
+            "value": 345600,
+            "evidence_span_ids": ["doc-anvil-jobs:c2:s3"],
+            "note": "The documented wholenode limit is four days."
+          }
+        ]
+      }
+    },
+    {
+      "output_name": "extract_network",
+      "response_id": "anvil-extraction-network",
+      "data": {"findings": []}
+    },
+    {
+      "output_name": "extract_operational",
+      "response_id": "anvil-extraction-operational",
+      "data": {
+        "findings": [
+          {
+            "field": "charging_model",
+            "resource": null,
+            "value": "ACCESS service units",
+            "evidence_span_ids": ["doc-anvil-policies:c1:s2"],
+            "note": "CPU work consumes ACCESS service units."
+          },
+          {
+            "field": "purge_after_days",
+            "resource": "scratch",
+            "value": 60,
+            "evidence_span_ids": ["doc-anvil-policies:c2:s1"],
+            "note": "Inactive scratch files may be purged after 60 days."
+          }
+        ]
+      }
+    }
+  ]
+}

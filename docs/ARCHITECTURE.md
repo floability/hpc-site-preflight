@@ -24,6 +24,9 @@ Backpack requirements ───────────────────�
 - `preflight`: deterministic compatibility checks and remediation.
 - `reporting`: trace and performance artifacts.
 
+The Phase D documentation modules and their execution order are described in
+[DOCUMENTATION_WORKFLOW.md](DOCUMENTATION_WORKFLOW.md).
+
 ## Dependency direction
 
 Low-level evidence providers must not import the planner. The planner consumes only normalized profile and backpack models. Provider-specific SDK types must not escape their adapter modules.

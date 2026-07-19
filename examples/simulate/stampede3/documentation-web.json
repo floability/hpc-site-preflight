@@ -1,0 +1,68 @@
+{
+  "schema_version": "0.1",
+  "note": "Synthetic documentation search and page data for offline simulation.",
+  "search_results": [
+    {
+      "url": "https://docs.tacc.utexas.edu/stampede3/jobs",
+      "title": "Stampede3 Batch Jobs",
+      "snippet": "Submitting Slurm jobs and production queue limits."
+    },
+    {
+      "url": "https://docs.tacc.utexas.edu/stampede3/policies",
+      "title": "Stampede3 Allocation and Scratch Policies",
+      "snippet": "Allocation charging and scratch purge policy."
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://docs.tacc.utexas.edu/stampede3/jobs",
+      "title": "Stampede3 Batch Jobs",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["Stampede3 User Guide", "Submitting Batch Jobs"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Stampede3 jobs are submitted with sbatch. Every batch job must specify an account, partition, node count, and walltime."
+            }
+          ]
+        },
+        {
+          "heading_path": ["Stampede3 User Guide", "Production Queues"],
+          "blocks": [
+            {
+              "kind": "table",
+              "text": "Partition | Maximum walltime\nspr | 172800 seconds\nskx | 172800 seconds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "https://docs.tacc.utexas.edu/stampede3/policies",
+      "title": "Stampede3 Allocation and Scratch Policies",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["Stampede3 User Guide", "Allocation Charging"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Stampede3 access requires a project allocation. Running jobs consumes that allocation in service units."
+            }
+          ]
+        },
+        {
+          "heading_path": ["Stampede3 User Guide", "Scratch Purge"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Files in Stampede3 scratch that have not been accessed for 10 days are eligible for purge."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

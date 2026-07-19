@@ -6,18 +6,30 @@ import argparse
 import sys
 from collections.abc import Sequence
 from pathlib import Path
+from typing import cast
 
 from hpc_site_preflight.config import AppConfig
+from hpc_site_preflight.documentation.extraction import empty_documentation
+from hpc_site_preflight.documentation.models import ContextMode, DocumentationEvidence
+from hpc_site_preflight.documentation.policy_agent_adapter import PolicyAgentAdapter
+from hpc_site_preflight.documentation.web import RecordedWebBackend
 from hpc_site_preflight.exceptions import (
     ConfigurationError,
+    DocumentationError,
     FeatureNotImplementedError,
+    ModelProviderError,
     PreflightError,
 )
+from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 from hpc_site_preflight.profiles.compiler import compile_profile
+from hpc_site_preflight.providers.base import ModelProvider
+from hpc_site_preflight.providers.openai import OpenAIProvider
+from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.reporting.artifacts import write_json
 from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.loader import load_site_info
+from hpc_site_preflight.site_info.models import SiteInfo
 
 _CONTEXT_MODES = ("full-corpus", "bm25", "schema-expanded-bm25")
 
@@ -52,6 +64,11 @@ def build_parser() -> argparse.ArgumentParser:
     profile_build.add_argument("--profile", type=Path)
     profile_build.add_argument("--profile-url")
     profile_build.add_argument("--output-dir", type=Path, default=Path("artifacts"))
+    profile_build.add_argument("--context-mode", choices=_CONTEXT_MODES, default="bm25")
+    profile_build.add_argument("--provider", choices=("recorded", "openai"), default="recorded")
+    profile_build.add_argument("--model")
+    profile_build.add_argument("--web-recording", type=Path)
+    profile_build.add_argument("--model-recording", type=Path)
     _set_handler(profile_build, "profile build")
     profile_build.set_defaults(handler=_profile_build_handler)
 
@@ -88,10 +105,15 @@ def build_parser() -> argparse.ArgumentParser:
         "documentation", help="Evaluate documentation discovery and extraction only."
     )
     documentation.add_argument("--site-info", type=Path, required=True)
+    documentation.add_argument("--measurements", type=Path, required=True)
     documentation.add_argument("--context-mode", choices=_CONTEXT_MODES, default="bm25")
-    documentation.add_argument("--provider", default="openai")
+    documentation.add_argument("--provider", choices=("recorded", "openai"), default="recorded")
     documentation.add_argument("--model")
+    documentation.add_argument("--web-recording", type=Path)
+    documentation.add_argument("--model-recording", type=Path)
+    documentation.add_argument("--output-dir", type=Path, default=Path("artifacts/documentation"))
     _set_handler(documentation, "evaluate documentation")
+    documentation.set_defaults(handler=_documentation_evaluation_handler)
 
     preflight = subcommands.add_parser(
         "preflight", help="Compare a backpack with a candidate site profile."
@@ -114,10 +136,10 @@ def _placeholder_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
 
 
 def _profile_build_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
-    """Build the Phase C measurement-only profile from simulated evidence."""
+    """Build a simulated profile from measurements and documentation."""
 
     if args.mode != "simulate":
-        raise FeatureNotImplementedError("Live profile building is deferred until Phase I.")
+        raise FeatureNotImplementedError("Live profile building is deferred until Phase E.")
     if args.measurements is None:
         raise ConfigurationError("Simulate mode requires --measurements.")
 
@@ -126,20 +148,91 @@ def _profile_build_handler(args: argparse.Namespace, tracker: RunTracker) -> Non
 
     measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
 
+    documentation = _build_documentation(args, site, measurements, tracker)
+
     with tracker.stage("measurement_profile_build"):
-        profile, report = compile_profile(site, measurements)
+        profile, report = compile_profile(site, measurements, documentation)
 
     profile_path = args.output_dir / "site-profile.json"
     report_path = args.output_dir / "evidence-report.json"
+    documentation_path = args.output_dir / "documentation-evidence.json"
     with tracker.stage("profile_artifact_write"):
         write_json(profile_path, profile.model_dump(mode="json"))
         write_json(report_path, report.model_dump(mode="json"))
+        write_json(documentation_path, documentation.model_dump(mode="json"))
         tracker.add_artifact(kind="site_profile", path=profile_path)
         tracker.add_artifact(kind="evidence_report", path=report_path)
+        tracker.add_artifact(kind="documentation_evidence", path=documentation_path)
 
     if not args.quiet:
         print(f"Profile:  {profile_path}")
         print(f"Evidence: {report_path}")
+
+
+def _documentation_evaluation_handler(
+    args: argparse.Namespace,
+    tracker: RunTracker,
+) -> None:
+    """Run the documentation subsystem without compiling a site profile."""
+
+    with tracker.stage("site_info_load"):
+        site = load_site_info(args.site_info)
+    measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
+    documentation = _build_documentation(args, site, measurements, tracker)
+    output_path = args.output_dir / "documentation-evidence.json"
+    with tracker.stage("documentation_artifact_write"):
+        write_json(output_path, documentation.model_dump(mode="json"))
+        tracker.add_artifact(kind="documentation_evidence", path=output_path)
+    if not args.quiet:
+        print(f"Documentation evidence: {output_path}")
+
+
+def _build_documentation(
+    args: argparse.Namespace,
+    site: SiteInfo,
+    measurements: MeasurementBundle,
+    tracker: RunTracker,
+) -> DocumentationEvidence:
+    """Resolve simulated inputs and run the linear documentation adapter."""
+
+    web_path = args.web_recording or args.site_info.parent / "documentation-web.json"
+    model_path = args.model_recording or args.site_info.parent / "documentation-model.json"
+    try:
+        web_backend = RecordedWebBackend.from_path(web_path)
+        model_provider = _model_provider(args.provider, args.model, model_path)
+    except (DocumentationError, ModelProviderError) as exc:
+        storage_names = {
+            observation.path.split("/")[4]
+            for observation in measurements.common
+            if observation.path.startswith("/facts/storage/filesystems/")
+            and observation.path.endswith("/path")
+        }
+        return empty_documentation(
+            site_id=site.site_id,
+            context_mode=cast(ContextMode, args.context_mode),
+            scheduler=site.scheduler,
+            storage_names=storage_names,
+            reason=str(exc),
+        )
+    adapter = PolicyAgentAdapter(
+        measurements=measurements,
+        model_provider=model_provider,
+        web_backend=web_backend,
+        corpus_directory=args.output_dir / "corpus",
+    )
+    return adapter.build(
+        site,
+        tracker,
+        context_mode=cast(ContextMode, args.context_mode),
+    )
+
+
+def _model_provider(provider: str, model: str | None, recording: Path) -> ModelProvider:
+    if provider == "recorded":
+        return RecordedModelProvider.from_path(recording)
+    if not model:
+        raise ConfigurationError("--model is required when --provider openai is selected.")
+    return OpenAIProvider(model=model)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

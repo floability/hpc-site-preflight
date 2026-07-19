@@ -59,7 +59,14 @@ def test_parser_rejects_retired_mode_names(retired_mode: str) -> None:
             "evidence run-pilots",
         ),
         (
-            ["evaluate", "documentation", "--site-info", "site.json"],
+            [
+                "evaluate",
+                "documentation",
+                "--site-info",
+                "site.json",
+                "--measurements",
+                "measurements.json",
+            ],
             "evaluate documentation",
         ),
         (
@@ -137,7 +144,7 @@ def test_unimplemented_command_writes_failed_report(tmp_path: Path) -> None:
     ]
 
 
-def test_simulated_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> None:
+def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> None:
     output_dir = tmp_path / "output"
     run_dir = tmp_path / "runs"
     exit_code = main(
@@ -165,14 +172,64 @@ def test_simulated_profile_build_writes_phase_c_artifacts(tmp_path: Path) -> Non
     report_path = next(run_dir.glob("*/performance.json"))
     report = json.loads(report_path.read_text(encoding="utf-8"))
     assert report["status"] == "completed"
-    assert [stage["name"] for stage in report["steps"]] == [
+    assert report["model_usage"]["usage_available"] is False
+    stage_names = [stage["name"] for stage in report["steps"]]
+    assert stage_names[:4] == [
         "site_info_load",
         "simulated_measurement_load",
         "simulated_measurement_validate",
-        "measurement_profile_build",
-        "profile_artifact_write",
+        "documentation_identity",
     ]
+    assert "documentation_corpus" in stage_names
+    assert "documentation_context_selection" in stage_names
+    assert "documentation_evidence_validation" in stage_names
+    assert stage_names[-2:] == ["measurement_profile_build", "profile_artifact_write"]
     assert {artifact["kind"] for artifact in report["artifacts"]} >= {
         "site_profile",
         "evidence_report",
+        "documentation_evidence",
+        "documentation_corpus",
     }
+    trace_path = next(run_dir.glob("*/trace.jsonl"))
+    trace = trace_path.read_text(encoding="utf-8")
+    assert "Anvil jobs are submitted" not in trace
+    assert "content_hash" in trace
+
+
+def test_profile_build_keeps_partial_output_when_documentation_is_missing(
+    tmp_path: Path,
+) -> None:
+    source = Path("examples/simulate/anvil")
+    inputs = tmp_path / "inputs"
+    inputs.mkdir()
+    site_path = inputs / "site-info.json"
+    measurement_path = inputs / "login-measurements.json"
+    site_path.write_text((source / "site-info.json").read_text(encoding="utf-8"))
+    measurement_path.write_text(
+        (source / "login-measurements.json").read_text(encoding="utf-8")
+    )
+    output = tmp_path / "output"
+
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--site-info",
+            str(site_path),
+            "--measurements",
+            str(measurement_path),
+            "--output-dir",
+            str(output),
+            "--run-dir",
+            str(tmp_path / "runs"),
+            "--quiet",
+        ]
+    )
+
+    documentation = json.loads(
+        (output / "documentation-evidence.json").read_text(encoding="utf-8")
+    )
+    assert exit_code == 0
+    assert documentation["findings"] == []
+    assert documentation["rejected"]
+    assert (output / "site-profile.json").exists()

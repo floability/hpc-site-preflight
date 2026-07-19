@@ -56,6 +56,15 @@ RULES = (
         not_applicable_for=["htcondor"],
     ),
     FieldRule(
+        rule_id="documented_submission_requirement",
+        field_pattern="/submission_options/*/requirement",
+        allowed_sources=["documentation", "user"],
+        precedence=["documentation", "user"],
+        conflict_behavior="retain_note",
+        unresolved_action="additional_documentation",
+        action_id="submission_policy_search",
+    ),
+    FieldRule(
         rule_id="documented_limit_over_visible_configuration",
         field_pattern="/partitions/*/maximum_walltime_seconds",
         allowed_sources=["documentation", "pilot", "measurement"],
@@ -101,6 +110,15 @@ RULES = (
         conflict_behavior="retain_note",
         unresolved_action="run_pilot",
         action_id="shared_storage_visibility",
+    ),
+    FieldRule(
+        rule_id="storage_retention_policy",
+        field_pattern="/storage/*/purge_after_days",
+        allowed_sources=["documentation", "user"],
+        precedence=["documentation", "user"],
+        conflict_behavior="retain_note",
+        unresolved_action="additional_documentation",
+        action_id="storage_policy_search",
     ),
     FieldRule(
         rule_id="compute_network_behavior",

@@ -18,14 +18,14 @@ AI is restricted to documentation discovery and structured extraction. Measureme
 
 ## Project status
 
-The deterministic foundation and first measurement-only profile builder are complete:
+The deterministic foundation and simulated documentation pipeline are complete:
 
 - an installable `src/` package;
 - a working CLI and command hierarchy;
 - run-level and step-level performance tracking;
 - typed site, measurement, profile, and evidence contracts;
 - simulated Anvil, Stampede3, and Notre Dame CRC inputs;
-- measurement-only partial profile construction;
+- measurement and documentation-backed partial profile construction;
 - tests;
 - explicit `NotImplementedError` messages for unfinished stages.
 
@@ -66,7 +66,8 @@ site information
 → evidence validation
 ```
 
-The planned context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`.
+The implemented context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`. See
+[docs/DOCUMENTATION_WORKFLOW.md](docs/DOCUMENTATION_WORKFLOW.md) for the code and artifact flow.
 
 ## Simulate and live modes
 
@@ -104,8 +105,9 @@ hpc-site-preflight evaluate documentation --help
 hpc-site-preflight preflight --help
 ```
 
-`profile build` currently constructs measurement-only partial profiles in simulate mode. Other
-unfinished commands create run reports and fail explicitly.
+`profile build` constructs measurement and documentation-backed partial profiles in simulate
+mode. `evaluate documentation` runs the documentation subsystem alone. Other unfinished commands
+create run reports and fail explicitly.
 
 ## Performance reporting
 
@@ -131,7 +133,9 @@ Usage is reported per pipeline step and for the whole run. Missing provider toke
 
 ## Repository relationship
 
-The existing `hpc-site-policy-agent` repository is the reference implementation for the future documentation subsystem. Its discovery, scope filtering, corpus, retrieval, extraction, and evidence validation code should be adapted behind `DocumentationPolicyProvider`; its top-level CLI and control loop should not be copied into this project.
+The existing `hpc-site-policy-agent` repository is the reference implementation for documentation
+discovery and extraction. Its useful components are adapted behind `DocumentationPolicyProvider`;
+its top-level CLI and control loop are not copied into this project.
 
 ## Trust boundary
 

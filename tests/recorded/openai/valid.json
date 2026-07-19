@@ -1,0 +1,15 @@
+{
+  "id": "resp_valid",
+  "output": [
+    {
+      "type": "function_call",
+      "name": "submit_result",
+      "arguments": "{\"value\":\"documented\",\"evidence\":\"Official user guide\",\"source_url\":\"https://example.edu/guide\"}"
+    }
+  ],
+  "usage": {
+    "input_tokens": 120,
+    "output_tokens": 18,
+    "total_tokens": 138
+  }
+}

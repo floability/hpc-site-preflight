@@ -98,114 +98,100 @@ Produce a useful partial site profile and detailed evidence report without faili
 
 ### Milestone 8 — Model provider and structured calls
 
-**Status: Next**
+**Status: Completed**
 
 Create the smallest provider-neutral interface needed for schema-constrained AI results.
 
-- Define one model request/response contract and a basic OpenAI adapter.
-- Require structured JSON output and validate it locally.
-- Record provider-reported usage, retries, and latency with `RunTracker`.
-- Test offline with recorded responses; API tests remain optional integrations.
+- Added provider-neutral structured request and response contracts with a basic OpenAI adapter.
+- Added local schema validation, bounded retry tracking, usage reporting, and offline recordings.
 
 **Test:** Parse valid, invalid, and partial recorded model responses without an API key.
 
 ### Milestone 9 — Site identity and query plan
 
-**Status: Incomplete**
+**Status: Completed**
 
 Turn site information and measurements into deterministic documentation search inputs.
 
-- Normalize site name, aliases, scheduler, hostname patterns, and allowed domains.
-- Build a small fixed set of policy-oriented search queries.
-- Keep organization-wide and sibling-site material separate from target-site policy.
+- Added normalized identity from site information and measured host signals.
+- Added four reproducible policy queries and deterministic source scope.
 
 **Test:** Snapshot the query plans for all three simulated sites.
 
 ### Milestone 10 — Bounded search and fetch tools
 
-**Status: Incomplete**
+**Status: Completed**
 
 Expose only the reviewed tools needed for documentation discovery.
 
-- Implement `search_web`, `fetch_page`, and `finish_discovery` behind small interfaces.
-- Enforce HTTPS, domain allowlists, page limits, timeouts, and content-size limits.
-- Record URLs and hashes without writing full page bodies to normal traces.
+- Added bounded search, fetch, and finish tools over a replaceable backend.
+- Added HTTPS, domain, budget, size, timeout, and body-free trace controls.
 
 **Test:** Use recorded search results and pages to verify every bound and rejection.
 
 ### Milestone 11 — Bounded discovery agent
 
-**Status: Incomplete**
+**Status: Completed**
 
 Let one agent find useful official pages while deterministic code controls its scope and budget.
 
-- Give the model only the three discovery tools and a fixed turn limit.
-- Validate every proposed tool action before execution.
-- Preserve partial discoveries when the budget ends or a page fails.
-- Reject sibling-site pages as target-site evidence.
+- Added a schema-constrained, fixed-turn discovery loop with three actions.
+- Added deterministic action validation, partial fallback, and sibling rejection.
 
 **Test:** Replay successful, partial, out-of-scope, and budget-exhausted discovery runs.
 
 ### Milestone 12 — Normalized document corpus
 
-**Status: Incomplete**
+**Status: Completed**
 
 Convert fetched official pages into a persistent corpus suitable for repeatable extraction.
 
-- Preserve headings, section paths, tables, source URLs, and content hashes.
-- Create stable document and chunk identifiers.
-- Store normalized records in JSONL for reuse across context modes.
+- Added heading-aware, table-preserving records with stable IDs and hashes.
+- Added persistent manifest, document JSONL, and chunk JSONL artifacts.
 
 **Test:** Rebuild the same recorded corpus twice and compare identifiers and hashes.
 
 ### Milestone 13 — Three context modes
 
-**Status: Incomplete**
+**Status: Completed**
 
 Select extraction context using full corpus, BM25, or schema-expanded BM25.
 
-- Implement the three modes over the same normalized chunks.
-- Use deterministic token and chunk limits.
-- Keep selected chunk IDs so retrieval experiments are reproducible.
+- Added full-corpus, BM25, and schema-expanded BM25 selection.
+- Added deterministic limits and retained selected chunk IDs.
 
 **Test:** Run all modes on one corpus and verify stable selected chunks.
 
 ### Milestone 14 — Evidence-span extraction
 
-**Status: Incomplete**
+**Status: Completed**
 
 Extract typed field candidates that point to exact local evidence spans.
 
-- Give each sentence or table row a stable span ID before the model call.
-- Extract small policy groups with nullable fields and selected span IDs.
-- Resolve quotes locally; discard unknown, altered, or out-of-scope spans.
-- Allow one constrained correction attempt, then keep the field empty.
+- Added exact local spans and three small structured extraction groups.
+- Added local field, resource, value, scope, and citation validation with one correction.
 
 **Test:** Replay valid, unsupported, misquoted, and absent-field responses.
 
 ### Milestone 15 — Documentation policy result
 
-**Status: Incomplete**
+**Status: Completed**
 
 Produce a documentation-derived partial policy with evidence for every accepted field.
 
-- Combine validated extraction groups without model-driven reconciliation.
-- Emit accepted, rejected, and unresolved fields with provenance.
-- Never turn sibling-site or organization-wide guidance into target-site policy.
-- Preserve empty values instead of failing the run.
+- Added typed accepted, rejected, and unresolved documentation results.
+- Added deterministic profile mappings and exact evidence-report provenance.
 
 **Test:** Build documentation results for each site and validate every evidence link.
 
 ### Milestone 16 — End-to-end simulated AI profile
 
-**Status: Incomplete**
+**Status: Completed**
 
 Run the documentation pipeline from simulated inputs to a partial site profile.
 
-- Connect identity, discovery, corpus, retrieval, extraction, and profile compilation linearly.
-- Support the three context modes from the CLI.
-- Use recorded web and model responses for the default offline tests.
-- Write the profile, evidence report, corpus, performance report, and trace.
+- Connected the full pipeline for all three sites and context modes.
+- Added simulated web/model recordings and complete CLI artifacts.
 
 **Test:** Reproduce all three site profiles offline and compare deterministic artifacts.
 
@@ -213,7 +199,7 @@ Run the documentation pipeline from simulated inputs to a partial site profile.
 
 ### Milestone 17 — Live input resolver
 
-**Status: Incomplete**
+**Status: Next**
 
 Allow real-site runs to reuse supplied inputs and collect only what is missing.
 

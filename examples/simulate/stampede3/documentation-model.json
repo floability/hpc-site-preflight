@@ -1,0 +1,53 @@
+{
+  "schema_version": "0.1",
+  "note": "Synthetic model outputs for offline simulation; no live model was called.",
+  "responses": [
+    {
+      "output_name": "discovery_action",
+      "response_id": "stampede3-discovery-1",
+      "data": {"action": "search_web", "query": "Stampede3 batch jobs and policies", "url": null, "source_urls": [], "summary": null, "unanswered_topics": []}
+    },
+    {
+      "output_name": "discovery_action",
+      "response_id": "stampede3-discovery-2",
+      "data": {"action": "fetch_page", "query": null, "url": "https://docs.tacc.utexas.edu/stampede3/jobs", "source_urls": [], "summary": null, "unanswered_topics": []}
+    },
+    {
+      "output_name": "discovery_action",
+      "response_id": "stampede3-discovery-3",
+      "data": {"action": "fetch_page", "query": null, "url": "https://docs.tacc.utexas.edu/stampede3/policies", "source_urls": [], "summary": null, "unanswered_topics": []}
+    },
+    {
+      "output_name": "discovery_action",
+      "response_id": "stampede3-discovery-4",
+      "data": {"action": "finish_discovery", "query": null, "url": null, "source_urls": ["https://docs.tacc.utexas.edu/stampede3/jobs", "https://docs.tacc.utexas.edu/stampede3/policies"], "summary": "Selected Stampede3 job and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
+    },
+    {
+      "output_name": "extract_submission",
+      "response_id": "stampede3-extraction-submission",
+      "data": {
+        "findings": [
+          {"field": "allocation_required", "resource": null, "value": true, "evidence_span_ids": ["doc-stampede3-policies:c1:s1"], "note": "A project allocation is required."},
+          {"field": "required_submission_options", "resource": null, "value": ["account", "partition", "nodes", "time"], "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"], "note": "The documented minimum includes account, partition, nodes, and walltime."},
+          {"field": "maximum_walltime_seconds", "resource": "spr", "value": 172800, "evidence_span_ids": ["doc-stampede3-jobs:c2:s2"], "note": "The SPR maximum is two days."},
+          {"field": "maximum_walltime_seconds", "resource": "skx", "value": 172800, "evidence_span_ids": ["doc-stampede3-jobs:c2:s3"], "note": "The SKX maximum is two days."}
+        ]
+      }
+    },
+    {
+      "output_name": "extract_network",
+      "response_id": "stampede3-extraction-network",
+      "data": {"findings": []}
+    },
+    {
+      "output_name": "extract_operational",
+      "response_id": "stampede3-extraction-operational",
+      "data": {
+        "findings": [
+          {"field": "charging_model", "resource": null, "value": "project allocation service units", "evidence_span_ids": ["doc-stampede3-policies:c1:s2"], "note": "Running jobs consumes service units."},
+          {"field": "purge_after_days", "resource": "scratch", "value": 10, "evidence_span_ids": ["doc-stampede3-policies:c2:s1"], "note": "Inactive scratch data becomes purge eligible after ten days."}
+        ]
+      }
+    }
+  ]
+}

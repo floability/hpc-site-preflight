@@ -6,7 +6,7 @@
 4. Discover official target-site documentation with bounded AI assistance.
 5. Build and persist a scoped corpus.
 6. Select extraction context using full-corpus, BM25, or schema-expanded BM25.
-7. Extract documentation-derived policy in one constrained call.
+7. Extract submission, network, and operational groups with constrained calls.
 8. Validate schema, citations, quotes, field context, and site scope.
 9. Classify unresolved fields by required next action.
 10. Run approved pilots or load simulated pilot results.
@@ -14,4 +14,8 @@
 12. Compare the backpack with the profile.
 13. Produce an execution plan or early-failure report.
 
-The documentation-only evaluation command stops after Step 8 and emits a documentation-derived partial profile and detailed evidence report.
+The documentation-only evaluation command stops after Step 8 and emits the corpus plus accepted,
+rejected, and unresolved documentation findings.
+
+See [DOCUMENTATION_WORKFLOW.md](DOCUMENTATION_WORKFLOW.md) for the implemented Phase D file and
+artifact flow.

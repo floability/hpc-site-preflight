@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.1",
+  "note": "Synthetic documentation search and page data for offline simulation.",
+  "search_results": [
+    {
+      "url": "https://docs.crc.nd.edu/crc/condor",
+      "title": "Notre Dame CRC HTCondor Jobs",
+      "snippet": "HTCondor submission files and required resource requests."
+    },
+    {
+      "url": "https://docs.crc.nd.edu/crc/policies",
+      "title": "Notre Dame CRC Usage Policy",
+      "snippet": "Allocation and charging guidance for the CRC pool."
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://docs.crc.nd.edu/crc/condor",
+      "title": "Notre Dame CRC HTCondor Jobs",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["CRC User Guide", "HTCondor Submission"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "Notre Dame CRC uses HTCondor and jobs are submitted with condor_submit. Submit descriptions must request CPUs and memory."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "https://docs.crc.nd.edu/crc/policies",
+      "title": "Notre Dame CRC Usage Policy",
+      "fetched_at": "2026-07-19T12:00:00Z",
+      "sections": [
+        {
+          "heading_path": ["CRC User Guide", "Charging"],
+          "blocks": [
+            {
+              "kind": "text",
+              "text": "CRC HTCondor jobs do not require a project allocation. General pool use has no project allocation charge."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
