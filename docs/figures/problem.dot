@@ -1,0 +1,25 @@
+// High-level paper motivation. Reviewed 2026-07-20.
+digraph problem {
+  rankdir=TB;
+  bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+        fillcolor="white", color="#3D4A56", penwidth=1.2];
+  edge [fontname="Helvetica", fontsize=9, color="#3D4A56", penwidth=1.1];
+
+  workflow [label="Portable workflow\n10-day walltime request", color="#534AB7"];
+  site [label="Target HPC site\nPurdue Anvil"];
+  measured [label="Scheduler observation\ninfinite", color="#0E7C86"];
+  documented [label="Documented policy\n4 days", color="#B0710E"];
+  gap [label="Portability gap\nconfiguration is not policy", color="#A0342C"];
+  solution [label="Evidence-backed site profile\nearly decision + remediation",
+            color="#0E7C86"];
+
+  workflow -> site;
+  site -> measured;
+  site -> documented;
+  measured -> gap;
+  documented -> gap;
+  gap -> solution;
+
+  { rank=same; measured; documented; }
+}

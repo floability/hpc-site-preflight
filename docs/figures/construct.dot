@@ -1,0 +1,23 @@
+// High-level site-profile construction. Reviewed 2026-07-20.
+digraph construct {
+  rankdir=LR;
+  bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+        fillcolor="white", color="#3D4A56", penwidth=1.2];
+  edge [fontname="Helvetica", fontsize=9, color="#3D4A56", penwidth=1.1];
+
+  site [label="Site information"];
+  measure [label="Login-node observations", color="#0E7C86"];
+  docs [label="Official documentation\nbounded AI", color="#534AB7"];
+  pilots [label="Approved pilot jobs\nplanned", color="#B0710E", style="rounded,dashed"];
+  construct [label="Deterministic\nprofile construction", color="#0E7C86"];
+  output [label="Site profile\n+ evidence report", color="#0E7C86"];
+
+  site -> docs;
+  site -> construct;
+  measure -> docs [label="site signals"];
+  measure -> construct;
+  docs -> construct;
+  pilots -> construct [style=dashed];
+  construct -> output;
+}

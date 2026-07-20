@@ -1,0 +1,25 @@
+// High-level end-to-end workflow. Reviewed 2026-07-20.
+digraph pipeline {
+  rankdir=TB;
+  bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+        fillcolor="white", color="#3D4A56", penwidth=1.2];
+  edge [fontname="Helvetica", fontsize=9, color="#3D4A56", penwidth=1.1];
+
+  site [label="Target HPC site"];
+  profile [label="Evidence-backed\nsite profile", color="#0E7C86"];
+  workflow [label="Portable workflow\nrequirements", color="#534AB7"];
+  preflight [label="Deterministic preflight\nplanned", color="#B0710E",
+             style="rounded,dashed"];
+  plan [label="Execution plan", color="#0E7C86", style="rounded,dashed"];
+  fail [label="Early failure\n+ remediation", color="#A0342C", style="rounded,dashed"];
+
+  site -> profile;
+  profile -> preflight [style=dashed];
+  workflow -> preflight [style=dashed];
+  preflight -> plan [label="compatible", style=dashed];
+  preflight -> fail [label="incompatible", style=dashed];
+
+  { rank=same; site; workflow; }
+  { rank=same; plan; fail; }
+}
