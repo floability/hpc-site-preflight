@@ -1,6 +1,10 @@
 """Deterministically apply validated documentation findings to a profile."""
 
-from hpc_site_preflight.documentation.models import DocumentationEvidence, DocumentationFinding
+from hpc_site_preflight.documentation.models import (
+    DocumentationEvidence,
+    DocumentationFinding,
+    RuntimeMode,
+)
 from hpc_site_preflight.evidence.bundle import EvidenceReport
 from hpc_site_preflight.evidence.models import EvidenceLink, EvidenceRecord
 from hpc_site_preflight.evidence.provenance import build_evidence_id
@@ -31,7 +35,13 @@ def apply_documentation(
             rule = get_rule(path)
             if rule is None or "documentation" not in rule.allowed_sources:
                 continue
-            evidence_ids = _append_evidence(report, profile.site_id, path, finding)
+            evidence_ids = _append_evidence(
+                report,
+                profile.site_id,
+                path,
+                finding,
+                documentation.web_mode,
+            )
             if evidence_ids:
                 profile.field_evidence.append(
                     FieldEvidenceLink(field=path, evidence_ids=evidence_ids)
@@ -89,6 +99,7 @@ def _append_evidence(
     site_id: str,
     field_path: str,
     finding: DocumentationFinding,
+    web_mode: RuntimeMode,
 ) -> list[str]:
     evidence_ids: list[str] = []
     for citation in finding.citations:
@@ -104,7 +115,7 @@ def _append_evidence(
                 field_path=field_path,
                 source_type="documentation",
                 scope="target_site",
-                trust="official",
+                trust="official" if web_mode == "live" else "illustrative",
                 disposition="accepted",
                 value=finding.value,
                 freshness="site_change",

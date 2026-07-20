@@ -1,13 +1,14 @@
 """Provider-neutral contracts for structured model calls."""
 
 from abc import ABC, abstractmethod
-from typing import Any, TypeVar
+from typing import Any, Literal, TypeAlias, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from hpc_site_preflight.reporting.tracker import RunTracker
 
 ResultModel = TypeVar("ResultModel", bound=BaseModel)
+ModelProviderName: TypeAlias = Literal["recorded", "openai", "anthropic", "gemini"]
 
 
 class StructuredModelRequest(BaseModel):

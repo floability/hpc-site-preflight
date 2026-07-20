@@ -10,11 +10,11 @@ The pipeline starts with four inputs:
 - `site-info.json`: site name, aliases, scheduler, hostname patterns, allowed documentation
   domains, and preferred URL path tokens;
 - `login-measurements.json`: observed hostname, storage names, partitions, and scheduler facts;
-- a web backend: currently a recorded set of search results and normalized pages; and
-- a model provider: either recorded structured responses or the OpenAI Responses API.
+- a web backend: either live bounded search/fetch or recorded results and pages; and
+- a model provider: either the live OpenAI Responses API or recorded structured responses.
 
-In `simulate` mode, these inputs are local recordings. They allow the entire AI path to run on a
-laptop without querying the current machine or the internet.
+Site, model, and web modes are independent. A normal laptop run simulates the site but uses live
+model and web modes. Fully offline tests explicitly simulate the model and web modes too.
 
 ## Pipeline at a glance
 
@@ -206,12 +206,14 @@ Pydantic result type.
 - `providers/recorded.py` replays ordered responses from `documentation-model.json`.
 - `providers/openai.py` translates the same request into a forced function call through the OpenAI
   Responses API and validates the returned arguments locally.
+- `providers/registry.py` maps the provider-neutral `--model` value to OpenAI, Anthropic, or
+  Gemini. Anthropic and Gemini mappings are reserved for their future adapters.
 
 Simulated recordings omit token counts because those values were not provider reported. The run
 tracker records their usage as unavailable rather than estimating it.
 
-The current Phase D web backend is recorded even when the OpenAI model provider is selected. Live
-web discovery belongs to later live-evidence work.
+`documentation/web.py` provides both backends. Live mode uses bounded DuckDuckGo search and HTTPS
+fetches restricted to the site's allowed domains. Simulated mode replays the local web recording.
 
 ## Failure and partial-output behavior
 

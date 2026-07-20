@@ -3,16 +3,25 @@
 import json
 from pathlib import Path
 
+import httpx
 import pytest
 
 from hpc_site_preflight.documentation.corpus import build_corpus
 from hpc_site_preflight.documentation.discovery import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import extract_documentation
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
-from hpc_site_preflight.documentation.models import ContextMode, DiscoveryDecision
+from hpc_site_preflight.documentation.models import (
+    ContextMode,
+    DiscoveryDecision,
+    SearchResult,
+)
 from hpc_site_preflight.documentation.policy_agent_adapter import PolicyAgentAdapter
 from hpc_site_preflight.documentation.retrieval import select_context
-from hpc_site_preflight.documentation.web import DocumentationTools, RecordedWebBackend
+from hpc_site_preflight.documentation.web import (
+    DocumentationTools,
+    LiveWebBackend,
+    RecordedWebBackend,
+)
 from hpc_site_preflight.exceptions import DocumentationError
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.profiles.compiler import compile_profile
@@ -93,6 +102,40 @@ def test_web_tools_enforce_domain_scope_and_budgets() -> None:
     assert sibling.scope == "sibling_site"
     with pytest.raises(DocumentationError, match="target-site"):
         tools.finish_discovery([sibling.url], "done", [])
+
+
+def test_live_web_backend_searches_and_normalizes_html() -> None:
+    html = """<html><head><title>Anvil Guide</title></head><body>
+    <h1>Jobs</h1><p>Use sbatch to submit.</p>
+    <h2>Limits</h2><table><tr><th>Queue</th><th>Time</th></tr>
+    <tr><td>shared</td><td>4 days</td></tr></table></body></html>"""
+
+    def handle(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            200,
+            headers={"content-type": "text/html; charset=utf-8"},
+            text=html,
+            request=request,
+        )
+
+    backend = LiveWebBackend(
+        ["purdue.edu"],
+        search_function=lambda query, limit, timeout: [
+            SearchResult(
+                url="https://docs.rcac.purdue.edu/anvil/jobs",
+                title="Anvil jobs",
+                snippet="Job submission",
+            )
+        ],
+        transport=httpx.MockTransport(handle),
+    )
+
+    results = backend.search("Anvil jobs", 5, 1.0)
+    page = backend.fetch(results[0].url, 1.0)
+
+    assert page.title == "Anvil Guide"
+    assert any(block.kind == "table" for section in page.sections for block in section.blocks)
+    assert any("Use sbatch" in block.text for section in page.sections for block in section.blocks)
 
 
 def test_discovery_preserves_partial_pages_at_turn_limit(tmp_path: Path) -> None:
@@ -254,6 +297,10 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
         storage_names={"home", "scratch"},
         chunks=chunks,
         context_mode="full-corpus",
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
         provider=provider,
         tracker=_tracker(tmp_path, "correction"),
     )
@@ -283,6 +330,10 @@ def test_end_to_end_documentation_profile_is_reproducible(
         model_provider=RecordedModelProvider.from_path(directory / "documentation-model.json"),
         web_backend=RecordedWebBackend.from_path(directory / "documentation-web.json"),
         corpus_directory=tmp_path / f"{site_name}-{mode}" / "corpus",
+        model_mode="simulate",
+        model_provider_name="recorded",
+        model=None,
+        web_mode="simulate",
     )
     documentation = adapter.build(
         site,
@@ -294,6 +345,11 @@ def test_end_to_end_documentation_profile_is_reproducible(
     assert documentation.rejected == []
     assert documentation.findings
     assert any(item.source_type == "documentation" for item in report.evidence)
+    assert all(
+        item.trust == "illustrative"
+        for item in report.evidence
+        if item.source_type == "documentation"
+    )
     assert all(citation.quote for item in documentation.findings for citation in item.citations)
     if site_name == "anvil":
         shared = next(item for item in profile.partitions if item.name == "shared")

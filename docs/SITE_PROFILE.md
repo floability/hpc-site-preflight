@@ -166,8 +166,9 @@ policy.
 
 ## Current builder boundary
 
-The Phase C builder consumes validated login measurements only. It fills observable scheduler,
-resource, storage-path, accounting-name, and software fields. Policy-only and compute-node fields
-remain null and become work items. Documentation and pilot evidence are added in later phases.
+The Phase D builder consumes validated login measurements and accepted documentation findings. It
+fills observable scheduler and resource fields, then adds documented submission, limit, storage,
+accounting, and network policy through reviewed mappings. Missing policy and compute-node behavior
+remain null and become work items. Pilot evidence is planned for Phase E.
 
 The profile does not submit or launch a workflow.

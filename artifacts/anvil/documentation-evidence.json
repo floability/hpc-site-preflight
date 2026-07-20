@@ -1,0 +1,117 @@
+{
+  "context_mode": "bm25",
+  "findings": [
+    {
+      "citations": [
+        {
+          "chunk_id": "doc-anvil-policies:c1",
+          "heading": "Anvil User Guide > Allocation and Charging",
+          "quote": "Anvil requires an ACCESS allocation before jobs can be submitted.",
+          "span_id": "doc-anvil-policies:c1:s1",
+          "title": "Anvil Allocation and Storage Policies",
+          "url": "https://docs.rcac.purdue.edu/anvil/policies"
+        }
+      ],
+      "field": "allocation_required",
+      "note": "An ACCESS allocation is required.",
+      "resource": null,
+      "value": true
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "doc-anvil-jobs:c1",
+          "heading": "Anvil User Guide > Job Submission",
+          "quote": "Every Anvil job must request an account and partition.",
+          "span_id": "doc-anvil-jobs:c1:s2",
+          "title": "Anvil Job Submission",
+          "url": "https://docs.rcac.purdue.edu/anvil/jobs"
+        }
+      ],
+      "field": "required_submission_options",
+      "note": "The account and partition are mandatory.",
+      "resource": null,
+      "value": [
+        "account",
+        "partition"
+      ]
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "doc-anvil-jobs:c2",
+          "heading": "Anvil User Guide > Queue Limits",
+          "quote": "shared | 345600 seconds",
+          "span_id": "doc-anvil-jobs:c2:s2",
+          "title": "Anvil Job Submission",
+          "url": "https://docs.rcac.purdue.edu/anvil/jobs"
+        }
+      ],
+      "field": "maximum_walltime_seconds",
+      "note": "The documented shared limit is four days.",
+      "resource": "shared",
+      "value": 345600
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "doc-anvil-jobs:c2",
+          "heading": "Anvil User Guide > Queue Limits",
+          "quote": "wholenode | 345600 seconds",
+          "span_id": "doc-anvil-jobs:c2:s3",
+          "title": "Anvil Job Submission",
+          "url": "https://docs.rcac.purdue.edu/anvil/jobs"
+        }
+      ],
+      "field": "maximum_walltime_seconds",
+      "note": "The documented wholenode limit is four days.",
+      "resource": "wholenode",
+      "value": 345600
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "doc-anvil-policies:c1",
+          "heading": "Anvil User Guide > Allocation and Charging",
+          "quote": "CPU work is charged against ACCESS service units.",
+          "span_id": "doc-anvil-policies:c1:s2",
+          "title": "Anvil Allocation and Storage Policies",
+          "url": "https://docs.rcac.purdue.edu/anvil/policies"
+        }
+      ],
+      "field": "charging_model",
+      "note": "CPU work consumes ACCESS service units.",
+      "resource": null,
+      "value": "ACCESS service units"
+    },
+    {
+      "citations": [
+        {
+          "chunk_id": "doc-anvil-policies:c2",
+          "heading": "Anvil User Guide > Scratch Purge",
+          "quote": "Files in Anvil scratch that have not been accessed for 60 days may be purged.",
+          "span_id": "doc-anvil-policies:c2:s1",
+          "title": "Anvil Allocation and Storage Policies",
+          "url": "https://docs.rcac.purdue.edu/anvil/policies"
+        }
+      ],
+      "field": "purge_after_days",
+      "note": "Inactive scratch files may be purged after 60 days.",
+      "resource": "scratch",
+      "value": 60
+    }
+  ],
+  "rejected": [],
+  "selected_chunk_ids": [
+    "doc-anvil-jobs:c2",
+    "doc-anvil-jobs:c1",
+    "doc-anvil-policies:c1",
+    "doc-anvil-policies:c2"
+  ],
+  "site_id": "purdue-anvil",
+  "unresolved": [
+    "manager_worker_connectivity",
+    "outbound_compute",
+    "worker_worker_connectivity"
+  ]
+}

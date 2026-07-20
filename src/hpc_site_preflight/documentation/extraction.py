@@ -14,10 +14,15 @@ from hpc_site_preflight.documentation.models import (
     ExtractionCandidate,
     ExtractionGroupName,
     ExtractionResult,
+    RuntimeMode,
 )
 from hpc_site_preflight.documentation.retrieval import select_context
 from hpc_site_preflight.exceptions import ModelProviderError
-from hpc_site_preflight.providers.base import ModelProvider, StructuredModelRequest
+from hpc_site_preflight.providers.base import (
+    ModelProvider,
+    ModelProviderName,
+    StructuredModelRequest,
+)
 from hpc_site_preflight.reporting.tracker import RunTracker
 
 _SYSTEM_PROMPT = """Extract only documented HPC site policy from the supplied exact spans.
@@ -59,6 +64,10 @@ def extract_documentation(
     storage_names: set[str],
     chunks: list[CorpusChunk],
     context_mode: ContextMode,
+    model_mode: RuntimeMode,
+    model_provider: ModelProviderName,
+    model: str | None,
+    web_mode: RuntimeMode,
     provider: ModelProvider,
     tracker: RunTracker,
 ) -> DocumentationEvidence:
@@ -73,8 +82,13 @@ def extract_documentation(
             selection = select_context(chunks, group=group, mode=context_mode)
             spans = build_evidence_spans(selection)
             prompt = build_extraction_prompt(site_name, group, selection, spans)
+            tracker.progress(
+                f"{group} extraction selected {len(selection.chunks)} chunk(s) "
+                f"and {len(spans)} span(s)"
+            )
         selected_chunk_ids.extend(selection.selected_chunk_ids)
 
+        tracker.progress(f"Requesting {group} policy findings")
         try:
             response = provider.generate_structured(
                 StructuredModelRequest(
@@ -100,6 +114,10 @@ def extract_documentation(
             )
         findings.extend(validated.findings)
         rejected.extend(validated.rejected)
+        tracker.progress(
+            f"Validated {group}: {len(validated.findings)} accepted, "
+            f"{len(validated.rejected)} rejected"
+        )
 
         if validated.rejected:
             correction_prompt = (
@@ -137,6 +155,10 @@ def extract_documentation(
     unresolved = sorted(expected_fields - found_fields)
     return DocumentationEvidence(
         site_id=site_id,
+        model_mode=model_mode,
+        model_provider=model_provider,
+        model=model,
+        web_mode=web_mode,
         context_mode=context_mode,
         findings=_deduplicate_findings(findings),
         rejected=rejected,
@@ -149,6 +171,10 @@ def empty_documentation(
     *,
     site_id: str,
     context_mode: ContextMode,
+    model_mode: RuntimeMode,
+    model_provider: ModelProviderName,
+    model: str | None,
+    web_mode: RuntimeMode,
     scheduler: str,
     storage_names: set[str],
     reason: str,
@@ -157,6 +183,10 @@ def empty_documentation(
 
     return DocumentationEvidence(
         site_id=site_id,
+        model_mode=model_mode,
+        model_provider=model_provider,
+        model=model,
+        web_mode=web_mode,
         context_mode=context_mode,
         findings=[],
         rejected=[reason],

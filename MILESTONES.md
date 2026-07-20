@@ -5,9 +5,11 @@ collection, pilots, and workflow preflight.
 
 ## Execution contract
 
-- `simulate` is the default mode; `--site-info` and `--measurements` are required and hardware is
-  never queried.
-- `live` reuses supplied inputs and eventually measures any missing inputs on the real login node.
+- Site, model, and web modes are independent.
+- Site mode defaults to `simulate`; supplied site information and measurements replace real HPC
+  access.
+- Model and web modes default to `live`; their `simulate` modes replay offline recordings.
+- Live site mode will eventually measure missing inputs on the real login node.
 - Evidence source is `simulated` or `measured`, independent of execution mode.
 - Pilot jobs are never automatic and always require explicit authorization.
 
@@ -77,7 +79,7 @@ Provide laptop inputs for Anvil, Stampede3, and Notre Dame CRC.
 Load simulated evidence without touching the current hardware.
 
 - Added the simulated measurement provider with site and scheduler checks.
-- Made `simulate` the default profile-build mode.
+- Made simulated site inputs independent from model and web execution.
 
 **Test:** Build a profile from each simulated site.
 
@@ -103,7 +105,8 @@ Produce a useful partial site profile and detailed evidence report without faili
 Create the smallest provider-neutral interface needed for schema-constrained AI results.
 
 - Added provider-neutral structured request and response contracts with a basic OpenAI adapter.
-- Added local schema validation, bounded retry tracking, usage reporting, and offline recordings.
+- Added model-to-provider inference for OpenAI and future Anthropic and Gemini adapters.
+- Added local validation, retry tracking, usage reporting, and offline recordings.
 
 **Test:** Parse valid, invalid, and partial recorded model responses without an API key.
 
@@ -124,7 +127,7 @@ Turn site information and measurements into deterministic documentation search i
 
 Expose only the reviewed tools needed for documentation discovery.
 
-- Added bounded search, fetch, and finish tools over a replaceable backend.
+- Added bounded live and recorded search/fetch tools over one interface.
 - Added HTTPS, domain, budget, size, timeout, and body-free trace controls.
 
 **Test:** Use recorded search results and pages to verify every bound and rejection.
@@ -184,14 +187,14 @@ Produce a documentation-derived partial policy with evidence for every accepted 
 
 **Test:** Build documentation results for each site and validate every evidence link.
 
-### Milestone 16 — End-to-end simulated AI profile
+### Milestone 16 — End-to-end live and replayable AI profile
 
 **Status: Completed**
 
-Run the documentation pipeline from simulated inputs to a partial site profile.
+Run real or recorded documentation AI from simulated site inputs to a partial site profile.
 
-- Connected the full pipeline for all three sites and context modes.
-- Added simulated web/model recordings and complete CLI artifacts.
+- Defaulted to live model and web modes while keeping site simulation independent.
+- Kept recorded web/model modes for deterministic offline tests.
 
 **Test:** Reproduce all three site profiles offline and compare deterministic artifacts.
 
@@ -203,8 +206,8 @@ Run the documentation pipeline from simulated inputs to a partial site profile.
 
 Allow real-site runs to reuse supplied inputs and collect only what is missing.
 
-- Keep both files required in `simulate` mode.
-- In `live` mode, load supplied site information and measured evidence when present.
+- Keep both files required in simulated site mode.
+- In live site mode, load supplied site information and measured evidence when present.
 - Derive missing site information and run fixed login-node collectors when absent.
 - Save newly measured inputs before continuing through the same pipeline.
 

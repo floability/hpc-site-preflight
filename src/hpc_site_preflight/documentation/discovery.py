@@ -37,7 +37,8 @@ class DiscoveryAgent:
         tracker: RunTracker,
     ) -> DiscoveryResult:
         history: list[dict[str, object]] = []
-        for _ in range(self.maximum_turns):
+        for turn in range(1, self.maximum_turns + 1):
+            tracker.progress(f"Discovery turn {turn}/{self.maximum_turns}: requesting next action")
             request = StructuredModelRequest(
                 system_prompt=_SYSTEM_PROMPT,
                 user_prompt=_build_prompt(identity, plan, history),
@@ -59,6 +60,7 @@ class DiscoveryAgent:
                 )
 
             decision = response.parse_as(DiscoveryDecision)
+            tracker.progress(f"Discovery turn {turn}: {decision.action}")
             if decision.action == "finish_discovery":
                 try:
                     selected, summary, unanswered = self._finish(decision, tools, tracker)
@@ -103,15 +105,18 @@ class DiscoveryAgent:
                     tool_name="search_web",
                     details={"query": decision.query},
                 )
-                return [
+                results = [
                     item.model_dump(mode="json") for item in tools.search_web(decision.query)
                 ]
+                tracker.progress(f"Search returned {len(results)} allowed result(s)")
+                return results
             assert decision.action == "fetch_page" and decision.url is not None
             page = tools.fetch_page(decision.url)
             tracker.record_tool_call(
                 tool_name="fetch_page",
                 details=page_trace_details(page),
             )
+            tracker.progress(f"Fetched {page.url} ({page.scope})")
             return page.model_dump(mode="json")
 
     @staticmethod
@@ -131,6 +136,7 @@ class DiscoveryAgent:
                 decision.summary,
                 decision.unanswered_topics,
             )
+            tracker.progress(f"Discovery selected {len(selected)} target-site page(s)")
             return selected, summary, unanswered
 
 

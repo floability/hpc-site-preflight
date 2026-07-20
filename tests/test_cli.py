@@ -14,25 +14,25 @@ def test_parser_accepts_profile_build() -> None:
         [
             "profile",
             "build",
-            "--mode",
-            "simulate",
             "--site-info",
             "examples/simulate/anvil/site-info.json",
         ]
     )
     assert args.command_name == "profile build"
-    assert args.mode == "simulate"
+    assert args.site_mode == "simulate"
+    assert args.model_mode == "live"
+    assert args.web_mode == "live"
 
 
-@pytest.mark.parametrize("retired_mode", ["fixture", "mock", "replay"])
-def test_parser_rejects_retired_mode_names(retired_mode: str) -> None:
+@pytest.mark.parametrize("option", ["--mode", "--provider"])
+def test_parser_rejects_retired_mode_options(option: str) -> None:
     with pytest.raises(SystemExit):
         build_parser().parse_args(
             [
                 "profile",
                 "build",
-                "--mode",
-                retired_mode,
+                option,
+                "simulate",
                 "--site-info",
                 "examples/simulate/anvil/site-info.json",
             ]
@@ -155,6 +155,10 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
             "examples/simulate/anvil/site-info.json",
             "--measurements",
             "examples/simulate/anvil/login-measurements.json",
+            "--model-mode",
+            "simulate",
+            "--web-mode",
+            "simulate",
             "--output-dir",
             str(output_dir),
             "--run-dir",
@@ -168,10 +172,18 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
     evidence = json.loads((output_dir / "evidence-report.json").read_text(encoding="utf-8"))
     assert profile["site_id"] == evidence["site_id"] == "purdue-anvil"
     assert profile["profile_state"] == "partial"
+    documentation = json.loads(
+        (output_dir / "documentation-evidence.json").read_text(encoding="utf-8")
+    )
+    assert documentation["model_mode"] == "simulate"
+    assert documentation["model_provider"] == "recorded"
+    assert documentation["model"] is None
+    assert documentation["web_mode"] == "simulate"
 
     report_path = next(run_dir.glob("*/performance.json"))
     report = json.loads(report_path.read_text(encoding="utf-8"))
     assert report["status"] == "completed"
+    assert report["mode"] == "site=simulate, model=simulate, web=simulate"
     assert report["model_usage"]["usage_available"] is False
     stage_names = [stage["name"] for stage in report["steps"]]
     assert stage_names[:4] == [
@@ -218,6 +230,10 @@ def test_profile_build_keeps_partial_output_when_documentation_is_missing(
             str(site_path),
             "--measurements",
             str(measurement_path),
+            "--model-mode",
+            "simulate",
+            "--web-mode",
+            "simulate",
             "--output-dir",
             str(output),
             "--run-dir",

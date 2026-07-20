@@ -17,14 +17,20 @@ AI may assist documentation discovery and extraction. It must not perform measur
 
 ## Execution modes and evidence sources
 
-- `simulate` is the default. It requires site-information and measurement files and never queries
-  the current hardware.
-- `live` reuses supplied inputs and will measure missing inputs from the real login node. Pilot
-  jobs always require explicit approval.
+- `--site-mode simulate` is the default. It requires site-information and measurement files and
+  never queries the current hardware. `live` will eventually measure missing site inputs.
+- `--model-mode live` is the default and makes provider-reported model calls. `simulate` replays
+  recorded structured responses for offline tests.
+- `--model` is provider-neutral. Infer the adapter through the reviewed model-prefix registry;
+  never require the user to select a provider separately.
+- `--web-mode live` is the default and performs bounded search and fetch against allowed official
+  domains. `simulate` replays recorded search results and pages.
+- Pilot jobs always require explicit approval.
 - Evidence declares `simulated` or `measured` independently of the execution mode.
 - Documentation evaluation stops after documentation-derived partial policy construction.
 
-Simulated and live implementations must conform to the same provider interfaces.
+Simulated and live implementations must conform to the same provider interfaces. Offline tests
+must select simulated model and web modes explicitly.
 
 ## Authoritative files
 

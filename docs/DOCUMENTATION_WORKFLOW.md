@@ -21,9 +21,9 @@ Read the small contracts first, then follow the transformations, and finish with
 12. `profiles/compiler.py` builds the measurement profile and applies documentation findings.
 13. `cli.py` loads files, chooses providers, calls the pipeline, and writes artifacts.
 
-The offline provider reads `documentation-model.json`; the OpenAI provider sends the same typed
-requests to the Responses API. Documentation web access remains a separate backend, so Phase D can
-be reproduced entirely from a recording.
+The simulated model provider reads `documentation-model.json`; the live provider sends the same
+typed requests to the OpenAI Responses API. The independent web mode either searches and fetches
+official allowed domains or replays `documentation-web.json`.
 
 ## What happens during `profile build`
 
@@ -71,17 +71,17 @@ The model never supplies the final quote, decides source scope, changes preceden
 the profile. It chooses discovery actions and proposes typed findings that deterministic code may
 accept or discard.
 
-## Simulated input files
+## Simulated site and replay input files
 
 Each directory under `examples/simulate/` contains:
 
 - `site-info.json`: explicit site identity and documentation scope;
 - `login-measurements.json`: simulated normalized measurements;
-- `documentation-web.json`: simulated search results and normalized pages; and
-- `documentation-model.json`: simulated discovery actions and extraction results.
+- `documentation-web.json`: optional simulated search results and normalized pages; and
+- `documentation-model.json`: optional simulated discovery actions and extraction results.
 
-The model recordings intentionally omit token counts because they are simulated rather than
-provider-reported usage.
+The first two files simulate the HPC site. The documentation files are used only with simulated
+web or model mode. Model recordings omit token counts because they are not provider-reported usage.
 
 ## Outputs
 
@@ -104,12 +104,16 @@ corpus and are not copied into the trace.
 hpc-site-preflight profile build \
   --site-info examples/simulate/anvil/site-info.json \
   --measurements examples/simulate/anvil/login-measurements.json \
+  --model-mode simulate \
+  --web-mode simulate \
   --context-mode bm25 \
   --output-dir artifacts/anvil
 
 hpc-site-preflight evaluate documentation \
   --site-info examples/simulate/anvil/site-info.json \
   --measurements examples/simulate/anvil/login-measurements.json \
+  --model-mode simulate \
+  --web-mode simulate \
   --context-mode schema-expanded-bm25 \
   --output-dir artifacts/anvil-documentation
 ```

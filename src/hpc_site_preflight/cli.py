@@ -3,16 +3,27 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from collections.abc import Sequence
 from pathlib import Path
 from typing import cast
 
+from dotenv import load_dotenv
+
 from hpc_site_preflight.config import AppConfig
 from hpc_site_preflight.documentation.extraction import empty_documentation
-from hpc_site_preflight.documentation.models import ContextMode, DocumentationEvidence
+from hpc_site_preflight.documentation.models import (
+    ContextMode,
+    DocumentationEvidence,
+    RuntimeMode,
+)
 from hpc_site_preflight.documentation.policy_agent_adapter import PolicyAgentAdapter
-from hpc_site_preflight.documentation.web import RecordedWebBackend
+from hpc_site_preflight.documentation.web import (
+    LiveWebBackend,
+    RecordedWebBackend,
+    WebBackend,
+)
 from hpc_site_preflight.exceptions import (
     ConfigurationError,
     DocumentationError,
@@ -23,9 +34,12 @@ from hpc_site_preflight.exceptions import (
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 from hpc_site_preflight.profiles.compiler import compile_profile
-from hpc_site_preflight.providers.base import ModelProvider
-from hpc_site_preflight.providers.openai import OpenAIProvider
+from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.providers.recorded import RecordedModelProvider
+from hpc_site_preflight.providers.registry import (
+    create_live_model_provider,
+    provider_for_model,
+)
 from hpc_site_preflight.reporting.artifacts import write_json
 from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.loader import load_site_info
@@ -57,7 +71,24 @@ def build_parser() -> argparse.ArgumentParser:
     profile_sub = profile.add_subparsers(dest="profile_command", required=True)
 
     profile_build = profile_sub.add_parser("build", help="Construct or update a site profile.")
-    profile_build.add_argument("--mode", choices=("simulate", "live"), default="simulate")
+    profile_build.add_argument(
+        "--site-mode",
+        choices=("simulate", "live"),
+        default="simulate",
+        help="Use supplied site files or collect from a live HPC site.",
+    )
+    profile_build.add_argument(
+        "--model-mode",
+        choices=("live", "simulate"),
+        default="live",
+        help="Call the configured model or replay recorded responses.",
+    )
+    profile_build.add_argument(
+        "--web-mode",
+        choices=("live", "simulate"),
+        default="live",
+        help="Search and fetch official documentation or replay recorded pages.",
+    )
     profile_build.add_argument("--site-info", type=Path, required=True)
     profile_build.add_argument("--measurements", type=Path)
     profile_build.add_argument("--pilot-results", type=Path)
@@ -65,7 +96,6 @@ def build_parser() -> argparse.ArgumentParser:
     profile_build.add_argument("--profile-url")
     profile_build.add_argument("--output-dir", type=Path, default=Path("artifacts"))
     profile_build.add_argument("--context-mode", choices=_CONTEXT_MODES, default="bm25")
-    profile_build.add_argument("--provider", choices=("recorded", "openai"), default="recorded")
     profile_build.add_argument("--model")
     profile_build.add_argument("--web-recording", type=Path)
     profile_build.add_argument("--model-recording", type=Path)
@@ -106,8 +136,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     documentation.add_argument("--site-info", type=Path, required=True)
     documentation.add_argument("--measurements", type=Path, required=True)
+    documentation.add_argument("--site-mode", choices=("simulate", "live"), default="simulate")
+    documentation.add_argument("--model-mode", choices=("live", "simulate"), default="live")
+    documentation.add_argument("--web-mode", choices=("live", "simulate"), default="live")
     documentation.add_argument("--context-mode", choices=_CONTEXT_MODES, default="bm25")
-    documentation.add_argument("--provider", choices=("recorded", "openai"), default="recorded")
     documentation.add_argument("--model")
     documentation.add_argument("--web-recording", type=Path)
     documentation.add_argument("--model-recording", type=Path)
@@ -138,10 +170,10 @@ def _placeholder_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
 def _profile_build_handler(args: argparse.Namespace, tracker: RunTracker) -> None:
     """Build a simulated profile from measurements and documentation."""
 
-    if args.mode != "simulate":
-        raise FeatureNotImplementedError("Live profile building is deferred until Phase E.")
+    if args.site_mode != "simulate":
+        raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
     if args.measurements is None:
-        raise ConfigurationError("Simulate mode requires --measurements.")
+        raise ConfigurationError("Simulated site mode requires --measurements.")
 
     with tracker.stage("site_info_load"):
         site = load_site_info(args.site_info)
@@ -175,6 +207,9 @@ def _documentation_evaluation_handler(
 ) -> None:
     """Run the documentation subsystem without compiling a site profile."""
 
+    if args.site_mode != "simulate":
+        raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
+
     with tracker.stage("site_info_load"):
         site = load_site_info(args.site_info)
     measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
@@ -197,9 +232,18 @@ def _build_documentation(
 
     web_path = args.web_recording or args.site_info.parent / "documentation-web.json"
     model_path = args.model_recording or args.site_info.parent / "documentation-model.json"
+    model_mode = cast(RuntimeMode, args.model_mode)
+    web_mode = cast(RuntimeMode, args.web_mode)
+    model_name = _model_name(model_mode, args.model)
+    model_provider_name: ModelProviderName = (
+        "recorded" if model_name is None else provider_for_model(model_name)
+    )
+    tracker.progress(
+        f"Model provider: {model_provider_name}; model: {model_name or 'recorded responses'}"
+    )
     try:
-        web_backend = RecordedWebBackend.from_path(web_path)
-        model_provider = _model_provider(args.provider, args.model, model_path)
+        web_backend = _web_backend(web_mode, web_path, site)
+        model_provider = _model_provider(model_mode, model_name, model_path)
     except (DocumentationError, ModelProviderError) as exc:
         storage_names = {
             observation.path.split("/")[4]
@@ -210,6 +254,10 @@ def _build_documentation(
         return empty_documentation(
             site_id=site.site_id,
             context_mode=cast(ContextMode, args.context_mode),
+            model_mode=model_mode,
+            model_provider=model_provider_name,
+            model=model_name,
+            web_mode=web_mode,
             scheduler=site.scheduler,
             storage_names=storage_names,
             reason=str(exc),
@@ -219,6 +267,10 @@ def _build_documentation(
         model_provider=model_provider,
         web_backend=web_backend,
         corpus_directory=args.output_dir / "corpus",
+        model_mode=model_mode,
+        model_provider_name=model_provider_name,
+        model=model_name,
+        web_mode=web_mode,
     )
     return adapter.build(
         site,
@@ -227,23 +279,44 @@ def _build_documentation(
     )
 
 
-def _model_provider(provider: str, model: str | None, recording: Path) -> ModelProvider:
-    if provider == "recorded":
+def _model_provider(mode: RuntimeMode, model: str | None, recording: Path) -> ModelProvider:
+    if mode == "simulate":
         return RecordedModelProvider.from_path(recording)
+    assert model is not None
+    return create_live_model_provider(model)
+
+
+def _model_name(mode: RuntimeMode, argument: str | None) -> str | None:
+    if mode == "simulate":
+        return None
+    model = (
+        argument
+        or os.getenv("HPC_SITE_PREFLIGHT_MODEL")
+        or os.getenv("OPENAI_MODEL")
+    )
     if not model:
-        raise ConfigurationError("--model is required when --provider openai is selected.")
-    return OpenAIProvider(model=model)
+        raise ConfigurationError(
+            "--model or HPC_SITE_PREFLIGHT_MODEL is required when --model-mode live is selected."
+        )
+    return model
+
+
+def _web_backend(mode: RuntimeMode, recording: Path, site: SiteInfo) -> WebBackend:
+    if mode == "simulate":
+        return RecordedWebBackend.from_path(recording)
+    return LiveWebBackend(site.documentation.allowed_domains)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     """Parse arguments, run one command, and always emit a performance report."""
 
+    load_dotenv()
     parser = build_parser()
     args = parser.parse_args(argv)
     config = AppConfig(run_dir=args.run_dir, quiet=args.quiet)
     tracker = RunTracker(
         command=args.command_name,
-        mode=getattr(args, "mode", None),
+        mode=_mode_summary(args),
         run_root=config.run_dir,
         quiet=config.quiet,
     )
@@ -265,3 +338,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         tracker.finalize(status="completed" if exit_code == 0 else "failed")
 
     return exit_code
+
+
+def _mode_summary(args: argparse.Namespace) -> str | None:
+    if not hasattr(args, "site_mode"):
+        return None
+    return f"site={args.site_mode}, model={args.model_mode}, web={args.web_mode}"

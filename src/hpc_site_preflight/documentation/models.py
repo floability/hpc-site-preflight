@@ -5,10 +5,13 @@ from typing import Literal, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from hpc_site_preflight.providers.base import ModelProviderName
+
 DocumentationScope = Literal[
     "target_site", "organization_general", "sibling_site", "out_of_scope"
 ]
 ContextMode = Literal["full-corpus", "bm25", "schema-expanded-bm25"]
+RuntimeMode = Literal["live", "simulate"]
 ExtractionGroupName = Literal["submission", "network", "operational"]
 BlockKind = Literal["text", "table"]
 DocumentationScalar: TypeAlias = str | int | float | bool
@@ -180,6 +183,10 @@ class DocumentationFinding(StrictModel):
 
 class DocumentationEvidence(StrictModel):
     site_id: str
+    model_mode: RuntimeMode
+    model_provider: ModelProviderName
+    model: str | None
+    web_mode: RuntimeMode
     context_mode: ContextMode
     findings: list[DocumentationFinding]
     rejected: list[str]

@@ -68,6 +68,8 @@ class RunTracker:
         self._current_stage = stage
         started = time.perf_counter()
         self._trace.write("stage_started", stage=name)
+        if not self.quiet:
+            print(f"[starting] {name}", flush=True)
         try:
             yield stage
         except Exception as exc:
@@ -131,6 +133,14 @@ class RunTracker:
         self._require_stage("tool call").tool_calls += count
         if tool_name is not None:
             self._trace.write("tool_call", tool=tool_name, details=details or {})
+
+    def progress(self, message: str) -> None:
+        """Write one safe progress message to the trace and live console."""
+
+        self._trace.write("progress", message=message)
+        if not self.quiet:
+            elapsed = time.perf_counter() - self._started_monotonic
+            print(f"[{elapsed:6.1f}s] {message}", flush=True)
 
     def add_artifact(self, *, kind: str, path: Path) -> None:
         """Record an artifact produced by the run."""

@@ -18,7 +18,7 @@ AI is restricted to documentation discovery and structured extraction. Measureme
 
 ## Project status
 
-The deterministic foundation and simulated documentation pipeline are complete:
+The deterministic foundation and replayable documentation pipeline are complete:
 
 - an installable `src/` package;
 - a working CLI and command hierarchy;
@@ -69,15 +69,24 @@ site information
 The implemented context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`. See
 [docs/DOCUMENTATION_WORKFLOW.md](docs/DOCUMENTATION_WORKFLOW.md) for the code and artifact flow.
 
-## Simulate and live modes
+## Site, model, and web modes
 
-- **Simulate mode** is the default. It requires site-information and measurement files and never
-  queries the current hardware.
-- **Live mode** reuses supplied inputs and will measure any missing inputs on the HPC login node.
-  Pilot jobs remain explicitly authorized operations.
-- Evidence records their source as **simulated** or **measured**.
+The three concerns are independent:
 
-Both modes must feed the same normalized evidence interfaces so that downstream policy construction behaves identically.
+- `--site-mode simulate` is the default and uses supplied site-information and measurement files
+  without querying local hardware. Live site collection is planned.
+- `--model-mode live` is the default and calls the model's inferred provider. `simulate` replays
+  model responses.
+- `--web-mode live` is the default and searches and fetches allowed official domains. `simulate`
+  replays search results and pages.
+
+The normal laptop workflow therefore simulates only the HPC site while using live web discovery
+and live model calls. Offline tests explicitly simulate all three external inputs. Evidence retains
+whether it was simulated or measured.
+
+`--model` accepts a provider-neutral model identifier. The current registry maps `gpt-` and
+OpenAI `o`-series names to OpenAI, `claude-` names to Anthropic, and `gemini-` names to Gemini.
+Only the OpenAI adapter is implemented today; recognized future providers fail explicitly.
 
 ## Installation
 
@@ -106,8 +115,20 @@ hpc-site-preflight preflight --help
 ```
 
 `profile build` constructs measurement and documentation-backed partial profiles in simulate
-mode. `evaluate documentation` runs the documentation subsystem alone. Other unfinished commands
+site mode. `evaluate documentation` runs the documentation subsystem alone. Other unfinished commands
 create run reports and fail explicitly.
+
+For a normal laptop run, set `OPENAI_API_KEY`, then run:
+
+```bash
+hpc-site-preflight profile build \
+  --site-info examples/simulate/anvil/site-info.json \
+  --measurements examples/simulate/anvil/login-measurements.json \
+  --model gpt-5-mini \
+  --output-dir artifacts/anvil-live
+```
+
+Add `--model-mode simulate --web-mode simulate` for a fully offline replay.
 
 ## Performance reporting
 
