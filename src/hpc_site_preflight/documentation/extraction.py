@@ -14,6 +14,7 @@ from hpc_site_preflight.documentation.models import (
     ExtractionCandidate,
     ExtractionGroupName,
     ExtractionResult,
+    FieldRetrieval,
     RuntimeMode,
 )
 from hpc_site_preflight.documentation.retrieval import select_context
@@ -33,17 +34,17 @@ Do not invent port ranges, limits, charging rules, or purge periods.
 Omit a finding when the documentation does not state it."""
 
 _GROUP_FIELDS = {
-    "submission": {
+    "submission": (
         "allocation_required",
         "required_submission_options",
         "maximum_walltime_seconds",
-    },
-    "network": {
+    ),
+    "network": (
         "manager_worker_connectivity",
         "worker_worker_connectivity",
         "outbound_compute",
-    },
-    "operational": {"charging_model", "purge_after_days"},
+    ),
+    "operational": ("charging_model", "purge_after_days"),
 }
 _RESOURCE_FIELDS = {"maximum_walltime_seconds", "purge_after_days"}
 _GROUPS: tuple[ExtractionGroupName, ...] = ("submission", "network", "operational")
@@ -76,17 +77,30 @@ def extract_documentation(
     findings: list[DocumentationFinding] = []
     rejected: list[str] = []
     selected_chunk_ids: list[str] = []
+    retrievals: list[FieldRetrieval] = []
+    resources_by_field = {
+        "maximum_walltime_seconds": partition_names,
+        "purge_after_days": storage_names,
+    }
 
     for group in _GROUPS:
+        requested_fields = _requested_fields(group, scheduler, storage_names)
         with tracker.stage("documentation_context_selection", display=False):
-            selection = select_context(chunks, group=group, mode=context_mode)
+            selection = select_context(
+                chunks,
+                group=group,
+                fields=requested_fields,
+                mode=context_mode,
+                resources_by_field=resources_by_field,
+            )
             spans = build_evidence_spans(selection)
             prompt = build_extraction_prompt(site_name, group, selection, spans)
             tracker.progress(
-                f"{group} extraction selected {len(selection.chunks)} chunk(s) "
-                f"and {len(spans)} span(s)"
+                f"{group} retrieval selected {len(selection.chunks)} unique chunk(s) "
+                f"for {len(selection.retrievals)} field(s)"
             )
         selected_chunk_ids.extend(selection.selected_chunk_ids)
+        retrievals.extend(selection.retrievals)
 
         tracker.progress(f"Requesting {group} policy findings")
         try:
@@ -109,6 +123,7 @@ def extract_documentation(
                 group,
                 response.parse_as(ExtractionResult),
                 spans,
+                selection.retrievals,
                 partition_names,
                 storage_names,
             )
@@ -145,6 +160,7 @@ def extract_documentation(
                     group,
                     corrected_response.parse_as(ExtractionResult),
                     spans,
+                    selection.retrievals,
                     partition_names,
                     storage_names,
                 )
@@ -154,6 +170,7 @@ def extract_documentation(
     found_fields = {finding.field for finding in findings}
     expected_fields = _expected_fields(scheduler, storage_names)
     unresolved = sorted(expected_fields - found_fields)
+    accepted_findings = _deduplicate_findings(findings)
     return DocumentationEvidence(
         site_id=site_id,
         model_mode=model_mode,
@@ -161,10 +178,11 @@ def extract_documentation(
         model=model,
         web_mode=web_mode,
         context_mode=context_mode,
-        findings=_deduplicate_findings(findings),
+        findings=accepted_findings,
         rejected=rejected,
         unresolved=unresolved,
         selected_chunk_ids=list(dict.fromkeys(selected_chunk_ids)),
+        retrieval=_mark_cited(retrievals, accepted_findings),
     )
 
 
@@ -193,6 +211,7 @@ def empty_documentation(
         rejected=[reason],
         unresolved=sorted(_expected_fields(scheduler, storage_names)),
         selected_chunk_ids=[],
+        retrieval=[],
     )
 
 
@@ -228,10 +247,21 @@ def build_extraction_prompt(
     lines = [
         f"SITE: {site_name}",
         f"GROUP: {group}",
-        "ALLOWED FIELDS: " + ", ".join(sorted(_GROUP_FIELDS[group])),
-        f"RETRIEVAL QUERY: {selection.query}",
-        "EXACT SPANS:",
+        "ALLOWED FIELDS: "
+        + ", ".join(retrieval.field for retrieval in selection.retrievals),
+        "FIELD RETRIEVAL:",
     ]
+    for retrieval in selection.retrievals:
+        queries = " | ".join(retrieval.queries) or "full corpus; no ranking query"
+        chunk_ids = ", ".join(hit.chunk_id for hit in retrieval.hits) or "none"
+        lines.extend(
+            [
+                f"FIELD: {retrieval.field}",
+                f"QUERIES: {queries}",
+                f"RETRIEVED CHUNKS: {chunk_ids}",
+            ]
+        )
+    lines.append("EXACT SPANS:")
     for span in spans:
         lines.extend(
             [
@@ -250,10 +280,15 @@ def _validate_group(
     group: ExtractionGroupName,
     result: ExtractionResult,
     spans: list[EvidenceSpan],
+    retrievals: list[FieldRetrieval],
     partition_names: set[str],
     storage_names: set[str],
 ) -> _ValidatedGroup:
     span_map = {span.span_id: span for span in spans}
+    retrieved_chunks = {
+        retrieval.field: {hit.chunk_id for hit in retrieval.hits}
+        for retrieval in retrievals
+    }
     findings: list[DocumentationFinding] = []
     rejected: list[str] = []
     for candidate in result.findings:
@@ -261,6 +296,7 @@ def _validate_group(
             group,
             candidate,
             span_map,
+            retrieved_chunks,
             partition_names,
             storage_names,
         )
@@ -295,11 +331,14 @@ def _candidate_error(
     group: ExtractionGroupName,
     candidate: ExtractionCandidate,
     spans: dict[str, EvidenceSpan],
+    retrieved_chunks: dict[str, set[str]],
     partition_names: set[str],
     storage_names: set[str],
 ) -> str | None:
     if candidate.field not in _GROUP_FIELDS[group]:
         return "field is outside this extraction group"
+    if candidate.field not in retrieved_chunks:
+        return "field was not requested for this site"
     if candidate.value is None:
         return "null values must be omitted rather than asserted"
     if candidate.field in _RESOURCE_FIELDS and not candidate.resource:
@@ -315,6 +354,13 @@ def _candidate_error(
     unknown = [span_id for span_id in candidate.evidence_span_ids if span_id not in spans]
     if unknown:
         return "unknown evidence span " + ", ".join(unknown)
+    wrong_field = [
+        span_id
+        for span_id in candidate.evidence_span_ids
+        if spans[span_id].chunk_id not in retrieved_chunks.get(candidate.field, set())
+    ]
+    if wrong_field:
+        return "evidence was not retrieved for this field: " + ", ".join(wrong_field)
     if any(spans[span_id].scope != "target_site" for span_id in candidate.evidence_span_ids):
         return "evidence is not target-site scoped"
     return _value_error(candidate)
@@ -363,6 +409,30 @@ def _deduplicate_findings(findings: list[DocumentationFinding]) -> list[Document
     return result
 
 
+def _mark_cited(
+    retrievals: list[FieldRetrieval],
+    findings: list[DocumentationFinding],
+) -> list[FieldRetrieval]:
+    cited = {
+        (finding.field, citation.chunk_id)
+        for finding in findings
+        for citation in finding.citations
+    }
+    return [
+        retrieval.model_copy(
+            update={
+                "hits": [
+                    hit.model_copy(
+                        update={"cited": (retrieval.field, hit.chunk_id) in cited}
+                    )
+                    for hit in retrieval.hits
+                ]
+            }
+        )
+        for retrieval in retrievals
+    ]
+
+
 def _expected_fields(scheduler: str, storage_names: set[str]) -> set[str]:
     fields = set().union(*_GROUP_FIELDS.values())
     if scheduler != "slurm":
@@ -370,3 +440,16 @@ def _expected_fields(scheduler: str, storage_names: set[str]) -> set[str]:
     if not storage_names:
         fields.discard("purge_after_days")
     return fields
+
+
+def _requested_fields(
+    group: ExtractionGroupName,
+    scheduler: str,
+    storage_names: set[str],
+) -> tuple[str, ...]:
+    fields = list(_GROUP_FIELDS[group])
+    if scheduler != "slurm" and "maximum_walltime_seconds" in fields:
+        fields.remove("maximum_walltime_seconds")
+    if not storage_names and "purge_after_days" in fields:
+        fields.remove("purge_after_days")
+    return tuple(fields)

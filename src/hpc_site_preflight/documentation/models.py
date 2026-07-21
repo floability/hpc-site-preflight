@@ -130,12 +130,24 @@ class CorpusManifest(StrictModel):
     chunk_count: int = Field(ge=0)
 
 
+class RetrievalHit(StrictModel):
+    chunk_id: str
+    score: float | None
+    cited: bool = False
+
+
+class FieldRetrieval(StrictModel):
+    field: str
+    queries: list[str]
+    hits: list[RetrievalHit]
+
+
 class ContextSelection(StrictModel):
     group: ExtractionGroupName
     mode: ContextMode
-    query: str
     chunks: list[CorpusChunk]
     selected_chunk_ids: list[str]
+    retrievals: list[FieldRetrieval]
 
 
 class EvidenceSpan(StrictModel):
@@ -188,3 +200,4 @@ class DocumentationEvidence(StrictModel):
     rejected: list[str]
     unresolved: list[str]
     selected_chunk_ids: list[str]
+    retrieval: list[FieldRetrieval]

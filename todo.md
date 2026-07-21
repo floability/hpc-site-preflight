@@ -54,6 +54,8 @@ chunks, and makes four model calls total: one source selection plus three extrac
 
 ## Step 2 — Restore field-level retrieval
 
+**Status:** Implementation complete; live context-mode comparison pending.
+
 Retrieve evidence for individual profile fields instead of using only one broad query per extraction
 group.
 
@@ -67,6 +69,10 @@ group.
 
 Test after this step: verify that the Anvil partition-limit table is retrieved for partition and
 walltime fields, then compare all three context modes.
+
+Offline replay now retrieves the Anvil queue-limit table for `maximum_walltime_seconds` in all
+three modes. `documentation-evidence.json` records field queries, fused scores, selected chunk IDs,
+and whether each retrieved chunk was cited. The run still makes four model calls total.
 
 ## Step 3 — Use canonical typed extraction schemas
 

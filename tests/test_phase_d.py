@@ -12,6 +12,7 @@ from hpc_site_preflight.documentation.extraction import extract_documentation
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
 from hpc_site_preflight.documentation.models import (
     ContextMode,
+    CorpusChunk,
     DiscoverySelection,
     SearchResult,
 )
@@ -35,6 +36,11 @@ from hpc_site_preflight.site_info.models import SiteInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
+SUBMISSION_FIELDS = (
+    "allocation_required",
+    "required_submission_options",
+    "maximum_walltime_seconds",
+)
 
 
 def _load(path: Path) -> dict:
@@ -323,12 +329,61 @@ def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
     fetched = [tools.fetch_page(page.url) for page in pages]
     chunks = build_corpus(site.site_id, fetched)[2]
 
-    first = select_context(chunks, group="submission", mode=mode)
-    second = select_context(chunks, group="submission", mode=mode)
+    resources = {"maximum_walltime_seconds": {"shared", "wholenode", "gpu"}}
+    first = select_context(
+        chunks,
+        group="submission",
+        fields=SUBMISSION_FIELDS,
+        mode=mode,
+        resources_by_field=resources,
+    )
+    second = select_context(
+        chunks,
+        group="submission",
+        fields=SUBMISSION_FIELDS,
+        mode=mode,
+        resources_by_field=resources,
+    )
 
     assert first == second
     assert first.selected_chunk_ids
     assert all(chunk.scope == "target_site" for chunk in first.chunks)
+    assert [item.field for item in first.retrievals] == list(SUBMISSION_FIELDS)
+    walltime = next(
+        item for item in first.retrievals if item.field == "maximum_walltime_seconds"
+    )
+    assert "doc-anvil-jobs:c2" in {hit.chunk_id for hit in walltime.hits}
+    if mode == "full-corpus":
+        assert walltime.queries == []
+        assert all(hit.score is None for hit in walltime.hits)
+    else:
+        assert len(walltime.queries) >= 2
+        assert all(hit.score is not None for hit in walltime.hits)
+
+
+def test_retrieval_filters_scope_and_deduplicates_content() -> None:
+    site, measurements = _inputs("anvil")
+    identity = build_site_identity(site, measurements)
+    backend = RecordedWebBackend.from_path(
+        SIMULATE_ROOT / "anvil" / "documentation-web.json"
+    )
+    tools = DocumentationTools(identity, backend)
+    fetched = [tools.fetch_page(page.url) for page in backend.recording.pages]
+    chunks = build_corpus(site.site_id, fetched)[2]
+    target = next(chunk for chunk in chunks if chunk.scope == "target_site")
+    duplicate = target.model_copy(update={"chunk_id": "zzz-duplicate"})
+
+    selection = select_context(
+        [*chunks, duplicate],
+        group="submission",
+        fields=SUBMISSION_FIELDS,
+        mode="bm25",
+        resources_by_field={"maximum_walltime_seconds": {"shared"}},
+    )
+
+    assert all(chunk.scope == "target_site" for chunk in selection.chunks)
+    assert len({chunk.content_hash for chunk in selection.chunks}) == len(selection.chunks)
+    assert "zzz-duplicate" not in selection.selected_chunk_ids
 
 
 def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
@@ -408,6 +463,84 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
     assert any("unknown evidence span" in error for error in result.rejected)
 
 
+def test_finding_must_cite_context_retrieved_for_its_field(tmp_path: Path) -> None:
+    chunks = [
+        CorpusChunk(
+            chunk_id="doc-allocation:c1",
+            document_id="doc-allocation",
+            source_url="https://docs.example.edu/site/allocation",
+            title="Allocation policy",
+            scope="target_site",
+            heading_path=["Allocation"],
+            block_kind="text",
+            text="Every job requires a project allocation.",
+            content_hash="allocation",
+        ),
+        CorpusChunk(
+            chunk_id="doc-limits:c1",
+            document_id="doc-limits",
+            source_url="https://docs.example.edu/site/limits",
+            title="Queue limits",
+            scope="target_site",
+            heading_path=["Partition limits"],
+            block_kind="text",
+            text="The shared partition has a maximum walltime of four days.",
+            content_hash="limits",
+        ),
+    ]
+    responses = [
+        (
+            "extract_submission",
+            {
+                "findings": [
+                    {
+                        "field": "allocation_required",
+                        "resource": None,
+                        "value": True,
+                        "evidence_span_ids": ["doc-limits:c1:s1"],
+                        "note": "Wrong field context.",
+                    }
+                ]
+            },
+        ),
+        ("extract_submission", {"findings": []}),
+        ("extract_network", {"findings": []}),
+        ("extract_operational", {"findings": []}),
+    ]
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="field-local citation",
+            responses=[
+                RecordedModelResponse(
+                    output_name=name,
+                    data=data,
+                    response_id=f"field-context-{index}",
+                )
+                for index, (name, data) in enumerate(responses)
+            ],
+        )
+    )
+
+    result = extract_documentation(
+        site_id="example",
+        site_name="Example",
+        scheduler="slurm",
+        partition_names={"shared"},
+        storage_names=set(),
+        chunks=chunks,
+        context_mode="bm25",
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        provider=provider,
+        tracker=_tracker(tmp_path, "field-local-citation"),
+    )
+
+    assert any("not retrieved for this field" in error for error in result.rejected)
+
+
 @pytest.mark.parametrize(
     ("site_name", "mode"),
     [
@@ -449,7 +582,25 @@ def test_end_to_end_documentation_profile_is_reproducible(
         if item.source_type == "documentation"
     )
     assert all(citation.quote for item in documentation.findings for citation in item.citations)
+    assert len(documentation.retrieval) == (6 if site_name == "notre-dame-crc" else 8)
+    assert any(not hit.cited for item in documentation.retrieval for hit in item.hits)
+    retrieval_chunks = {
+        item.field: {hit.chunk_id for hit in item.hits}
+        for item in documentation.retrieval
+    }
+    assert all(
+        citation.chunk_id in retrieval_chunks[finding.field]
+        for finding in documentation.findings
+        for citation in finding.citations
+    )
     if site_name == "anvil":
+        walltime = next(
+            item
+            for item in documentation.retrieval
+            if item.field == "maximum_walltime_seconds"
+        )
+        assert "doc-anvil-jobs:c2" in {hit.chunk_id for hit in walltime.hits}
+        assert any(hit.cited for hit in walltime.hits)
         shared = next(item for item in profile.partitions if item.name == "shared")
         assert shared.maximum_walltime_seconds == 345600
         assert profile.accounting.charging_model == "ACCESS service units"

@@ -125,9 +125,14 @@ AI run inspectable and repeatable without downloading the pages again.
 
 `documentation/retrieval.py` supports three context modes:
 
-- `full-corpus`: use bounded target-site chunks in stable order;
-- `bm25`: rank chunks using a fixed query for the extraction group; and
-- `schema-expanded-bm25`: add fixed field-related terms before BM25 ranking.
+- `full-corpus`: use bounded, deduplicated target-site chunks in stable order without ranking;
+- `bm25`: rank chunks independently for each field using fixed query variants; and
+- `schema-expanded-bm25`: add reviewed field vocabulary to those variants before ranking.
+
+Target-site scope is applied before scoring and identical content is removed by content hash. Query
+variant scores are fused deterministically, and measured partition or storage names extend fixed
+resource-query templates. A fair merge combines the field-local results only when building each
+group model request.
 
 Retrieval runs independently for three extraction groups:
 
@@ -137,7 +142,9 @@ Retrieval runs independently for three extraction groups:
 | `network` | manager-worker, worker-worker, and outbound-compute connectivity |
 | `operational` | charging model and storage purge period |
 
-The selected chunk IDs are saved in the documentation result so retrieval can be audited.
+The documentation result stores each field's queries and selected hits with their scores. After
+validation, every hit is marked `cited: true` or `cited: false`, making retrieved-but-uncited
+context visible without creating another artifact.
 
 ## 5. Create exact evidence spans
 
@@ -177,6 +184,7 @@ Deterministic validation rejects a proposal when:
 - its value has the wrong JSON type;
 - a required partition or storage resource is missing or was not measured;
 - it cites no span or an unknown span;
+- it cites a chunk that was not retrieved for the claimed field;
 - it uses non-target-site evidence; or
 - it assigns a resource to a non-resource field.
 

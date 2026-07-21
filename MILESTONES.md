@@ -162,7 +162,7 @@ Convert fetched official pages into a persistent corpus suitable for repeatable 
 Select extraction context using full corpus, BM25, or schema-expanded BM25.
 
 - Added full-corpus, BM25, and schema-expanded BM25 selection.
-- Added deterministic limits and retained selected chunk IDs.
+- Added field-level query variants, score fusion, content deduplication, and retrieval audit data.
 
 **Test:** Run all modes on one corpus and verify stable selected chunks.
 

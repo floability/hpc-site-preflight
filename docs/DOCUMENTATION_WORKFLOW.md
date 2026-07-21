@@ -53,9 +53,9 @@ site-info.json + login-measurements.json
   |     manifest.json, documents.jsonl, chunks.jsonl
   |     headings and tables are preserved
   |
-  |-- select context independently for three extraction groups
-  |     submission, network, operational
+  |-- retrieve context independently for each requested field
   |     mode = full-corpus | bm25 | schema-expanded-bm25
+  |     merge field-local chunks into submission, network, operational requests
   |
   |-- create exact sentence and table-row span IDs
   |
@@ -96,7 +96,7 @@ web or model mode. Model recordings omit token counts because they are not provi
 
 - `site-profile.json`: compact actionable partial profile;
 - `evidence-report.json`: measurement and documentation provenance;
-- `documentation-evidence.json`: accepted, rejected, and unresolved documentation findings;
+- `documentation-evidence.json`: findings plus field queries, retrieval scores, and citation use;
 - `corpus/manifest.json`;
 - `corpus/documents.jsonl`;
 - `corpus/chunks.jsonl`; and

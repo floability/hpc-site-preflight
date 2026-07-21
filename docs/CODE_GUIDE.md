@@ -214,8 +214,9 @@ documentation agent.
 - `documentation/retrieval.py` implements `full-corpus`, `bm25`, and
   `schema-expanded-bm25` context selection.
 
-Retrieval is deterministic. It runs separately for submission, network, and operational extraction
-groups. The model sees selected local chunks, not an unrestricted remote page.
+Retrieval is deterministic. It filters scope and duplicate content first, then runs fixed query
+variants independently for each requested field. Field results are merged only for the three model
+requests. The model sees selected local chunks, not an unrestricted remote page.
 
 ### Extraction and validation
 
@@ -312,7 +313,7 @@ They document intended boundaries and make accidental fake behavior difficult.
 | `corpus/manifest.json` | `documentation/corpus.py` | Corpus identity and reproducibility |
 | `corpus/documents.jsonl` | `documentation/corpus.py` | Normalized fetched pages |
 | `corpus/chunks.jsonl` | `documentation/corpus.py` | Retrieval and citation audit |
-| `documentation-evidence.json` | `documentation/extraction.py`, written by CLI | Accepted/rejected AI proposals and selected chunks |
+| `documentation-evidence.json` | `documentation/extraction.py`, written by CLI | Findings, field-level retrieval scores, and citation use |
 | `site-profile.json` | `profiles/compiler.py` plus `profiles/documentation.py` | Future deterministic preflight input |
 | `evidence-report.json` | profile compiler and documentation mapper | Full provenance behind compact profile fields |
 | `performance.json` | `reporting/tracker.py` | Timing, requests, tokens, tools, failures, artifacts |
