@@ -17,8 +17,8 @@ Keep four boundaries in mind while reading:
 3. **Construct policy:** deterministic code maps accepted evidence into a partial site profile.
 4. **Preflight a workflow:** future deterministic code will compare workflow needs with the profile.
 
-The model is allowed to choose bounded documentation actions and propose typed facts. It does not
-measure machines, run shell commands, decide evidence precedence, or write the final profile.
+The model is allowed to select among bounded documentation results and propose typed facts. It does
+not measure machines, run shell commands, decide evidence precedence, or write the final profile.
 
 ## Fastest reading path
 
@@ -32,9 +32,10 @@ For a first pass, read these files in order:
 5. `src/hpc_site_preflight/cli.py` — see process lifecycle and the small operation dispatch table.
 6. `src/hpc_site_preflight/operations.py` — follow `build_profile()` and
    `_build_documentation()`.
-7. `src/hpc_site_preflight/documentation/policy_agent_adapter.py` — see the documentation stages in
+7. `src/hpc_site_preflight/documentation/pipeline.py` — see the documentation stages in
    one short method.
-8. `src/hpc_site_preflight/documentation/discovery.py` — find the implemented agent loop.
+8. `src/hpc_site_preflight/documentation/discovery_agent.py` — see the discovery agent use web
+   tools and request one source selection.
 9. `src/hpc_site_preflight/documentation/extraction.py` — see model proposals become validated
    findings.
 10. `src/hpc_site_preflight/profiles/compiler.py` and `profiles/documentation.py` — see evidence
@@ -59,12 +60,12 @@ __main__.py
            -> provider_for_model()
            -> create_live_model_provider() or RecordedModelProvider
            -> LiveWebBackend or RecordedWebBackend
-           -> PolicyAgentAdapter.build()
+           -> DocumentationPipeline.build()
               -> build_site_identity()
               -> build_query_plan()
               -> DiscoveryAgent.run()
-                 -> ModelProvider.generate_structured()
                  -> DocumentationTools.search_web()/fetch_page()
+                 -> ModelProvider.generate_structured() for source selection
               -> build_corpus()
               -> write_corpus()
               -> extract_documentation()
@@ -146,13 +147,13 @@ observe. They are allowlists/design contracts, not collected values.
 ### Documentation models
 
 - `documentation/base.py` defines the provider-neutral documentation-policy interface.
-- `documentation/models.py` contains the shared contracts for identity, queries, discovery actions,
+- `documentation/models.py` contains the shared contracts for identity, queries, source selection,
   pages, corpus records, extraction proposals, citations, and final documentation evidence.
 
 Read `documentation/models.py` by following this type sequence:
 
 ```text
-SiteIdentity -> QueryPlan -> DiscoveryDecision -> DiscoveryResult
+SiteIdentity -> QueryPlan -> DiscoverySelection -> DiscoveryResult
              -> CorpusChunk -> ExtractionResult -> DocumentationEvidence
 ```
 
@@ -172,20 +173,20 @@ raise an explicit not-implemented error today.
 ### Site identity and scope
 
 - `documentation/identity.py` merges site information with hostname and scheduler observations,
-  creates four deterministic policy queries, and classifies documentation scope.
+  creates deterministic topic queries, and classifies documentation scope.
 
 The optional `--site-name` is a discovery-only search name and does not replace the canonical name
 in `SiteInfo` or `SiteProfile`. `--discovery-note` is included in the typed identity shown to the
-discovery model. Repeatable `--discovery-keyword` values are deduplicated and appended to the four
-fixed queries. No disallowed-keyword input is implemented; allowed domains and deterministic source
-scope remain the primary exclusion controls.
+discovery model. Each deduplicated `--discovery-keyword` adds a separate search query. No
+disallowed-keyword input is implemented; allowed domains and deterministic source scope remain the
+primary exclusion controls.
 
 This module owns a major trust decision. Target-site documents may support policy; sibling-site and
 organization-general documents may help discovery but cannot become target policy.
 
 ### Web acquisition
 
-- `documentation/web.py` defines the backend interface, a live backend, a recorded backend, and the
+- `documentation/tools.py` defines the backend interface, a live backend, a recorded backend, and the
   bounded `DocumentationTools` exposed to discovery.
 
 The tools enforce HTTPS, allowed domains, query/page budgets, timeout, page size, fetch-before-select,
@@ -193,16 +194,13 @@ and target-site selection. The model never receives a general browser or network
 
 ### The implemented agent
 
-- `documentation/discovery.py` contains `DiscoveryAgent`, the only implemented agent loop.
+- `documentation/discovery_agent.py` contains `DiscoveryAgent`, the only implemented agent.
 
-On each bounded turn it asks for one `DiscoveryDecision`:
-
-```text
-search_web | fetch_page | finish_discovery
-```
-
-The agent chooses an action; deterministic tools decide whether it is legal. If discovery ends
-early or a call fails, already fetched target-site pages are preserved as a partial result.
+The agent owns two reviewed tools: documentation search and page download. It executes fixed topic
+queries, filters and ranks results locally, downloads a bounded candidate set, and follows allowed
+links. It then makes one normal model call for `DiscoverySelection`. The response may only name
+already fetched target-site URLs. One correction is allowed for an invalid selection; a model
+failure preserves the deterministically fetched pages.
 
 The top-level `agent/` package is different. It defines future evidence-controller actions and
 state, but `agent/controller.py` is not implemented or called by `profile build`. That later
@@ -238,7 +236,8 @@ cannot rewrite a citation and have it accepted as exact evidence.
 
 ### Linear documentation orchestration
 
-- `documentation/policy_agent_adapter.py` is the short composition root for Phase D.
+- `documentation/pipeline.py` contains `DocumentationPipeline`, the short composition root for
+  documentation discovery, corpus construction, and extraction.
 
 Its `build()` method is the best single file for seeing the AI workflow. It creates identity and
 queries, runs discovery, builds the corpus, then calls extraction. It returns documentation evidence;
@@ -288,6 +287,10 @@ The model never receives a mutable `SiteProfile`.
 
 Every model adapter and documentation tool receives the same tracker. Provider-reported token counts
 are recorded; missing counts remain unavailable rather than being estimated.
+
+The tracker prints concise progress to standard error before potentially slow external calls.
+Repeated internal tool stages remain in the performance report and trace without producing verbose
+stage summaries in the terminal.
 
 ### Future pipeline packages
 

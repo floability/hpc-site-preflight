@@ -1,5 +1,7 @@
 """Human-readable stage and final-run summaries."""
 
+import sys
+
 from hpc_site_preflight.reporting.models import ModelUsage, RunPerformance, StageMetrics
 
 
@@ -11,19 +13,23 @@ def _token_value(value: int, usage: ModelUsage) -> str:
 
 def print_stage_summary(
     stage: StageMetrics,
-    *,
-    run_elapsed: float,
-    run_usage: ModelUsage,
 ) -> None:
-    """Print one concise summary after a stage completes or fails."""
+    """Print one compact line after a visible stage."""
 
-    print(f"[{stage.status}] {stage.name}")
-    print(f"  Time:          {stage.duration_seconds or 0.0:.2f} s")
-    print(f"  Model calls:   {stage.model_usage.requests}")
-    print(f"  Tokens:        {_token_value(stage.model_usage.total_tokens, stage.model_usage)}")
+    details = [f"{stage.duration_seconds or 0.0:.2f}s"]
+    if stage.model_usage.requests:
+        details.append(f"model calls={stage.model_usage.requests}")
+        details.append(
+            f"tokens={_token_value(stage.model_usage.total_tokens, stage.model_usage)}"
+        )
+    if stage.tool_calls:
+        details.append(f"tool calls={stage.tool_calls}")
+    if stage.error_type:
+        details.append(f"error={stage.error_type}")
     print(
-        f"  Run total:     {run_elapsed:.2f} s / "
-        f"{_token_value(run_usage.total_tokens, run_usage)} tokens"
+        f"[{stage.status}] {stage.name} ({', '.join(details)})",
+        file=sys.stderr,
+        flush=True,
     )
 
 

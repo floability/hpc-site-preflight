@@ -1,0 +1,66 @@
+{
+  "site_id": "purdue-anvil",
+  "model_mode": "live",
+  "model_provider": "openai",
+  "model": "gpt-5-mini",
+  "web_mode": "live",
+  "context_mode": "bm25",
+  "findings": [
+    {
+      "field": "charging_model",
+      "resource": null,
+      "value": "not charged",
+      "note": "Span states that filesystem storage is not charged.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c132:s1",
+          "chunk_id": "doc-anvil-jobs:c132",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > Filesystem \u00b6",
+          "quote": "Filesystem storage is not charged."
+        }
+      ]
+    }
+  ],
+  "rejected": [
+    "charging_model: resource name is not allowed",
+    "charging_model: resource name is not allowed",
+    "charging_model: resource name is not allowed"
+  ],
+  "unresolved": [
+    "allocation_required",
+    "manager_worker_connectivity",
+    "maximum_walltime_seconds",
+    "outbound_compute",
+    "purge_after_days",
+    "required_submission_options",
+    "worker_worker_connectivity"
+  ],
+  "selected_chunk_ids": [
+    "doc-anvil-jobs:c43",
+    "doc-anvil-jobs:c63",
+    "doc-anvil-jobs:c4",
+    "doc-anvil-jobs:c48",
+    "doc-anvil-jobs:c40",
+    "doc-anvil-jobs:c31",
+    "doc-anvil-jobs:c139",
+    "doc-anvil-jobs:c64",
+    "doc-anvil-jobs:c1",
+    "doc-anvil-jobs:c50",
+    "doc-anvil-jobs:c129",
+    "doc-anvil-jobs:c58",
+    "doc-anvil-jobs:c68",
+    "doc-anvil-jobs:c24",
+    "doc-anvil-jobs:c61",
+    "doc-anvil-jobs:c91",
+    "doc-anvil-jobs:c132",
+    "doc-anvil-jobs:c8",
+    "doc-userguides-anvil:c12",
+    "doc-anvil-jobs:c120",
+    "doc-anvil-jobs:c122",
+    "doc-anvil-jobs:c125",
+    "doc-anvil-jobs:c123",
+    "doc-anvil-jobs:c121"
+  ]
+}

@@ -1,8 +1,9 @@
 # Run result: Anvil with live model and web
 
 This document evaluates one representative profile build and traces each output back to the code
-that produced it. It is a snapshot of the current implementation, not a claim that the generated
-site profile is complete or correct ground truth.
+that produced it. It is the pre-redesign baseline retained for comparison: discovery used the old
+model-directed action loop. It is not a claim that the generated site profile is complete or
+correct ground truth.
 
 ## Run identity
 
@@ -108,7 +109,8 @@ This stage did not inspect the laptop hardware.
 
 Stage: `documentation_identity`
 
-`PolicyAgentAdapter.build()` called `build_site_identity()` and `build_query_plan()`. These
+`DocumentationPipeline.build()` calls `build_site_identity()` and `build_query_plan()`. The
+pipeline class had an older name when this baseline was recorded. These
 functions combined explicit site information with measured host and scheduler signals, then made
 four bounded policy-search queries.
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from hpc_site_preflight.documentation.base import DocumentationPolicyProvider
 from hpc_site_preflight.documentation.corpus import build_corpus, write_corpus
-from hpc_site_preflight.documentation.discovery import DiscoveryAgent
+from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import extract_documentation
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
 from hpc_site_preflight.documentation.models import (
@@ -12,15 +12,15 @@ from hpc_site_preflight.documentation.models import (
     DocumentationEvidence,
     RuntimeMode,
 )
-from hpc_site_preflight.documentation.web import DocumentationTools, WebBackend
+from hpc_site_preflight.documentation.tools import DocumentationTools, WebBackend
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.models import SiteInfo
 
 
-class PolicyAgentAdapter(DocumentationPolicyProvider):
-    """Connect the small Phase D components without embedding policy decisions."""
+class DocumentationPipeline(DocumentationPolicyProvider):
+    """Run documentation discovery, corpus construction, and extraction."""
 
     def __init__(
         self,
@@ -36,7 +36,6 @@ class PolicyAgentAdapter(DocumentationPolicyProvider):
         discovery_site_name: str | None = None,
         discovery_note: str | None = None,
         discovery_keywords: list[str] | None = None,
-        maximum_discovery_turns: int = 8,
     ) -> None:
         self.measurements = measurements
         self.model_provider = model_provider
@@ -49,7 +48,6 @@ class PolicyAgentAdapter(DocumentationPolicyProvider):
         self.discovery_site_name = discovery_site_name
         self.discovery_note = discovery_note
         self.discovery_keywords = discovery_keywords or []
-        self.maximum_discovery_turns = maximum_discovery_turns
 
     def build(
         self,
@@ -69,12 +67,17 @@ class PolicyAgentAdapter(DocumentationPolicyProvider):
             query_plan = build_query_plan(identity)
 
         tools = DocumentationTools(identity, self.web_backend)
-        discovery = DiscoveryAgent(
-            self.model_provider,
-            maximum_turns=self.maximum_discovery_turns,
-        ).run(identity, query_plan, tools, tracker)
+        discovery = DiscoveryAgent(self.model_provider).run(
+            identity,
+            query_plan,
+            tools,
+            tracker,
+        )
 
-        with tracker.stage("documentation_corpus"):
+        tracker.progress(
+            f"Building corpus from {len(discovery.selected_pages)} selected page(s)"
+        )
+        with tracker.stage("documentation_corpus", display=False):
             manifest, documents, chunks = build_corpus(site.site_id, discovery.selected_pages)
             tracker.progress(
                 f"Corpus contains {len(documents)} document(s) and {len(chunks)} chunk(s)"

@@ -3,48 +3,9 @@
   "note": "Synthetic model outputs for offline simulation; no live model was called.",
   "responses": [
     {
-      "output_name": "discovery_action",
-      "response_id": "anvil-discovery-1",
+      "output_name": "documentation_selection",
+      "response_id": "anvil-documentation-selection",
       "data": {
-        "action": "search_web",
-        "query": "Anvil job submission allocation storage policy",
-        "url": null,
-        "source_urls": [],
-        "summary": null,
-        "unanswered_topics": []
-      }
-    },
-    {
-      "output_name": "discovery_action",
-      "response_id": "anvil-discovery-2",
-      "data": {
-        "action": "fetch_page",
-        "query": null,
-        "url": "https://docs.rcac.purdue.edu/anvil/jobs",
-        "source_urls": [],
-        "summary": null,
-        "unanswered_topics": []
-      }
-    },
-    {
-      "output_name": "discovery_action",
-      "response_id": "anvil-discovery-3",
-      "data": {
-        "action": "fetch_page",
-        "query": null,
-        "url": "https://docs.rcac.purdue.edu/anvil/policies",
-        "source_urls": [],
-        "summary": null,
-        "unanswered_topics": []
-      }
-    },
-    {
-      "output_name": "discovery_action",
-      "response_id": "anvil-discovery-4",
-      "data": {
-        "action": "finish_discovery",
-        "query": null,
-        "url": null,
         "source_urls": [
           "https://docs.rcac.purdue.edu/anvil/jobs",
           "https://docs.rcac.purdue.edu/anvil/policies"

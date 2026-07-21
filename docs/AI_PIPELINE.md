@@ -25,10 +25,12 @@ site information + measurements
      deterministic identity
               |
               v
-       four fixed queries
+     fixed topic queries
               |
               v
-    bounded discovery agent  <---- model call: choose one action
+    bounded discovery agent
+      | search + fetch tools
+      ` one model selection
               |
               v
   selected target-site pages
@@ -55,8 +57,9 @@ site information + measurements
  deterministic profile mapping
 ```
 
-Only the two marked stages use a model. Every other transition is ordinary Python code with typed
-inputs and deterministic results.
+There are two kinds of model judgment: one source-selection call during discovery and constrained
+fact extraction calls. Every other transition is ordinary Python code with typed inputs and
+deterministic results.
 
 ## 1. Build site identity and queries
 
@@ -65,34 +68,30 @@ values. It produces a `SiteIdentity` containing the target name, aliases, schedu
 allowed domains, and preferred path tokens.
 
 Users may add a discovery-only site name, a free-text note, and repeatable keywords from the CLI.
-The alternate name and note are visible to the discovery model; keywords also extend every fixed
-query. These hints do not change the canonical site identity or the documentation domain allowlist.
+The alternate name and note are visible to the discovery model. Each keyword adds a separate
+bounded search. These hints do not change the canonical site identity or the documentation domain
+allowlist.
 
-The same module creates four reproducible searches:
+The same module creates two reproducible searches for each main topic:
 
-1. job submission and required options;
-2. queues, partitions, resources, and limits;
-3. storage, purge, charging, and allocation policy; and
-4. compute-node networking and outbound access.
+1. canonical user guides;
+2. job submission and required options;
+3. queues, partitions, resources, and limits;
+4. storage, purge, charging, and allocation policy; and
+5. compute-node networking and outbound access.
 
 The model cannot replace the allowed domains or remove the target-site name from a query.
 
 ## 2. Run bounded discovery
 
-`documentation/discovery.py` asks the model to choose exactly one action per turn:
+`documentation/discovery_agent.py` contains the single `DiscoveryAgent`. Search and page download are
+tools of that agent, but their execution is deterministic: the agent runs the approved query plan,
+ranks allowed candidates, fetches a bounded set, and follows eligible links found in fetched pages.
+Live search uses DuckDuckGo through the `ddgs` package.
 
-```text
-search_web
-fetch_page
-finish_discovery
-```
+`documentation/tools.py` implements those tools and enforces:
 
-The response is parsed as `DiscoveryDecision`. Free-form tool names and arbitrary commands are not
-accepted.
-
-`documentation/web.py` executes the selected action and enforces:
-
-- a fixed turn, search, and page budget;
+- fixed search and page budgets;
 - HTTPS URLs;
 - the site-information domain allowlist;
 - page size and request timeout limits;
@@ -100,11 +99,13 @@ accepted.
 - target-site scope for every selected evidence page.
 
 Source scope is classified by deterministic code as `target_site`, `organization_general`,
-`sibling_site`, or `out_of_scope`. The model cannot promote sibling-site documentation into target
-policy.
+`sibling_site`, or `out_of_scope`. The agent gives the model compact metadata, headings, and short
+excerpts from fetched target-site candidates. One schema-constrained `DiscoverySelection` response
+chooses the source URLs and lists unanswered topics. The model cannot request a new URL or promote
+sibling-site documentation into target policy.
 
-If the model fails or reaches its turn limit, discovery returns the target-site pages already
-fetched. An incomplete search therefore becomes a partial result instead of losing useful work.
+An invalid selection permits one correction call. If selection fails, deterministic discovery
+returns the target-site pages already fetched, so useful partial work is preserved.
 
 ## 3. Build the local corpus
 
@@ -216,7 +217,7 @@ Pydantic result type.
 Simulated recordings omit token counts because those values were not provider reported. The run
 tracker records their usage as unavailable rather than estimating it.
 
-`documentation/web.py` provides both backends. Live mode uses bounded DuckDuckGo search and HTTPS
+`documentation/tools.py` provides both backends. Live mode uses bounded DuckDuckGo search and HTTPS
 fetches restricted to the site's allowed domains. Simulated mode replays the local web recording.
 
 ## Failure and partial-output behavior
@@ -256,12 +257,12 @@ For a line-by-line reading of this subsystem, use this order:
 1. `documentation/models.py`
 2. `providers/base.py`
 3. `documentation/identity.py`
-4. `documentation/web.py`
-5. `documentation/discovery.py`
+4. `documentation/tools.py`
+5. `documentation/discovery_agent.py`
 6. `documentation/corpus.py`
 7. `documentation/retrieval.py`
 8. `documentation/extraction.py`
-9. `documentation/policy_agent_adapter.py`
+9. `documentation/pipeline.py`
 10. `profiles/documentation.py`
 11. `profiles/compiler.py`
 12. `operations.py`

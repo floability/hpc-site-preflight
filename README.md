@@ -2,6 +2,8 @@
 
 HPC Site Preflight constructs an evidence-backed profile of an HPC system and uses that profile to determine whether a portable workflow package can be deployed safely.
 
+The research paper framing is **Evidence-Backed HPC Site Policies with Agentic Discovery**.
+
 The working machine-readable site-profile contract, field semantics, evidence boundary, and a
 full illustrative example are described in [docs/SITE_PROFILE.md](docs/SITE_PROFILE.md).
 Common scheduler-independent login-node observations and their safety boundary are defined in
@@ -14,7 +16,9 @@ The project combines four evidence sources:
 3. official documentation analyzed with bounded AI assistance;
 4. predefined pilot-job results.
 
-AI is restricted to documentation discovery and structured extraction. Measurements, pilot scripts, evidence validation, reconciliation, and the final preflight decision remain deterministic.
+One bounded discovery agent uses reviewed web-search and page-download tools, then AI selects among
+the fetched sources and proposes structured facts. Measurements, pilot scripts, evidence
+validation, reconciliation, and the final preflight decision remain deterministic.
 
 ## Project status
 
@@ -88,8 +92,8 @@ whether it was simulated or measured.
 
 Documentation discovery also accepts optional user guidance. `--site-name` supplies a search name
 without changing the canonical site profile, `--discovery-note` adds free-text context for the
-discovery model, and repeatable `--discovery-keyword` values extend all fixed search queries. There
-is no exclusion-keyword option: source scope and allowed domains remain deterministic controls.
+discovery model, and each repeatable `--discovery-keyword` adds a bounded search query. There is no
+exclusion-keyword option: source scope and allowed domains remain deterministic controls.
 
 `--model` accepts a provider-neutral model identifier. The current registry maps `gpt-` and
 OpenAI `o`-series names to OpenAI, `claude-` names to Anthropic, and `gemini-` names to Gemini.
@@ -136,6 +140,14 @@ hpc-site-preflight profile build \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model gpt-5-mini \
   --output-dir artifacts/anvil-live
+```
+
+Progress is written to standard error before slow searches, downloads, and model calls. When using
+`conda run`, add `--no-capture-output` so Conda streams that output instead of holding it until the
+process exits:
+
+```bash
+conda run --no-capture-output -n hpc-site-preflight hpc-site-preflight profile build --help
 ```
 
 Add `--model-mode simulate --web-mode simulate` for a fully offline replay.

@@ -138,8 +138,9 @@ Expose only the reviewed tools needed for documentation discovery.
 
 Let one agent find useful official pages while deterministic code controls its scope and budget.
 
-- Added a schema-constrained, fixed-turn discovery loop with three actions.
-- Added deterministic action validation, partial fallback, and sibling rejection.
+- Added one discovery agent with bounded search and download tools.
+- Added one structured source-selection call, one correction bound, partial fallback, and sibling
+  rejection.
 
 **Test:** Replay successful, partial, out-of-scope, and budget-exhausted discovery runs.
 

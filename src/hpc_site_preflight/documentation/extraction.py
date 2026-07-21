@@ -78,7 +78,7 @@ def extract_documentation(
     selected_chunk_ids: list[str] = []
 
     for group in _GROUPS:
-        with tracker.stage("documentation_context_selection"):
+        with tracker.stage("documentation_context_selection", display=False):
             selection = select_context(chunks, group=group, mode=context_mode)
             spans = build_evidence_spans(selection)
             prompt = build_extraction_prompt(site_name, group, selection, spans)
@@ -104,7 +104,7 @@ def extract_documentation(
             rejected.append(f"{group}: model request failed: {exc}")
             continue
 
-        with tracker.stage("documentation_evidence_validation"):
+        with tracker.stage("documentation_evidence_validation", display=False):
             validated = _validate_group(
                 group,
                 response.parse_as(ExtractionResult),
@@ -120,6 +120,7 @@ def extract_documentation(
         )
 
         if validated.rejected:
+            tracker.progress(f"Requesting one correction for {group} policy findings")
             correction_prompt = (
                 prompt
                 + "\n\nCORRECTION: Return only corrected findings for these local errors:\n- "
@@ -139,7 +140,7 @@ def extract_documentation(
             except ModelProviderError as exc:
                 rejected.append(f"{group}: correction failed: {exc}")
                 continue
-            with tracker.stage("documentation_evidence_validation"):
+            with tracker.stage("documentation_evidence_validation", display=False):
                 corrected = _validate_group(
                     group,
                     corrected_response.parse_as(ExtractionResult),

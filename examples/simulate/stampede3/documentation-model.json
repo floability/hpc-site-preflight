@@ -3,24 +3,9 @@
   "note": "Synthetic model outputs for offline simulation; no live model was called.",
   "responses": [
     {
-      "output_name": "discovery_action",
-      "response_id": "stampede3-discovery-1",
-      "data": {"action": "search_web", "query": "Stampede3 batch jobs and policies", "url": null, "source_urls": [], "summary": null, "unanswered_topics": []}
-    },
-    {
-      "output_name": "discovery_action",
-      "response_id": "stampede3-discovery-2",
-      "data": {"action": "fetch_page", "query": null, "url": "https://docs.tacc.utexas.edu/stampede3/jobs", "source_urls": [], "summary": null, "unanswered_topics": []}
-    },
-    {
-      "output_name": "discovery_action",
-      "response_id": "stampede3-discovery-3",
-      "data": {"action": "fetch_page", "query": null, "url": "https://docs.tacc.utexas.edu/stampede3/policies", "source_urls": [], "summary": null, "unanswered_topics": []}
-    },
-    {
-      "output_name": "discovery_action",
-      "response_id": "stampede3-discovery-4",
-      "data": {"action": "finish_discovery", "query": null, "url": null, "source_urls": ["https://docs.tacc.utexas.edu/stampede3/jobs", "https://docs.tacc.utexas.edu/stampede3/policies"], "summary": "Selected Stampede3 job and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
+      "output_name": "documentation_selection",
+      "response_id": "stampede3-documentation-selection",
+      "data": {"source_urls": ["https://docs.tacc.utexas.edu/stampede3/jobs", "https://docs.tacc.utexas.edu/stampede3/policies"], "summary": "Selected Stampede3 job and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
     },
     {
       "output_name": "extract_submission",

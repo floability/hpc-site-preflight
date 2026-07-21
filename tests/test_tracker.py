@@ -68,8 +68,9 @@ def test_tracker_marks_missing_provider_usage_unavailable(
     report = json.loads(path.read_text(encoding="utf-8"))
     assert report["steps"][0]["model_usage"]["usage_available"] is False
     assert report["model_usage"]["usage_available"] is False
-    output = capsys.readouterr().out
-    assert "Tokens:        unavailable" in output
+    captured = capsys.readouterr()
+    assert "tokens=unavailable" in captured.err
+    output = captured.out
     assert "Total tokens:  unavailable" in output
 
 

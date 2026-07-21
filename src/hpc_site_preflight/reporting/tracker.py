@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import time
 import uuid
 from collections.abc import Iterator
@@ -59,7 +60,7 @@ class RunTracker:
         self._write_performance()
 
     @contextmanager
-    def stage(self, name: str) -> Iterator[StageMetrics]:
+    def stage(self, name: str, *, display: bool = True) -> Iterator[StageMetrics]:
         """Measure one sequential pipeline stage and report it immediately."""
 
         if self._current_stage is not None:
@@ -68,8 +69,8 @@ class RunTracker:
         self._current_stage = stage
         started = time.perf_counter()
         self._trace.write("stage_started", stage=name)
-        if not self.quiet:
-            print(f"[starting] {name}", flush=True)
+        if not self.quiet and display:
+            print(f"[starting] {name}", file=sys.stderr, flush=True)
         try:
             yield stage
         except Exception as exc:
@@ -87,12 +88,8 @@ class RunTracker:
             self._trace.write("stage_finished", **stage.model_dump(mode="json"))
             self._current_stage = None
             self._write_performance()
-            if not self.quiet:
-                print_stage_summary(
-                    stage,
-                    run_elapsed=time.perf_counter() - self._started_monotonic,
-                    run_usage=self._report.model_usage,
-                )
+            if not self.quiet and display:
+                print_stage_summary(stage)
 
     def record_model_usage(
         self,
@@ -134,13 +131,24 @@ class RunTracker:
         if tool_name is not None:
             self._trace.write("tool_call", tool=tool_name, details=details or {})
 
+    def record_tool_result(
+        self,
+        *,
+        tool_name: str,
+        details: dict[str, str] | None = None,
+    ) -> None:
+        """Trace a tool result without increasing the tool-call count."""
+
+        self._require_stage("tool result")
+        self._trace.write("tool_result", tool=tool_name, details=details or {})
+
     def progress(self, message: str) -> None:
         """Write one safe progress message to the trace and live console."""
 
         self._trace.write("progress", message=message)
         if not self.quiet:
             elapsed = time.perf_counter() - self._started_monotonic
-            print(f"[{elapsed:6.1f}s] {message}", flush=True)
+            print(f"[{elapsed:6.1f}s] {message}", file=sys.stderr, flush=True)
 
     def add_artifact(self, *, kind: str, path: Path) -> None:
         """Record an artifact produced by the run."""

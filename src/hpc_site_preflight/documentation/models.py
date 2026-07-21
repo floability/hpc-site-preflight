@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Literal, TypeAlias
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field
 
 from hpc_site_preflight.providers.base import ModelProviderName
 
@@ -37,7 +37,7 @@ class SiteIdentity(StrictModel):
 
 
 class SearchQuery(StrictModel):
-    topic: Literal["submission", "resources", "storage", "networking"]
+    topic: Literal["canonical", "submission", "resources", "storage", "networking", "user"]
     query: str
 
 
@@ -62,11 +62,17 @@ class DocumentSection(StrictModel):
     blocks: list[DocumentBlock] = Field(min_length=1)
 
 
+class DocumentLink(StrictModel):
+    url: str
+    text: str
+
+
 class RecordedPage(StrictModel):
     url: str
     title: str
     fetched_at: datetime
     sections: list[DocumentSection] = Field(min_length=1)
+    links: list[DocumentLink] = Field(default_factory=list)
 
 
 class WebRecording(StrictModel):
@@ -82,30 +88,17 @@ class FetchedPage(RecordedPage):
     text_truncated: bool = False
 
 
-class DiscoveryDecision(StrictModel):
-    action: Literal["search_web", "fetch_page", "finish_discovery"]
-    query: str | None
-    url: str | None
-    source_urls: list[str]
-    summary: str | None
+class DiscoverySelection(StrictModel):
+    source_urls: list[str] = Field(max_length=10)
+    summary: str = Field(min_length=1)
     unanswered_topics: list[str]
-
-    @model_validator(mode="after")
-    def validate_action_arguments(self) -> "DiscoveryDecision":
-        if self.action == "search_web" and not self.query:
-            raise ValueError("search_web requires query.")
-        if self.action == "fetch_page" and not self.url:
-            raise ValueError("fetch_page requires url.")
-        if self.action == "finish_discovery" and not self.summary:
-            raise ValueError("finish_discovery requires summary.")
-        return self
 
 
 class DiscoveryResult(StrictModel):
     selected_pages: list[FetchedPage]
     summary: str
     unanswered_topics: list[str]
-    termination_reason: Literal["model_finished", "turn_limit", "model_failed"]
+    termination_reason: Literal["model_selected", "model_corrected", "deterministic_fallback"]
 
 
 class CorpusDocument(StrictModel):

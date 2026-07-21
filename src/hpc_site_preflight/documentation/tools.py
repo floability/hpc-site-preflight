@@ -1,4 +1,4 @@
-"""Bounded documentation search, fetch, and finish tools."""
+"""Bounded documentation search and page-download tools."""
 
 import hashlib
 import re
@@ -16,6 +16,7 @@ from hpc_site_preflight.documentation.identity import classify_source
 from hpc_site_preflight.documentation.models import (
     BlockKind,
     DocumentBlock,
+    DocumentLink,
     DocumentSection,
     FetchedPage,
     RecordedPage,
@@ -98,9 +99,10 @@ class LiveWebBackend:
     def fetch(self, url: str, timeout_seconds: float) -> RecordedPage:
         final_url, content_type, content = self._download(url, timeout_seconds)
         if "text/html" in content_type or "application/xhtml+xml" in content_type:
-            title, sections = _html_sections(final_url, content)
+            title, sections, links = _html_sections(final_url, content)
         elif "text/plain" in content_type:
             title = final_url.rsplit("/", 1)[-1] or final_url
+            links = []
             sections = [
                 DocumentSection(
                     heading_path=[title],
@@ -116,6 +118,7 @@ class LiveWebBackend:
             title=title,
             fetched_at=datetime.now(UTC),
             sections=sections,
+            links=links,
         )
 
     def _download(self, url: str, timeout_seconds: float) -> tuple[str, str, str]:
@@ -175,8 +178,8 @@ class DocumentationTools:
         identity: SiteIdentity,
         backend: WebBackend,
         *,
-        search_budget: int = 6,
-        page_budget: int = 6,
+        search_budget: int = 12,
+        page_budget: int = 10,
         search_result_limit: int = 8,
         maximum_page_chars: int = 20_000,
         timeout_seconds: float = 20.0,
@@ -228,6 +231,7 @@ class DocumentationTools:
             text_truncated=truncated,
         )
         self.fetched_pages[url] = page
+        self.fetched_pages[page.url] = page
         return page
 
     def finish_discovery(
@@ -249,11 +253,13 @@ class DocumentationTools:
         return selected, summary, unanswered_topics
 
     def partial_selection(self) -> list[FetchedPage]:
-        return [
-            page
-            for _, page in sorted(self.fetched_pages.items())
-            if page.scope == "target_site"
-        ][:10]
+        pages = {page.url: page for page in self.fetched_pages.values()}
+        return [page for _, page in sorted(pages.items()) if page.scope == "target_site"][:10]
+
+    def url_allowed(self, url: str) -> bool:
+        """Return whether a URL is inside the reviewed HTTPS domain boundary."""
+
+        return self._url_allowed(url)
 
     def _repair_query(self, query: str) -> str:
         if any(alias.lower() in query.lower() for alias in self.identity.aliases):
@@ -337,8 +343,25 @@ def _read_bounded(response: httpx.Response, maximum_bytes: int) -> bytes:
     return bytes(content)
 
 
-def _html_sections(url: str, html: str) -> tuple[str, list[DocumentSection]]:
+def _html_sections(
+    url: str,
+    html: str,
+) -> tuple[str, list[DocumentSection], list[DocumentLink]]:
     soup = BeautifulSoup(html, "html.parser")
+    links: list[DocumentLink] = []
+    seen_links: set[str] = set()
+    for anchor in soup.find_all("a", href=True):
+        linked_url = urljoin(url, str(anchor["href"]))
+        if linked_url in seen_links:
+            continue
+        seen_links.add(linked_url)
+        links.append(
+            DocumentLink(
+                url=linked_url,
+                text=anchor.get_text(" ", strip=True)[:500],
+            )
+        )
+
     for tag in soup(["script", "style", "noscript", "svg", "nav", "footer"]):
         tag.decompose()
 
@@ -389,4 +412,4 @@ def _html_sections(url: str, html: str) -> tuple[str, list[DocumentSection]]:
                 blocks=[DocumentBlock(kind="text", text=text)],
             )
         )
-    return title[:500], sections
+    return title[:500], sections, links

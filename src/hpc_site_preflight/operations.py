@@ -13,8 +13,8 @@ from hpc_site_preflight.documentation.models import (
     DocumentationEvidence,
     RuntimeMode,
 )
-from hpc_site_preflight.documentation.policy_agent_adapter import PolicyAgentAdapter
-from hpc_site_preflight.documentation.web import LiveWebBackend, RecordedWebBackend, WebBackend
+from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
+from hpc_site_preflight.documentation.tools import LiveWebBackend, RecordedWebBackend, WebBackend
 from hpc_site_preflight.exceptions import (
     ConfigurationError,
     DocumentationError,
@@ -100,7 +100,7 @@ def _build_documentation(
     measurements: MeasurementBundle,
     tracker: RunTracker,
 ) -> DocumentationEvidence:
-    """Resolve model and web inputs, then run the linear documentation adapter."""
+    """Resolve model and web inputs, then run the documentation pipeline."""
 
     web_path = args.web_recording or args.site_info.parent / "documentation-web.json"
     model_path = args.model_recording or args.site_info.parent / "documentation-model.json"
@@ -134,7 +134,7 @@ def _build_documentation(
             storage_names=storage_names,
             reason=str(exc),
         )
-    adapter = PolicyAgentAdapter(
+    pipeline = DocumentationPipeline(
         measurements=measurements,
         model_provider=model_provider,
         web_backend=web_backend,
@@ -147,7 +147,7 @@ def _build_documentation(
         discovery_note=args.discovery_note,
         discovery_keywords=args.discovery_keyword,
     )
-    return adapter.build(
+    return pipeline.build(
         site,
         tracker,
         context_mode=cast(ContextMode, args.context_mode),

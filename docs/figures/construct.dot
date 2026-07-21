@@ -1,4 +1,4 @@
-// High-level site-profile construction. Reviewed 2026-07-20.
+// High-level site-profile construction. Reviewed 2026-07-21.
 digraph construct {
   rankdir=LR;
   bgcolor="white";
@@ -8,7 +8,7 @@ digraph construct {
 
   site [label="Site information"];
   measure [label="Login-node observations", color="#0E7C86"];
-  docs [label="Official documentation\nbounded AI", color="#534AB7"];
+  docs [label="Discovery agent\nsearch + download tools", color="#534AB7"];
   pilots [label="Approved pilot jobs\nplanned", color="#B0710E", style="rounded,dashed"];
   construct [label="Deterministic validation\n+ reconciliation", color="#0E7C86"];
   output [label="Site profile\n+ evidence report", color="#0E7C86"];

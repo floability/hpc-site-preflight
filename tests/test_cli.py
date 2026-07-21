@@ -233,6 +233,40 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
     assert "content_hash" in trace
 
 
+def test_profile_build_prints_concise_discovery_progress(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--site-info",
+            "examples/simulate/anvil/site-info.json",
+            "--measurements",
+            "examples/simulate/anvil/login-measurements.json",
+            "--model-mode",
+            "simulate",
+            "--web-mode",
+            "simulate",
+            "--output-dir",
+            str(tmp_path / "output"),
+            "--run-dir",
+            str(tmp_path / "runs"),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert "Searching official documentation with 10 queries" in captured.err
+    assert "Search 1/10: canonical" in captured.err
+    assert "Ranked 2 unique documentation candidate(s)" in captured.err
+    assert "Fetch 1/10:" in captured.err
+    assert "Asking the model to select from 2 fetched" in captured.err
+    assert "Discovery selected 2 target-site page(s)" in captured.err
+    assert "  Time:" not in captured.err
+
+
 def test_profile_build_keeps_partial_output_when_documentation_is_missing(
     tmp_path: Path,
 ) -> None:

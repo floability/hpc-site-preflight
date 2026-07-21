@@ -17,7 +17,7 @@ Backpack requirements ───────────────────�
 - `site_info`: target-site identity and documentation scope.
 - `profiles`: lookup, storage, freshness, and compilation.
 - `measurements`: simulated and measured login-node evidence.
-- `documentation`: adapter for bounded discovery and extraction.
+- `documentation`: bounded discovery agent, its tools, and the extraction pipeline.
 - `probes`: simulated and measured predefined pilot results.
 - `evidence`: normalized evidence, conflicts, and reconciliation.
 - `backpack`: portable workflow requirement loading.

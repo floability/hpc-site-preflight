@@ -53,7 +53,7 @@ def build_site_identity(
 
 
 def build_query_plan(identity: SiteIdentity) -> QueryPlan:
-    """Build four fixed policy searches for the target site."""
+    """Build fixed canonical and policy searches for the target site."""
 
     alias = identity.discovery_site_name or min(
         identity.aliases,
@@ -61,31 +61,70 @@ def build_query_plan(identity: SiteIdentity) -> QueryPlan:
     )
     site_filter = " OR ".join(f"site:{domain}" for domain in identity.allowed_domains)
     suffix = f" {site_filter}" if site_filter else ""
-    keyword_text = " ".join(identity.discovery_keywords)
-    keyword_suffix = f" {keyword_text}" if keyword_text else ""
     scheduler = identity.scheduler if identity.scheduler != "unknown" else "batch"
     queries = [
         SearchQuery(
+            topic="canonical",
+            query=f"{alias} official user guide{suffix}",
+        ),
+        SearchQuery(
+            topic="canonical",
+            query=f"{alias} documentation user guide{suffix}",
+        ),
+        SearchQuery(
             topic="submission",
-            query=f"{alias} {scheduler} submit job account queue partition{keyword_suffix}{suffix}",
+            query=f"{alias} {scheduler} submit job required options account allocation{suffix}",
+        ),
+        SearchQuery(
+            topic="submission",
+            query=f"{alias} batch job script submit command project account{suffix}",
         ),
         SearchQuery(
             topic="resources",
-            query=f"{alias} queue walltime node job limits{keyword_suffix}{suffix}",
+            query=_resource_query(alias, identity.scheduler, suffix, detailed=False),
+        ),
+        SearchQuery(
+            topic="resources",
+            query=_resource_query(alias, identity.scheduler, suffix, detailed=True),
         ),
         SearchQuery(
             topic="storage",
-            query=(
-                f"{alias} scratch storage purge charging allocation policy"
-                f"{keyword_suffix}{suffix}"
-            ),
+            query=f"{alias} policies FAQ charging accounting service units{suffix}",
+        ),
+        SearchQuery(
+            topic="storage",
+            query=f"{alias} scratch purge retention storage policy{suffix}",
         ),
         SearchQuery(
             topic="networking",
-            query=f"{alias} compute node networking outbound ports policy{keyword_suffix}{suffix}",
+            query=f"{alias} compute login node network firewall TCP ports{suffix}",
+        ),
+        SearchQuery(
+            topic="networking",
+            query=f"{alias} worker networking outbound compute nodes{suffix}",
         ),
     ]
+    queries.extend(
+        SearchQuery(topic="user", query=f"{alias} {keyword}{suffix}")
+        for keyword in identity.discovery_keywords
+    )
     return QueryPlan(site_id=identity.site_id, queries=queries)
+
+
+def _resource_query(alias: str, scheduler: str, suffix: str, *, detailed: bool) -> str:
+    if scheduler == "htcondor":
+        terms = (
+            "execute machines slots CPU memory GPU resource limits"
+            if detailed
+            else "HTCondor pool resources machines slots limits"
+        )
+    else:
+        terms = (
+            "partition maximum nodes walltime CPU memory GPU"
+            if detailed
+            else "queue partition walltime node job limits"
+        )
+    return f"{alias} {terms}{suffix}"
 
 
 def classify_source(identity: SiteIdentity, url: str, title: str, text: str) -> DocumentationScope:

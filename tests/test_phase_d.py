@@ -7,17 +7,17 @@ import httpx
 import pytest
 
 from hpc_site_preflight.documentation.corpus import build_corpus
-from hpc_site_preflight.documentation.discovery import DiscoveryAgent
+from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import extract_documentation
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
 from hpc_site_preflight.documentation.models import (
     ContextMode,
-    DiscoveryDecision,
+    DiscoverySelection,
     SearchResult,
 )
-from hpc_site_preflight.documentation.policy_agent_adapter import PolicyAgentAdapter
+from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
 from hpc_site_preflight.documentation.retrieval import select_context
-from hpc_site_preflight.documentation.web import (
+from hpc_site_preflight.documentation.tools import (
     DocumentationTools,
     LiveWebBackend,
     RecordedWebBackend,
@@ -72,14 +72,19 @@ def test_query_plan_is_stable(
     plan = build_query_plan(build_site_identity(site, measurements))
 
     assert [query.topic for query in plan.queries] == [
+        "canonical",
+        "canonical",
+        "submission",
         "submission",
         "resources",
+        "resources",
+        "storage",
         "storage",
         "networking",
+        "networking",
     ]
-    assert plan.queries[0].query == (
-        f"{alias} {scheduler} submit job account queue partition site:{domain}"
-    )
+    assert plan.queries[0].query == f"{alias} official user guide site:{domain}"
+    assert scheduler in plan.queries[2].query
 
 
 def test_user_hints_extend_documentation_identity_and_queries() -> None:
@@ -99,7 +104,9 @@ def test_user_hints_extend_documentation_identity_and_queries() -> None:
     assert identity.discovery_note == "Prefer the RCAC user guide."
     assert identity.discovery_keywords == ["RCAC", "queues"]
     assert all(query.query.startswith("Anvil Supercomputer ") for query in plan.queries)
-    assert all("RCAC queues" in query.query for query in plan.queries)
+    assert [query.topic for query in plan.queries[-2:]] == ["user", "user"]
+    assert "RCAC" in plan.queries[-2].query
+    assert "queues" in plan.queries[-1].query
 
 
 def test_web_tools_enforce_domain_scope_and_budgets() -> None:
@@ -126,6 +133,7 @@ def test_web_tools_enforce_domain_scope_and_budgets() -> None:
 
 def test_live_web_backend_searches_and_normalizes_html() -> None:
     html = """<html><head><title>Anvil Guide</title></head><body>
+    <nav><a href="/anvil/policies">Policies</a></nav>
     <h1>Jobs</h1><p>Use sbatch to submit.</p>
     <h2>Limits</h2><table><tr><th>Queue</th><th>Time</th></tr>
     <tr><td>shared</td><td>4 days</td></tr></table></body></html>"""
@@ -156,9 +164,10 @@ def test_live_web_backend_searches_and_normalizes_html() -> None:
     assert page.title == "Anvil Guide"
     assert any(block.kind == "table" for section in page.sections for block in section.blocks)
     assert any("Use sbatch" in block.text for section in page.sections for block in section.blocks)
+    assert page.links[0].url == "https://docs.rcac.purdue.edu/anvil/policies"
 
 
-def test_discovery_preserves_partial_pages_at_turn_limit(tmp_path: Path) -> None:
+def test_discovery_uses_tools_then_one_model_selection(tmp_path: Path) -> None:
     site, measurements = _inputs("anvil")
     identity = build_site_identity(site, measurements)
     plan = build_query_plan(identity)
@@ -166,50 +175,119 @@ def test_discovery_preserves_partial_pages_at_turn_limit(tmp_path: Path) -> None
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
     )
     tools = DocumentationTools(identity, backend)
-    decisions = [
-        DiscoveryDecision(
-            action="fetch_page",
-            query=None,
-            url="https://docs.rcac.purdue.edu/anvil/jobs",
-            source_urls=[],
-            summary=None,
+    selection = DiscoverySelection(
+        source_urls=[
+            "https://docs.rcac.purdue.edu/anvil/jobs",
+            "https://docs.rcac.purdue.edu/anvil/policies",
+        ],
+        summary="Selected both target-site pages.",
+        unanswered_topics=["networking"],
+    )
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="single selection test",
+            responses=[
+                RecordedModelResponse(
+                    output_name="documentation_selection",
+                    data=selection.model_dump(mode="json"),
+                    response_id="selection",
+                )
+            ],
+        )
+    )
+    tracker = _tracker(tmp_path, "discovery")
+
+    result = DiscoveryAgent(provider).run(
+        identity,
+        plan,
+        tools,
+        tracker,
+    )
+
+    assert result.termination_reason == "model_selected"
+    assert [page.url for page in result.selected_pages] == [
+        "https://docs.rcac.purdue.edu/anvil/jobs",
+        "https://docs.rcac.purdue.edu/anvil/policies",
+    ]
+    assert tracker.report.model_usage.requests == 1
+    assert tools.searches_used == 10
+    assert tools.pages_used == 2
+
+
+def test_discovery_preserves_pages_when_model_fails(tmp_path: Path) -> None:
+    site, measurements = _inputs("anvil")
+    identity = build_site_identity(site, measurements)
+    tools = DocumentationTools(
+        identity,
+        RecordedWebBackend.from_path(
+            SIMULATE_ROOT / "anvil" / "documentation-web.json"
+        ),
+    )
+    provider = RecordedModelProvider(
+        ModelRecording(schema_version="0.1", note="failure", responses=[])
+    )
+
+    result = DiscoveryAgent(provider).run(
+        identity,
+        build_query_plan(identity),
+        tools,
+        _tracker(tmp_path, "discovery-fallback"),
+    )
+
+    assert result.termination_reason == "deterministic_fallback"
+    assert len(result.selected_pages) == 2
+
+
+def test_discovery_corrects_invalid_model_selection(tmp_path: Path) -> None:
+    site, measurements = _inputs("anvil")
+    identity = build_site_identity(site, measurements)
+    tools = DocumentationTools(
+        identity,
+        RecordedWebBackend.from_path(
+            SIMULATE_ROOT / "anvil" / "documentation-web.json"
+        ),
+    )
+    selections = [
+        DiscoverySelection(
+            source_urls=["https://docs.rcac.purdue.edu/anvil/not-fetched"],
+            summary="Invalid selection.",
             unanswered_topics=[],
         ),
-        DiscoveryDecision(
-            action="search_web",
-            query="network policy",
-            url=None,
-            source_urls=[],
-            summary=None,
-            unanswered_topics=[],
+        DiscoverySelection(
+            source_urls=["https://docs.rcac.purdue.edu/anvil/jobs"],
+            summary="Corrected selection.",
+            unanswered_topics=["networking"],
         ),
     ]
     provider = RecordedModelProvider(
         ModelRecording(
             schema_version="0.1",
-            note="turn limit test",
+            note="selection correction",
             responses=[
                 RecordedModelResponse(
-                    output_name="discovery_action",
-                    data=decision.model_dump(mode="json"),
-                    response_id=f"turn-{index}",
+                    output_name="documentation_selection",
+                    data=selection.model_dump(mode="json"),
+                    response_id=f"selection-{index}",
                 )
-                for index, decision in enumerate(decisions)
+                for index, selection in enumerate(selections)
             ],
         )
     )
+    tracker = _tracker(tmp_path, "discovery-correction")
 
-    result = DiscoveryAgent(provider, maximum_turns=2).run(
+    result = DiscoveryAgent(provider).run(
         identity,
-        plan,
+        build_query_plan(identity),
         tools,
-        _tracker(tmp_path, "discovery"),
+        tracker,
     )
 
-    assert result.termination_reason == "turn_limit"
+    assert result.termination_reason == "model_corrected"
     assert [page.url for page in result.selected_pages] == [
         "https://docs.rcac.purdue.edu/anvil/jobs"
     ]
+    assert tracker.report.model_usage.requests == 2
 
 
 def test_corpus_is_deterministic_and_preserves_tables() -> None:
@@ -345,7 +423,7 @@ def test_end_to_end_documentation_profile_is_reproducible(
 ) -> None:
     site, measurements = _inputs(site_name)
     directory = SIMULATE_ROOT / site_name
-    adapter = PolicyAgentAdapter(
+    pipeline = DocumentationPipeline(
         measurements=measurements,
         model_provider=RecordedModelProvider.from_path(directory / "documentation-model.json"),
         web_backend=RecordedWebBackend.from_path(directory / "documentation-web.json"),
@@ -355,7 +433,7 @@ def test_end_to_end_documentation_profile_is_reproducible(
         model=None,
         web_mode="simulate",
     )
-    documentation = adapter.build(
+    documentation = pipeline.build(
         site,
         _tracker(tmp_path, f"{site_name}-{mode}"),
         context_mode=mode,
