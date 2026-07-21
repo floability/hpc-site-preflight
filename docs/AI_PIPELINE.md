@@ -64,6 +64,10 @@ inputs and deterministic results.
 values. It produces a `SiteIdentity` containing the target name, aliases, scheduler, host signals,
 allowed domains, and preferred path tokens.
 
+Users may add a discovery-only site name, a free-text note, and repeatable keywords from the CLI.
+The alternate name and note are visible to the discovery model; keywords also extend every fixed
+query. These hints do not change the canonical site identity or the documentation domain allowlist.
+
 The same module creates four reproducible searches:
 
 1. job submission and required options;
@@ -247,7 +251,7 @@ and tool counts, URLs, scopes, and content hashes, but not complete downloaded p
 
 ## Code reading order
 
-For a line-by-line reading, use this order:
+For a line-by-line reading of this subsystem, use this order:
 
 1. `documentation/models.py`
 2. `providers/base.py`
@@ -260,7 +264,10 @@ For a line-by-line reading, use this order:
 9. `documentation/policy_agent_adapter.py`
 10. `profiles/documentation.py`
 11. `profiles/compiler.py`
-12. `cli.py`
+12. `operations.py`
+13. `cli_parser.py`
+14. `cli.py`
 
 `docs/DOCUMENTATION_WORKFLOW.md` describes how this AI subsystem fits into the complete profile
-build command.
+build command. `docs/CODE_GUIDE.md` expands this into a repository-wide reading guide, and
+`docs/RUN_RESULT.md` maps the code to one real model/web execution.

@@ -21,6 +21,10 @@ The JSON is intentionally shallow. Top-level metadata is followed by flat record
 options, partitions, HTCondor resource groups, resource shapes, storage, network capabilities,
 validation states, unresolved work, conflicts, and evidence links.
 
+Serialized profiles preserve this schema order instead of sorting keys alphabetically. The
+evidence-report reference and field-evidence links are kept at the end so the actionable policy is
+read first.
+
 Values use normalized units:
 
 - durations in seconds;

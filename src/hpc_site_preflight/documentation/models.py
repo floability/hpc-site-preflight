@@ -31,6 +31,9 @@ class SiteIdentity(StrictModel):
     observed_hosts: list[str]
     allowed_domains: list[str]
     preferred_path_tokens: list[str]
+    discovery_site_name: str | None = None
+    discovery_note: str | None = None
+    discovery_keywords: list[str] = Field(default_factory=list)
 
 
 class SearchQuery(StrictModel):

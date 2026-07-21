@@ -19,11 +19,16 @@ Read the small contracts first, then follow the transformations, and finish with
 10. `documentation/policy_agent_adapter.py` calls those documentation stages in a straight line.
 11. `profiles/documentation.py` maps accepted findings onto known profile fields.
 12. `profiles/compiler.py` builds the measurement profile and applies documentation findings.
-13. `cli.py` loads files, chooses providers, calls the pipeline, and writes artifacts.
+13. `operations.py` loads files, chooses providers, calls the pipeline, and writes artifacts.
+14. `cli_parser.py` defines arguments; `cli.py` dispatches the selected operation and owns the run
+    lifecycle.
 
 The simulated model provider reads `documentation-model.json`; the live provider sends the same
 typed requests to the OpenAI Responses API. The independent web mode either searches and fetches
 official allowed domains or replays `documentation-web.json`.
+
+Optional `--site-name`, `--discovery-note`, and repeatable `--discovery-keyword` arguments guide
+discovery without changing the canonical site record or allowed domains.
 
 ## What happens during `profile build`
 

@@ -33,6 +33,9 @@ class PolicyAgentAdapter(DocumentationPolicyProvider):
         model_provider_name: ModelProviderName,
         model: str | None,
         web_mode: RuntimeMode,
+        discovery_site_name: str | None = None,
+        discovery_note: str | None = None,
+        discovery_keywords: list[str] | None = None,
         maximum_discovery_turns: int = 8,
     ) -> None:
         self.measurements = measurements
@@ -43,6 +46,9 @@ class PolicyAgentAdapter(DocumentationPolicyProvider):
         self.model_provider_name = model_provider_name
         self.model = model
         self.web_mode = web_mode
+        self.discovery_site_name = discovery_site_name
+        self.discovery_note = discovery_note
+        self.discovery_keywords = discovery_keywords or []
         self.maximum_discovery_turns = maximum_discovery_turns
 
     def build(
@@ -53,7 +59,13 @@ class PolicyAgentAdapter(DocumentationPolicyProvider):
         context_mode: ContextMode,
     ) -> DocumentationEvidence:
         with tracker.stage("documentation_identity"):
-            identity = build_site_identity(site, self.measurements)
+            identity = build_site_identity(
+                site,
+                self.measurements,
+                discovery_site_name=self.discovery_site_name,
+                discovery_note=self.discovery_note,
+                discovery_keywords=self.discovery_keywords,
+            )
             query_plan = build_query_plan(identity)
 
         tools = DocumentationTools(identity, self.web_backend)

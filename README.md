@@ -68,6 +68,8 @@ site information
 
 The implemented context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`. See
 [docs/DOCUMENTATION_WORKFLOW.md](docs/DOCUMENTATION_WORKFLOW.md) for the code and artifact flow.
+For a repository-wide reading order, see [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md). The evaluated
+Anvil live-AI example is traced in [docs/RUN_RESULT.md](docs/RUN_RESULT.md).
 
 ## Site, model, and web modes
 
@@ -83,6 +85,11 @@ The three concerns are independent:
 The normal laptop workflow therefore simulates only the HPC site while using live web discovery
 and live model calls. Offline tests explicitly simulate all three external inputs. Evidence retains
 whether it was simulated or measured.
+
+Documentation discovery also accepts optional user guidance. `--site-name` supplies a search name
+without changing the canonical site profile, `--discovery-note` adds free-text context for the
+discovery model, and repeatable `--discovery-keyword` values extend all fixed search queries. There
+is no exclusion-keyword option: source scope and allowed domains remain deterministic controls.
 
 `--model` accepts a provider-neutral model identifier. The current registry maps `gpt-` and
 OpenAI `o`-series names to OpenAI, `claude-` names to Anthropic, and `gemini-` names to Gemini.
@@ -117,6 +124,9 @@ hpc-site-preflight preflight --help
 `profile build` constructs measurement and documentation-backed partial profiles in simulate
 site mode. `evaluate documentation` runs the documentation subsystem alone. Other unfinished commands
 create run reports and fail explicitly.
+
+Generated profile JSON follows the `SiteProfile` schema order instead of alphabetical key order.
+The evidence-report reference and field-evidence links are the final top-level fields.
 
 For a normal laptop run, set `OPENAI_API_KEY`, then run:
 

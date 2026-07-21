@@ -24,6 +24,29 @@ def test_parser_accepts_profile_build() -> None:
     assert args.web_mode == "live"
 
 
+def test_parser_accepts_documentation_discovery_hints() -> None:
+    args = build_parser().parse_args(
+        [
+            "profile",
+            "build",
+            "--site-info",
+            "examples/simulate/anvil/site-info.json",
+            "--site-name",
+            "Purdue Anvil",
+            "--discovery-note",
+            "Use the RCAC user guide.",
+            "--discovery-keyword",
+            "RCAC",
+            "--discovery-keyword",
+            "queues",
+        ]
+    )
+
+    assert args.site_name == "Purdue Anvil"
+    assert args.discovery_note == "Use the RCAC user guide."
+    assert args.discovery_keyword == ["RCAC", "queues"]
+
+
 @pytest.mark.parametrize("option", ["--mode", "--provider"])
 def test_parser_rejects_retired_mode_options(option: str) -> None:
     with pytest.raises(SystemExit):
@@ -172,6 +195,8 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
     evidence = json.loads((output_dir / "evidence-report.json").read_text(encoding="utf-8"))
     assert profile["site_id"] == evidence["site_id"] == "purdue-anvil"
     assert profile["profile_state"] == "partial"
+    assert list(profile)[:4] == ["schema_version", "site_id", "site_name", "aliases"]
+    assert list(profile)[-2:] == ["evidence_report", "field_evidence"]
     documentation = json.loads(
         (output_dir / "documentation-evidence.json").read_text(encoding="utf-8")
     )

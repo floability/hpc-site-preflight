@@ -1,0 +1,614 @@
+{
+  "conflicts": [],
+  "evidence": [
+    {
+      "chunk_id": null,
+      "command_id": "socket_getfqdn",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:afa86468e6424007",
+      "exact_quote": null,
+      "field_path": "/facts/identity/fqdn",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "login01.anvil.rcac.purdue.edu"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "machine_architecture",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:14bab80ce621aa6b",
+      "exact_quote": null,
+      "field_path": "/facts/platform/architecture",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "x86_64"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "detect_scheduler",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:027e7466451d8993",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/detected_type",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "slurm"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "find_submit_command",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:2fa4582cd48ae09c",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/submit_command_available",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": true
+    },
+    {
+      "chunk_id": null,
+      "command_id": "resolve_reviewed_path",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:c0cc19dda18e25d0",
+      "exact_quote": null,
+      "field_path": "/facts/storage/filesystems/home/path",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "/home/mockuser"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "resolve_reviewed_path",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:3e0b5f247065989d",
+      "exact_quote": null,
+      "field_path": "/facts/storage/filesystems/scratch/path",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "/anvil/scratch/mockuser"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_config",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:84dcab63f04a9749",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/cluster_name",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "anvil"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_version",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:d3beb6f054d39c32",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/version",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "24.05.2"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_partitions",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:b56b4006dd96e735",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/default_partition",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "shared"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_partitions",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:cd8da6b3df06a48f",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/partitions",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": [
+        "shared",
+        "wholenode",
+        "gpu"
+      ]
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_partitions",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:d8caaa9ff6e61679",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/partitions/shared/available",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": true
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_partitions",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:56f2e1c246e8ab9d",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/partitions/shared/visible_walltime_limit",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "illustrative scheduler observation; not enforced policy",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "infinite"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_partitions",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:25f2441f1d9512cf",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/partitions/wholenode/visible_walltime_limit",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "illustrative scheduler observation; not enforced policy",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "infinite"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_partitions",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:4dd8a6b8249e9fcd",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/partitions/gpu/visible_walltime_limit",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "illustrative scheduler observation; not enforced policy",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": "2-00:00:00"
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_node_shapes",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:b1ec4fb410219f86",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/node_shapes",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": [
+        "cpu",
+        "gpu"
+      ]
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_node_shapes",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:039daa92de9d693c",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/node_shapes/cpu/cpus",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": 128
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_node_shapes",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:1aa656aea6ceb0e9",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/node_shapes/cpu/memory_mib",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": 256000
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_node_shapes",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:e07c83a61f7a7158",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/node_shapes/gpu/gpu_count",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": 4
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_node_shapes",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:29ee59704520aef8",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/node_shapes/gpu/gpu_models",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real observation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": [
+        "NVIDIA A100"
+      ]
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_associations",
+      "disposition": "accepted",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:123dbe84fcab7f69",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/visible_accounts",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "simulated evidence; not a real allocation",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": [
+        "mock-account"
+      ]
+    },
+    {
+      "chunk_id": null,
+      "command_id": "slurm_associations",
+      "disposition": "invalid",
+      "documentation_heading": null,
+      "documentation_url": null,
+      "evidence_id": "measurement:4e1509698712fcf9",
+      "exact_quote": null,
+      "field_path": "/facts/scheduler/visible_qos",
+      "freshness": "per_run",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "pilot_id": null,
+      "reason": "permission_denied",
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "illustrative unavailable-value example",
+      "source_type": "measurement",
+      "trust": "illustrative",
+      "value": null
+    },
+    {
+      "chunk_id": "doc-anvil-jobs:c132",
+      "command_id": null,
+      "disposition": "accepted",
+      "documentation_heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > Filesystem \u00b6",
+      "documentation_url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+      "evidence_id": "documentation:26605d71fff8379d",
+      "exact_quote": "Filesystem storage is not charged.",
+      "field_path": "/accounting/charging_model",
+      "freshness": "site_change",
+      "observed_at": null,
+      "pilot_id": null,
+      "reason": null,
+      "result": null,
+      "scope": "target_site",
+      "source_reference": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+      "source_type": "documentation",
+      "trust": "official",
+      "value": "Filesystem storage is not charged."
+    }
+  ],
+  "generated_at": "2026-07-19T12:00:00Z",
+  "links": [
+    {
+      "evidence_ids": [
+        "measurement:027e7466451d8993"
+      ],
+      "profile_field": "/scheduler_type"
+    },
+    {
+      "evidence_ids": [
+        "measurement:d3beb6f054d39c32"
+      ],
+      "profile_field": "/scheduler_version"
+    },
+    {
+      "evidence_ids": [
+        "measurement:2fa4582cd48ae09c"
+      ],
+      "profile_field": "/submit_command"
+    },
+    {
+      "evidence_ids": [
+        "measurement:d8caaa9ff6e61679"
+      ],
+      "profile_field": "/partitions/shared/available"
+    },
+    {
+      "evidence_ids": [
+        "measurement:56f2e1c246e8ab9d"
+      ],
+      "profile_field": "/partitions/shared/visible_walltime_seconds"
+    },
+    {
+      "evidence_ids": [
+        "measurement:25f2441f1d9512cf"
+      ],
+      "profile_field": "/partitions/wholenode/visible_walltime_seconds"
+    },
+    {
+      "evidence_ids": [
+        "measurement:4dd8a6b8249e9fcd"
+      ],
+      "profile_field": "/partitions/gpu/visible_walltime_seconds"
+    },
+    {
+      "evidence_ids": [
+        "measurement:cd8da6b3df06a48f"
+      ],
+      "profile_field": "/partitions"
+    },
+    {
+      "evidence_ids": [
+        "measurement:039daa92de9d693c"
+      ],
+      "profile_field": "/resource_shapes/cpu/cpus"
+    },
+    {
+      "evidence_ids": [
+        "measurement:1aa656aea6ceb0e9"
+      ],
+      "profile_field": "/resource_shapes/cpu/memory_mib"
+    },
+    {
+      "evidence_ids": [
+        "measurement:e07c83a61f7a7158"
+      ],
+      "profile_field": "/resource_shapes/gpu/gpu_count"
+    },
+    {
+      "evidence_ids": [
+        "measurement:29ee59704520aef8"
+      ],
+      "profile_field": "/resource_shapes/gpu/gpu_models"
+    },
+    {
+      "evidence_ids": [
+        "measurement:b1ec4fb410219f86"
+      ],
+      "profile_field": "/resource_shapes"
+    },
+    {
+      "evidence_ids": [
+        "measurement:c0cc19dda18e25d0"
+      ],
+      "profile_field": "/storage/home/path"
+    },
+    {
+      "evidence_ids": [
+        "measurement:3e0b5f247065989d"
+      ],
+      "profile_field": "/storage/scratch/path"
+    },
+    {
+      "evidence_ids": [
+        "measurement:123dbe84fcab7f69"
+      ],
+      "profile_field": "/accounting/visible_accounts"
+    },
+    {
+      "evidence_ids": [
+        "documentation:26605d71fff8379d"
+      ],
+      "profile_field": "/accounting/charging_model"
+    }
+  ],
+  "report_id": "report:8af92a1600daf714",
+  "schema_version": "0.1",
+  "site_id": "purdue-anvil",
+  "unresolved": [
+    {
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "field_path": "/partitions/shared/maximum_walltime_seconds",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "field_path": "/partitions/wholenode/maximum_walltime_seconds",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "field_path": "/partitions/gpu/maximum_walltime_seconds",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "action": "run_pilot",
+      "action_id": "manager_worker_check",
+      "field_path": "/network/manager_worker",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "action": "run_pilot",
+      "action_id": "worker_worker_check",
+      "field_path": "/network/worker_worker",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "action": "run_pilot",
+      "action_id": "outbound_compute_check",
+      "field_path": "/network/outbound_compute",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "action": "run_pilot",
+      "action_id": "shared_storage_visibility",
+      "field_path": "/storage/home/compute_visible",
+      "reason": "Login-node visibility does not establish compute-node visibility."
+    },
+    {
+      "action": "run_pilot",
+      "action_id": "shared_storage_visibility",
+      "field_path": "/storage/scratch/compute_visible",
+      "reason": "Login-node visibility does not establish compute-node visibility."
+    }
+  ]
+}

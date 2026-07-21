@@ -82,6 +82,26 @@ def test_query_plan_is_stable(
     )
 
 
+def test_user_hints_extend_documentation_identity_and_queries() -> None:
+    site, measurements = _inputs("anvil")
+    identity = build_site_identity(
+        site,
+        measurements,
+        discovery_site_name="Anvil Supercomputer",
+        discovery_note="Prefer the RCAC user guide.",
+        discovery_keywords=["RCAC", "queues", "RCAC"],
+    )
+    plan = build_query_plan(identity)
+
+    assert identity.site_name == "Purdue Anvil"
+    assert identity.discovery_site_name == "Anvil Supercomputer"
+    assert identity.aliases[:2] == ["Anvil Supercomputer", "Purdue Anvil"]
+    assert identity.discovery_note == "Prefer the RCAC user guide."
+    assert identity.discovery_keywords == ["RCAC", "queues"]
+    assert all(query.query.startswith("Anvil Supercomputer ") for query in plan.queries)
+    assert all("RCAC queues" in query.query for query in plan.queries)
+
+
 def test_web_tools_enforce_domain_scope_and_budgets() -> None:
     site, measurements = _inputs("anvil")
     identity = build_site_identity(site, measurements)

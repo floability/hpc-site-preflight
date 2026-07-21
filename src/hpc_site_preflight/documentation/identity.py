@@ -17,7 +17,14 @@ _SCOPE_MARKERS = {"clusters", "hpc", "systems", "userguides"}
 _GENERIC_PATH_TOKENS = {"docs", "documentation", "guide", "guides", "policies"}
 
 
-def build_site_identity(site: SiteInfo, measurements: MeasurementBundle) -> SiteIdentity:
+def build_site_identity(
+    site: SiteInfo,
+    measurements: MeasurementBundle,
+    *,
+    discovery_site_name: str | None = None,
+    discovery_note: str | None = None,
+    discovery_keywords: Iterable[str] = (),
+) -> SiteIdentity:
     """Normalize explicit site information and observed hostname signals."""
 
     hosts: list[str] = []
@@ -26,7 +33,8 @@ def build_site_identity(site: SiteInfo, measurements: MeasurementBundle) -> Site
             if observation.status == "observed" and isinstance(observation.value, str):
                 hosts.append(observation.value.lower().strip("."))
 
-    aliases = _dedupe([site.site_name, *site.aliases])
+    preferred_name = _optional_text(discovery_site_name)
+    aliases = _dedupe([preferred_name or site.site_name, site.site_name, *site.aliases])
     domains = _dedupe(domain.lower().strip(".") for domain in site.documentation.allowed_domains)
     tokens = _dedupe(token.lower() for token in site.documentation.preferred_path_tokens)
     return SiteIdentity(
@@ -38,32 +46,43 @@ def build_site_identity(site: SiteInfo, measurements: MeasurementBundle) -> Site
         observed_hosts=_dedupe(hosts),
         allowed_domains=domains,
         preferred_path_tokens=tokens,
+        discovery_site_name=preferred_name,
+        discovery_note=_optional_text(discovery_note),
+        discovery_keywords=_dedupe(discovery_keywords),
     )
 
 
 def build_query_plan(identity: SiteIdentity) -> QueryPlan:
     """Build four fixed policy searches for the target site."""
 
-    alias = min(identity.aliases, key=lambda value: (len(value.split()), len(value)))
+    alias = identity.discovery_site_name or min(
+        identity.aliases,
+        key=lambda value: (len(value.split()), len(value)),
+    )
     site_filter = " OR ".join(f"site:{domain}" for domain in identity.allowed_domains)
     suffix = f" {site_filter}" if site_filter else ""
+    keyword_text = " ".join(identity.discovery_keywords)
+    keyword_suffix = f" {keyword_text}" if keyword_text else ""
     scheduler = identity.scheduler if identity.scheduler != "unknown" else "batch"
     queries = [
         SearchQuery(
             topic="submission",
-            query=f"{alias} {scheduler} submit job account queue partition{suffix}",
+            query=f"{alias} {scheduler} submit job account queue partition{keyword_suffix}{suffix}",
         ),
         SearchQuery(
             topic="resources",
-            query=f"{alias} queue walltime node job limits{suffix}",
+            query=f"{alias} queue walltime node job limits{keyword_suffix}{suffix}",
         ),
         SearchQuery(
             topic="storage",
-            query=f"{alias} scratch storage purge charging allocation policy{suffix}",
+            query=(
+                f"{alias} scratch storage purge charging allocation policy"
+                f"{keyword_suffix}{suffix}"
+            ),
         ),
         SearchQuery(
             topic="networking",
-            query=f"{alias} compute node networking outbound ports policy{suffix}",
+            query=f"{alias} compute node networking outbound ports policy{keyword_suffix}{suffix}",
         ),
     ]
     return QueryPlan(site_id=identity.site_id, queries=queries)
@@ -119,3 +138,10 @@ def _dedupe(values: Iterable[str]) -> list[str]:
             seen.add(key)
             result.append(cleaned)
     return result
+
+
+def _optional_text(value: str | None) -> str | None:
+    if value is None:
+        return None
+    cleaned = value.strip()
+    return cleaned or None
