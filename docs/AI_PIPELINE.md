@@ -161,55 +161,69 @@ library, preventing the model from silently rewriting the source.
 
 ## 6. Request typed findings
 
-There is one structured extraction request for each group. A proposed finding contains:
+There is one structured extraction request for each group. The schemas are shallow and match the
+profile concepts directly. A submission result can contain an allocation requirement, individual
+submission options, and individual partition limits:
 
 ```json
 {
-  "field": "maximum_walltime_seconds",
-  "resource": "shared",
-  "value": 345600,
-  "evidence_span_ids": ["doc-anvil-jobs:c2:s3"],
-  "note": "The user guide states a four-day limit."
+  "allocation_required": null,
+  "submission_options": [
+    {
+      "name": "account",
+      "requirement": "required",
+      "evidence_span_ids": ["doc-anvil-jobs:c1:s2"],
+      "note": "The account is required."
+    }
+  ],
+  "partitions": [
+    {
+      "name": "shared",
+      "maximum_walltime_seconds": 345600,
+      "evidence_span_ids": ["doc-anvil-jobs:c2:s2"],
+      "note": "The documented limit is four days."
+    }
+  ]
 }
 ```
 
-The provider must return the schema-constrained `ExtractionResult`. Unknown keys and malformed
-values fail contract validation.
+`SubmissionExtractionResult`, `NetworkExtractionResult`, and `OperationalExtractionResult` reject
+unknown keys and malformed JSON types. A documentation gap is represented by `null` or an empty
+list, so silence does not fail the group.
 
 ## 7. Validate proposals locally
 
-Deterministic validation rejects a proposal when:
+Deterministic validation rejects an individual value when:
 
-- its field is outside the current extraction group;
-- its value has the wrong JSON type;
-- a required partition or storage resource is missing or was not measured;
+- its option name is outside the reviewed scheduler contract;
+- its partition or storage resource was not measured;
 - it cites no span or an unknown span;
 - it cites a chunk that was not retrieved for the claimed field;
-- it uses non-target-site evidence; or
-- it assigns a resource to a non-resource field.
+- or it uses non-target-site evidence.
 
-If a group contains invalid proposals, the model receives one correction request containing the
-local validation errors. Invalid corrected results are rejected. Missing facts stay unresolved;
-documentation silence is not treated as an error.
+Valid values from the same result are retained. If any values are invalid, the model receives one
+correction request containing only the local errors and is told to leave every other schema field
+empty. Invalid corrected values are discarded. Missing facts stay unresolved; documentation
+silence is not treated as an error.
 
 ## 8. Apply accepted documentation
 
 The AI portion ends with `DocumentationEvidence`, which contains accepted findings, rejected
 proposals, unresolved field names, and selected chunk IDs.
 
-`profiles/documentation.py` then applies accepted findings through a small, reviewed mapping table.
-For example:
+`profiles/documentation.py` then applies each accepted finding by its Python type. For example:
 
 ```text
-maximum_walltime_seconds + partition=shared
+PartitionFinding(name="shared", maximum_walltime_seconds=345600)
     -> /partitions/shared/maximum_walltime_seconds
 
-purge_after_days + resource=scratch
+StoragePolicyFinding(name="scratch", purge_after_days=60)
     -> /storage/scratch/purge_after_days
 ```
 
-Each mapped value receives an evidence record containing its official URL, heading, chunk ID, span
-ID, and exact quote. Findings without a known mapping cannot modify the profile.
+There is no generic string field dispatch between extraction and the profile. Each applied value
+receives an evidence record containing its official URL, heading, chunk ID, span ID, and exact
+quote.
 
 ## Providers and simulation
 

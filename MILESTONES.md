@@ -172,8 +172,8 @@ Select extraction context using full corpus, BM25, or schema-expanded BM25.
 
 Extract typed field candidates that point to exact local evidence spans.
 
-- Added exact local spans and three small structured extraction groups.
-- Added local field, resource, value, scope, and citation validation with one correction.
+- Added exact local spans and three small typed extraction schemas.
+- Added independent resource, scope, and citation validation with one bounded correction.
 
 **Test:** Replay valid, unsupported, misquoted, and absent-field responses.
 
@@ -183,8 +183,8 @@ Extract typed field candidates that point to exact local evidence spans.
 
 Produce a documentation-derived partial policy with evidence for every accepted field.
 
-- Added typed accepted, rejected, and unresolved documentation results.
-- Added deterministic profile mappings and exact evidence-report provenance.
+- Added canonical accepted findings plus rejected and unresolved results.
+- Added direct typed profile application and exact evidence-report provenance.
 
 **Test:** Build documentation results for each site and validate every evidence link.
 

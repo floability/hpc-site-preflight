@@ -11,24 +11,25 @@
       "output_name": "extract_submission",
       "response_id": "crc-extraction-submission",
       "data": {
-        "findings": [
-          {"field": "allocation_required", "resource": null, "value": false, "evidence_span_ids": ["doc-crc-policies:c1:s1"], "note": "The general pool does not require a project allocation."},
-          {"field": "required_submission_options", "resource": null, "value": ["request_cpus", "request_memory"], "evidence_span_ids": ["doc-crc-condor:c1:s2"], "note": "CPU and memory requests are required."}
-        ]
+        "allocation_required": {"value": false, "evidence_span_ids": ["doc-crc-policies:c1:s1"], "note": "The general pool does not require a project allocation."},
+        "submission_options": [
+          {"name": "request_cpus", "requirement": "required", "evidence_span_ids": ["doc-crc-condor:c1:s2"], "note": "A CPU request is required."},
+          {"name": "request_memory", "requirement": "required", "evidence_span_ids": ["doc-crc-condor:c1:s2"], "note": "A memory request is required."}
+        ],
+        "partitions": []
       }
     },
     {
       "output_name": "extract_network",
       "response_id": "crc-extraction-network",
-      "data": {"findings": []}
+      "data": {"network": []}
     },
     {
       "output_name": "extract_operational",
       "response_id": "crc-extraction-operational",
       "data": {
-        "findings": [
-          {"field": "charging_model", "resource": null, "value": "no project allocation charge", "evidence_span_ids": ["doc-crc-policies:c1:s2"], "note": "General pool use does not consume project allocation charges."}
-        ]
+        "charging_model": {"value": "no project allocation charge", "evidence_span_ids": ["doc-crc-policies:c1:s2"], "note": "General pool use does not consume project allocation charges."},
+        "storage": []
       }
     }
   ]

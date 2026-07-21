@@ -18,32 +18,35 @@
       "output_name": "extract_submission",
       "response_id": "anvil-extraction-submission",
       "data": {
-        "findings": [
+        "allocation_required": {
+          "value": true,
+          "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
+          "note": "An ACCESS allocation is required."
+        },
+        "submission_options": [
           {
-            "field": "allocation_required",
-            "resource": null,
-            "value": true,
-            "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
-            "note": "An ACCESS allocation is required."
-          },
-          {
-            "field": "required_submission_options",
-            "resource": null,
-            "value": ["account", "partition"],
+            "name": "account",
+            "requirement": "required",
             "evidence_span_ids": ["doc-anvil-jobs:c1:s2"],
-            "note": "The account and partition are mandatory."
+            "note": "The account is mandatory."
           },
           {
-            "field": "maximum_walltime_seconds",
-            "resource": "shared",
-            "value": 345600,
+            "name": "partition",
+            "requirement": "required",
+            "evidence_span_ids": ["doc-anvil-jobs:c1:s2"],
+            "note": "The partition is mandatory."
+          }
+        ],
+        "partitions": [
+          {
+            "name": "shared",
+            "maximum_walltime_seconds": 345600,
             "evidence_span_ids": ["doc-anvil-jobs:c2:s2"],
             "note": "The documented shared limit is four days."
           },
           {
-            "field": "maximum_walltime_seconds",
-            "resource": "wholenode",
-            "value": 345600,
+            "name": "wholenode",
+            "maximum_walltime_seconds": 345600,
             "evidence_span_ids": ["doc-anvil-jobs:c2:s3"],
             "note": "The documented wholenode limit is four days."
           }
@@ -53,24 +56,21 @@
     {
       "output_name": "extract_network",
       "response_id": "anvil-extraction-network",
-      "data": {"findings": []}
+      "data": {"network": []}
     },
     {
       "output_name": "extract_operational",
       "response_id": "anvil-extraction-operational",
       "data": {
-        "findings": [
+        "charging_model": {
+          "value": "ACCESS service units",
+          "evidence_span_ids": ["doc-anvil-policies:c1:s2"],
+          "note": "CPU work consumes ACCESS service units."
+        },
+        "storage": [
           {
-            "field": "charging_model",
-            "resource": null,
-            "value": "ACCESS service units",
-            "evidence_span_ids": ["doc-anvil-policies:c1:s2"],
-            "note": "CPU work consumes ACCESS service units."
-          },
-          {
-            "field": "purge_after_days",
-            "resource": "scratch",
-            "value": 60,
+            "name": "scratch",
+            "purge_after_days": 60,
             "evidence_span_ids": ["doc-anvil-policies:c2:s1"],
             "note": "Inactive scratch files may be purged after 60 days."
           }

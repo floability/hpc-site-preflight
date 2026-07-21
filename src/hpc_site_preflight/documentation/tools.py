@@ -133,25 +133,34 @@ class LiveWebBackend:
         ) as client:
             for _ in range(4):
                 self._validate_url(current_url)
-                with client.stream("GET", current_url) as response:
-                    if response.is_redirect:
-                        location = response.headers.get("location")
-                        if not location:
-                            raise DocumentationError("Documentation redirect has no location.")
-                        current_url = urljoin(current_url, location)
-                        continue
-                    try:
+                try:
+                    with client.stream("GET", current_url) as response:
+                        if response.is_redirect:
+                            location = response.headers.get("location")
+                            if not location:
+                                raise DocumentationError(
+                                    "Documentation redirect has no location."
+                                )
+                            current_url = urljoin(current_url, location)
+                            continue
                         response.raise_for_status()
-                    except httpx.HTTPStatusError as exc:
-                        raise DocumentationError(
-                            f"Documentation fetch returned HTTP {response.status_code}."
-                        ) from exc
-                    content = _read_bounded(response, self.maximum_download_bytes)
-                    final_url = str(response.url)
-                    self._validate_url(final_url)
-                    content_type = response.headers.get("content-type", "").lower()
-                    encoding = response.encoding or "utf-8"
-                    return final_url, content_type, content.decode(encoding, errors="replace")
+                        content = _read_bounded(response, self.maximum_download_bytes)
+                        final_url = str(response.url)
+                        self._validate_url(final_url)
+                        content_type = response.headers.get("content-type", "").lower()
+                        encoding = response.encoding or "utf-8"
+                        return final_url, content_type, content.decode(
+                            encoding,
+                            errors="replace",
+                        )
+                except httpx.HTTPStatusError as exc:
+                    raise DocumentationError(
+                        f"Documentation fetch returned HTTP {exc.response.status_code}."
+                    ) from exc
+                except httpx.RequestError as exc:
+                    raise DocumentationError(
+                        "Documentation fetch failed due to a network error."
+                    ) from exc
         raise DocumentationError("Documentation fetch exceeded the redirect limit.")
 
     def _validate_url(self, url: str) -> None:

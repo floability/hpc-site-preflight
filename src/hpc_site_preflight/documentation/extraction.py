@@ -1,9 +1,14 @@
-"""Context selection, exact spans, and locally validated extraction."""
+"""Context selection, typed extraction, and local evidence validation."""
 
 import re
 from dataclasses import dataclass
+from typing import TypeAlias, cast
+
+from pydantic import BaseModel
 
 from hpc_site_preflight.documentation.models import (
+    AllocationRequiredFinding,
+    ChargingModelFinding,
     ContextMode,
     ContextSelection,
     CorpusChunk,
@@ -11,11 +16,16 @@ from hpc_site_preflight.documentation.models import (
     DocumentationEvidence,
     DocumentationFinding,
     EvidenceSpan,
-    ExtractionCandidate,
     ExtractionGroupName,
-    ExtractionResult,
     FieldRetrieval,
+    NetworkExtractionResult,
+    NetworkFinding,
+    OperationalExtractionResult,
+    PartitionFinding,
     RuntimeMode,
+    StoragePolicyFinding,
+    SubmissionExtractionResult,
+    SubmissionOptionFinding,
 )
 from hpc_site_preflight.documentation.retrieval import select_context
 from hpc_site_preflight.exceptions import ModelProviderError
@@ -27,11 +37,11 @@ from hpc_site_preflight.providers.base import (
 from hpc_site_preflight.reporting.tracker import RunTracker
 
 _SYSTEM_PROMPT = """Extract only documented HPC site policy from the supplied exact spans.
-Use only allowed field names and span IDs.
-Every non-null value requires at least one supporting span.
+Return values using the provided typed schema and canonical resource names.
+Every returned value requires at least one supporting span ID.
 Do not infer connectivity from network architecture.
 Do not invent port ranges, limits, charging rules, or purge periods.
-Omit a finding when the documentation does not state it."""
+Use null or an empty list when the documentation does not state a value."""
 
 _GROUP_FIELDS = {
     "submission": (
@@ -46,8 +56,22 @@ _GROUP_FIELDS = {
     ),
     "operational": ("charging_model", "purge_after_days"),
 }
-_RESOURCE_FIELDS = {"maximum_walltime_seconds", "purge_after_days"}
 _GROUPS: tuple[ExtractionGroupName, ...] = ("submission", "network", "operational")
+_NETWORK_RETRIEVAL = {
+    "manager_worker": "manager_worker_connectivity",
+    "worker_worker": "worker_worker_connectivity",
+    "outbound_compute": "outbound_compute",
+}
+_SLURM_OPTIONS = {"account", "partition", "nodes", "cpus-per-task", "time"}
+_HTCONDOR_OPTIONS = {"request_cpus", "request_memory", "request_gpus"}
+_ExtractionResult: TypeAlias = (
+    SubmissionExtractionResult | NetworkExtractionResult | OperationalExtractionResult
+)
+_RESULT_TYPES: dict[ExtractionGroupName, type[BaseModel]] = {
+    "submission": SubmissionExtractionResult,
+    "network": NetworkExtractionResult,
+    "operational": OperationalExtractionResult,
+}
 
 
 @dataclass(frozen=True)
@@ -102,6 +126,7 @@ def extract_documentation(
         selected_chunk_ids.extend(selection.selected_chunk_ids)
         retrievals.extend(selection.retrievals)
 
+        result_type = _RESULT_TYPES[group]
         tracker.progress(f"Requesting {group} policy findings")
         try:
             response = provider.generate_structured(
@@ -111,19 +136,20 @@ def extract_documentation(
                     output_name=f"extract_{group}",
                     output_description=f"Submit documented {group} policy findings.",
                 ),
-                ExtractionResult,
+                result_type,
                 tracker,
             )
+            result = cast(_ExtractionResult, response.parse_as(result_type))
         except ModelProviderError as exc:
             rejected.append(f"{group}: model request failed: {exc}")
             continue
 
         with tracker.stage("documentation_evidence_validation", display=False):
             validated = _validate_group(
-                group,
-                response.parse_as(ExtractionResult),
+                result,
                 spans,
                 selection.retrievals,
+                scheduler,
                 partition_names,
                 storage_names,
             )
@@ -138,7 +164,8 @@ def extract_documentation(
             tracker.progress(f"Requesting one correction for {group} policy findings")
             correction_prompt = (
                 prompt
-                + "\n\nCORRECTION: Return only corrected findings for these local errors:\n- "
+                + "\n\nCORRECTION: Return only corrected values for these local errors. "
+                "Use null or empty lists for all other schema fields:\n- "
                 + "\n- ".join(validated.rejected)
             )
             try:
@@ -149,28 +176,31 @@ def extract_documentation(
                         output_name=f"extract_{group}",
                         output_description=f"Correct invalid {group} findings once.",
                     ),
-                    ExtractionResult,
+                    result_type,
                     tracker,
+                )
+                corrected_result = cast(
+                    _ExtractionResult,
+                    corrected_response.parse_as(result_type),
                 )
             except ModelProviderError as exc:
                 rejected.append(f"{group}: correction failed: {exc}")
                 continue
             with tracker.stage("documentation_evidence_validation", display=False):
                 corrected = _validate_group(
-                    group,
-                    corrected_response.parse_as(ExtractionResult),
+                    corrected_result,
                     spans,
                     selection.retrievals,
+                    scheduler,
                     partition_names,
                     storage_names,
                 )
             findings.extend(corrected.findings)
             rejected.extend(f"after correction: {item}" for item in corrected.rejected)
 
-    found_fields = {finding.field for finding in findings}
-    expected_fields = _expected_fields(scheduler, storage_names)
-    unresolved = sorted(expected_fields - found_fields)
     accepted_findings = _deduplicate_findings(findings)
+    found_fields = {_retrieval_field(finding) for finding in accepted_findings}
+    unresolved = sorted(_expected_fields(scheduler, storage_names) - found_fields)
     return DocumentationEvidence(
         site_id=site_id,
         model_mode=model_mode,
@@ -247,7 +277,7 @@ def build_extraction_prompt(
     lines = [
         f"SITE: {site_name}",
         f"GROUP: {group}",
-        "ALLOWED FIELDS: "
+        "RETRIEVAL TARGETS: "
         + ", ".join(retrieval.field for retrieval in selection.retrievals),
         "FIELD RETRIEVAL:",
     ]
@@ -277,10 +307,10 @@ def build_extraction_prompt(
 
 
 def _validate_group(
-    group: ExtractionGroupName,
-    result: ExtractionResult,
+    result: _ExtractionResult,
     spans: list[EvidenceSpan],
     retrievals: list[FieldRetrieval],
+    scheduler: str,
     partition_names: set[str],
     storage_names: set[str],
 ) -> _ValidatedGroup:
@@ -291,98 +321,176 @@ def _validate_group(
     }
     findings: list[DocumentationFinding] = []
     rejected: list[str] = []
-    for candidate in result.findings:
-        error = _candidate_error(
-            group,
-            candidate,
-            span_map,
-            retrieved_chunks,
-            partition_names,
-            storage_names,
-        )
-        if error:
-            rejected.append(f"{candidate.field}: {error}")
-            continue
-        citations = [
-            DocumentationCitation(
-                span_id=span_map[span_id].span_id,
-                chunk_id=span_map[span_id].chunk_id,
-                url=span_map[span_id].source_url,
-                title=span_map[span_id].title,
-                heading=span_map[span_id].heading,
-                quote=span_map[span_id].quote,
+
+    if isinstance(result, SubmissionExtractionResult):
+        if result.allocation_required is not None:
+            citations, error = _citations(
+                "allocation_required",
+                result.allocation_required.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
             )
-            for span_id in candidate.evidence_span_ids
-        ]
-        assert candidate.value is not None
-        findings.append(
-            DocumentationFinding(
-                field=candidate.field,
-                resource=candidate.resource,
-                value=candidate.value,
-                note=candidate.note,
-                citations=citations,
+            if error:
+                rejected.append(f"allocation_required: {error}")
+            else:
+                findings.append(
+                    AllocationRequiredFinding(
+                        allocation_required=result.allocation_required.value,
+                        note=result.allocation_required.note,
+                        citations=citations,
+                    )
+                )
+
+        allowed_options = _SLURM_OPTIONS if scheduler == "slurm" else _HTCONDOR_OPTIONS
+        for option in result.submission_options:
+            if option.name not in allowed_options:
+                rejected.append(
+                    f"submission_options/{option.name}: option is not in the reviewed "
+                    f"{scheduler} profile contract"
+                )
+                continue
+            citations, error = _citations(
+                "required_submission_options",
+                option.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
             )
-        )
+            if error:
+                rejected.append(f"submission_options/{option.name}: {error}")
+            else:
+                findings.append(
+                    SubmissionOptionFinding(
+                        name=option.name,
+                        requirement=option.requirement,
+                        note=option.note,
+                        citations=citations,
+                    )
+                )
+
+        for partition in result.partitions:
+            if scheduler != "slurm" or partition.name not in partition_names:
+                rejected.append(
+                    f"partitions/{partition.name}: partition is not present "
+                    "in measured site resources"
+                )
+                continue
+            citations, error = _citations(
+                "maximum_walltime_seconds",
+                partition.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"partitions/{partition.name}: {error}")
+            else:
+                findings.append(
+                    PartitionFinding(
+                        name=partition.name,
+                        maximum_walltime_seconds=partition.maximum_walltime_seconds,
+                        note=partition.note,
+                        citations=citations,
+                    )
+                )
+
+    elif isinstance(result, NetworkExtractionResult):
+        for capability in result.network:
+            retrieval_field = _NETWORK_RETRIEVAL[capability.name]
+            citations, error = _citations(
+                retrieval_field,
+                capability.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"network/{capability.name}: {error}")
+            else:
+                findings.append(
+                    NetworkFinding(
+                        name=capability.name,
+                        available=capability.available,
+                        note=capability.note,
+                        citations=citations,
+                    )
+                )
+
+    elif isinstance(result, OperationalExtractionResult):
+        if result.charging_model is not None:
+            citations, error = _citations(
+                "charging_model",
+                result.charging_model.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"charging_model: {error}")
+            else:
+                findings.append(
+                    ChargingModelFinding(
+                        charging_model=result.charging_model.value,
+                        note=result.charging_model.note,
+                        citations=citations,
+                    )
+                )
+
+        for storage in result.storage:
+            if storage.name not in storage_names:
+                rejected.append(
+                    f"storage/{storage.name}: storage resource is not present "
+                    "in measured site resources"
+                )
+                continue
+            citations, error = _citations(
+                "purge_after_days",
+                storage.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"storage/{storage.name}: {error}")
+            else:
+                findings.append(
+                    StoragePolicyFinding(
+                        name=storage.name,
+                        purge_after_days=storage.purge_after_days,
+                        note=storage.note,
+                        citations=citations,
+                    )
+                )
+
     return _ValidatedGroup(findings=findings, rejected=rejected)
 
 
-def _candidate_error(
-    group: ExtractionGroupName,
-    candidate: ExtractionCandidate,
+def _citations(
+    field: str,
+    span_ids: list[str],
     spans: dict[str, EvidenceSpan],
     retrieved_chunks: dict[str, set[str]],
-    partition_names: set[str],
-    storage_names: set[str],
-) -> str | None:
-    if candidate.field not in _GROUP_FIELDS[group]:
-        return "field is outside this extraction group"
-    if candidate.field not in retrieved_chunks:
-        return "field was not requested for this site"
-    if candidate.value is None:
-        return "null values must be omitted rather than asserted"
-    if candidate.field in _RESOURCE_FIELDS and not candidate.resource:
-        return "resource name is required"
-    if candidate.field == "maximum_walltime_seconds" and candidate.resource not in partition_names:
-        return "partition is not present in measured site resources"
-    if candidate.field == "purge_after_days" and candidate.resource not in storage_names:
-        return "storage resource is not present in measured site resources"
-    if candidate.field not in _RESOURCE_FIELDS and candidate.resource is not None:
-        return "resource name is not allowed"
-    if not candidate.evidence_span_ids:
-        return "documented values require evidence"
-    unknown = [span_id for span_id in candidate.evidence_span_ids if span_id not in spans]
+) -> tuple[list[DocumentationCitation], str | None]:
+    if field not in retrieved_chunks:
+        return [], "field was not requested for this site"
+    unknown = [span_id for span_id in span_ids if span_id not in spans]
     if unknown:
-        return "unknown evidence span " + ", ".join(unknown)
+        return [], "unknown evidence span " + ", ".join(unknown)
     wrong_field = [
         span_id
-        for span_id in candidate.evidence_span_ids
-        if spans[span_id].chunk_id not in retrieved_chunks.get(candidate.field, set())
+        for span_id in span_ids
+        if spans[span_id].chunk_id not in retrieved_chunks[field]
     ]
     if wrong_field:
-        return "evidence was not retrieved for this field: " + ", ".join(wrong_field)
-    if any(spans[span_id].scope != "target_site" for span_id in candidate.evidence_span_ids):
-        return "evidence is not target-site scoped"
-    return _value_error(candidate)
-
-
-def _value_error(candidate: ExtractionCandidate) -> str | None:
-    value = candidate.value
-    boolean_fields = {
-        "allocation_required",
-        "manager_worker_connectivity",
-        "worker_worker_connectivity",
-        "outbound_compute",
-    }
-    if candidate.field in boolean_fields:
-        return None if isinstance(value, bool) else "value must be boolean"
-    if candidate.field in {"maximum_walltime_seconds", "purge_after_days"}:
-        valid = isinstance(value, int) and not isinstance(value, bool) and value >= 0
-        return None if valid else "value must be a non-negative integer"
-    if candidate.field == "required_submission_options":
-        valid = isinstance(value, list) and all(isinstance(item, str) for item in value)
-        return None if valid else "value must be a list of option names"
-    return None if isinstance(value, str) else "value must be a string"
+        return [], "evidence was not retrieved for this field: " + ", ".join(wrong_field)
+    if any(spans[span_id].scope != "target_site" for span_id in span_ids):
+        return [], "evidence is not target-site scoped"
+    return [
+        DocumentationCitation(
+            span_id=spans[span_id].span_id,
+            chunk_id=spans[span_id].chunk_id,
+            url=spans[span_id].source_url,
+            title=spans[span_id].title,
+            heading=spans[span_id].heading,
+            quote=spans[span_id].quote,
+        )
+        for span_id in span_ids
+    ], None
 
 
 def _table_rows(text: str) -> list[str]:
@@ -398,11 +506,29 @@ def _text_spans(text: str) -> list[str]:
     return spans
 
 
+def _finding_key(finding: DocumentationFinding) -> tuple[str, str | None]:
+    if isinstance(finding, AllocationRequiredFinding):
+        return "allocation_required", None
+    if isinstance(finding, SubmissionOptionFinding):
+        return "required_submission_options", finding.name
+    if isinstance(finding, PartitionFinding):
+        return "maximum_walltime_seconds", finding.name
+    if isinstance(finding, NetworkFinding):
+        return _NETWORK_RETRIEVAL[finding.name], None
+    if isinstance(finding, ChargingModelFinding):
+        return "charging_model", None
+    return "purge_after_days", finding.name
+
+
+def _retrieval_field(finding: DocumentationFinding) -> str:
+    return _finding_key(finding)[0]
+
+
 def _deduplicate_findings(findings: list[DocumentationFinding]) -> list[DocumentationFinding]:
     result: list[DocumentationFinding] = []
     seen: set[tuple[str, str | None]] = set()
     for finding in findings:
-        key = finding.field, finding.resource
+        key = _finding_key(finding)
         if key not in seen:
             seen.add(key)
             result.append(finding)
@@ -414,7 +540,7 @@ def _mark_cited(
     findings: list[DocumentationFinding],
 ) -> list[FieldRetrieval]:
     cited = {
-        (finding.field, citation.chunk_id)
+        (_retrieval_field(finding), citation.chunk_id)
         for finding in findings
         for citation in finding.citations
     }

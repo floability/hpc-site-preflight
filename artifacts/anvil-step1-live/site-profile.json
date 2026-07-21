@@ -75,21 +75,21 @@
       "name": "shared",
       "available": true,
       "visible_walltime_seconds": null,
-      "maximum_walltime_seconds": null,
+      "maximum_walltime_seconds": 345600,
       "node_count": null
     },
     {
       "name": "wholenode",
       "available": null,
       "visible_walltime_seconds": null,
-      "maximum_walltime_seconds": null,
+      "maximum_walltime_seconds": 345600,
       "node_count": null
     },
     {
       "name": "gpu",
       "available": null,
       "visible_walltime_seconds": 172800,
-      "maximum_walltime_seconds": null,
+      "maximum_walltime_seconds": 172800,
       "node_count": null
     }
   ],
@@ -145,11 +145,11 @@
     },
     {
       "name": "worker_worker",
-      "available": null
+      "available": true
     },
     {
       "name": "outbound_compute",
-      "available": null
+      "available": false
     }
   ],
   "accounting": {
@@ -157,7 +157,7 @@
     "visible_accounts": [
       "mock-account"
     ],
-    "charging_model": "not charged"
+    "charging_model": "Jobs are charged in Service Units (SUs). Users exchange SUs for queue access and may split credits across queues. Partition-specific charging factors apply (see Charging Factor column). Node-exclusive partitions allocate and charge full nodes (e.g., a wholenode allocates/charges 128 cores). Large-memory (highmem) nodes are charged 4 SU per compute core (4x wholenode node charge)."
   },
   "software": {
     "module_system": null,
@@ -175,7 +175,7 @@
     },
     {
       "section": "resources",
-      "state": "measured"
+      "state": "documented"
     },
     {
       "section": "network",
@@ -196,40 +196,10 @@
   ],
   "unresolved": [
     {
-      "field": "/partitions/shared/maximum_walltime_seconds",
-      "reason": "Visible scheduler configuration does not establish enforced policy.",
-      "next_action": "additional_documentation",
-      "action_id": "partition_policy_search"
-    },
-    {
-      "field": "/partitions/wholenode/maximum_walltime_seconds",
-      "reason": "Visible scheduler configuration does not establish enforced policy.",
-      "next_action": "additional_documentation",
-      "action_id": "partition_policy_search"
-    },
-    {
-      "field": "/partitions/gpu/maximum_walltime_seconds",
-      "reason": "Visible scheduler configuration does not establish enforced policy.",
-      "next_action": "additional_documentation",
-      "action_id": "partition_policy_search"
-    },
-    {
       "field": "/network/manager_worker",
       "reason": "Compute-node network behavior requires approved evidence.",
       "next_action": "run_pilot",
       "action_id": "manager_worker_check"
-    },
-    {
-      "field": "/network/worker_worker",
-      "reason": "Compute-node network behavior requires approved evidence.",
-      "next_action": "run_pilot",
-      "action_id": "worker_worker_check"
-    },
-    {
-      "field": "/network/outbound_compute",
-      "reason": "Compute-node network behavior requires approved evidence.",
-      "next_action": "run_pilot",
-      "action_id": "outbound_compute_check"
     },
     {
       "field": "/storage/home/compute_visible",
@@ -344,9 +314,51 @@
       ]
     },
     {
+      "field": "/partitions/wholenode/maximum_walltime_seconds",
+      "evidence_ids": [
+        "documentation:c91236063dad54d9"
+      ]
+    },
+    {
+      "field": "/partitions/shared/maximum_walltime_seconds",
+      "evidence_ids": [
+        "documentation:52632bb790dfc487"
+      ]
+    },
+    {
+      "field": "/partitions/gpu/maximum_walltime_seconds",
+      "evidence_ids": [
+        "documentation:2d14d62fa29c8e22",
+        "documentation:795e897b8d73ac09"
+      ]
+    },
+    {
+      "field": "/network/worker_worker",
+      "evidence_ids": [
+        "documentation:a23938da56941a44",
+        "documentation:c3e2a10dda283ded",
+        "documentation:2bd589ee6517f261"
+      ]
+    },
+    {
+      "field": "/network/outbound_compute",
+      "evidence_ids": [
+        "documentation:106a6cc3f2a496ba",
+        "documentation:e6a998e0484c033c",
+        "documentation:c8b1a5123b88f0b8"
+      ]
+    },
+    {
       "field": "/accounting/charging_model",
       "evidence_ids": [
-        "documentation:26605d71fff8379d"
+        "documentation:aef94e5e5a3619d6",
+        "documentation:36f847dbffaccc5b",
+        "documentation:5264665ca5f6dfdc",
+        "documentation:61a128eed690b2f0",
+        "documentation:7febeb7056b21022",
+        "documentation:3e169c8802aebbb0",
+        "documentation:1be53a64f322fc0c",
+        "documentation:aa8e79dbe560a5a0"
       ]
     }
   ]

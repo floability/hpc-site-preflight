@@ -14,8 +14,8 @@ ContextMode = Literal["full-corpus", "bm25", "schema-expanded-bm25"]
 RuntimeMode = Literal["live", "simulate"]
 ExtractionGroupName = Literal["submission", "network", "operational"]
 BlockKind = Literal["text", "table"]
-DocumentationScalar: TypeAlias = str | int | float | bool
-DocumentationValue: TypeAlias = DocumentationScalar | list[DocumentationScalar]
+SubmissionRequirement = Literal["required", "recommended", "optional", "conditional"]
+NetworkCapabilityName = Literal["manager_worker", "worker_worker", "outbound_compute"]
 
 
 class StrictModel(BaseModel):
@@ -160,16 +160,59 @@ class EvidenceSpan(StrictModel):
     quote: str
 
 
-class ExtractionCandidate(StrictModel):
-    field: str
-    resource: str | None
-    value: DocumentationValue | None
-    evidence_span_ids: list[str]
+class ExtractedBoolean(StrictModel):
+    value: bool = Field(strict=True)
+    evidence_span_ids: list[str] = Field(min_length=1)
     note: str
 
 
-class ExtractionResult(StrictModel):
-    findings: list[ExtractionCandidate]
+class ExtractedString(StrictModel):
+    value: str = Field(min_length=1, strict=True)
+    evidence_span_ids: list[str] = Field(min_length=1)
+    note: str
+
+
+class ExtractedSubmissionOption(StrictModel):
+    name: str = Field(strict=True)
+    requirement: SubmissionRequirement
+    evidence_span_ids: list[str] = Field(min_length=1)
+    note: str
+
+
+class ExtractedPartition(StrictModel):
+    name: str = Field(strict=True)
+    maximum_walltime_seconds: int = Field(ge=0, strict=True)
+    evidence_span_ids: list[str] = Field(min_length=1)
+    note: str
+
+
+class SubmissionExtractionResult(StrictModel):
+    allocation_required: ExtractedBoolean | None
+    submission_options: list[ExtractedSubmissionOption]
+    partitions: list[ExtractedPartition]
+
+
+class ExtractedNetworkCapability(StrictModel):
+    name: NetworkCapabilityName
+    available: bool = Field(strict=True)
+    evidence_span_ids: list[str] = Field(min_length=1)
+    note: str
+
+
+class NetworkExtractionResult(StrictModel):
+    network: list[ExtractedNetworkCapability]
+
+
+class ExtractedStoragePolicy(StrictModel):
+    name: str = Field(strict=True)
+    purge_after_days: int = Field(ge=0, strict=True)
+    evidence_span_ids: list[str] = Field(min_length=1)
+    note: str
+
+
+class OperationalExtractionResult(StrictModel):
+    charging_model: ExtractedString | None
+    storage: list[ExtractedStoragePolicy]
 
 
 class DocumentationCitation(StrictModel):
@@ -181,12 +224,54 @@ class DocumentationCitation(StrictModel):
     quote: str
 
 
-class DocumentationFinding(StrictModel):
-    field: str
-    resource: str | None
-    value: DocumentationValue
+class AllocationRequiredFinding(StrictModel):
+    allocation_required: bool
     note: str
     citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+class SubmissionOptionFinding(StrictModel):
+    name: str
+    requirement: SubmissionRequirement
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+class PartitionFinding(StrictModel):
+    name: str
+    maximum_walltime_seconds: int = Field(ge=0)
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+class NetworkFinding(StrictModel):
+    name: NetworkCapabilityName
+    available: bool
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+class ChargingModelFinding(StrictModel):
+    charging_model: str = Field(min_length=1)
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+class StoragePolicyFinding(StrictModel):
+    name: str
+    purge_after_days: int = Field(ge=0)
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+DocumentationFinding: TypeAlias = (
+    AllocationRequiredFinding
+    | SubmissionOptionFinding
+    | PartitionFinding
+    | NetworkFinding
+    | ChargingModelFinding
+    | StoragePolicyFinding
+)
 
 
 class DocumentationEvidence(StrictModel):

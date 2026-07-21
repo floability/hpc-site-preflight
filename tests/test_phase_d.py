@@ -5,16 +5,19 @@ from pathlib import Path
 
 import httpx
 import pytest
+from pydantic import ValidationError
 
 from hpc_site_preflight.documentation.corpus import build_corpus
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import extract_documentation
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
 from hpc_site_preflight.documentation.models import (
+    AllocationRequiredFinding,
     ContextMode,
     CorpusChunk,
     DiscoverySelection,
     SearchResult,
+    SubmissionExtractionResult,
 )
 from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
 from hpc_site_preflight.documentation.retrieval import select_context
@@ -171,6 +174,19 @@ def test_live_web_backend_searches_and_normalizes_html() -> None:
     assert any(block.kind == "table" for section in page.sections for block in section.blocks)
     assert any("Use sbatch" in block.text for section in page.sections for block in section.blocks)
     assert page.links[0].url == "https://docs.rcac.purdue.edu/anvil/policies"
+
+
+def test_live_web_backend_wraps_network_fetch_errors() -> None:
+    def fail(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("DNS lookup failed", request=request)
+
+    backend = LiveWebBackend(
+        ["purdue.edu"],
+        transport=httpx.MockTransport(fail),
+    )
+
+    with pytest.raises(DocumentationError, match="network error"):
+        backend.fetch("https://anvilcloud.rcac.purdue.edu/guide", 1.0)
 
 
 def test_discovery_uses_tools_then_one_model_selection(tmp_path: Path) -> None:
@@ -399,33 +415,29 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
         (
             "extract_submission",
             {
-                "findings": [
-                    {
-                        "field": "allocation_required",
-                        "resource": None,
-                        "value": True,
-                        "evidence_span_ids": ["missing"],
-                        "note": "bad",
-                    }
-                ]
+                "allocation_required": {
+                    "value": True,
+                    "evidence_span_ids": ["missing"],
+                    "note": "bad",
+                },
+                "submission_options": [],
+                "partitions": [],
             },
         ),
         (
             "extract_submission",
             {
-                "findings": [
-                    {
-                        "field": "allocation_required",
-                        "resource": None,
-                        "value": True,
-                        "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
-                        "note": "corrected",
-                    }
-                ]
+                "allocation_required": {
+                    "value": True,
+                    "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
+                    "note": "corrected",
+                },
+                "submission_options": [],
+                "partitions": [],
             },
         ),
-        ("extract_network", {"findings": []}),
-        ("extract_operational", {"findings": []}),
+        ("extract_network", {"network": []}),
+        ("extract_operational", {"charging_model": None, "storage": []}),
     ]
     provider = RecordedModelProvider(
         ModelRecording(
@@ -458,7 +470,8 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
         tracker=_tracker(tmp_path, "correction"),
     )
 
-    assert result.findings[0].field == "allocation_required"
+    assert isinstance(result.findings[0], AllocationRequiredFinding)
+    assert result.findings[0].allocation_required is True
     assert result.findings[0].citations[0].quote.startswith("Anvil requires")
     assert any("unknown evidence span" in error for error in result.rejected)
 
@@ -492,20 +505,21 @@ def test_finding_must_cite_context_retrieved_for_its_field(tmp_path: Path) -> No
         (
             "extract_submission",
             {
-                "findings": [
-                    {
-                        "field": "allocation_required",
-                        "resource": None,
-                        "value": True,
-                        "evidence_span_ids": ["doc-limits:c1:s1"],
-                        "note": "Wrong field context.",
-                    }
-                ]
+                "allocation_required": {
+                    "value": True,
+                    "evidence_span_ids": ["doc-limits:c1:s1"],
+                    "note": "Wrong field context.",
+                },
+                "submission_options": [],
+                "partitions": [],
             },
         ),
-        ("extract_submission", {"findings": []}),
-        ("extract_network", {"findings": []}),
-        ("extract_operational", {"findings": []}),
+        (
+            "extract_submission",
+            {"allocation_required": None, "submission_options": [], "partitions": []},
+        ),
+        ("extract_network", {"network": []}),
+        ("extract_operational", {"charging_model": None, "storage": []}),
     ]
     provider = RecordedModelProvider(
         ModelRecording(
@@ -584,12 +598,12 @@ def test_end_to_end_documentation_profile_is_reproducible(
     assert all(citation.quote for item in documentation.findings for citation in item.citations)
     assert len(documentation.retrieval) == (6 if site_name == "notre-dame-crc" else 8)
     assert any(not hit.cited for item in documentation.retrieval for hit in item.hits)
-    retrieval_chunks = {
-        item.field: {hit.chunk_id for hit in item.hits}
-        for item in documentation.retrieval
-    }
     assert all(
-        citation.chunk_id in retrieval_chunks[finding.field]
+        any(
+            hit.cited and hit.chunk_id == citation.chunk_id
+            for retrieval in documentation.retrieval
+            for hit in retrieval.hits
+        )
         for finding in documentation.findings
         for citation in finding.citations
     )
@@ -604,8 +618,48 @@ def test_end_to_end_documentation_profile_is_reproducible(
         shared = next(item for item in profile.partitions if item.name == "shared")
         assert shared.maximum_walltime_seconds == 345600
         assert profile.accounting.charging_model == "ACCESS service units"
+        documentation_paths = {
+            item.field_path
+            for item in report.evidence
+            if item.source_type == "documentation"
+        }
+        assert documentation_paths == {
+            "/accounting/allocation_required",
+            "/accounting/charging_model",
+            "/partitions/shared/maximum_walltime_seconds",
+            "/partitions/wholenode/maximum_walltime_seconds",
+            "/storage/scratch/purge_after_days",
+            "/submission_options/account/requirement",
+            "/submission_options/partition/requirement",
+        }
+        assert documentation_paths <= {item.field for item in profile.field_evidence}
     elif site_name == "stampede3":
         scratch = next(item for item in profile.storage if item.name == "scratch")
         assert scratch.purge_after_days == 10
     else:
         assert profile.accounting.allocation_required is False
+
+
+def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
+    silent = SubmissionExtractionResult.model_validate(
+        {"allocation_required": None, "submission_options": [], "partitions": []}
+    )
+
+    assert silent.allocation_required is None
+    with pytest.raises(ValidationError):
+        SubmissionExtractionResult.model_validate(
+            {
+                "allocation_required": {
+                    "value": "yes",
+                    "evidence_span_ids": ["span"],
+                    "note": "Invalid boolean.",
+                },
+                "submission_options": [],
+                "partitions": [],
+            }
+        )
+
+    schema = SubmissionExtractionResult.model_json_schema()
+    assert set(schema["required"]) == set(schema["properties"])
+    for definition in schema["$defs"].values():
+        assert set(definition["required"]) == set(definition["properties"])

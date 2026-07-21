@@ -1,21 +1,21 @@
 """Deterministically apply validated documentation findings to a profile."""
 
 from hpc_site_preflight.documentation.models import (
+    AllocationRequiredFinding,
+    ChargingModelFinding,
     DocumentationEvidence,
     DocumentationFinding,
+    NetworkFinding,
+    PartitionFinding,
     RuntimeMode,
+    StoragePolicyFinding,
+    SubmissionOptionFinding,
 )
 from hpc_site_preflight.evidence.bundle import EvidenceReport
 from hpc_site_preflight.evidence.models import EvidenceLink, EvidenceRecord
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.evidence.reconciliation import get_rule
 from hpc_site_preflight.profiles.models import FieldEvidenceLink, SiteProfile
-
-_NETWORK_FIELDS = {
-    "manager_worker_connectivity": "manager_worker",
-    "worker_worker_connectivity": "worker_worker",
-    "outbound_compute": "outbound_compute",
-}
 
 
 def apply_documentation(
@@ -58,39 +58,37 @@ def apply_documentation(
 
 
 def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[str]:
-    value = finding.value
-    if finding.field == "allocation_required" and isinstance(value, bool):
-        profile.accounting.allocation_required = value
+    if isinstance(finding, AllocationRequiredFinding):
+        profile.accounting.allocation_required = finding.allocation_required
         return ["/accounting/allocation_required"]
-    if finding.field == "charging_model" and isinstance(value, str):
-        profile.accounting.charging_model = value
+    if isinstance(finding, ChargingModelFinding):
+        profile.accounting.charging_model = finding.charging_model
         return ["/accounting/charging_model"]
-    if finding.field == "maximum_walltime_seconds" and isinstance(value, int):
+    if isinstance(finding, PartitionFinding):
         partition = next(
-            (item for item in profile.partitions if item.name == finding.resource),
+            (item for item in profile.partitions if item.name == finding.name),
             None,
         )
         if partition is not None:
-            partition.maximum_walltime_seconds = value
+            partition.maximum_walltime_seconds = finding.maximum_walltime_seconds
             return [f"/partitions/{partition.name}/maximum_walltime_seconds"]
-    if finding.field == "purge_after_days" and isinstance(value, int):
-        storage = next((item for item in profile.storage if item.name == finding.resource), None)
+    if isinstance(finding, StoragePolicyFinding):
+        storage = next((item for item in profile.storage if item.name == finding.name), None)
         if storage is not None:
-            storage.purge_after_days = value
+            storage.purge_after_days = finding.purge_after_days
             return [f"/storage/{storage.name}/purge_after_days"]
-    if finding.field == "required_submission_options" and isinstance(value, list):
-        names = {item for item in value if isinstance(item, str)}
-        paths: list[str] = []
-        for option in profile.submission_options:
-            if option.name in names:
-                option.requirement = "required"
-                paths.append(f"/submission_options/{option.name}/requirement")
-        return paths
-    if finding.field in _NETWORK_FIELDS and isinstance(value, bool):
-        capability_name = _NETWORK_FIELDS[finding.field]
-        capability = next(item for item in profile.network if item.name == capability_name)
-        capability.available = value
-        return [f"/network/{capability_name}"]
+    if isinstance(finding, SubmissionOptionFinding):
+        option = next(
+            (item for item in profile.submission_options if item.name == finding.name),
+            None,
+        )
+        if option is not None:
+            option.requirement = finding.requirement
+            return [f"/submission_options/{option.name}/requirement"]
+    if isinstance(finding, NetworkFinding):
+        capability = next(item for item in profile.network if item.name == finding.name)
+        capability.available = finding.available
+        return [f"/network/{finding.name}"]
     return []
 
 
@@ -117,7 +115,7 @@ def _append_evidence(
                 scope="target_site",
                 trust="official" if web_mode == "live" else "illustrative",
                 disposition="accepted",
-                value=finding.value,
+                value=_finding_value(finding),
                 freshness="site_change",
                 source_reference=citation.url,
                 documentation_url=citation.url,
@@ -130,6 +128,20 @@ def _append_evidence(
     return evidence_ids
 
 
+def _finding_value(finding: DocumentationFinding) -> bool | int | str:
+    if isinstance(finding, AllocationRequiredFinding):
+        return finding.allocation_required
+    if isinstance(finding, SubmissionOptionFinding):
+        return finding.requirement
+    if isinstance(finding, PartitionFinding):
+        return finding.maximum_walltime_seconds
+    if isinstance(finding, NetworkFinding):
+        return finding.available
+    if isinstance(finding, ChargingModelFinding):
+        return finding.charging_model
+    return finding.purge_after_days
+
+
 def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:
     section_states = {item.section: item for item in profile.validation}
     if any(path.startswith("/partitions/") for path in resolved_paths):
@@ -138,6 +150,10 @@ def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:
         section_states["accounting"].state = "documented"
     if any(path.startswith("/storage/") for path in resolved_paths):
         section_states["storage"].state = "partial"
-    network_paths = {f"/network/{name}" for name in _NETWORK_FIELDS.values()}
+    network_paths = {
+        "/network/manager_worker",
+        "/network/worker_worker",
+        "/network/outbound_compute",
+    }
     if network_paths <= resolved_paths:
         section_states["network"].state = "documented"

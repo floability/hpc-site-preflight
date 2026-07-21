@@ -76,6 +76,8 @@ and whether each retrieved chunk was cited. The run still makes four model calls
 
 ## Step 3 — Use canonical typed extraction schemas
 
+**Status:** Implementation complete; live Anvil comparison pending.
+
 Replace the generic `field + resource + value` candidate list with small typed schemas whose names
 and value shapes match the site-profile contract.
 
@@ -89,6 +91,11 @@ and value shapes match the site-profile contract.
 
 Test after this step: confirm that accepted submission options and partition limits map directly to
 profile fields and every applied value has evidence.
+
+Offline replay now returns shallow group-specific schemas, preserves valid fields when another
+field needs correction, and applies typed findings without a generic field-name translation. The
+Anvil run still makes four model calls and links all seven applied documentation values to exact
+evidence spans.
 
 ## Step 4 — Simplify after quality is stable
 

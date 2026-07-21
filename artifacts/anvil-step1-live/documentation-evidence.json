@@ -7,60 +7,475 @@
   "context_mode": "bm25",
   "findings": [
     {
-      "field": "charging_model",
-      "resource": null,
-      "value": "not charged",
-      "note": "Span states that filesystem storage is not charged.",
+      "name": "wholenode",
+      "maximum_walltime_seconds": 345600,
+      "note": "Max Duration listed as 96 hrs.",
       "citations": [
         {
-          "span_id": "doc-anvil-jobs:c132:s1",
-          "chunk_id": "doc-anvil-jobs:c132",
+          "span_id": "doc-anvil-jobs:c24:s4",
+          "chunk_id": "doc-anvil-jobs:c24",
           "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
           "title": "Job Submission - RCAC Documentation",
-          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > Filesystem \u00b6",
-          "quote": "Filesystem storage is not charged."
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "wholenode | regular | 16 nodes | 2,048 cores | 96 hrs | 64 | 2500 | 1 (node-exclusive)"
+        }
+      ]
+    },
+    {
+      "name": "shared",
+      "maximum_walltime_seconds": 345600,
+      "note": "Max Duration listed as 96 hrs.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c24:s6",
+          "chunk_id": "doc-anvil-jobs:c24",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "shared | regular | 1 node | 128 cores | 96 hrs | 1280 cores | \u2013 | 1"
+        }
+      ]
+    },
+    {
+      "name": "gpu",
+      "maximum_walltime_seconds": 172800,
+      "note": "Max Duration listed as 48 hrs; GPU nodes have 4 GPUs and are shared.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c24:s8",
+          "chunk_id": "doc-anvil-jobs:c24",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "gpu | gpu | \u2013 | \u2013 | 48 hrs | \u2013 | \u2013 | 1"
+        },
+        {
+          "span_id": "doc-anvil-jobs:c131:s1",
+          "chunk_id": "doc-anvil-jobs:c131",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > GPU Nodes \u00b6",
+          "quote": "Each GPU node on Anvil has 4 GPUs and all GPU nodes are shared."
+        }
+      ]
+    },
+    {
+      "name": "worker_worker",
+      "available": true,
+      "note": "Multi-node jobs are supported via Slurm allocations; to utilize multiple nodes applications must be written to use multiple nodes (e.g., MPI) (doc-anvil-jobs:c58:s3). Users may request multiple nodes (doc-anvil-jobs:c58:s6); each compute node has 128 cores (doc-anvil-jobs:c58:s2). No inter-node port ranges or additional network policy details are documented in the provided spans.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c58:s3",
+          "chunk_id": "doc-anvil-jobs:c58",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Running Jobs \u00b6 > Submitting a Job \u00b6",
+          "quote": "To utilize multiple nodes, you will need to have a program or code that is specifically programmed to use multiple nodes such as with MPI."
+        },
+        {
+          "span_id": "doc-anvil-jobs:c58:s6",
+          "chunk_id": "doc-anvil-jobs:c58",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Running Jobs \u00b6 > Submitting a Job \u00b6",
+          "quote": "To request 2 compute nodes with 256 tasks:"
+        },
+        {
+          "span_id": "doc-anvil-jobs:c58:s2",
+          "chunk_id": "doc-anvil-jobs:c58",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Running Jobs \u00b6 > Submitting a Job \u00b6",
+          "quote": "In some cases, you may want to request multiple nodes."
+        }
+      ]
+    },
+    {
+      "name": "outbound_compute",
+      "available": false,
+      "note": "The provided documentation spans do not state whether compute nodes have outbound (Internet) network access or any egress policy. No ports, egress rules, or restrictions are documented in the provided spans.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c50:s1",
+          "chunk_id": "doc-anvil-jobs:c50",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Running Jobs \u00b6 > Submitting a Job \u00b6",
+          "quote": "To submit your job to one compute node with one task:"
+        },
+        {
+          "span_id": "doc-anvil-jobs:c70:s1",
+          "chunk_id": "doc-anvil-jobs:c70",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Running Jobs \u00b6 > Interactive jobs \u00b6",
+          "quote": "sinteractive accepts most of the same resource requests as sbatch, so to request a login shell in the compute queue while allocating 2 nodes and 256 total cores, you might do:"
+        },
+        {
+          "span_id": "doc-anvil-jobs:c129:s1",
+          "chunk_id": "doc-anvil-jobs:c129",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > CPU Nodes \u00b6",
+          "quote": "Jobs submitted to the large memory nodes ( highmem partition) will be charged 4 SU per compute core (4x wholenode node charge)."
+        }
+      ]
+    },
+    {
+      "charging_model": "Jobs are charged in Service Units (SUs). Users exchange SUs for queue access and may split credits across queues. Partition-specific charging factors apply (see Charging Factor column). Node-exclusive partitions allocate and charge full nodes (e.g., a wholenode allocates/charges 128 cores). Large-memory (highmem) nodes are charged 4 SU per compute core (4x wholenode node charge).",
+      "note": "Do not include doc-anvil-jobs:c132:s1 as evidence (it documents filesystem storage).",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c17:s1",
+          "chunk_id": "doc-anvil-jobs:c17",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Overview / Slurm Basics \u00b6",
+          "quote": "You can choose which queues you want access to by exchanging your Service Units (credits) for the corresponding queue (CPU, GPU, AI)."
+        },
+        {
+          "span_id": "doc-anvil-jobs:c17:s2",
+          "chunk_id": "doc-anvil-jobs:c17",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Overview / Slurm Basics \u00b6",
+          "quote": "You can have access to multiple queues if you divvy out your credits."
+        },
+        {
+          "span_id": "doc-anvil-jobs:c31:s1",
+          "chunk_id": "doc-anvil-jobs:c31",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "If the partition is node-exclusive (e.g., wholenode and wide ), even if you request only one core, the job will be allocated an entire node."
+        },
+        {
+          "span_id": "doc-anvil-jobs:c31:s2",
+          "chunk_id": "doc-anvil-jobs:c31",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "The job will be charged for 128 cores , and squeue will reflect this allocation."
+        },
+        {
+          "span_id": "doc-anvil-jobs:c129:s1",
+          "chunk_id": "doc-anvil-jobs:c129",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > CPU Nodes \u00b6",
+          "quote": "Jobs submitted to the large memory nodes ( highmem partition) will be charged 4 SU per compute core (4x wholenode node charge)."
+        },
+        {
+          "span_id": "doc-anvil-jobs:c24:s2",
+          "chunk_id": "doc-anvil-jobs:c24",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "debug | regular | 2 nodes | 256 cores | 2 hrs | 1 | 2 | 1"
+        },
+        {
+          "span_id": "doc-anvil-jobs:c24:s4",
+          "chunk_id": "doc-anvil-jobs:c24",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "wholenode | regular | 16 nodes | 2,048 cores | 96 hrs | 64 | 2500 | 1 (node-exclusive)"
+        },
+        {
+          "span_id": "doc-anvil-jobs:c24:s7",
+          "chunk_id": "doc-anvil-jobs:c24",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Anvil Queues (Partitions) \u00b6",
+          "quote": "highmem | large-memory | 1 node | 128 cores | 48 hrs | 2 | 4 | 4"
         }
       ]
     }
   ],
   "rejected": [
-    "charging_model: resource name is not allowed",
-    "charging_model: resource name is not allowed",
-    "charging_model: resource name is not allowed"
+    "submission_options/Account (allocation): option is not in the reviewed slurm profile contract",
+    "submission_options/Partition (-p): option is not in the reviewed slurm profile contract",
+    "partitions/debug: partition is not present in measured site resources",
+    "partitions/gpu-debug: partition is not present in measured site resources",
+    "partitions/wide: partition is not present in measured site resources",
+    "partitions/highmem: partition is not present in measured site resources",
+    "partitions/ai: partition is not present in measured site resources",
+    "after correction: submission_options/Account: option is not in the reviewed slurm profile contract",
+    "after correction: submission_options/Partition: option is not in the reviewed slurm profile contract",
+    "after correction: partitions/debug: partition is not present in measured site resources",
+    "after correction: partitions/gpu-debug: partition is not present in measured site resources",
+    "after correction: partitions/wide: partition is not present in measured site resources",
+    "after correction: partitions/highmem: partition is not present in measured site resources",
+    "after correction: partitions/ai: partition is not present in measured site resources",
+    "network/manager_worker: evidence was not retrieved for this field: doc-anvil-jobs:c8:s1",
+    "network: correction failed: OpenAI request failed before a response was received.",
+    "charging_model: evidence was not retrieved for this field: doc-anvil-jobs:c132:s1"
   ],
   "unresolved": [
     "allocation_required",
     "manager_worker_connectivity",
-    "maximum_walltime_seconds",
-    "outbound_compute",
     "purge_after_days",
-    "required_submission_options",
-    "worker_worker_connectivity"
+    "required_submission_options"
   ],
   "selected_chunk_ids": [
     "doc-anvil-jobs:c43",
-    "doc-anvil-jobs:c63",
-    "doc-anvil-jobs:c4",
-    "doc-anvil-jobs:c48",
-    "doc-anvil-jobs:c40",
-    "doc-anvil-jobs:c31",
-    "doc-anvil-jobs:c139",
-    "doc-anvil-jobs:c64",
+    "doc-anvil-jobs:c129",
+    "doc-anvil-jobs:c29",
+    "doc-anvil-getting-started:c8",
+    "doc-anvil-jobs:c93",
+    "doc-anvil-getting-started:c12",
+    "doc-anvil-jobs:c89",
+    "doc-anvil-jobs:c24",
+    "doc-anvil-jobs:c27",
+    "doc-anvil-jobs:c44",
+    "doc-anvil-jobs:c131",
     "doc-anvil-jobs:c1",
     "doc-anvil-jobs:c50",
-    "doc-anvil-jobs:c129",
     "doc-anvil-jobs:c58",
     "doc-anvil-jobs:c68",
-    "doc-anvil-jobs:c24",
-    "doc-anvil-jobs:c61",
-    "doc-anvil-jobs:c91",
-    "doc-anvil-jobs:c132",
     "doc-anvil-jobs:c8",
-    "doc-userguides-anvil:c12",
-    "doc-anvil-jobs:c120",
-    "doc-anvil-jobs:c122",
-    "doc-anvil-jobs:c125",
-    "doc-anvil-jobs:c123",
-    "doc-anvil-jobs:c121"
+    "doc-anvil-jobs:c3",
+    "doc-anvil-jobs:c70",
+    "doc-anvil-jobs:c17",
+    "doc-anvil-jobs:c64",
+    "doc-anvil-jobs:c132",
+    "doc-anvil-jobs:c31",
+    "doc-anvil-jobs:c21"
+  ],
+  "retrieval": [
+    {
+      "field": "allocation_required",
+      "queries": [
+        "allocation account project required job submission",
+        "job submission requires allocation account"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c43",
+          "score": 17.849893,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-getting-started:c8",
+          "score": 12.459807,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-getting-started:c12",
+          "score": 11.606566,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c27",
+          "score": 9.16075,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "required_submission_options",
+      "queries": [
+        "required batch submission options account partition",
+        "job script account partition time nodes memory"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c129",
+          "score": 14.792882,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c43",
+          "score": 12.576301,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c89",
+          "score": 11.829703,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c44",
+          "score": 11.359035,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "maximum_walltime_seconds",
+      "queries": [
+        "partition maximum walltime time limit",
+        "queue maximum job duration",
+        "gpu shared wholenode partition queue maximum walltime"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c29",
+          "score": 15.769253,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c93",
+          "score": 12.913134,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 12.145425,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c131",
+          "score": 11.679531,
+          "cited": true
+        }
+      ]
+    },
+    {
+      "field": "manager_worker_connectivity",
+      "queries": [
+        "manager worker connectivity login compute TCP",
+        "compute node connect to login manager"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c1",
+          "score": 12.314701,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c50",
+          "score": 11.494227,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c68",
+          "score": 11.397324,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c3",
+          "score": 10.540538,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "worker_worker_connectivity",
+      "queries": [
+        "worker compute node to node connectivity TCP",
+        "inter-node application network policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c50",
+          "score": 10.495644,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c129",
+          "score": 9.082555,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c8",
+          "score": 8.799069,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c58",
+          "score": 8.251832,
+          "cited": true
+        }
+      ]
+    },
+    {
+      "field": "outbound_compute",
+      "queries": [
+        "outbound compute node internet network egress",
+        "compute nodes access external network"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c129",
+          "score": 10.432091,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c58",
+          "score": 10.411689,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c50",
+          "score": 10.003836,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c70",
+          "score": 7.613614,
+          "cited": true
+        }
+      ]
+    },
+    {
+      "field": "charging_model",
+      "queries": [
+        "charging accounting service units credits allocation cost",
+        "job charge cores memory node allocation"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c17",
+          "score": 17.860655,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c129",
+          "score": 15.830916,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c31",
+          "score": 13.325096,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 12.959011,
+          "cited": true
+        }
+      ]
+    },
+    {
+      "field": "purge_after_days",
+      "queries": [
+        "purge retention deletion expiration scratch policy",
+        "scratch files removed after days",
+        "home scratch storage scratch purge retention days"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c64",
+          "score": 11.554601,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c132",
+          "score": 8.395682,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c8",
+          "score": 7.954425,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c21",
+          "score": 7.421335,
+          "cited": false
+        }
+      ]
+    }
   ]
 }

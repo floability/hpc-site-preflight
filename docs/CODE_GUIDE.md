@@ -94,7 +94,8 @@ The easiest way to understand each module is to know which typed object it recei
 | `SiteIdentity` | `documentation/models.py` | Normalized identity used for search and scope |
 | `DiscoveryResult` | `documentation/models.py` | Pages selected by bounded discovery |
 | `CorpusDocument`, `CorpusChunk` | `documentation/models.py` | Persistent normalized documentation |
-| `DocumentationFinding` | `documentation/models.py` | One locally validated model proposal |
+| Three extraction result types | `documentation/models.py` | Schema-constrained model proposals |
+| Typed documentation findings | `documentation/models.py` | Locally validated values ready for profile application |
 | `DocumentationEvidence` | `documentation/models.py` | Accepted, rejected, and unresolved documentation output |
 | `EvidenceRecord` | `evidence/models.py` | Detailed provenance for one value |
 | `SiteProfile` | `profiles/models.py` | Compact machine-readable site policy |
@@ -154,8 +155,15 @@ Read `documentation/models.py` by following this type sequence:
 
 ```text
 SiteIdentity -> QueryPlan -> DiscoverySelection -> DiscoveryResult
-             -> CorpusChunk -> ExtractionResult -> DocumentationEvidence
+             -> CorpusChunk -> group extraction result -> typed findings
+             -> DocumentationEvidence
 ```
+
+The three model result types are `SubmissionExtractionResult`, `NetworkExtractionResult`, and
+`OperationalExtractionResult`. Start with those classes, then follow `_validate_group()` in
+`documentation/extraction.py`. Accepted values become specific classes such as
+`SubmissionOptionFinding` and `PartitionFinding`; `profiles/documentation.py` applies those types
+directly without interpreting a generic field-name string.
 
 ### Model providers
 
