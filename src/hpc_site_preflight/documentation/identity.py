@@ -11,21 +11,21 @@ from hpc_site_preflight.documentation.models import (
     SiteIdentity,
 )
 from hpc_site_preflight.measurements.base import MeasurementBundle
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 _SCOPE_MARKERS = {"clusters", "hpc", "systems", "userguides"}
 _GENERIC_PATH_TOKENS = {"docs", "documentation", "guide", "guides", "policies"}
 
 
 def build_site_identity(
-    site: SiteInfo,
+    site: SiteDescriptor,
     measurements: MeasurementBundle,
     *,
     discovery_site_name: str | None = None,
     discovery_note: str | None = None,
     discovery_keywords: Iterable[str] = (),
 ) -> SiteIdentity:
-    """Normalize explicit site information and observed hostname signals."""
+    """Normalize explicit site descriptor and observed hostname signals."""
 
     hosts: list[str] = []
     for observation in measurements.common:

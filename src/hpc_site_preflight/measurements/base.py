@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, RootModel, model_validator
 
 from hpc_site_preflight.evidence.models import EvidenceSource
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ObservationStatus = Literal[
     "observed",
@@ -212,7 +212,7 @@ class MeasurementProvider(ABC):
     """Load or capture measurement evidence through one stable interface."""
 
     @abstractmethod
-    def collect(self, site: SiteInfo, tracker: RunTracker) -> MeasurementBundle:
+    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> MeasurementBundle:
         """Return normalized measurements."""
 
 

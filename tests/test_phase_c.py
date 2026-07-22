@@ -16,7 +16,7 @@ from hpc_site_preflight.evidence.reconciliation import (
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.profiles.compiler import compile_profile
 from hpc_site_preflight.profiles.models import SiteProfile, SubmissionOption
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -28,7 +28,7 @@ def _load(path: Path) -> dict:
 
 def _compile(simulation_name: str) -> tuple[SiteProfile, EvidenceReport]:
     root = SIMULATE_ROOT / simulation_name
-    site = SiteInfo.model_validate(_load(root / "site-info.json"))
+    site = SiteDescriptor.model_validate(_load(root / "site-descriptor.json"))
     measurements = MeasurementBundle.model_validate(_load(root / "login-measurements.json"))
     return compile_profile(site, measurements)
 

@@ -14,7 +14,7 @@ Backpack requirements ───────────────────�
 
 ## Components
 
-- `site_info`: target-site identity and documentation scope.
+- `site_descriptor`: target-site identity and documentation scope.
 - `profiles`: lookup, storage, freshness, and compilation.
 - `measurements`: simulated and measured login-node evidence.
 - `documentation`: bounded discovery agent, its tools, and the extraction pipeline.

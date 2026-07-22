@@ -17,7 +17,7 @@ AI may assist documentation discovery and extraction. It must not perform measur
 
 ## Execution modes and evidence sources
 
-- `--site-mode simulate` is the default. It requires site-information and measurement files and
+- `--site-mode simulate` is the default. It requires site descriptor and measurement files and
   never queries the current hardware. `live` will eventually measure missing site inputs.
 - `--model-mode live` is the default and makes provider-reported model calls. `simulate` replays
   recorded structured responses for offline tests.

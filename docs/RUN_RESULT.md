@@ -50,7 +50,7 @@ work items.
 
 | Input | Meaning | Important contents |
 | --- | --- | --- |
-| `examples/simulate/anvil/site-info.json` | Explicit target identity and documentation boundary | Purdue Anvil, Slurm, `purdue.edu`, Anvil hostname pattern |
+| `examples/simulate/anvil/site-descriptor.json` | Explicit target identity and documentation boundary | Purdue Anvil, Slurm, `purdue.edu`, Anvil hostname pattern |
 | `examples/simulate/anvil/login-measurements.json` | Facts that stand in for a real login-node collection | 21 observations, three partitions, two node shapes, two storage paths |
 | Live web backend | Official-documentation acquisition | HTTPS search and fetch limited to the configured domain |
 | Live OpenAI provider | Structured discovery and extraction decisions | `gpt-5-mini` |
@@ -77,11 +77,11 @@ Produced:
 The tracker refreshed the performance report after every stage and finalized it even though one
 internal fetch stage failed.
 
-### 2. Site-information loading
+### 2. Site-descriptor loading
 
-Stage: `site_info_load`
+Stage: `site_descriptor_load`
 
-`site_info.loader.load_site_info()` read the JSON and validated it as `SiteInfo`.
+`site_descriptor.loader.load_site_descriptor()` read the JSON and validated it as `SiteDescriptor`.
 
 Produced in memory:
 
@@ -90,7 +90,7 @@ Produced in memory:
 - aliases and hostname patterns;
 - allowed documentation domains and preferred URL tokens.
 
-No standalone output file was produced because the supplied site-information file is already the
+No standalone output file was produced because the supplied site-descriptor file is already the
 persisted input.
 
 ### 3. Simulated login measurements
@@ -111,7 +111,7 @@ Stage: `documentation_identity`
 
 `DocumentationPipeline.build()` calls `build_site_identity()` and `build_query_plan()`. The
 pipeline class had an older name when this baseline was recorded. These
-functions combined explicit site information with measured host and scheduler signals, then made
+functions combined explicit site descriptor with measured host and scheduler signals, then made
 four bounded policy-search queries.
 
 Produced in memory:

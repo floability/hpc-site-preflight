@@ -35,7 +35,7 @@ from hpc_site_preflight.providers.recorded import (
     RecordedModelResponse,
 )
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -50,9 +50,9 @@ def _load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _inputs(site_name: str) -> tuple[SiteInfo, MeasurementBundle]:
+def _inputs(site_name: str) -> tuple[SiteDescriptor, MeasurementBundle]:
     directory = SIMULATE_ROOT / site_name
-    site = SiteInfo.model_validate(_load(directory / "site-info.json"))
+    site = SiteDescriptor.model_validate(_load(directory / "site-descriptor.json"))
     measurements = MeasurementBundle.model_validate(
         _load(directory / "login-measurements.json")
     )

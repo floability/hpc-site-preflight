@@ -6,7 +6,7 @@ collection, pilots, and workflow preflight.
 ## Execution contract
 
 - Site, model, and web modes are independent.
-- Site mode defaults to `simulate`; supplied site information and measurements replace real HPC
+- Site mode defaults to `simulate`; supplied site descriptor and measurements replace real HPC
   access.
 - Model and web modes default to `live`; their `simulate` modes replay offline recordings.
 - Live site mode will eventually measure missing inputs on the real login node.
@@ -52,9 +52,9 @@ Define safely observable Slurm and HTCondor login-node facts.
 
 **Status: Completed**
 
-Validate site information and flat measurement evidence with simple external contracts.
+Validate site descriptor and flat measurement evidence with simple external contracts.
 
-- Added site-info, measurement, observation, and scheduler-specific models.
+- Added site-descriptor, measurement, observation, and scheduler-specific models.
 - Added `simulated | measured` evidence-source validation.
 
 **Test:** Load all example JSON through the Pydantic models.
@@ -67,7 +67,7 @@ Validate site information and flat measurement evidence with simple external con
 
 Provide laptop inputs for Anvil, Stampede3, and Notre Dame CRC.
 
-- Added site information and simulated measurements for two Slurm sites and one HTCondor site.
+- Added site descriptor and simulated measurements for two Slurm sites and one HTCondor site.
 - Preserved observable facts as evidence, including Anvil's visible infinite walltime.
 
 **Test:** Validate every pair under `examples/simulate/`.
@@ -114,9 +114,9 @@ Create the smallest provider-neutral interface needed for schema-constrained AI 
 
 **Status: Completed**
 
-Turn site information and measurements into deterministic documentation search inputs.
+Turn site descriptor and measurements into deterministic documentation search inputs.
 
-- Added normalized identity from site information and measured host signals.
+- Added normalized identity from site descriptor and measured host signals.
 - Added four reproducible policy queries and deterministic source scope.
 
 **Test:** Snapshot the query plans for all three simulated sites.
@@ -208,8 +208,8 @@ Run real or recorded documentation AI from simulated site inputs to a partial si
 Allow real-site runs to reuse supplied inputs and collect only what is missing.
 
 - Keep both files required in simulated site mode.
-- In live site mode, load supplied site information and measured evidence when present.
-- Derive missing site information and run fixed login-node collectors when absent.
+- In live site mode, load supplied site descriptor and measured evidence when present.
+- Derive missing site descriptor and run fixed login-node collectors when absent.
 - Save newly measured inputs before continuing through the same pipeline.
 
 **Test:** Verify supplied, missing, and mixed-input cases with collector fakes.

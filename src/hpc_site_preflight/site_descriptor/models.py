@@ -1,4 +1,4 @@
-"""Typed site identity and documentation-scope information."""
+"""Typed site descriptor used to start evidence acquisition."""
 
 from typing import Literal
 
@@ -14,8 +14,8 @@ class DocumentationScope(BaseModel):
     preferred_path_tokens: list[str]
 
 
-class SiteInfo(BaseModel):
-    """Stable identity inputs used to scope evidence collection."""
+class SiteDescriptor(BaseModel):
+    """Minimal site identity and bounded documentation-discovery hints."""
 
     model_config = ConfigDict(extra="forbid")
 

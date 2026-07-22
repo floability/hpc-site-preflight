@@ -23,7 +23,7 @@ Examples:
 - A path writable from the login node is not thereby writable or visible from a compute node.
 - A workflow tool installed on the login node is not thereby installed on a compute node.
 - A hostname is a site-identity signal. It does not independently establish the canonical site
-  identity supplied by `site-info.json`.
+  identity supplied by `site-descriptor.json`.
 
 Every field in this milestone is classified as `observation`. Documentation-derived policy and
 pilot-derived behavior enter through separate evidence providers.
@@ -125,9 +125,9 @@ later contract requires it. It must not contain secrets and must not be copied i
 ### Site and host identity signals
 
 The common identity group records the login hostname, fully qualified domain name when safely
-available, and DNS suffix. These values can confirm or challenge `site-info.json`, seed bounded
+available, and DNS suffix. These values can confirm or challenge `site-descriptor.json`, seed bounded
 documentation discovery, and detect an evidence/site mismatch. They cannot select the target site
-without validation against explicit site information.
+without validation against explicit site descriptor.
 
 Usernames, home-directory contents, SSH configuration, credentials, tokens, environment dumps,
 and process listings are outside the catalog.
@@ -158,7 +158,7 @@ Each reviewed filesystem path may record:
 - total and available capacity in bytes; and
 - bounded symlink and hard-link creation support.
 
-Candidate paths come only from explicit site information, allowlisted environment variables, or
+Candidate paths come only from explicit site descriptor, allowlisted environment variables, or
 reviewed simulation configuration. The collector must not crawl arbitrary parent directories.
 
 Actual paths can contain usernames, allocation names, or project identifiers. Evidence artifacts

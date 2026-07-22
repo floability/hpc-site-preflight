@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hpc-site-preflight.dev/schemas/site-info.schema.json",
-  "title": "HPC Site Information",
+  "$id": "https://hpc-site-preflight.dev/schemas/site-descriptor.schema.json",
+  "title": "HPC Site Descriptor",
   "type": "object",
   "additionalProperties": false,
   "required": [

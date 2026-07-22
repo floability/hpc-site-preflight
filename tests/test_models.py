@@ -8,7 +8,7 @@ from pydantic import ValidationError
 
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementObservation
 from hpc_site_preflight.probes.base import PilotResultBundle
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -17,8 +17,8 @@ def _load(path: str) -> dict:
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
-def test_example_site_info_validates() -> None:
-    model = SiteInfo.model_validate(_load("examples/simulate/anvil/site-info.json"))
+def test_example_site_descriptor_validates() -> None:
+    model = SiteDescriptor.model_validate(_load("examples/simulate/anvil/site-descriptor.json"))
     assert model.site_id == "purdue-anvil"
     assert model.scheduler == "slurm"
 

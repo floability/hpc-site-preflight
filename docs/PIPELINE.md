@@ -1,6 +1,6 @@
 # Pipeline
 
-1. Receive an optional backpack and required site information.
+1. Receive an optional backpack and required site descriptor.
 2. Look up local or remote site profiles.
 3. Load simulated measurements or obtain measured login-node evidence.
 4. Discover official target-site documentation with bounded AI assistance.

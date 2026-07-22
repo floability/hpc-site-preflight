@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from hpc_site_preflight.exceptions import SimulationLoadError, SimulationValidationError
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementProvider
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class SimulatedMeasurementProvider(MeasurementProvider):
@@ -17,7 +17,7 @@ class SimulatedMeasurementProvider(MeasurementProvider):
     def __init__(self, path: Path) -> None:
         self.path = path
 
-    def collect(self, site: SiteInfo, tracker: RunTracker) -> MeasurementBundle:
+    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> MeasurementBundle:
         with tracker.stage("simulated_measurement_load"):
             try:
                 payload = json.loads(self.path.read_text(encoding="utf-8"))

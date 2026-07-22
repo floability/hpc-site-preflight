@@ -15,7 +15,7 @@ from hpc_site_preflight.documentation.tools import DocumentationTools, WebBacken
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class DocumentationPipeline:
@@ -50,7 +50,7 @@ class DocumentationPipeline:
 
     def build(
         self,
-        site: SiteInfo,
+        site: SiteDescriptor,
         tracker: RunTracker,
         *,
         context_mode: ContextMode,

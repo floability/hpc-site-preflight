@@ -7,7 +7,7 @@ measure the system, decide which evidence wins, or write the site profile direct
 
 The pipeline starts with four inputs:
 
-- `site-info.json`: site name, aliases, scheduler, hostname patterns, allowed documentation
+- `site-descriptor.json`: site name, aliases, scheduler, hostname patterns, allowed documentation
   domains, and preferred URL path tokens;
 - `login-measurements.json`: observed hostname, storage names, partitions, and scheduler facts;
 - a web backend: either live bounded search/fetch or recorded results and pages; and
@@ -19,7 +19,7 @@ model and web modes. Fully offline tests explicitly simulate the model and web m
 ## Pipeline at a glance
 
 ```text
-site information + measurements
+site descriptor + measurements
               |
               v
      deterministic identity
@@ -63,7 +63,7 @@ deterministic results.
 
 ## 1. Build site identity and queries
 
-`documentation/identity.py` combines explicit site information with observed hostname and FQDN
+`documentation/identity.py` combines explicit site descriptor with observed hostname and FQDN
 values. It produces a `SiteIdentity` containing the target name, aliases, scheduler, host signals,
 allowed domains, and preferred path tokens.
 
@@ -93,7 +93,7 @@ Live search uses DuckDuckGo through the `ddgs` package.
 
 - fixed search and page budgets;
 - HTTPS URLs;
-- the site-information domain allowlist;
+- the site-descriptor domain allowlist;
 - page size and request timeout limits;
 - fetching a page before selecting it; and
 - target-site scope for every selected evidence page.

@@ -8,7 +8,7 @@ import pytest
 from pydantic import ValidationError
 
 from hpc_site_preflight.measurements.base import MeasurementBundle
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -17,7 +17,7 @@ SITE_IDS = {
     "stampede3": ("tacc-stampede3", "slurm"),
     "notre-dame-crc": ("notre-dame-crc", "htcondor"),
 }
-SITE_INFO_KEYS = {
+SITE_DESCRIPTOR_KEYS = {
     "schema_version",
     "site_id",
     "site_name",
@@ -40,24 +40,24 @@ def _object_depth(value: object) -> int:
     return 0
 
 
-def test_site_info_schema_describes_the_shared_shape() -> None:
-    schema = _load(ROOT / "schemas" / "site-info.schema.json")
+def test_site_descriptor_schema_describes_the_shared_shape() -> None:
+    schema = _load(ROOT / "schemas" / "site-descriptor.schema.json")
 
     assert schema["additionalProperties"] is False
-    assert set(schema["required"]) == SITE_INFO_KEYS
-    assert set(schema["properties"]) == SITE_INFO_KEYS
+    assert set(schema["required"]) == SITE_DESCRIPTOR_KEYS
+    assert set(schema["properties"]) == SITE_DESCRIPTOR_KEYS
     assert schema["properties"]["scheduler"]["enum"] == ["slurm", "htcondor", "unknown"]
 
 
 @pytest.mark.parametrize("simulation_name", SITE_IDS)
 def test_site_simulation_pair_validates(simulation_name: str) -> None:
     expected_site_id, expected_scheduler = SITE_IDS[simulation_name]
-    site_payload = _load(SIMULATE_ROOT / simulation_name / "site-info.json")
+    site_payload = _load(SIMULATE_ROOT / simulation_name / "site-descriptor.json")
     measurement_payload = _load(SIMULATE_ROOT / simulation_name / "login-measurements.json")
-    site = SiteInfo.model_validate(site_payload)
+    site = SiteDescriptor.model_validate(site_payload)
     measurements = MeasurementBundle.model_validate(measurement_payload)
 
-    assert set(site_payload) == SITE_INFO_KEYS
+    assert set(site_payload) == SITE_DESCRIPTOR_KEYS
     assert _object_depth(site_payload) <= 2
     assert _object_depth(measurement_payload) <= 2
     assert site.site_id == measurements.site_id == expected_site_id

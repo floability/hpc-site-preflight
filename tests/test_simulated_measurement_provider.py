@@ -9,7 +9,7 @@ from hpc_site_preflight.exceptions import SimulationLoadError, SimulationValidat
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -28,7 +28,7 @@ def test_simulated_provider_loads_and_validates_site_pair(
     simulation_name: str, tmp_path: Path
 ) -> None:
     simulation_dir = SIMULATE_ROOT / simulation_name
-    site = SiteInfo.model_validate(_load(simulation_dir / "site-info.json"))
+    site = SiteDescriptor.model_validate(_load(simulation_dir / "site-descriptor.json"))
     tracker = _tracker(tmp_path)
 
     bundle = SimulatedMeasurementProvider(simulation_dir / "login-measurements.json").collect(
@@ -46,7 +46,7 @@ def test_simulated_provider_loads_and_validates_site_pair(
 
 def test_simulated_provider_rejects_site_mismatch(tmp_path: Path) -> None:
     simulation_dir = SIMULATE_ROOT / "anvil"
-    site = SiteInfo.model_validate(_load(simulation_dir / "site-info.json")).model_copy(
+    site = SiteDescriptor.model_validate(_load(simulation_dir / "site-descriptor.json")).model_copy(
         update={"site_id": "different-site"}
     )
     tracker = _tracker(tmp_path)
@@ -60,7 +60,7 @@ def test_simulated_provider_rejects_site_mismatch(tmp_path: Path) -> None:
 
 def test_simulated_provider_rejects_scheduler_mismatch(tmp_path: Path) -> None:
     simulation_dir = SIMULATE_ROOT / "anvil"
-    site = SiteInfo.model_validate(_load(simulation_dir / "site-info.json")).model_copy(
+    site = SiteDescriptor.model_validate(_load(simulation_dir / "site-descriptor.json")).model_copy(
         update={"scheduler": "htcondor"}
     )
 
@@ -73,7 +73,7 @@ def test_simulated_provider_rejects_scheduler_mismatch(tmp_path: Path) -> None:
 def test_simulated_provider_reports_invalid_json_without_contents(tmp_path: Path) -> None:
     path = tmp_path / "invalid.json"
     path.write_text("{invalid", encoding="utf-8")
-    site = SiteInfo.model_validate(_load(SIMULATE_ROOT / "anvil" / "site-info.json"))
+    site = SiteDescriptor.model_validate(_load(SIMULATE_ROOT / "anvil" / "site-descriptor.json"))
 
     with pytest.raises(SimulationLoadError, match="invalid JSON at line 1"):
         SimulatedMeasurementProvider(path).collect(site, _tracker(tmp_path))
@@ -84,7 +84,7 @@ def test_simulated_provider_rejects_measured_evidence(tmp_path: Path) -> None:
     payload["evidence_source"] = "measured"
     path = tmp_path / "measured.json"
     path.write_text(json.dumps(payload), encoding="utf-8")
-    site = SiteInfo.model_validate(_load(SIMULATE_ROOT / "anvil" / "site-info.json"))
+    site = SiteDescriptor.model_validate(_load(SIMULATE_ROOT / "anvil" / "site-descriptor.json"))
 
     with pytest.raises(SimulationValidationError, match="requires evidence_source 'simulated'"):
         SimulatedMeasurementProvider(path).collect(site, _tracker(tmp_path))

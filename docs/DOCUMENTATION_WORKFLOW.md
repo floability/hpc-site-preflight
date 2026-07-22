@@ -6,7 +6,7 @@ This document follows the Phase D code in execution order. Each module has one p
 
 Read the small contracts first, then follow the transformations, and finish with orchestration:
 
-1. `site_info/models.py` and `measurements/base.py` define the two starting inputs.
+1. `site_descriptor/models.py` and `measurements/base.py` define the two starting inputs.
 2. `documentation/models.py` defines every value passed through the documentation pipeline.
 3. `providers/base.py` defines one structured-model operation; `providers/recorded.py` and
    `providers/openai.py` implement it.
@@ -35,7 +35,7 @@ discovery without changing the canonical site record or allowed domains.
 ## What happens during `profile build`
 
 ```text
-site-info.json + login-measurements.json
+site-descriptor.json + login-measurements.json
   |
   |-- validate both files and confirm site/scheduler agreement
   |
@@ -83,7 +83,7 @@ may accept or discard.
 
 Each directory under `examples/simulate/` contains:
 
-- `site-info.json`: explicit site identity and documentation scope;
+- `site-descriptor.json`: explicit site identity and documentation scope;
 - `login-measurements.json`: simulated normalized measurements;
 - `documentation-web.json`: optional simulated search results and normalized pages; and
 - `documentation-model.json`: optional simulated source selection and extraction results.
@@ -115,7 +115,7 @@ child process output and can make a live run appear stuck.
 
 ```bash
 hpc-site-preflight profile build \
-  --site-info examples/simulate/anvil/site-info.json \
+  --site-descriptor examples/simulate/anvil/site-descriptor.json \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model-mode simulate \
   --web-mode simulate \
@@ -123,7 +123,7 @@ hpc-site-preflight profile build \
   --output-dir artifacts/anvil
 
 hpc-site-preflight evaluate documentation \
-  --site-info examples/simulate/anvil/site-info.json \
+  --site-descriptor examples/simulate/anvil/site-descriptor.json \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model-mode simulate \
   --web-mode simulate \

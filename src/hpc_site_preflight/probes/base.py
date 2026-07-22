@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from hpc_site_preflight.evidence.models import EvidenceSource
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class PilotResultBundle(BaseModel):
@@ -25,5 +25,5 @@ class PilotProvider(ABC):
     """Load or run only predefined bounded pilots."""
 
     @abstractmethod
-    def collect(self, site: SiteInfo, tracker: RunTracker) -> PilotResultBundle:
+    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> PilotResultBundle:
         """Return normalized pilot results."""

@@ -31,20 +31,20 @@ from hpc_site_preflight.profiles.models import (
     SubmissionOption,
     UnresolvedWorkItem,
 )
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 _STORAGE_PATH = re.compile(r"^/facts/storage/filesystems/([^/]+)/path$")
 
 
 def compile_profile(
-    site: SiteInfo,
+    site: SiteDescriptor,
     measurements: MeasurementBundle,
     documentation: DocumentationEvidence | None = None,
 ) -> tuple[SiteProfile, EvidenceReport]:
     """Build a partial profile from measurements and optional documentation."""
 
     if site.site_id != measurements.site_id or site.scheduler != measurements.scheduler_type:
-        raise ConfigurationError("Site information and measurements do not identify the same site.")
+        raise ConfigurationError("Site descriptor and measurements do not identify the same site.")
     if measurements.scheduler_type == "unknown":
         raise ConfigurationError("Cannot build a profile for an unknown scheduler.")
 

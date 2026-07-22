@@ -29,8 +29,8 @@ from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.providers.registry import create_live_model_provider, provider_for_model
 from hpc_site_preflight.reporting.artifacts import write_json
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_info.loader import load_site_info
-from hpc_site_preflight.site_info.models import SiteInfo
+from hpc_site_preflight.site_descriptor.loader import load_site_descriptor
+from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
@@ -51,8 +51,8 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
     if args.measurements is None:
         raise ConfigurationError("Simulated site mode requires --measurements.")
 
-    with tracker.stage("site_info_load"):
-        site = load_site_info(args.site_info)
+    with tracker.stage("site_descriptor_load"):
+        site = load_site_descriptor(args.site_descriptor)
 
     measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
     documentation = _build_documentation(args, site, measurements, tracker)
@@ -82,8 +82,8 @@ def evaluate_documentation(args: argparse.Namespace, tracker: RunTracker) -> Non
     if args.site_mode != "simulate":
         raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
 
-    with tracker.stage("site_info_load"):
-        site = load_site_info(args.site_info)
+    with tracker.stage("site_descriptor_load"):
+        site = load_site_descriptor(args.site_descriptor)
     measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
     documentation = _build_documentation(args, site, measurements, tracker)
     output_path = args.output_dir / "documentation-evidence.json"
@@ -96,14 +96,14 @@ def evaluate_documentation(args: argparse.Namespace, tracker: RunTracker) -> Non
 
 def _build_documentation(
     args: argparse.Namespace,
-    site: SiteInfo,
+    site: SiteDescriptor,
     measurements: MeasurementBundle,
     tracker: RunTracker,
 ) -> DocumentationEvidence:
     """Resolve model and web inputs, then run the documentation pipeline."""
 
-    web_path = args.web_recording or args.site_info.parent / "documentation-web.json"
-    model_path = args.model_recording or args.site_info.parent / "documentation-model.json"
+    web_path = args.web_recording or args.site_descriptor.parent / "documentation-web.json"
+    model_path = args.model_recording or args.site_descriptor.parent / "documentation-model.json"
     model_mode = cast(RuntimeMode, args.model_mode)
     web_mode = cast(RuntimeMode, args.web_mode)
     model_name = _model_name(model_mode, args.model)
@@ -166,7 +166,7 @@ def _model_name(mode: RuntimeMode, argument: str | None) -> str | None:
     return model
 
 
-def _web_backend(mode: RuntimeMode, recording: Path, site: SiteInfo) -> WebBackend:
+def _web_backend(mode: RuntimeMode, recording: Path, site: SiteDescriptor) -> WebBackend:
     if mode == "simulate":
         return RecordedWebBackend.from_path(recording)
     return LiveWebBackend(site.documentation.allowed_domains)

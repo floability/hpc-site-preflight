@@ -25,9 +25,9 @@ not measure machines, run shell commands, decide evidence precedence, or write t
 For a first pass, read these files in order:
 
 1. `docs/SITE_PROFILE.md` — understand the intended final product.
-2. `examples/simulate/anvil/site-info.json` — see explicit target identity.
+2. `examples/simulate/anvil/site-descriptor.json` — see explicit target identity.
 3. `examples/simulate/anvil/login-measurements.json` — see normalized observable evidence.
-4. `src/hpc_site_preflight/site_info/models.py` and `measurements/base.py` — read the input
+4. `src/hpc_site_preflight/site_descriptor/models.py` and `measurements/base.py` — read the input
    contracts.
 5. `src/hpc_site_preflight/cli.py` — see process lifecycle and the small operation dispatch table.
 6. `src/hpc_site_preflight/operations.py` — follow `build_profile()` and
@@ -54,7 +54,7 @@ __main__.py
      -> RunTracker(...)
      -> operation dispatch
      -> operations.build_profile()
-        -> load_site_info()
+        -> load_site_descriptor()
         -> SimulatedMeasurementProvider.collect()
         -> operations._build_documentation()
            -> provider_for_model()
@@ -88,7 +88,7 @@ The easiest way to understand each module is to know which typed object it recei
 
 | Contract | Defined in | Role |
 | --- | --- | --- |
-| `SiteInfo` | `site_info/models.py` | Target identity and documentation boundary |
+| `SiteDescriptor` | `site_descriptor/models.py` | Target identity and documentation boundary |
 | `MeasurementObservation` | `measurements/base.py` | One flat observed or unavailable fact with provenance |
 | `MeasurementBundle` | `measurements/base.py` | All common and scheduler-specific login observations |
 | `SiteIdentity` | `documentation/models.py` | Normalized identity used for search and scope |
@@ -122,13 +122,13 @@ paper: an AI response and a valid policy field are different stages and differen
 Read `cli_parser.py` only when you need to understand user input. For execution, read `cli.main()`
 and then the selected function in `operations.py`.
 
-### Site information
+### Site descriptor
 
-- `site_info/models.py` defines the explicit site record and documentation allowlist.
-- `site_info/loader.py` reads and validates `site-info.json`.
+- `site_descriptor/models.py` defines the explicit site record and documentation allowlist.
+- `site_descriptor/loader.py` reads and validates `site-descriptor.json`.
 
-Site information is not a measurement. It says which site is the target and where documentation is
-allowed to come from.
+A site descriptor is not a measurement. It identifies the target site and bounds where its
+documentation may come from. The evidence-backed site profile is a separate pipeline output.
 
 ### Measurements
 
@@ -179,11 +179,11 @@ raise an explicit not-implemented error today.
 
 ### Site identity and scope
 
-- `documentation/identity.py` merges site information with hostname and scheduler observations,
+- `documentation/identity.py` merges site descriptor with hostname and scheduler observations,
   creates deterministic topic queries, and classifies documentation scope.
 
 The optional `--site-name` is a discovery-only search name and does not replace the canonical name
-in `SiteInfo` or `SiteProfile`. `--discovery-note` is included in the typed identity shown to the
+in `SiteDescriptor` or `SiteProfile`. `--discovery-note` is included in the typed identity shown to the
 discovery model. Each deduplicated `--discovery-keyword` adds a separate search query. No
 disallowed-keyword input is implemented; allowed domains and deterministic source scope remain the
 primary exclusion controls.
@@ -376,7 +376,7 @@ often show the intended trust boundary more directly than comments do.
 
 Implemented end to end:
 
-- supplied site information;
+- supplied site descriptor;
 - supplied simulated login measurements;
 - live or recorded model calls;
 - live or recorded documentation search/fetch;
@@ -389,7 +389,7 @@ Implemented end to end:
 
 Not yet implemented end to end:
 
-- deriving site information from a live login node;
+- deriving site descriptor from a live login node;
 - live Slurm and HTCondor collection;
 - simulated or approved live pilots;
 - complete evidence reconciliation and conflict handling;

@@ -4,6 +4,10 @@ HPC Site Preflight constructs an evidence-backed profile of an HPC system and us
 
 The research paper framing is **Evidence-Backed HPC Site Policies with Agentic Discovery**.
 
+A **site descriptor** is the small input that identifies a site and bounds documentation
+discovery. A **site profile** is the larger evidence-backed, actionable output constructed from
+measurements, documentation, and eventually pilot jobs.
+
 The working machine-readable site-profile contract, field semantics, evidence boundary, and a
 full illustrative example are described in [docs/SITE_PROFILE.md](docs/SITE_PROFILE.md).
 Common scheduler-independent login-node observations and their safety boundary are defined in
@@ -42,7 +46,7 @@ See [MILESTONES.md](MILESTONES.md) for the planned sequence of small implementat
 A backpack is not required.
 
 ```text
-site information
+site descriptor
 → profile lookup
 → measurements
 → documentation evidence
@@ -62,7 +66,7 @@ backpack + site profile
 ### Evaluate only the AI/documentation subsystem
 
 ```text
-site information
+site descriptor
 → documentation discovery
 → corpus
 → context selection
@@ -79,7 +83,7 @@ Anvil live-AI example is traced in [docs/RUN_RESULT.md](docs/RUN_RESULT.md).
 
 The three concerns are independent:
 
-- `--site-mode simulate` is the default and uses supplied site-information and measurement files
+- `--site-mode simulate` is the default and uses supplied site descriptor and measurement files
   without querying local hardware. Live site collection is planned.
 - `--model-mode live` is the default and calls the model's inferred provider. `simulate` replays
   model responses.
@@ -136,7 +140,7 @@ For a normal laptop run, set `OPENAI_API_KEY`, then run:
 
 ```bash
 hpc-site-preflight profile build \
-  --site-info examples/simulate/anvil/site-info.json \
+  --site-descriptor examples/simulate/anvil/site-descriptor.json \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model gpt-5-mini \
   --output-dir artifacts/anvil-live
