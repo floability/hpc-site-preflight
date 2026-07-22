@@ -23,6 +23,7 @@ dist/
 *.egg-info/
 
 # Runtime artifacts
+/artifacts/
 runs/
 *.log
 
