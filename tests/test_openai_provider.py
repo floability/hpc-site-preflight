@@ -70,12 +70,10 @@ def test_valid_recorded_response_is_locally_validated_and_tracked(
     provider = _provider([(200, _load("valid.json"))], captured)
     tracker = _tracker(tmp_path)
 
-    response = provider.generate_structured(_request(), ExampleResult, tracker)
-    result = response.parse_as(ExampleResult)
+    result = provider.generate_structured(_request(), ExampleResult, tracker)
 
     assert result.value == "documented"
     assert str(result.source_url) == "https://example.edu/guide"
-    assert response.response_id == "resp_valid"
     assert captured[0]["tool_choice"] == {"type": "function", "name": "submit_result"}
     tool = captured[0]["tools"][0]
     assert tool["strict"] is True
@@ -93,9 +91,7 @@ def test_valid_recorded_response_is_locally_validated_and_tracked(
 def test_nullable_partial_recorded_response_is_accepted(tmp_path: Path) -> None:
     provider = _provider([(200, _load("partial.json"))], [])
 
-    result = provider.generate_structured(
-        _request(), ExampleResult, _tracker(tmp_path)
-    ).parse_as(ExampleResult)
+    result = provider.generate_structured(_request(), ExampleResult, _tracker(tmp_path))
 
     assert result.value == "unknown"
     assert result.evidence is None

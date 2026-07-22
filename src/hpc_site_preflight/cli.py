@@ -20,11 +20,11 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 
 Operation = Callable[[argparse.Namespace, RunTracker], None]
 
-# _OPERATIONS: dict[str, Operation] = {
-#     "profile_build": build_profile,
-#     "evaluate_documentation": evaluate_documentation,
-#     "unimplemented": run_unimplemented,
-# }
+_OPERATIONS: dict[str, Operation] = {
+    "profile_build": build_profile,
+    "evaluate_documentation": evaluate_documentation,
+    "unimplemented": run_unimplemented,
+}
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -33,7 +33,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     load_dotenv()
     args = build_parser().parse_args(argv)
     config = AppConfig(run_dir=args.run_dir, quiet=args.quiet)
-    
+
     tracker = RunTracker(
         command=args.command_name,
         mode=_mode_summary(args),
@@ -43,15 +43,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     exit_code = 0
     try:
-        # _OPERATIONS[args.operation](args, tracker)
-        
-        if args.operation == "profile_build":
-            build_profile(args, tracker)
-        elif args.operation == "evaluate_documentation":
-            evaluate_documentation(args, tracker)
-        else:
-            run_unimplemented(args, tracker)
-        
+        _OPERATIONS[args.operation](args, tracker)
     except PreflightError as exc:
         tracker.record_run_error(exc)
         if not config.quiet:

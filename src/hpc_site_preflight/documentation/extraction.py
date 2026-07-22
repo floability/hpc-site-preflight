@@ -129,17 +129,19 @@ def extract_documentation(
         result_type = _RESULT_TYPES[group]
         tracker.progress(f"Requesting {group} policy findings")
         try:
-            response = provider.generate_structured(
-                StructuredModelRequest(
-                    system_prompt=_SYSTEM_PROMPT,
-                    user_prompt=prompt,
-                    output_name=f"extract_{group}",
-                    output_description=f"Submit documented {group} policy findings.",
+            result = cast(
+                _ExtractionResult,
+                provider.generate_structured(
+                    StructuredModelRequest(
+                        system_prompt=_SYSTEM_PROMPT,
+                        user_prompt=prompt,
+                        output_name=f"extract_{group}",
+                        output_description=f"Submit documented {group} policy findings.",
+                    ),
+                    result_type,
+                    tracker,
                 ),
-                result_type,
-                tracker,
             )
-            result = cast(_ExtractionResult, response.parse_as(result_type))
         except ModelProviderError as exc:
             rejected.append(f"{group}: model request failed: {exc}")
             continue
@@ -169,19 +171,18 @@ def extract_documentation(
                 + "\n- ".join(validated.rejected)
             )
             try:
-                corrected_response = provider.generate_structured(
-                    StructuredModelRequest(
-                        system_prompt=_SYSTEM_PROMPT,
-                        user_prompt=correction_prompt,
-                        output_name=f"extract_{group}",
-                        output_description=f"Correct invalid {group} findings once.",
-                    ),
-                    result_type,
-                    tracker,
-                )
                 corrected_result = cast(
                     _ExtractionResult,
-                    corrected_response.parse_as(result_type),
+                    provider.generate_structured(
+                        StructuredModelRequest(
+                            system_prompt=_SYSTEM_PROMPT,
+                            user_prompt=correction_prompt,
+                            output_name=f"extract_{group}",
+                            output_description=f"Correct invalid {group} findings once.",
+                        ),
+                        result_type,
+                        tracker,
+                    ),
                 )
             except ModelProviderError as exc:
                 rejected.append(f"{group}: correction failed: {exc}")

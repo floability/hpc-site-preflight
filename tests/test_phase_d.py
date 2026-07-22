@@ -137,12 +137,13 @@ def test_web_tools_enforce_domain_scope_and_budgets() -> None:
     )
     assert sibling.scope == "sibling_site"
     with pytest.raises(DocumentationError, match="target-site"):
-        tools.finish_discovery([sibling.url], "done", [])
+        tools.select_fetched_pages([sibling.url])
 
 
 def test_live_web_backend_searches_and_normalizes_html() -> None:
     html = """<html><head><title>Anvil Guide</title></head><body>
-    <nav><a href="/anvil/policies">Policies</a></nav>
+    <nav><a href="/anvil/policies#storage">Policies</a>
+    <a href="/anvil/policies#charging">Policies again</a></nav>
     <h1>Jobs</h1><p>Use sbatch to submit.</p>
     <h2>Limits</h2><table><tr><th>Queue</th><th>Time</th></tr>
     <tr><td>shared</td><td>4 days</td></tr></table></body></html>"""
@@ -174,6 +175,34 @@ def test_live_web_backend_searches_and_normalizes_html() -> None:
     assert any(block.kind == "table" for section in page.sections for block in section.blocks)
     assert any("Use sbatch" in block.text for section in page.sections for block in section.blocks)
     assert page.links[0].url == "https://docs.rcac.purdue.edu/anvil/policies"
+    assert len(page.links) == 1
+
+
+def test_web_tools_canonicalize_and_deduplicate_search_fragments() -> None:
+    site, measurements = _inputs("anvil")
+    identity = build_site_identity(site, measurements)
+    results = [
+        SearchResult(
+            url="https://docs.rcac.purdue.edu/anvil/jobs#first",
+            title="Jobs",
+            snippet="Submission",
+        ),
+        SearchResult(
+            url="https://docs.rcac.purdue.edu/anvil/jobs#second",
+            title="Jobs duplicate",
+            snippet="Submission",
+        ),
+    ]
+    backend = LiveWebBackend(
+        ["purdue.edu"],
+        search_function=lambda query, limit, timeout: results,
+    )
+
+    canonical = DocumentationTools(identity, backend).search_web("Anvil jobs")
+
+    assert [item.url for item in canonical] == [
+        "https://docs.rcac.purdue.edu/anvil/jobs"
+    ]
 
 
 def test_live_web_backend_wraps_network_fetch_errors() -> None:

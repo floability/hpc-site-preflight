@@ -117,12 +117,6 @@ def _build_documentation(
         web_backend = _web_backend(web_mode, web_path, site)
         model_provider = _model_provider(model_mode, model_name, model_path)
     except (DocumentationError, ModelProviderError) as exc:
-        storage_names = {
-            observation.path.split("/")[4]
-            for observation in measurements.common
-            if observation.path.startswith("/facts/storage/filesystems/")
-            and observation.path.endswith("/path")
-        }
         return empty_documentation(
             site_id=site.site_id,
             context_mode=cast(ContextMode, args.context_mode),
@@ -131,7 +125,7 @@ def _build_documentation(
             model=model_name,
             web_mode=web_mode,
             scheduler=site.scheduler,
-            storage_names=storage_names,
+            storage_names=measurements.storage_names,
             reason=str(exc),
         )
     pipeline = DocumentationPipeline(

@@ -47,6 +47,7 @@ site-info.json + login-measurements.json
   |
   |-- run one bounded discovery agent
   |     deterministic search, ranking, download, and guide-link following
+  |     browser-only URL fragments are removed before ranking and fetch
   |     one model call selects from fetched target-site pages
   |
   |-- build corpus/
@@ -60,7 +61,7 @@ site-info.json + login-measurements.json
   |-- create exact sentence and table-row span IDs
   |
   |-- request structured findings
-  |     model returns field, resource, value, and span IDs
+  |     model returns typed group values and span IDs
   |
   |-- validate locally
   |     reject unknown fields, resources, spans, scopes, and value types

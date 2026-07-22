@@ -8,8 +8,8 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from hpc_site_preflight.exceptions import ModelProviderError
 from hpc_site_preflight.providers.base import (
     ModelProvider,
+    ResultModel,
     StructuredModelRequest,
-    StructuredModelResponse,
 )
 from hpc_site_preflight.reporting.tracker import RunTracker
 
@@ -54,9 +54,9 @@ class RecordedModelProvider(ModelProvider):
     def generate_structured(
         self,
         request: StructuredModelRequest,
-        result_type: type[BaseModel],
+        result_type: type[ResultModel],
         tracker: RunTracker,
-    ) -> StructuredModelResponse:
+    ) -> ResultModel:
         with tracker.stage("structured_model_call"):
             if self._index >= len(self.recording.responses):
                 raise ModelProviderError("Model recording has no response left for this call.")
@@ -80,9 +80,4 @@ class RecordedModelProvider(ModelProvider):
                 output_tokens=recorded.output_tokens or 0,
                 usage_available=usage_available,
             )
-            return StructuredModelResponse(
-                data=result.model_dump(mode="json"),
-                response_id=recorded.response_id,
-                input_tokens=recorded.input_tokens,
-                output_tokens=recorded.output_tokens,
-            )
+            return result

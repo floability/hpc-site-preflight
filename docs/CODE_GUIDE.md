@@ -147,7 +147,6 @@ observe. They are allowlists/design contracts, not collected values.
 
 ### Documentation models
 
-- `documentation/base.py` defines the provider-neutral documentation-policy interface.
 - `documentation/models.py` contains the shared contracts for identity, queries, source selection,
   pages, corpus records, extraction proposals, citations, and final documentation evidence.
 
@@ -167,8 +166,8 @@ directly without interpreting a generic field-name string.
 
 ### Model providers
 
-- `providers/base.py` defines a single operation: produce a structured response matching a Pydantic
-  result type. It also defines request, response, and token-usage records.
+- `providers/base.py` defines a single operation: return a locally validated Pydantic result for a
+  structured request. Provider usage is written directly to the run tracker.
 - `providers/openai.py` calls the OpenAI Responses API and reports provider token usage to the
   tracker.
 - `providers/openai_schema.py` converts Pydantic schemas into the strict form accepted by the API.
@@ -199,6 +198,8 @@ organization-general documents may help discovery but cannot become target polic
 
 The tools enforce HTTPS, allowed domains, query/page budgets, timeout, page size, fetch-before-select,
 and target-site selection. The model never receives a general browser or network client.
+Browser-only URL fragments are removed at this boundary so anchors cannot consume additional fetch
+slots or appear as duplicate source-selection candidates.
 
 ### The implemented agent
 

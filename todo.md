@@ -99,6 +99,8 @@ evidence spans.
 
 ## Step 4 — Simplify after quality is stable
 
+**Status:** Partially completed; artifact consolidation remains.
+
 Simplify artifacts and module boundaries only after the first three steps produce stable output.
 
 - Keep one compact actionable `site-profile.json` and one detailed `evidence-report.json` as the
@@ -113,6 +115,10 @@ Simplify artifacts and module boundaries only after the first three steps produc
 
 Test after this step: reproduce the Anvil result, validate all artifact links, and confirm that the
 documented code-reading path matches the actual call graph.
+
+Removed fragment-duplicate web work, redundant model-response validation, pass-through discovery
+completion data, unused interfaces, and repeated URL/resource parsing. Primary artifact
+consolidation remains deferred until live output quality is stable.
 
 ## Deferred work
 

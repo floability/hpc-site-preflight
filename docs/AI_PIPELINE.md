@@ -227,8 +227,8 @@ quote.
 
 ## Providers and simulation
 
-`providers/base.py` defines one provider-neutral operation: generate a structured response for a
-Pydantic result type.
+`providers/base.py` defines one provider-neutral operation: return a validated Pydantic result for
+a structured request.
 
 - `providers/recorded.py` replays ordered responses from `documentation-model.json`.
 - `providers/openai.py` translates the same request into a forced function call through the OpenAI
@@ -240,7 +240,8 @@ Simulated recordings omit token counts because those values were not provider re
 tracker records their usage as unavailable rather than estimating it.
 
 `documentation/tools.py` provides both backends. Live mode uses bounded DuckDuckGo search and HTTPS
-fetches restricted to the site's allowed domains. Simulated mode replays the local web recording.
+fetches restricted to the site's allowed domains. Browser-only URL fragments are stripped before
+ranking and fetching. Simulated mode replays the local web recording.
 
 ## Failure and partial-output behavior
 

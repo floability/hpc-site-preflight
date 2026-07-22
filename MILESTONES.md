@@ -104,7 +104,7 @@ Produce a useful partial site profile and detailed evidence report without faili
 
 Create the smallest provider-neutral interface needed for schema-constrained AI results.
 
-- Added provider-neutral structured request and response contracts with a basic OpenAI adapter.
+- Added a provider-neutral typed-result interface with a basic OpenAI adapter.
 - Added model-to-provider inference for OpenAI and future Anthropic and Gemini adapters.
 - Added local validation, retry tracking, usage reporting, and offline recordings.
 

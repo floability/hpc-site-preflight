@@ -185,6 +185,7 @@ class DiscoveryAgent:
                 tracker.progress(f"Fetch {request_number} failed: {exc}")
                 continue
 
+            fetched_urls.add(page.url)
             tracker.progress(f"Fetch {request_number}: accepted as {page.scope}")
             added_links = 0
 
@@ -222,7 +223,7 @@ class DiscoveryAgent:
             output_description="Select the fetched target-site documentation sources.",
         )
         try:
-            response = self.provider.generate_structured(
+            return self.provider.generate_structured(
                 request,
                 DiscoverySelection,
                 tracker,
@@ -230,7 +231,6 @@ class DiscoveryAgent:
         except ModelProviderError as exc:
             tracker.progress(f"Model source selection failed: {exc}")
             return None
-        return response.parse_as(DiscoverySelection)
 
     def _correct(
         self,
@@ -256,7 +256,7 @@ class DiscoveryAgent:
             output_description="Correct the invalid documentation source selection.",
         )
         try:
-            response = self.provider.generate_structured(
+            return self.provider.generate_structured(
                 request,
                 DiscoverySelection,
                 tracker,
@@ -264,7 +264,6 @@ class DiscoveryAgent:
         except ModelProviderError as exc:
             tracker.progress(f"Model source-selection correction failed: {exc}")
             return None
-        return response.parse_as(DiscoverySelection)
 
     @staticmethod
     def _finish(
@@ -272,18 +271,9 @@ class DiscoveryAgent:
         tools: DocumentationTools,
         tracker: RunTracker,
     ) -> list[FetchedPage]:
-        with tracker.stage("documentation_tool", display=False):
-            tracker.record_tool_call(
-                tool_name="finish_discovery",
-                details={"selected_pages": str(len(selection.source_urls))},
-            )
-            pages, _, _ = tools.finish_discovery(
-                selection.source_urls,
-                selection.summary,
-                selection.unanswered_topics,
-            )
-            tracker.progress(f"Discovery selected {len(pages)} target-site page(s)")
-            return pages
+        pages = tools.select_fetched_pages(selection.source_urls)
+        tracker.progress(f"Discovery selected {len(pages)} target-site page(s)")
+        return pages
 
     @staticmethod
     def _fallback(tools: DocumentationTools, reason: str) -> DiscoveryResult:

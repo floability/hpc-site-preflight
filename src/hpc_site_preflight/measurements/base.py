@@ -186,6 +186,27 @@ class MeasurementBundle(BaseModel):
             raise ValueError("unknown schedulers cannot contain scheduler-specific measurements.")
         return self
 
+    @property
+    def storage_names(self) -> set[str]:
+        """Return named filesystems represented by common path observations."""
+
+        prefix = "/facts/storage/filesystems/"
+        suffix = "/path"
+        return {
+            item.path.removeprefix(prefix).removesuffix(suffix)
+            for item in self.common
+            if item.path.startswith(prefix) and item.path.endswith(suffix)
+        }
+
+    @property
+    def partition_names(self) -> set[str]:
+        """Return visible Slurm partition names."""
+
+        for item in self.scheduler:
+            if item.path == "/facts/scheduler/partitions" and isinstance(item.value, list):
+                return {value for value in item.value if isinstance(value, str)}
+        return set()
+
 
 class MeasurementProvider(ABC):
     """Load or capture measurement evidence through one stable interface."""

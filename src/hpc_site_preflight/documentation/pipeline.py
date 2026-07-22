@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-from hpc_site_preflight.documentation.base import DocumentationPolicyProvider
 from hpc_site_preflight.documentation.corpus import build_corpus, write_corpus
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import extract_documentation
@@ -19,7 +18,7 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 from hpc_site_preflight.site_info.models import SiteInfo
 
 
-class DocumentationPipeline(DocumentationPolicyProvider):
+class DocumentationPipeline:
     """Run documentation discovery, corpus construction, and extraction."""
 
     def __init__(
@@ -90,8 +89,8 @@ class DocumentationPipeline(DocumentationPolicyProvider):
             site_id=site.site_id,
             site_name=site.site_name,
             scheduler=site.scheduler,
-            partition_names=_partition_names(self.measurements),
-            storage_names=_storage_names(self.measurements),
+            partition_names=self.measurements.partition_names,
+            storage_names=self.measurements.storage_names,
             chunks=chunks,
             context_mode=context_mode,
             model_mode=self.model_mode,
@@ -101,22 +100,3 @@ class DocumentationPipeline(DocumentationPolicyProvider):
             provider=self.model_provider,
             tracker=tracker,
         )
-
-
-def _storage_names(measurements: MeasurementBundle) -> set[str]:
-    names: set[str] = set()
-    prefix = "/facts/storage/filesystems/"
-    suffix = "/path"
-    for observation in measurements.common:
-        if observation.path.startswith(prefix) and observation.path.endswith(suffix):
-            names.add(observation.path.removeprefix(prefix).removesuffix(suffix))
-    return names
-
-
-def _partition_names(measurements: MeasurementBundle) -> set[str]:
-    for observation in measurements.scheduler:
-        if observation.path == "/facts/scheduler/partitions" and isinstance(
-            observation.value, list
-        ):
-            return {item for item in observation.value if isinstance(item, str)}
-    return set()

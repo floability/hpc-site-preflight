@@ -12,8 +12,8 @@ from pydantic import BaseModel, ConfigDict, ValidationError
 from hpc_site_preflight.exceptions import ConfigurationError, ModelProviderError
 from hpc_site_preflight.providers.base import (
     ModelProvider,
+    ResultModel,
     StructuredModelRequest,
-    StructuredModelResponse,
 )
 from hpc_site_preflight.providers.openai_schema import openai_compatible_schema
 from hpc_site_preflight.reporting.tracker import RunTracker
@@ -40,7 +40,6 @@ class _OpenAIOutputItem(BaseModel):
 class _OpenAIResponse(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
-    id: str | None = None
     output: list[_OpenAIOutputItem]
     usage: _OpenAIUsage | None = None
 
@@ -76,23 +75,16 @@ class OpenAIProvider(ModelProvider):
     def generate_structured(
         self,
         request: StructuredModelRequest,
-        result_type: type[BaseModel],
+        result_type: type[ResultModel],
         tracker: RunTracker,
-    ) -> StructuredModelResponse:
+    ) -> ResultModel:
         """Make one tracked request and return schema-validated data."""
 
         with tracker.stage("structured_model_call"):
             response, attempts = self._send(request, result_type, tracker)
             envelope = self._decode_response(response, attempts, tracker)
             self._record_usage(envelope, attempts, tracker)
-            data = self._extract_data(envelope, request.output_name, result_type)
-            usage = envelope.usage
-            return StructuredModelResponse(
-                data=data,
-                response_id=envelope.id,
-                input_tokens=usage.input_tokens if usage else None,
-                output_tokens=usage.output_tokens if usage else None,
-            )
+            return self._extract_data(envelope, request.output_name, result_type)
 
     def _send(
         self,
@@ -159,8 +151,8 @@ class OpenAIProvider(ModelProvider):
     def _extract_data(
         response: _OpenAIResponse,
         output_name: str,
-        result_type: type[BaseModel],
-    ) -> dict[str, Any]:
+        result_type: type[ResultModel],
+    ) -> ResultModel:
         calls = [
             item
             for item in response.output
@@ -175,10 +167,9 @@ class OpenAIProvider(ModelProvider):
             raise ModelProviderError("OpenAI returned invalid structured JSON.") from exc
 
         try:
-            validated = result_type.model_validate(raw_data)
+            return result_type.model_validate(raw_data)
         except ValidationError as exc:
             raise ModelProviderError("OpenAI structured output failed schema validation.") from exc
-        return validated.model_dump(mode="json")
 
     def _payload(
         self,

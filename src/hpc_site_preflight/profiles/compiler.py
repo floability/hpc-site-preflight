@@ -198,9 +198,9 @@ def _build_partitions(
                 node_count=_integer(observations, f"{prefix}/node_count"),
             )
         )
-        _call_link(link, f"/partitions/{name}/available", f"{prefix}/available")
-        _call_link(link, f"/partitions/{name}/visible_walltime_seconds", visible_path)
-    _call_link(link, "/partitions", "/facts/scheduler/partitions")
+        link(f"/partitions/{name}/available", f"{prefix}/available")
+        link(f"/partitions/{name}/visible_walltime_seconds", visible_path)
+    link("/partitions", "/facts/scheduler/partitions")
     return result
 
 
@@ -223,8 +223,8 @@ def _build_resource_shapes(
             )
         )
         for field in ("cpus", "memory_mib", "temporary_disk_mib", "gpu_count", "gpu_models"):
-            _call_link(link, f"/resource_shapes/{name}/{field}", f"{prefix}/{field}")
-    _call_link(link, "/resource_shapes", "/facts/scheduler/node_shapes")
+            link(f"/resource_shapes/{name}/{field}", f"{prefix}/{field}")
+    link("/resource_shapes", "/facts/scheduler/node_shapes")
     return result
 
 
@@ -243,8 +243,8 @@ def _build_resource_groups(
             )
         )
         for field in ("key", "machine_count", "slot_count"):
-            _call_link(link, f"/resource_groups/{name}/{field}", f"{prefix}/{field}")
-    _call_link(link, "/resource_groups", "/facts/scheduler/resource_groups")
+            link(f"/resource_groups/{name}/{field}", f"{prefix}/{field}")
+    link("/resource_groups", "/facts/scheduler/resource_groups")
     return result
 
 
@@ -267,7 +267,7 @@ def _build_storage(
                 available_bytes=_integer(observations, f"{prefix}/available_bytes"),
             )
         )
-        _call_link(link, f"/storage/{name}/path", path)
+        link(f"/storage/{name}/path", path)
     return result
 
 
@@ -443,9 +443,3 @@ def _duration_seconds(value: str | None) -> int | None:
         return None
     hours, minutes, seconds = (int(part) for part in clock)
     return days * 86400 + hours * 3600 + minutes * 60 + seconds
-
-
-def _call_link(
-    link: Callable[[str, str], None], profile_field: str, observation_path: str
-) -> None:
-    link(profile_field, observation_path)

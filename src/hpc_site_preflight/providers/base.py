@@ -1,7 +1,7 @@
 """Provider-neutral contracts for structured model calls."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Literal, TypeAlias, TypeVar
+from typing import Literal, TypeAlias, TypeVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -22,22 +22,6 @@ class StructuredModelRequest(BaseModel):
     output_description: str = "Submit the structured result."
 
 
-class StructuredModelResponse(BaseModel):
-    """Locally validated structured output and provider-reported usage."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    data: dict[str, Any]
-    response_id: str | None = None
-    input_tokens: int | None = Field(default=None, ge=0)
-    output_tokens: int | None = Field(default=None, ge=0)
-
-    def parse_as(self, result_type: type[ResultModel]) -> ResultModel:
-        """Return the structured data as its caller-owned Pydantic type."""
-
-        return result_type.model_validate(self.data)
-
-
 class ModelProvider(ABC):
     """Small provider interface for one schema-constrained model call."""
 
@@ -45,7 +29,7 @@ class ModelProvider(ABC):
     def generate_structured(
         self,
         request: StructuredModelRequest,
-        result_type: type[BaseModel],
+        result_type: type[ResultModel],
         tracker: RunTracker,
-    ) -> StructuredModelResponse:
-        """Generate and locally validate one structured response."""
+    ) -> ResultModel:
+        """Generate and locally validate one typed result."""

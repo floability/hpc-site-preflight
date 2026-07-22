@@ -177,8 +177,8 @@ Usage is reported per pipeline step and for the whole run. Missing provider toke
 ## Repository relationship
 
 The existing `hpc-site-policy-agent` repository is the reference implementation for documentation
-discovery and extraction. Its useful components are adapted behind `DocumentationPolicyProvider`;
-its top-level CLI and control loop are not copied into this project.
+discovery and extraction. Its useful components are adapted into the bounded documentation
+pipeline; its top-level CLI and control loop are not copied into this project.
 
 ## Trust boundary
 
