@@ -76,6 +76,8 @@ _RESULT_TYPES: dict[ExtractionGroupName, type[BaseModel]] = {
 
 @dataclass(frozen=True)
 class _ValidatedGroup:
+    """Hold accepted documentation findings and rejection messages for one policy group."""
+
     findings: list[DocumentationFinding]
     rejected: list[str]
 
@@ -96,7 +98,12 @@ def extract_documentation(
     provider: ModelProvider,
     tracker: RunTracker,
 ) -> DocumentationEvidence:
-    """Extract three independent policy groups and preserve partial success."""
+    """Extract evidence-backed policy findings from normalized documentation chunks.
+
+    Site resources constrain valid names while the context mode controls retrieval. Submission,
+    network, and operational groups are retrieved and modeled independently, validated locally,
+    and combined into accepted, rejected, and unresolved documentation evidence.
+    """
 
     findings: list[DocumentationFinding] = []
     rejected: list[str] = []
@@ -229,7 +236,11 @@ def empty_documentation(
     storage_names: set[str],
     reason: str,
 ) -> DocumentationEvidence:
-    """Return an explicit partial result when documentation inputs are unavailable."""
+    """Build documentation evidence with no findings when provider inputs are unavailable.
+
+    Returns the failure reason as rejected evidence and lists every applicable policy field as
+    unresolved, while preserving the requested runtime metadata.
+    """
 
     return DocumentationEvidence(
         site_id=site_id,
@@ -247,7 +258,10 @@ def empty_documentation(
 
 
 def build_evidence_spans(selection: ContextSelection) -> list[EvidenceSpan]:
-    """Assign stable IDs to exact sentences, paragraphs, or table rows."""
+    """Split selected chunks into exact, citable text spans with stable IDs.
+
+    Returns table rows or text sentences with their chunk, URL, heading, and scope metadata.
+    """
 
     spans: list[EvidenceSpan] = []
     for chunk in selection.chunks:
@@ -273,7 +287,11 @@ def build_extraction_prompt(
     selection: ContextSelection,
     spans: list[EvidenceSpan],
 ) -> str:
-    """Render one compact field-local span library."""
+    """Build the model prompt for one site and policy group.
+
+    Returns retrieval targets, field queries, selected chunk IDs, and exact citable spans as text;
+    it does not include unselected corpus content.
+    """
 
     lines = [
         f"SITE: {site_name}",
@@ -315,6 +333,12 @@ def _validate_group(
     partition_names: set[str],
     storage_names: set[str],
 ) -> _ValidatedGroup:
+    """Validate one typed model proposal against retrieved evidence and measured resources.
+
+    Returns accepted findings with full citations and rejection messages for invalid span IDs,
+    unsupported scheduler options, or unmeasured partition and storage names.
+    """
+
     span_map = {span.span_id: span for span in spans}
     retrieved_chunks = {
         retrieval.field: {hit.chunk_id for hit in retrieval.hits}
@@ -467,6 +491,12 @@ def _citations(
     spans: dict[str, EvidenceSpan],
     retrieved_chunks: dict[str, set[str]],
 ) -> tuple[list[DocumentationCitation], str | None]:
+    """Resolve model-provided span IDs into citations for one requested field.
+
+    Returns citations and no error when every span exists, came from that field's retrieval, and is
+    target-site scoped; otherwise returns an empty list and a rejection reason.
+    """
+
     if field not in retrieved_chunks:
         return [], "field was not requested for this site"
     unknown = [span_id for span_id in span_ids if span_id not in spans]
@@ -495,10 +525,14 @@ def _citations(
 
 
 def _table_rows(text: str) -> list[str]:
+    """Return each nonempty table line as one exact evidence quote."""
+
     return [line.strip() for line in text.splitlines() if line.strip()]
 
 
 def _text_spans(text: str) -> list[str]:
+    """Return nonempty sentence-level quotes while preserving paragraph boundaries."""
+
     paragraphs = [item.strip() for item in text.split("\n\n") if item.strip()]
     spans: list[str] = []
     for paragraph in paragraphs:
@@ -508,6 +542,8 @@ def _text_spans(text: str) -> list[str]:
 
 
 def _finding_key(finding: DocumentationFinding) -> tuple[str, str | None]:
+    """Return the canonical field and optional resource name that identify one finding."""
+
     if isinstance(finding, AllocationRequiredFinding):
         return "allocation_required", None
     if isinstance(finding, SubmissionOptionFinding):
@@ -522,10 +558,14 @@ def _finding_key(finding: DocumentationFinding) -> tuple[str, str | None]:
 
 
 def _retrieval_field(finding: DocumentationFinding) -> str:
+    """Return the canonical retrieval field represented by an accepted finding."""
+
     return _finding_key(finding)[0]
 
 
 def _deduplicate_findings(findings: list[DocumentationFinding]) -> list[DocumentationFinding]:
+    """Keep the first accepted finding for each canonical field and resource pair."""
+
     result: list[DocumentationFinding] = []
     seen: set[tuple[str, str | None]] = set()
     for finding in findings:
@@ -540,6 +580,8 @@ def _mark_cited(
     retrievals: list[FieldRetrieval],
     findings: list[DocumentationFinding],
 ) -> list[FieldRetrieval]:
+    """Return retrieval records with hits marked when an accepted finding cites their chunk."""
+
     cited = {
         (_retrieval_field(finding), citation.chunk_id)
         for finding in findings
@@ -561,6 +603,8 @@ def _mark_cited(
 
 
 def _expected_fields(scheduler: str, storage_names: set[str]) -> set[str]:
+    """Return policy fields expected for the scheduler and observed storage resources."""
+
     fields = set().union(*_GROUP_FIELDS.values())
     if scheduler != "slurm":
         fields.discard("maximum_walltime_seconds")
@@ -574,6 +618,8 @@ def _requested_fields(
     scheduler: str,
     storage_names: set[str],
 ) -> tuple[str, ...]:
+    """Return fields from one extraction group that apply to the current site."""
+
     fields = list(_GROUP_FIELDS[group])
     if scheduler != "slurm" and "maximum_walltime_seconds" in fields:
         fields.remove("maximum_walltime_seconds")

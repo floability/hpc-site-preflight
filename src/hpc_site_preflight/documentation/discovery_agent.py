@@ -42,6 +42,8 @@ _USEFUL_LINK_TERMS = (
 
 @dataclass
 class _Candidate:
+    """Store one search result with its ranking score and matching policy topics."""
+
     result: SearchResult
     score: int
     topics: set[str] = field(default_factory=set)
@@ -51,6 +53,8 @@ class DiscoveryAgent:
     """Use reviewed web tools, then one model judgment to select sources."""
 
     def __init__(self, provider: ModelProvider) -> None:
+        """Store the model provider used to choose documentation URLs."""
+
         self.provider = provider
 
     def run(
@@ -60,6 +64,13 @@ class DiscoveryAgent:
         tools: DocumentationTools,
         tracker: RunTracker,
     ) -> DiscoveryResult:
+        """Discover documentation for one site from its identity and query plan.
+
+        Returns selected downloaded pages with parsed content and source metadata, plus a summary,
+        unanswered topics, and the reason discovery stopped. Search, fetch, model selection, one
+        correction attempt, and deterministic fallback happen in that order.
+        """
+
         tracker.progress(f"Starting documentation discovery for {identity.site_name}")
         candidates = self._search(identity, plan, tools, tracker)
         self._fetch(identity, candidates, tools, tracker)
@@ -106,6 +117,12 @@ class DiscoveryAgent:
         tools: DocumentationTools,
         tracker: RunTracker,
     ) -> dict[str, _Candidate]:
+        """Search within the budget and rank results using site identity signals.
+
+        Returns search-result metadata keyed by URL, with a score and matching topics for each
+        result. It does not download page content.
+        """
+
         candidates: dict[str, _Candidate] = {}
         query_count = min(len(plan.queries), tools.search_budget)
         tracker.progress(f"Searching official documentation with {query_count} queries")
@@ -152,6 +169,11 @@ class DiscoveryAgent:
         tools: DocumentationTools,
         tracker: RunTracker,
     ) -> None:
+        """Download ranked candidates and useful links within the page budget.
+
+        Parsed page content and source metadata are stored in the tools cache; nothing is returned.
+        """
+
         queue = _ordered_candidates(candidates)
         fetched_urls: set[str] = set()
         tracker.progress(
@@ -213,6 +235,12 @@ class DiscoveryAgent:
         pages: list[FetchedPage],
         tracker: RunTracker,
     ) -> DiscoverySelection | None:
+        """Ask the model which downloaded sources best cover the query plan.
+
+        Returns selected page URLs, a summary, and unanswered topics—not page content. A provider
+        failure returns ``None`` so the caller can use deterministic fallback.
+        """
+
         tracker.progress(
             f"Asking the model to select from {len(pages)} fetched target-site page(s)"
         )
@@ -241,6 +269,12 @@ class DiscoveryAgent:
         error: str,
         tracker: RunTracker,
     ) -> DiscoverySelection | None:
+        """Ask the model to repair an invalid list of selected source URLs.
+
+        Returns corrected URLs, summary, and unanswered topics, or ``None`` if the model call fails.
+        The request includes the rejected selection and its validation error.
+        """
+
         tracker.progress("Asking the model to correct an invalid source selection")
         request = StructuredModelRequest(
             system_prompt=_SYSTEM_PROMPT,
@@ -271,12 +305,24 @@ class DiscoveryAgent:
         tools: DocumentationTools,
         tracker: RunTracker,
     ) -> list[FetchedPage]:
+        """Resolve selected URLs to their previously downloaded pages.
+
+        Returns target-site pages with parsed sections, links, and source metadata in selection
+        order. Invalid or unfetched URLs raise ``DocumentationError``.
+        """
+
         pages = tools.select_fetched_pages(selection.source_urls)
         tracker.progress(f"Discovery selected {len(pages)} target-site page(s)")
         return pages
 
     @staticmethod
     def _fallback(tools: DocumentationTools, reason: str) -> DiscoveryResult:
+        """Use valid downloaded target-site pages when model selection is unavailable.
+
+        Returns cached page content and source metadata with the failure reason recorded as an
+        unanswered topic.
+        """
+
         pages = tools.partial_selection()
         return DiscoveryResult(
             selected_pages=pages,
@@ -292,6 +338,8 @@ def _candidate_score(
     scope: str,
     topic: str,
 ) -> int:
+    """Score search-result metadata using site scope, URL tokens, aliases, and topic."""
+
     text = f"{result.url} {result.title} {result.snippet}".lower()
     score = 100 if scope == "target_site" else 10
     score += 20 * sum(token.lower() in text for token in identity.preferred_path_tokens)
@@ -301,6 +349,8 @@ def _candidate_score(
 
 
 def _ordered_candidates(candidates: dict[str, _Candidate]) -> list[_Candidate]:
+    """Return search candidates with one strong result per topic before the remaining ranking."""
+
     ranked = sorted(candidates.values(), key=_candidate_sort_key)
     ordered: list[_Candidate] = []
     used: set[str] = set()
@@ -317,6 +367,8 @@ def _ordered_candidates(candidates: dict[str, _Candidate]) -> list[_Candidate]:
 
 
 def _candidate_sort_key(candidate: _Candidate) -> tuple[int, str]:
+    """Return ``(-score, url)`` for descending score and ascending URL sorting."""
+
     return -candidate.score, candidate.result.url
 
 
@@ -325,6 +377,8 @@ def _selection_prompt(
     plan: QueryPlan,
     pages: list[FetchedPage],
 ) -> str:
+    """Build a prompt containing page URLs, headings, and short excerpts—not full page content."""
+
     compact_pages = [
         {
             "url": page.url,

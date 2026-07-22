@@ -34,7 +34,10 @@ from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
-    """Fail explicitly for a command whose milestone is not implemented."""
+    """Record command dispatch and raise an explicit error for an unfinished operation.
+
+    The parsed arguments supply the command name; no operation result is returned.
+    """
 
     with tracker.stage("command_dispatch"):
         raise FeatureNotImplementedError(
@@ -44,7 +47,11 @@ def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
 
 
 def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
-    """Build a simulated profile from measurements and documentation."""
+    """Build profile artifacts from the CLI's site descriptor and simulated measurements.
+
+    The operation runs documentation analysis, compiles deterministic policy output, and writes a
+    site profile, evidence report, and documentation evidence. It returns no in-memory result.
+    """
 
     if args.site_mode != "simulate":
         raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
@@ -77,7 +84,11 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
 
 
 def evaluate_documentation(args: argparse.Namespace, tracker: RunTracker) -> None:
-    """Run the documentation subsystem without compiling a site profile."""
+    """Evaluate documentation using CLI inputs without compiling a site profile.
+
+    The operation loads the descriptor and measurements, runs discovery and extraction, and writes
+    one documentation-evidence JSON artifact. It returns no in-memory result.
+    """
 
     if args.site_mode != "simulate":
         raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
@@ -100,10 +111,15 @@ def _build_documentation(
     measurements: MeasurementBundle,
     tracker: RunTracker,
 ) -> DocumentationEvidence:
-    """Resolve model and web inputs, then run the documentation pipeline."""
+    """Run documentation analysis for one validated site and measurement bundle.
+
+    Runtime arguments select live or recorded model and web providers. Returns discovered and
+    extracted documentation evidence, or an explicit empty partial result if setup fails.
+    """
 
     web_path = args.web_recording or args.site_descriptor.parent / "documentation-web.json"
     model_path = args.model_recording or args.site_descriptor.parent / "documentation-model.json"
+
     model_mode = cast(RuntimeMode, args.model_mode)
     web_mode = cast(RuntimeMode, args.web_mode)
     model_name = _model_name(model_mode, args.model)
@@ -128,6 +144,7 @@ def _build_documentation(
             storage_names=measurements.storage_names,
             reason=str(exc),
         )
+
     pipeline = DocumentationPipeline(
         measurements=measurements,
         model_provider=model_provider,
@@ -141,6 +158,7 @@ def _build_documentation(
         discovery_note=args.discovery_note,
         discovery_keywords=args.discovery_keyword,
     )
+
     return pipeline.build(
         site,
         tracker,
@@ -149,6 +167,8 @@ def _build_documentation(
 
 
 def _model_provider(mode: RuntimeMode, model: str | None, recording: Path) -> ModelProvider:
+    """Return a recorded provider for simulation or a live adapter for the model name."""
+
     if mode == "simulate":
         return RecordedModelProvider.from_path(recording)
     assert model is not None
@@ -156,6 +176,8 @@ def _model_provider(mode: RuntimeMode, model: str | None, recording: Path) -> Mo
 
 
 def _model_name(mode: RuntimeMode, argument: str | None) -> str | None:
+    """Return the CLI or environment model name for live mode and ``None`` for simulation."""
+
     if mode == "simulate":
         return None
     model = argument or os.getenv("HPC_SITE_PREFLIGHT_MODEL") or os.getenv("OPENAI_MODEL")
@@ -167,6 +189,8 @@ def _model_name(mode: RuntimeMode, argument: str | None) -> str | None:
 
 
 def _web_backend(mode: RuntimeMode, recording: Path, site: SiteDescriptor) -> WebBackend:
+    """Return recorded web data or a live backend bounded to the site's allowed domains."""
+
     if mode == "simulate":
         return RecordedWebBackend.from_path(recording)
     return LiveWebBackend(site.documentation.allowed_domains)
