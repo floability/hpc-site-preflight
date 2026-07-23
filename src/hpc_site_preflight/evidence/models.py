@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 EvidenceSource = Literal["simulated", "measured"]
 EvidenceScalar: TypeAlias = str | int | float | bool
-EvidenceValue: TypeAlias = EvidenceScalar | list[EvidenceScalar]
+EvidenceValue: TypeAlias = EvidenceScalar | list[str] | list[int] | list[float] | list[bool]
 
 
 class EvidenceRecord(BaseModel):

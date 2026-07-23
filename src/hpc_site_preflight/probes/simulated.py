@@ -3,9 +3,9 @@
 from pathlib import Path
 
 from hpc_site_preflight.exceptions import FeatureNotImplementedError
+from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.probes.base import PilotProvider, PilotResultBundle
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class SimulatedPilotProvider(PilotProvider):
@@ -14,5 +14,7 @@ class SimulatedPilotProvider(PilotProvider):
     def __init__(self, path: Path) -> None:
         self.path = path
 
-    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> PilotResultBundle:
+    def collect(
+        self, measurements: MeasurementBundle, tracker: RunTracker
+    ) -> PilotResultBundle:
         raise FeatureNotImplementedError("Simulated pilot ingestion is not implemented yet.")

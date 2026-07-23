@@ -9,7 +9,7 @@ Run ID: `12995463-7ee3-4a95-9e08-e506a7292799`
 
 ## 1. Input
 
-The site descriptor and simulated login measurements produced this identity:
+The simulated login-measurement bundle produced this identity:
 
 ```json
 {

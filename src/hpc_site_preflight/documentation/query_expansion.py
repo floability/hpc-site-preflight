@@ -17,9 +17,10 @@ _FIELD_DESCRIPTIONS = {
     "purge_after_days": "When files on temporary or scratch storage become eligible for deletion.",
 }
 
-_SYSTEM_PROMPT = """Create concise BM25 queries for already-downloaded official HPC documentation.
+_SYSTEM_PROMPT = """Add concise BM25 query variants for downloaded official HPC documentation.
 Return search terms only, not policy answers.
 Use the site, scheduler, known resource names, field meaning, and base queries.
+Add synonyms and site-specific terminology; do not repeat or replace the base queries.
 Return at most two distinct queries for each requested field and no unrequested fields.
 Each query must be no more than 24 words."""
 _MAX_RESOURCES_PER_FIELD = 20
@@ -42,7 +43,7 @@ def expand_queries(
     """
 
     prompt = _prompt(site_name, scheduler, fields, resources_by_field)
-    tracker.progress(f"Requesting optimized BM25 queries for {len(fields)} field(s)")
+    tracker.progress(f"Requesting additional BM25 queries for {len(fields)} field(s)")
     try:
         result = provider.generate_structured(
             StructuredModelRequest(
@@ -60,7 +61,7 @@ def expand_queries(
 
     expanded = _validated_queries(result, fields)
     count = sum(len(queries) for queries in expanded.values())
-    tracker.progress(f"Accepted {count} optimized BM25 query variant(s)")
+    tracker.progress(f"Accepted {count} additional BM25 query variant(s)")
     return expanded, None
 
 

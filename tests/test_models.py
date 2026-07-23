@@ -8,7 +8,6 @@ from pydantic import ValidationError
 
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementObservation
 from hpc_site_preflight.probes.base import PilotResultBundle
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -17,47 +16,45 @@ def _load(path: str) -> dict:
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
-def test_example_site_descriptor_validates() -> None:
-    model = SiteDescriptor.model_validate(_load("examples/simulate/anvil/site-descriptor.json"))
-    assert model.site_id == "purdue-anvil"
-    assert model.scheduler == "slurm"
-
-
 def test_example_measurements_validate() -> None:
     model = MeasurementBundle.model_validate(
         _load("examples/simulate/anvil/login-measurements.json")
     )
-    assert model.evidence_source == "simulated"
+    assert model.evidence_source == "measured"
     assert model.scheduler_type == "slurm"
-    assert model.partition_names == {"shared", "wholenode", "gpu"}
-    assert model.schema_version == "0.2"
-    assert model.storage_names == {"home", "project", "scratch"}
+    assert model.partition_names == {
+        "wholenode",
+        "standard",
+        "shared",
+        "wide",
+        "highmem",
+        "debug",
+        "gpu",
+        "ai",
+        "gpu-debug",
+        "profiling",
+    }
+    assert model.schema_version == "0.6"
+    assert model.storage_names == {"home", "tmp", "project", "scratch"}
 
 
 def test_measurement_bundle_supports_both_scheduler_types() -> None:
-    payload = _load("examples/simulate/anvil/login-measurements.json")
-    payload["scheduler_type"] = "htcondor"
-    payload["scheduler"] = []
+    payload = _load("examples/simulate/notre-dame-crc/login-measurements.json")
 
     model = MeasurementBundle.model_validate(payload)
     assert model.scheduler_type == "htcondor"
 
 
-def test_measurement_json_has_at_most_two_object_layers() -> None:
-    def object_depth(value: object) -> int:
-        if isinstance(value, dict):
-            return 1 + max((object_depth(item) for item in value.values()), default=0)
-        if isinstance(value, list):
-            return max((object_depth(item) for item in value), default=0)
-        return 0
-
-    payload = _load("examples/simulate/anvil/login-measurements.json")
-    assert object_depth(payload) <= 2
-
-
 def test_example_pilot_results_validate() -> None:
-    model = PilotResultBundle.model_validate(_load("examples/simulate/anvil/pilot-results.json"))
-    assert model.site_id == "purdue-anvil"
+    model = PilotResultBundle.model_validate(
+        {
+            "schema_version": "0.1",
+            "site_id": "anvil",
+            "evidence_source": "simulated",
+            "results": {},
+        }
+    )
+    assert model.site_id == "anvil"
     assert model.evidence_source == "simulated"
 
 
@@ -72,7 +69,12 @@ def test_measurement_evidence_source_is_simulated_or_measured() -> None:
 
 
 def test_pilot_evidence_source_is_simulated_or_measured() -> None:
-    payload = _load("examples/simulate/anvil/pilot-results.json")
+    payload = {
+        "schema_version": "0.1",
+        "site_id": "anvil",
+        "evidence_source": "simulated",
+        "results": {},
+    }
     payload["evidence_source"] = "measured"
     assert PilotResultBundle.model_validate(payload).evidence_source == "measured"
 

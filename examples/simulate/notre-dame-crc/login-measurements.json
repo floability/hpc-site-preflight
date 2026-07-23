@@ -1,363 +1,126 @@
 {
-  "schema_version": "0.2",
-  "site_id": "notre-dame-crc",
-  "scheduler_type": "htcondor",
+  "schema_version": "0.6",
   "collected_at": "2026-07-19T12:00:00Z",
   "evidence_source": "simulated",
-  "collector_version": "0.1.0.dev0",
-  "common": [
-    {
-      "path": "/facts/identity/fqdn",
-      "status": "observed",
-      "value": "condorfe.crc.nd.edu",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "socket_getfqdn",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/user/username",
-      "status": "observed",
-      "value": "mockuser",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "getpass_getuser",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/user/groups",
-      "status": "observed",
-      "value": ["mockgroup"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "user_groups",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/platform/architecture",
-      "status": "observed",
-      "value": "x86_64",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "machine_architecture",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/detected_type",
-      "status": "observed",
-      "value": "htcondor",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "executable_lookup",
-      "command_id": "detect_scheduler",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/path",
-      "status": "observed",
-      "value": "/users/mockuser",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "resolve_reviewed_path",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/filesystem_type",
-      "status": "observed",
-      "value": "nfs",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "filesystem_type",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/readable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_readable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/writable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_writable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/dns_resolution",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_allowlisted_dns",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/outbound_https_to_allowlisted_target",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_allowlisted_https",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/local_tcp_bind",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_local_tcp_bind",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/local_tcp_loopback",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_tcp_loopback",
-      "source_reference": "simulated evidence; not a real observation"
-    }
+  "collector_version": "migrated-simulation-0.6",
+  "detected_schedulers": [
+    "htcondor"
   ],
-  "scheduler": [
-    {
-      "path": "/facts/scheduler/collector_host",
-      "status": "observed",
-      "value": "condorfe.crc.nd.edu",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "htcondor_collector_host",
-      "source_reference": "simulated evidence; not a real observation"
+  "site_facts": {
+    "site_id": "notre-dame-crc",
+    "site_name": "Notre Dame CRC",
+    "aliases": [
+      "ND CRC",
+      "Notre Dame CRC"
+    ],
+    "hostname": "condorfe",
+    "fqdn": "condorfe.crc.nd.edu",
+    "dns_suffix": "crc.nd.edu",
+    "hostname_patterns": [
+      "condorfe.crc.nd.edu"
+    ],
+    "documentation_domains": [
+      "nd.edu"
+    ],
+    "preferred_path_tokens": [
+      "crc",
+      "condor"
+    ],
+    "username": "mockuser",
+    "uid": null,
+    "groups": [
+      "mockgroup"
+    ],
+    "home_directory": null,
+    "working_directory": null,
+    "os_id": null,
+    "os_version": null,
+    "kernel_release": null,
+    "architecture": "x86_64",
+    "cpu_count": null,
+    "available_memory_bytes": null
+  },
+  "storage": {
+    "home": {
+      "source_environment_variable": "HOME",
+      "observed_path": "/users/mockuser",
+      "path_pattern": "/users/{username}",
+      "exists": null,
+      "readable": true,
+      "writable": true,
+      "executable": null,
+      "permissions": null,
+      "filesystem_type": "nfs",
+      "available_bytes": null
     },
-    {
-      "path": "/facts/scheduler/version",
-      "status": "observed",
-      "value": "24.0.12",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "htcondor_version",
-      "source_reference": "simulated evidence; not a real observation"
+    "tmp": {
+      "source_environment_variable": null,
+      "observed_path": null,
+      "path_pattern": null,
+      "exists": null,
+      "readable": null,
+      "writable": null,
+      "executable": null,
+      "permissions": null,
+      "filesystem_type": null,
+      "available_bytes": null
     },
-    {
-      "path": "/facts/scheduler/pool_version",
-      "status": "observed",
-      "value": "24.0.12",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_collectors",
-      "source_reference": "simulated evidence; not a real observation"
+    "scratch": {
+      "source_environment_variable": null,
+      "observed_path": null,
+      "path_pattern": null,
+      "exists": null,
+      "readable": null,
+      "writable": null,
+      "executable": null,
+      "permissions": null,
+      "filesystem_type": null,
+      "available_bytes": null
     },
-    {
-      "path": "/facts/scheduler/collector_names",
-      "status": "observed",
-      "value": ["mock-collector@crc.nd.edu"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_collectors",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/schedd_names",
-      "status": "observed",
-      "value": ["condorfe.crc.nd.edu"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_schedds",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/submit_command_available",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "executable_lookup",
-      "command_id": "find_condor_submit",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/execute_machines",
-      "status": "observed",
-      "value": ["mock-cpu-01.crc.nd.edu", "mock-gpu-01.crc.nd.edu"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; hostnames are synthetic"
-    },
-    {
-      "path": "/facts/scheduler/execute_machine_count",
-      "status": "observed",
-      "value": 2,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/slot_count",
-      "status": "observed",
-      "value": 3,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/partitionable_slot_count",
-      "status": "observed",
-      "value": 2,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/dynamic_slot_count",
-      "status": "observed",
-      "value": 1,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads",
-      "status": "observed",
-      "value": ["slot1@mock-cpu-01", "slot1@mock-gpu-01", "slot1_1@mock-cpu-01"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; ClassAd identifiers are synthetic"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/slot_kind",
-      "status": "observed",
-      "value": "partitionable",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/state",
-      "status": "observed",
-      "value": "Unclaimed",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/activity",
-      "status": "observed",
-      "value": "Idle",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/cpus",
-      "status": "observed",
-      "value": 32,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/memory_mib",
-      "status": "observed",
-      "value": 128000,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/architecture",
-      "status": "observed",
-      "value": "X86_64",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/operating_system",
-      "status": "observed",
-      "value": "RockyLinux9",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-cpu-01/grouping_attributes",
-      "status": "observed",
-      "value": ["MachineFamily=cpu", "ResourceGroup=general"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "illustrative administrator-defined attributes"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-gpu-01/gpu_count",
-      "status": "observed",
-      "value": 4,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/raw_slot_classads/slot1@mock-gpu-01/gpu_models",
-      "status": "observed",
-      "value": ["NVIDIA RTX 6000"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "htcondor_slots",
-      "source_reference": "simulated evidence; not a real ClassAd"
-    },
-    {
-      "path": "/facts/scheduler/resource_groups",
-      "status": "observed",
-      "value": ["general-cpu", "general-gpu"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "derive_htcondor_resource_groups",
-      "source_reference": "illustrative deterministic grouping"
-    },
-    {
-      "path": "/facts/scheduler/resource_groups/general-cpu/key",
-      "status": "observed",
-      "value": "MachineFamily=cpu|ResourceGroup=general|Arch=X86_64|OpSysAndVer=RockyLinux9",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "derive_htcondor_resource_groups",
-      "source_reference": "illustrative deterministic grouping"
-    },
-    {
-      "path": "/facts/scheduler/resource_groups/general-cpu/machine_count",
-      "status": "observed",
-      "value": 1,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "derive_htcondor_resource_groups",
-      "source_reference": "illustrative deterministic grouping"
-    },
-    {
-      "path": "/facts/scheduler/resource_groups/general-cpu/slot_count",
-      "status": "observed",
-      "value": 2,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "derive_htcondor_resource_groups",
-      "source_reference": "illustrative deterministic grouping"
+    "project": {
+      "source_environment_variable": null,
+      "observed_path": null,
+      "path_pattern": null,
+      "exists": null,
+      "readable": null,
+      "writable": null,
+      "executable": null,
+      "permissions": null,
+      "filesystem_type": null,
+      "available_bytes": null
     }
-  ]
+  },
+  "slurm": null,
+  "htcondor": {
+    "available_commands": [],
+    "submit_command_available": true,
+    "version": "24.0.12",
+    "collector_host": "condorfe.crc.nd.edu",
+    "resource_groups": [
+      {
+        "key": "general-cpu",
+        "machine_count": 1,
+        "slot_count": 2,
+        "cpus": null,
+        "memory_mib": null,
+        "disk_kib": null,
+        "gpu_count": null
+      },
+      {
+        "key": "general-gpu",
+        "machine_count": null,
+        "slot_count": null,
+        "cpus": null,
+        "memory_mib": null,
+        "disk_kib": null,
+        "gpu_count": null
+      }
+    ]
+  },
+  "networking": {
+    "dns_resolution": true,
+    "outbound_https": true,
+    "local_tcp_bind": true,
+    "local_tcp_loopback": true
+  }
 }

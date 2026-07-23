@@ -26,6 +26,7 @@ dist/
 /artifacts/
 runs/
 *.log
+/login-measurements.json
 
 # Local profiles and captured evidence
 .hpc-site-preflight/

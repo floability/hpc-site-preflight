@@ -1,8 +1,8 @@
 # Pipeline
 
-1. Receive an optional backpack and required site descriptor.
+1. Receive an optional backpack and a supplied or newly captured login-measurement bundle.
 2. Look up local or remote site profiles.
-3. Load simulated measurements or obtain measured login-node evidence.
+3. Validate the structured site, storage, platform, and scheduler facts.
 4. Build the initial measurement-backed partial profile.
 5. Discover official target-site documentation with bounded AI assistance.
 6. Build and persist a scoped corpus.

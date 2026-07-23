@@ -5,6 +5,9 @@ that produced it. It is the pre-redesign baseline retained for comparison: disco
 model-directed action loop. It is not a claim that the generated site profile is complete or
 correct ground truth.
 
+The current pipeline has since merged site identity and documentation scope into structured
+`login-measurements.json`; the descriptor stage below is retained only as a historical trace.
+
 ## Run identity
 
 ```text
@@ -50,8 +53,7 @@ work items.
 
 | Input | Meaning | Important contents |
 | --- | --- | --- |
-| `examples/simulate/anvil/site-descriptor.json` | Explicit target identity and documentation boundary | Purdue Anvil, Slurm, `purdue.edu`, Anvil hostname pattern |
-| `examples/simulate/anvil/login-measurements.json` | Facts that stand in for a real login-node collection | 21 observations, three partitions, two node shapes, two storage paths |
+| `examples/simulate/anvil/login-measurements.json` | Current combined site identity and simulated login facts | Purdue Anvil, Slurm, `purdue.edu`, host pattern, partitions, and storage |
 | Live web backend | Official-documentation acquisition | HTTPS search and fetch limited to the configured domain |
 | Live OpenAI provider | Structured discovery and extraction decisions | `gpt-5-mini` |
 
@@ -77,7 +79,7 @@ Produced:
 The tracker refreshed the performance report after every stage and finalized it even though one
 internal fetch stage failed.
 
-### 2. Site-descriptor loading
+### 2. Legacy descriptor loading
 
 Stage: `site_descriptor_load`
 
@@ -90,15 +92,15 @@ Produced in memory:
 - aliases and hostname patterns;
 - allowed documentation domains and preferred URL tokens.
 
-No standalone output file was produced because the supplied site-descriptor file is already the
-persisted input.
+This stage no longer exists. Current runs obtain the same values from `site_facts` and scheduler
+objects in the measurement bundle.
 
 ### 3. Simulated login measurements
 
 Stages: `simulated_measurement_load`, `simulated_measurement_validate`
 
-`SimulatedMeasurementProvider.collect()` read the measurement file, validated every observation,
-and confirmed that its site ID, scheduler, and `evidence_source: simulated` matched the site.
+`SimulatedMeasurementProvider.collect()` now reads and validates the complete structured
+measurement bundle, including scheduler consistency.
 
 Produced in memory: one normalized `MeasurementBundle` used by both documentation identity and
 profile compilation.
@@ -111,8 +113,8 @@ Stage: `documentation_identity`
 
 `DocumentationPipeline.build()` calls `build_site_identity()` and `build_query_plan()`. The
 pipeline class had an older name when this baseline was recorded. These
-functions combined explicit site descriptor with measured host and scheduler signals, then made
-four bounded policy-search queries.
+functions now combine site, domain, host, and scheduler fields from the measurement bundle, then
+make bounded policy-search queries.
 
 Produced in memory:
 

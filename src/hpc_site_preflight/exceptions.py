@@ -18,7 +18,11 @@ class SimulationLoadError(PreflightError):
 
 
 class SimulationValidationError(PreflightError):
-    """Raised when simulated evidence does not match the site or contract."""
+    """Raised when simulated evidence does not match its contract."""
+
+
+class MeasurementValidationError(PreflightError):
+    """Raised when newly captured login measurements fail validation."""
 
 
 class ModelProviderError(PreflightError):

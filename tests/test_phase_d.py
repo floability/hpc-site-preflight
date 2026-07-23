@@ -40,7 +40,6 @@ from hpc_site_preflight.providers.recorded import (
     RecordedModelResponse,
 )
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -55,13 +54,11 @@ def _load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _inputs(site_name: str) -> tuple[SiteDescriptor, MeasurementBundle]:
+def _inputs(site_name: str) -> MeasurementBundle:
     directory = SIMULATE_ROOT / site_name
-    site = SiteDescriptor.model_validate(_load(directory / "site-descriptor.json"))
-    measurements = MeasurementBundle.model_validate(
+    return MeasurementBundle.model_validate(
         _load(directory / "login-measurements.json")
     )
-    return site, measurements
 
 
 def _tracker(tmp_path: Path, run_id: str) -> RunTracker:
@@ -82,8 +79,8 @@ def test_query_plan_is_stable(
     scheduler: str,
     domain: str,
 ) -> None:
-    site, measurements = _inputs(site_name)
-    plan = build_query_plan(build_site_identity(site, measurements))
+    measurements = _inputs(site_name)
+    plan = build_query_plan(build_site_identity(measurements))
 
     assert [query.topic for query in plan.queries] == [
         "canonical",
@@ -102,9 +99,8 @@ def test_query_plan_is_stable(
 
 
 def test_user_hints_extend_documentation_identity_and_queries() -> None:
-    site, measurements = _inputs("anvil")
+    measurements = _inputs("anvil")
     identity = build_site_identity(
-        site,
         measurements,
         discovery_site_name="Anvil Supercomputer",
         discovery_note="Prefer the RCAC user guide.",
@@ -112,9 +108,9 @@ def test_user_hints_extend_documentation_identity_and_queries() -> None:
     )
     plan = build_query_plan(identity)
 
-    assert identity.site_name == "Purdue Anvil"
+    assert identity.site_name == "Anvil"
     assert identity.discovery_site_name == "Anvil Supercomputer"
-    assert identity.aliases[:2] == ["Anvil Supercomputer", "Purdue Anvil"]
+    assert identity.aliases[:2] == ["Anvil Supercomputer", "Anvil"]
     assert identity.discovery_note == "Prefer the RCAC user guide."
     assert identity.discovery_keywords == ["RCAC", "queues"]
     assert all(query.query.startswith("Anvil Supercomputer ") for query in plan.queries)
@@ -124,8 +120,8 @@ def test_user_hints_extend_documentation_identity_and_queries() -> None:
 
 
 def test_web_tools_enforce_domain_scope_and_budgets() -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     backend = RecordedWebBackend.from_path(
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
     )
@@ -184,8 +180,8 @@ def test_live_web_backend_searches_and_normalizes_html() -> None:
 
 
 def test_web_tools_canonicalize_and_deduplicate_search_fragments() -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     results = [
         SearchResult(
             url="https://docs.rcac.purdue.edu/anvil/jobs#first",
@@ -224,8 +220,8 @@ def test_live_web_backend_wraps_network_fetch_errors() -> None:
 
 
 def test_discovery_uses_tools_then_one_model_selection(tmp_path: Path) -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     plan = build_query_plan(identity)
     backend = RecordedWebBackend.from_path(
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
@@ -272,8 +268,8 @@ def test_discovery_uses_tools_then_one_model_selection(tmp_path: Path) -> None:
 
 
 def test_discovery_preserves_pages_when_model_fails(tmp_path: Path) -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     tools = DocumentationTools(
         identity,
         RecordedWebBackend.from_path(
@@ -296,8 +292,8 @@ def test_discovery_preserves_pages_when_model_fails(tmp_path: Path) -> None:
 
 
 def test_discovery_corrects_invalid_model_selection(tmp_path: Path) -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     tools = DocumentationTools(
         identity,
         RecordedWebBackend.from_path(
@@ -347,8 +343,8 @@ def test_discovery_corrects_invalid_model_selection(tmp_path: Path) -> None:
 
 
 def test_corpus_is_deterministic_and_preserves_tables() -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     backend = RecordedWebBackend.from_path(
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
     )
@@ -358,8 +354,8 @@ def test_corpus_is_deterministic_and_preserves_tables() -> None:
         tools.fetch_page("https://docs.rcac.purdue.edu/anvil/policies"),
     ]
 
-    first = build_corpus(site.site_id, pages)
-    second = build_corpus(site.site_id, pages)
+    first = build_corpus(measurements.site_id, pages)
+    second = build_corpus(measurements.site_id, pages)
 
     assert first == second
     assert first[0].fingerprint
@@ -369,15 +365,15 @@ def test_corpus_is_deterministic_and_preserves_tables() -> None:
 
 @pytest.mark.parametrize("mode", ["full-corpus", "bm25", "llm-expanded-bm25"])
 def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     backend = RecordedWebBackend.from_path(
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
     )
     tools = DocumentationTools(identity, backend)
     pages = [page for page in backend.recording.pages]
     fetched = [tools.fetch_page(page.url) for page in pages]
-    chunks = build_corpus(site.site_id, fetched)[2]
+    chunks = build_corpus(measurements.site_id, fetched)[2]
 
     resources = {"maximum_walltime_seconds": {"shared", "wholenode", "gpu"}}
     first = select_context(
@@ -406,9 +402,72 @@ def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
     if mode == "full-corpus":
         assert walltime.queries == []
         assert all(hit.score is None for hit in walltime.hits)
+        expected = list(
+            dict.fromkeys(
+                chunk.content_hash
+                for chunk in chunks
+                if chunk.scope == "target_site"
+            )
+        )
+        assert len(first.chunks) == len(expected)
+        assert first.selected_chunk_ids == [chunk.chunk_id for chunk in first.chunks]
     else:
         assert len(walltime.queries) >= 2
         assert all(hit.score is not None for hit in walltime.hits)
+
+
+def test_llm_expanded_bm25_keeps_base_queries_and_adds_hits() -> None:
+    chunks = [
+        CorpusChunk(
+            chunk_id="base:c1",
+            document_id="base",
+            source_url="https://example.edu/base",
+            title="Queue limits",
+            scope="target_site",
+            heading_path=["Queues"],
+            block_kind="text",
+            text="The partition maximum walltime is four days.",
+            content_hash="base-hash",
+        ),
+        CorpusChunk(
+            chunk_id="expanded:c1",
+            document_id="expanded",
+            source_url="https://example.edu/expanded",
+            title="Runtime policy",
+            scope="target_site",
+            heading_path=["Runtime"],
+            block_kind="text",
+            text="The batch elapsed runtime ceiling is ninety six hours.",
+            content_hash="expanded-hash",
+        ),
+    ]
+    resources = {"maximum_walltime_seconds": set()}
+    bm25 = select_context(
+        chunks,
+        group="submission",
+        fields=("maximum_walltime_seconds",),
+        mode="bm25",
+        resources_by_field=resources,
+    )
+    expanded = select_context(
+        chunks,
+        group="submission",
+        fields=("maximum_walltime_seconds",),
+        mode="llm-expanded-bm25",
+        resources_by_field=resources,
+        expanded_queries_by_field={
+            "maximum_walltime_seconds": ["batch elapsed runtime ceiling"]
+        },
+    )
+
+    retrieval = expanded.retrievals[0]
+    assert retrieval.queries[:2] == [
+        "partition maximum walltime time limit",
+        "queue maximum job duration",
+    ]
+    assert retrieval.queries[-1] == "batch elapsed runtime ceiling"
+    assert set(bm25.selected_chunk_ids) <= set(expanded.selected_chunk_ids)
+    assert "expanded:c1" in expanded.selected_chunk_ids
 
 
 def test_model_expands_bm25_queries_once_and_python_bounds_the_result(
@@ -468,14 +527,14 @@ def test_model_expands_bm25_queries_once_and_python_bounds_the_result(
 
 
 def test_retrieval_filters_scope_and_deduplicates_content() -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     backend = RecordedWebBackend.from_path(
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
     )
     tools = DocumentationTools(identity, backend)
     fetched = [tools.fetch_page(page.url) for page in backend.recording.pages]
-    chunks = build_corpus(site.site_id, fetched)[2]
+    chunks = build_corpus(measurements.site_id, fetched)[2]
     target = next(chunk for chunk in chunks if chunk.scope == "target_site")
     duplicate = target.model_copy(update={"chunk_id": "zzz-duplicate"})
 
@@ -493,14 +552,14 @@ def test_retrieval_filters_scope_and_deduplicates_content() -> None:
 
 
 def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
-    site, measurements = _inputs("anvil")
-    identity = build_site_identity(site, measurements)
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
     backend = RecordedWebBackend.from_path(
         SIMULATE_ROOT / "anvil" / "documentation-web.json"
     )
     tools = DocumentationTools(identity, backend)
     pages = [tools.fetch_page("https://docs.rcac.purdue.edu/anvil/policies")]
-    chunks = build_corpus(site.site_id, pages)[2]
+    chunks = build_corpus(measurements.site_id, pages)[2]
     responses = [
         (
             "extract_submission",
@@ -545,9 +604,9 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
     )
 
     result = extract_documentation(
-        site_id=site.site_id,
-        site_name=site.site_name,
-        scheduler=site.scheduler,
+        site_id=measurements.site_id,
+        site_name=measurements.site_facts.site_name,
+        scheduler=measurements.scheduler_type,
         partition_names={"shared", "wholenode", "gpu"},
         storage_names={"home", "scratch"},
         chunks=chunks,
@@ -658,7 +717,7 @@ def test_end_to_end_documentation_profile_is_reproducible(
     mode: ContextMode,
     tmp_path: Path,
 ) -> None:
-    site, measurements = _inputs(site_name)
+    measurements = _inputs(site_name)
     directory = SIMULATE_ROOT / site_name
     pipeline = DocumentationPipeline(
         measurements=measurements,
@@ -671,11 +730,10 @@ def test_end_to_end_documentation_profile_is_reproducible(
         web_mode="simulate",
     )
     documentation = pipeline.build(
-        site,
         _tracker(tmp_path, f"{site_name}-{mode}"),
         context_mode=mode,
     )
-    profile, report = compile_profile(site, measurements)
+    profile, report = compile_profile(measurements)
     profile, report = apply_documentation(profile, report, documentation)
 
     assert documentation.rejected == []
@@ -763,7 +821,7 @@ def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
 
 
 def test_documented_network_findings_fill_structured_profile() -> None:
-    site, measurements = _inputs("anvil")
+    measurements = _inputs("anvil")
     citation = DocumentationCitation(
         span_id="network:c1:s1",
         chunk_id="network:c1",
@@ -773,7 +831,7 @@ def test_documented_network_findings_fill_structured_profile() -> None:
         quote="Compute workers can connect to a manager on the login system.",
     )
     documentation = DocumentationEvidence(
-        site_id=site.site_id,
+        site_id=measurements.site_id,
         model_mode="simulate",
         model_provider="recorded",
         model=None,
@@ -793,7 +851,7 @@ def test_documented_network_findings_fill_structured_profile() -> None:
         retrieval=[],
     )
 
-    profile, report = compile_profile(site, measurements)
+    profile, report = compile_profile(measurements)
     profile, _ = apply_documentation(profile, report, documentation)
 
     assert profile.network.login_compute.tcp_connect is True

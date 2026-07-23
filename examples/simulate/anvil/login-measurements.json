@@ -1,363 +1,199 @@
 {
-  "schema_version": "0.2",
-  "site_id": "purdue-anvil",
-  "scheduler_type": "slurm",
-  "collected_at": "2026-07-19T12:00:00Z",
-  "evidence_source": "simulated",
-  "collector_version": "0.1.0.dev0",
-  "common": [
-    {
-      "path": "/facts/identity/fqdn",
-      "status": "observed",
-      "value": "login01.anvil.rcac.purdue.edu",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "socket_getfqdn",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/user/username",
-      "status": "observed",
-      "value": "mockuser",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "getpass_getuser",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/user/groups",
-      "status": "observed",
-      "value": ["mockgroup"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "user_groups",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/platform/architecture",
-      "status": "observed",
-      "value": "x86_64",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "machine_architecture",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/detected_type",
-      "status": "observed",
-      "value": "slurm",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "executable_lookup",
-      "command_id": "detect_scheduler",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/submit_command_available",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "executable_lookup",
-      "command_id": "find_submit_command",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/path",
-      "status": "observed",
-      "value": "/home/mockuser",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "resolve_reviewed_path",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/filesystem_type",
-      "status": "observed",
-      "value": "zfs",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "filesystem_type",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/readable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_readable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/writable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_writable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/home/available_bytes",
-      "status": "observed",
-      "value": 25000000000,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "shutil_disk_usage",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/project/path",
-      "status": "observed",
-      "value": "/anvil/projects/mock-account",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "resolve_reviewed_path",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/project/filesystem_type",
-      "status": "observed",
-      "value": "gpfs",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "filesystem_type",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/project/readable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_readable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/project/writable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_writable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/scratch/path",
-      "status": "observed",
-      "value": "/anvil/scratch/mockuser",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "resolve_reviewed_path",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/scratch/filesystem_type",
-      "status": "observed",
-      "value": "gpfs",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "filesystem_type",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/scratch/readable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_readable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/scratch/writable",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "path_writable",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/storage/filesystems/scratch/available_bytes",
-      "status": "observed",
-      "value": 100000000000000,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "python_api",
-      "command_id": "shutil_disk_usage",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/dns_resolution",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_allowlisted_dns",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/outbound_https_to_allowlisted_target",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_allowlisted_https",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/local_tcp_bind",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_local_tcp_bind",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/networking/local_tcp_loopback",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "collector_function",
-      "command_id": "test_tcp_loopback",
-      "source_reference": "simulated evidence; not a real observation"
-    }
+  "schema_version": "0.6",
+  "collected_at": "2026-07-23T21:36:23.490242Z",
+  "evidence_source": "measured",
+  "collector_version": "0.5.0",
+  "detected_schedulers": [
+    "slurm"
   ],
-  "scheduler": [
-    {
-      "path": "/facts/scheduler/cluster_name",
-      "status": "observed",
-      "value": "anvil",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "slurm_config",
-      "source_reference": "simulated evidence; not a real observation"
+  "site_facts": {
+    "site_id": "anvil",
+    "site_name": "Anvil",
+    "aliases": [],
+    "hostname": "login03",
+    "fqdn": "login03.anvil.rcac.purdue.edu",
+    "dns_suffix": "anvil.rcac.purdue.edu",
+    "hostname_patterns": [
+      "*.anvil.rcac.purdue.edu"
+    ],
+    "documentation_domains": [
+      "purdue.edu"
+    ],
+    "preferred_path_tokens": [
+      "anvil"
+    ],
+    "username": "x-mislam11",
+    "uid": 7957988,
+    "groups": [
+      "x-cis250350"
+    ],
+    "home_directory": "/home/x-mislam11",
+    "working_directory": "/home/x-mislam11/site-preflight",
+    "os_id": "rocky",
+    "os_version": "8.10",
+    "kernel_release": "4.18.0-553.81.1.el8_10.x86_64",
+    "architecture": "x86_64",
+    "cpu_count": 32,
+    "available_memory_bytes": 121888051200
+  },
+  "storage": {
+    "home": {
+      "source_environment_variable": "HOME",
+      "observed_path": "/home/x-mislam11",
+      "path_pattern": "/home/{username}",
+      "exists": true,
+      "readable": true,
+      "writable": true,
+      "executable": true,
+      "permissions": "drwx------",
+      "filesystem_type": "nfs",
+      "available_bytes": 13077618098176
     },
-    {
-      "path": "/facts/scheduler/version",
-      "status": "observed",
-      "value": "24.05.2",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "slurm_version",
-      "source_reference": "simulated evidence; not a real observation"
+    "tmp": {
+      "source_environment_variable": null,
+      "observed_path": "/tmp",
+      "path_pattern": "/tmp",
+      "exists": true,
+      "readable": true,
+      "writable": true,
+      "executable": true,
+      "permissions": "drwxrwxrwt",
+      "filesystem_type": "xfs",
+      "available_bytes": 345579003904
     },
-    {
-      "path": "/facts/scheduler/default_partition",
-      "status": "observed",
-      "value": "shared",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_partitions",
-      "source_reference": "simulated evidence; not a real observation"
+    "scratch": {
+      "source_environment_variable": "SCRATCH",
+      "observed_path": "/anvil/scratch/x-mislam11",
+      "path_pattern": "/anvil/scratch/{username}",
+      "exists": true,
+      "readable": true,
+      "writable": true,
+      "executable": true,
+      "permissions": "drwx------",
+      "filesystem_type": "gpfs",
+      "available_bytes": 2407361146781696
     },
-    {
-      "path": "/facts/scheduler/partitions",
-      "status": "observed",
-      "value": ["shared", "wholenode", "gpu"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "slurm_partitions",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/partitions/shared/available",
-      "status": "observed",
-      "value": true,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_partitions",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/partitions/shared/visible_walltime_limit",
-      "status": "observed",
-      "value": "infinite",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_partitions",
-      "source_reference": "illustrative scheduler observation; not enforced policy"
-    },
-    {
-      "path": "/facts/scheduler/partitions/wholenode/visible_walltime_limit",
-      "status": "observed",
-      "value": "infinite",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_partitions",
-      "source_reference": "illustrative scheduler observation; not enforced policy"
-    },
-    {
-      "path": "/facts/scheduler/partitions/gpu/visible_walltime_limit",
-      "status": "observed",
-      "value": "2-00:00:00",
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_partitions",
-      "source_reference": "illustrative scheduler observation; not enforced policy"
-    },
-    {
-      "path": "/facts/scheduler/node_shapes",
-      "status": "observed",
-      "value": ["cpu", "gpu"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "fixed_command",
-      "command_id": "slurm_node_shapes",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/node_shapes/cpu/cpus",
-      "status": "observed",
-      "value": 128,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_node_shapes",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/node_shapes/cpu/memory_mib",
-      "status": "observed",
-      "value": 256000,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_node_shapes",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/node_shapes/gpu/gpu_count",
-      "status": "observed",
-      "value": 4,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_node_shapes",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/node_shapes/gpu/gpu_models",
-      "status": "observed",
-      "value": ["NVIDIA A100"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_node_shapes",
-      "source_reference": "simulated evidence; not a real observation"
-    },
-    {
-      "path": "/facts/scheduler/visible_accounts",
-      "status": "observed",
-      "value": ["mock-account"],
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_associations",
-      "source_reference": "simulated evidence; not a real allocation"
-    },
-    {
-      "path": "/facts/scheduler/visible_qos",
-      "status": "permission_denied",
-      "value": null,
-      "observed_at": "2026-07-19T12:00:00Z",
-      "method": "derived",
-      "command_id": "slurm_associations",
-      "source_reference": "illustrative unavailable-value example"
+    "project": {
+      "source_environment_variable": "PROJECT",
+      "observed_path": "/anvil/projects/x-cis250350",
+      "path_pattern": "/anvil/projects/{group}",
+      "exists": true,
+      "readable": true,
+      "writable": true,
+      "executable": true,
+      "permissions": "drwxrws---",
+      "filesystem_type": "gpfs",
+      "available_bytes": 5497558138880
     }
-  ]
+  },
+  "slurm": {
+    "version": "25.11.1",
+    "available_commands": [
+      "sinfo",
+      "sbatch",
+      "squeue",
+      "sacct"
+    ],
+    "submit_command_available": true,
+    "default_partition": "shared",
+    "partitions": [
+      {
+        "name": "wholenode",
+        "node_count": 750,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      },
+      {
+        "name": "standard",
+        "node_count": 750,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      },
+      {
+        "name": "shared",
+        "node_count": 250,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      },
+      {
+        "name": "wide",
+        "node_count": 746,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      },
+      {
+        "name": "highmem",
+        "node_count": 32,
+        "memory_mib_per_node": 1031400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      },
+      {
+        "name": "debug",
+        "node_count": 17,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      },
+      {
+        "name": "gpu",
+        "node_count": 16,
+        "memory_mib_per_node": 515400,
+        "cpus_per_node": 128,
+        "gres": [
+          "gpu:4"
+        ],
+        "gpu_count_per_node": 4,
+        "gpu_models": []
+      },
+      {
+        "name": "ai",
+        "node_count": 21,
+        "memory_mib_per_node": 1031000,
+        "cpus_per_node": 96,
+        "gres": [
+          "gpu:4"
+        ],
+        "gpu_count_per_node": 4,
+        "gpu_models": []
+      },
+      {
+        "name": "gpu-debug",
+        "node_count": 16,
+        "memory_mib_per_node": 515400,
+        "cpus_per_node": 128,
+        "gres": [
+          "gpu:4"
+        ],
+        "gpu_count_per_node": 4,
+        "gpu_models": []
+      },
+      {
+        "name": "profiling",
+        "node_count": 4,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": []
+      }
+    ]
+  },
+  "htcondor": null
 }

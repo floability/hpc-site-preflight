@@ -13,6 +13,7 @@ from hpc_site_preflight.config import AppConfig
 from hpc_site_preflight.exceptions import PreflightError
 from hpc_site_preflight.operations import (
     build_profile,
+    capture_login_measurements,
     evaluate_documentation,
     run_unimplemented,
 )
@@ -37,11 +38,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.operation == "profile_build":
             build_profile(args, tracker)
+        elif args.operation == "capture_login":
+            capture_login_measurements(args, tracker)
         elif args.operation == "evaluate_documentation":
             evaluate_documentation(args, tracker)
         else:
             run_unimplemented(args, tracker)
-            
+
     except PreflightError as exc:
         tracker.record_run_error(exc)
         if not config.quiet:

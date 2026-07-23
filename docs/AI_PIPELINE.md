@@ -5,11 +5,10 @@ measure the system, decide which evidence wins, or write the site profile direct
 
 ## Inputs
 
-The pipeline starts with four inputs:
+The pipeline starts with three inputs:
 
-- `site-descriptor.json`: site name, aliases, scheduler, hostname patterns, allowed documentation
-  domains, and preferred URL path tokens;
-- `login-measurements.json`: observed hostname, storage names, partitions, and scheduler facts;
+- `login-measurements.json`: site name, hostnames, documentation domains, storage, partitions, and
+  scheduler facts;
 - a web backend: either live bounded search/fetch or recorded results and pages; and
 - a model provider: either the live OpenAI Responses API or recorded structured responses.
 
@@ -19,9 +18,9 @@ model and web modes. Fully offline tests explicitly simulate the model and web m
 ## Pipeline at a glance
 
 ```text
-site descriptor + measurements ----> initial measurement-backed profile
-              |
-              v
+login measurements ----------------> initial measurement-backed profile
+        |
+        v
      deterministic identity
               |
               v
@@ -69,8 +68,8 @@ deterministic results.
 
 ## 1. Build site identity and queries
 
-`documentation/identity.py` combines explicit site descriptor with observed hostname and FQDN
-values. It produces a `SiteIdentity` containing the target name, aliases, scheduler, host signals,
+`documentation/identity.py` reads site, scheduler, hostname, and FQDN values from the measurement
+bundle. It produces a `SiteIdentity` containing the target name, aliases, scheduler, host signals,
 allowed domains, and preferred path tokens.
 
 Users may add a discovery-only site name, a free-text note, and repeatable keywords from the CLI.
@@ -99,7 +98,7 @@ Live search uses DuckDuckGo through the `ddgs` package.
 
 - fixed search and page budgets;
 - HTTPS URLs;
-- the site-descriptor domain allowlist;
+- the measured documentation-domain allowlist;
 - page size and request timeout limits;
 - fetching a page before selecting it; and
 - target-site scope for every selected evidence page.
@@ -131,16 +130,17 @@ AI run inspectable and repeatable without downloading the pages again.
 
 `documentation/retrieval.py` supports three context modes:
 
-- `full-corpus`: use bounded, deduplicated target-site chunks in stable order without ranking;
+- `full-corpus`: use every deduplicated target-site chunk in stable corpus order without ranking;
 - `bm25`: rank chunks independently for each field using fixed query variants; and
-- `llm-expanded-bm25`: make one typed model call that proposes up to two optimized query
-  variants per applicable profile field.
+- `llm-expanded-bm25`: preserve the reviewed queries and add up to two model-generated synonym or
+  site-specific query variants per applicable profile field.
 
 The expansion prompt contains the site, scheduler, field meanings, reviewed base queries, and at
 most 20 known resource names per field. Its typed result is limited to 16 query rows, 240 characters
 and 24 words per query, and two accepted queries per requested field. Unknown fields are ignored.
-There is no correction call; a failed or missing expansion falls back to that field's reviewed BM25
-queries.
+There is no correction call; a failed or missing expansion uses ordinary BM25. Expanded retrieval
+keeps up to six hits per field and merges up to 18 chunks or 18,000 characters per extraction
+group, compared with four hits per field and 12 chunks or 12,000 characters for ordinary BM25.
 
 Target-site scope is applied before scoring and identical content is removed by content hash.
 BM25 scoring, score fusion, chunk limits, and the fair field merge remain deterministic.

@@ -22,6 +22,7 @@ from hpc_site_preflight.exceptions import (
     ModelProviderError,
 )
 from hpc_site_preflight.measurements.base import MeasurementBundle
+from hpc_site_preflight.measurements.live import LiveMeasurementProvider
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 from hpc_site_preflight.profiles.compiler import compile_profile
 from hpc_site_preflight.profiles.documentation import apply_documentation
@@ -30,8 +31,6 @@ from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.providers.registry import create_live_model_provider, provider_for_model
 from hpc_site_preflight.reporting.artifacts import write_json
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.loader import load_site_descriptor
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
@@ -48,26 +47,23 @@ def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
 
 
 def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
-    """Build profile artifacts from the CLI's site descriptor and simulated measurements.
+    """Build profile artifacts from supplied or newly collected login measurements.
 
     The operation builds a measurement-backed profile, runs documentation analysis, applies
     accepted findings, and writes the profile and evidence artifacts. It returns no in-memory
     result.
     """
 
-    if args.site_mode != "simulate":
-        raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
-    if args.measurements is None:
-        raise ConfigurationError("Simulated site mode requires --measurements.")
-
-    with tracker.stage("site_descriptor_load"):
-        site = load_site_descriptor(args.site_descriptor)
-
-    measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
+    measurements, measurement_path = _resolve_measurements(args, tracker)
     with tracker.stage("measurement_profile_build"):
-        profile, report = compile_profile(site, measurements)
+        profile, report = compile_profile(measurements)
 
-    documentation = _build_documentation(args, site, measurements, tracker)
+    documentation = _build_documentation(
+        args,
+        measurements,
+        tracker,
+        measurement_path=measurement_path,
+    )
     with tracker.stage("documentation_profile_apply"):
         profile, report = apply_documentation(profile, report, documentation)
 
@@ -87,6 +83,22 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
         print(f"Evidence: {report_path}")
 
 
+def capture_login_measurements(args: argparse.Namespace, tracker: RunTracker) -> None:
+    """Collect one structured login-measurement file without building a profile."""
+
+    provider = LiveMeasurementProvider(
+        args.site_name,
+        keywords=args.keyword,
+        documentation_domains=args.documentation_domain,
+    )
+    measurements = provider.collect(tracker)
+    with tracker.stage("login_measurement_write"):
+        write_json(args.output, measurements.model_dump(mode="json"))
+        tracker.add_artifact(kind="login_measurements", path=args.output)
+    if not args.quiet:
+        print(f"Login measurements: {args.output}")
+
+
 def evaluate_documentation(args: argparse.Namespace, tracker: RunTracker) -> None:
     """Evaluate documentation using CLI inputs without compiling a site profile.
 
@@ -94,13 +106,13 @@ def evaluate_documentation(args: argparse.Namespace, tracker: RunTracker) -> Non
     one documentation-evidence JSON artifact. It returns no in-memory result.
     """
 
-    if args.site_mode != "simulate":
-        raise FeatureNotImplementedError("Live site collection is deferred until Phase E.")
-
-    with tracker.stage("site_descriptor_load"):
-        site = load_site_descriptor(args.site_descriptor)
-    measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
-    documentation = _build_documentation(args, site, measurements, tracker)
+    measurements, measurement_path = _resolve_measurements(args, tracker)
+    documentation = _build_documentation(
+        args,
+        measurements,
+        tracker,
+        measurement_path=measurement_path,
+    )
     output_path = args.output_dir / "documentation-evidence.json"
     with tracker.stage("documentation_artifact_write"):
         write_json(output_path, documentation.model_dump(mode="json"))
@@ -111,9 +123,10 @@ def evaluate_documentation(args: argparse.Namespace, tracker: RunTracker) -> Non
 
 def _build_documentation(
     args: argparse.Namespace,
-    site: SiteDescriptor,
     measurements: MeasurementBundle,
     tracker: RunTracker,
+    *,
+    measurement_path: Path,
 ) -> DocumentationEvidence:
     """Run documentation analysis for one validated site and measurement bundle.
 
@@ -121,8 +134,8 @@ def _build_documentation(
     extracted documentation evidence, or an explicit empty partial result if setup fails.
     """
 
-    web_path = args.web_recording or args.site_descriptor.parent / "documentation-web.json"
-    model_path = args.model_recording or args.site_descriptor.parent / "documentation-model.json"
+    web_path = args.web_recording or measurement_path.parent / "documentation-web.json"
+    model_path = args.model_recording or measurement_path.parent / "documentation-model.json"
 
     model_mode = cast(RuntimeMode, args.model_mode)
     web_mode = cast(RuntimeMode, args.web_mode)
@@ -134,17 +147,21 @@ def _build_documentation(
         f"Model provider: {model_provider_name}; model: {model_name or 'recorded responses'}"
     )
     try:
-        web_backend = _web_backend(web_mode, web_path, site)
+        web_backend = _web_backend(
+            web_mode,
+            web_path,
+            measurements.site_facts.documentation_domains,
+        )
         model_provider = _model_provider(model_mode, model_name, model_path)
     except (DocumentationError, ModelProviderError) as exc:
         return empty_documentation(
-            site_id=site.site_id,
+            site_id=measurements.site_id,
             context_mode=cast(ContextMode, args.context_mode),
             model_mode=model_mode,
             model_provider=model_provider_name,
             model=model_name,
             web_mode=web_mode,
-            scheduler=site.scheduler,
+            scheduler=measurements.scheduler_type,
             storage_names=measurements.storage_names,
             reason=str(exc),
         )
@@ -163,11 +180,35 @@ def _build_documentation(
         discovery_keywords=args.discovery_keyword,
     )
 
-    return pipeline.build(
-        site,
-        tracker,
-        context_mode=cast(ContextMode, args.context_mode),
+    return pipeline.build(tracker, context_mode=cast(ContextMode, args.context_mode))
+
+
+def _resolve_measurements(
+    args: argparse.Namespace,
+    tracker: RunTracker,
+) -> tuple[MeasurementBundle, Path]:
+    """Load supplied measurements or collect them for a live site run."""
+
+    if args.measurements is not None:
+        return SimulatedMeasurementProvider(args.measurements).collect(tracker), args.measurements
+    if args.site_mode == "simulate":
+        raise ConfigurationError("Simulated site mode requires --measurements.")
+    if not args.site_name:
+        raise ConfigurationError(
+            "Live site mode requires --short-site-name when --measurements is omitted."
+        )
+
+    provider = LiveMeasurementProvider(
+        args.site_name,
+        keywords=args.discovery_keyword,
+        documentation_domains=args.documentation_domain,
     )
+    measurements = provider.collect(tracker)
+    path = args.output_dir / "login-measurements.json"
+    with tracker.stage("login_measurement_write"):
+        write_json(path, measurements.model_dump(mode="json"))
+        tracker.add_artifact(kind="login_measurements", path=path)
+    return measurements, path
 
 
 def _model_provider(mode: RuntimeMode, model: str | None, recording: Path) -> ModelProvider:
@@ -192,9 +233,9 @@ def _model_name(mode: RuntimeMode, argument: str | None) -> str | None:
     return model
 
 
-def _web_backend(mode: RuntimeMode, recording: Path, site: SiteDescriptor) -> WebBackend:
+def _web_backend(mode: RuntimeMode, recording: Path, domains: list[str]) -> WebBackend:
     """Return recorded web data or a live backend bounded to the site's allowed domains."""
 
     if mode == "simulate":
         return RecordedWebBackend.from_path(recording)
-    return LiveWebBackend(site.documentation.allowed_domains)
+    return LiveWebBackend(domains)

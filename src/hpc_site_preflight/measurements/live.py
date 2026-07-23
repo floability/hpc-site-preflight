@@ -1,13 +1,40 @@
-"""Capture safe common measurements on a real HPC login node."""
+"""Capture structured measurements on the current HPC login node."""
 
-from hpc_site_preflight.exceptions import FeatureNotImplementedError
+from collections.abc import Sequence
+
+from pydantic import ValidationError
+
+from hpc_site_preflight.exceptions import MeasurementValidationError
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementProvider
+from hpc_site_preflight.measurements.capture import collect_measurements
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class LiveMeasurementProvider(MeasurementProvider):
-    """Capture live measurements in Milestone 5."""
+    """Capture and validate the reviewed structured login facts."""
 
-    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> MeasurementBundle:
-        raise FeatureNotImplementedError("Live measurements are planned for Milestone 5.")
+    def __init__(
+        self,
+        site_name: str,
+        *,
+        keywords: Sequence[str] = (),
+        documentation_domains: Sequence[str] = (),
+    ) -> None:
+        self.site_name = site_name
+        self.keywords = list(keywords)
+        self.documentation_domains = list(documentation_domains)
+
+    def collect(self, tracker: RunTracker) -> MeasurementBundle:
+        with tracker.stage("login_measurement_collect"):
+            payload = collect_measurements(
+                site_name=self.site_name,
+                keywords=self.keywords,
+                domain_overrides=self.documentation_domains,
+            )
+        with tracker.stage("login_measurement_validate"):
+            try:
+                return MeasurementBundle.model_validate(payload)
+            except ValidationError as exc:
+                raise MeasurementValidationError(
+                    f"Measured login facts failed {exc.error_count()} contract validation(s)."
+                ) from exc

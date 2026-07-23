@@ -15,7 +15,6 @@ from hpc_site_preflight.documentation.tools import DocumentationTools, WebBacken
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class DocumentationPipeline:
@@ -50,14 +49,12 @@ class DocumentationPipeline:
 
     def build(
         self,
-        site: SiteDescriptor,
         tracker: RunTracker,
         *,
         context_mode: ContextMode,
     ) -> DocumentationEvidence:
         with tracker.stage("documentation_identity"):
             identity = build_site_identity(
-                site,
                 self.measurements,
                 discovery_site_name=self.discovery_site_name,
                 discovery_note=self.discovery_note,
@@ -77,6 +74,7 @@ class DocumentationPipeline:
             f"Building corpus from {len(discovery.selected_pages)} selected page(s)"
         )
         with tracker.stage("documentation_corpus", display=False):
+            site = self.measurements.site_facts
             manifest, documents, chunks = build_corpus(site.site_id, discovery.selected_pages)
             tracker.progress(
                 f"Corpus contains {len(documents)} document(s) and {len(chunks)} chunk(s)"
@@ -88,7 +86,7 @@ class DocumentationPipeline:
         return extract_documentation(
             site_id=site.site_id,
             site_name=site.site_name,
-            scheduler=site.scheduler,
+            scheduler=self.measurements.scheduler_type,
             partition_names=self.measurements.partition_names,
             storage_names=self.measurements.storage_names,
             chunks=chunks,

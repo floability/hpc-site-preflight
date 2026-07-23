@@ -16,7 +16,6 @@ from hpc_site_preflight.evidence.reconciliation import (
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.profiles.compiler import compile_profile
 from hpc_site_preflight.profiles.models import SiteProfile, SubmissionOption
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -28,9 +27,8 @@ def _load(path: Path) -> dict:
 
 def _compile(simulation_name: str) -> tuple[SiteProfile, EvidenceReport]:
     root = SIMULATE_ROOT / simulation_name
-    site = SiteDescriptor.model_validate(_load(root / "site-descriptor.json"))
     measurements = MeasurementBundle.model_validate(_load(root / "login-measurements.json"))
-    return compile_profile(site, measurements)
+    return compile_profile(measurements)
 
 
 def _object_depth(value: object) -> int:
@@ -142,34 +140,35 @@ def test_measurement_only_builder_supports_all_sites(
         SiteProfile.model_validate({**profile_payload, "unexpected": True})
 
 
-def test_anvil_visible_infinite_is_not_promoted_to_policy() -> None:
+def test_anvil_missing_visible_walltime_is_not_promoted_to_policy() -> None:
     profile, _ = _compile("anvil")
     shared = next(item for item in profile.partitions if item.name == "shared")
     assert shared.visible_walltime_seconds is None
     assert shared.maximum_walltime_seconds is None
 
 
-def test_anvil_measurements_build_storage_patterns_and_login_network() -> None:
+def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
     profile, report = _compile("anvil")
     storage = {item.name: item for item in profile.storage}
 
-    assert list(storage) == ["home", "project", "data", "scratch"]
+    assert list(storage) == ["home", "project", "data", "scratch", "tmp"]
     assert storage["home"].path_pattern == "/home/{username}"
-    assert storage["project"].path_pattern == "/anvil/projects/{account}"
+    assert storage["project"].path_pattern == "/anvil/projects/{group}"
     assert storage["data"].path_pattern is None
     assert storage["scratch"].path_pattern == "/anvil/scratch/{username}"
     assert storage["scratch"].login_readable is True
     assert storage["scratch"].login_writable is True
     assert storage["scratch"].compute_visible is None
     assert profile.network.login.hostname_patterns == ["*.anvil.rcac.purdue.edu"]
-    assert profile.network.login.outbound_https is True
+    assert storage["tmp"].path_pattern == "/tmp"
+    assert profile.network.login.outbound_https is None
     assert profile.network.compute.outbound_https is None
     assert profile.network.login_compute.tcp_connect is None
     assert profile.network.compute_compute.verified_tcp_port_range is None
 
     evidence_paths = {item.field_path for item in report.evidence}
     assert "/facts/storage/filesystems/scratch/path" in evidence_paths
-    assert "/facts/networking/local_tcp_bind" in evidence_paths
+    assert "/facts/networking/local_tcp_bind" not in evidence_paths
     links = {item.field: item.evidence_ids for item in profile.field_evidence}
     assert len(links["/storage/scratch/path_pattern"]) == 2
     assert len(links["/storage/project/path_pattern"]) == 2

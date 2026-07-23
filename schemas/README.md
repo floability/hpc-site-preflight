@@ -1,8 +1,8 @@
 # Schemas
 
-`site-descriptor.schema.json` and `site-profile.schema.json` define checked external contracts. Their
-Pydantic models under `src/hpc_site_preflight/` must remain equivalent. Other Pydantic contracts
-remain authoritative until their JSON Schema files are added.
+`site-profile.schema.json` is a checked external contract. Its Pydantic model under
+`src/hpc_site_preflight/` must remain equivalent. The structured login-measurement Pydantic model
+is authoritative until its JSON Schema file is added.
 
 The files under `measurement-fields/` are reviewed design catalogs, not JSON Schema documents.
 They define the field vocabulary from which later Pydantic contracts and exported schemas will

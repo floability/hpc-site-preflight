@@ -11,38 +11,40 @@ from hpc_site_preflight.documentation.models import (
     SiteIdentity,
 )
 from hpc_site_preflight.measurements.base import MeasurementBundle
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 _SCOPE_MARKERS = {"clusters", "hpc", "systems", "userguides"}
 _GENERIC_PATH_TOKENS = {"docs", "documentation", "guide", "guides", "policies"}
 
 
 def build_site_identity(
-    site: SiteDescriptor,
     measurements: MeasurementBundle,
     *,
     discovery_site_name: str | None = None,
     discovery_note: str | None = None,
     discovery_keywords: Iterable[str] = (),
 ) -> SiteIdentity:
-    """Normalize explicit site descriptor and observed hostname signals."""
+    """Build documentation identity from measurements and optional discovery hints."""
 
-    hosts: list[str] = []
-    for observation in measurements.common:
-        if observation.path in {"/facts/identity/hostname", "/facts/identity/fqdn"}:
-            if observation.status == "observed" and isinstance(observation.value, str):
-                hosts.append(observation.value.lower().strip("."))
+    facts = measurements.site_facts
+    hosts = [
+        value.lower().strip(".")
+        for value in (
+            facts.hostname,
+            facts.fqdn,
+        )
+        if value
+    ]
 
     preferred_name = _optional_text(discovery_site_name)
-    aliases = _dedupe([preferred_name or site.site_name, site.site_name, *site.aliases])
-    domains = _dedupe(domain.lower().strip(".") for domain in site.documentation.allowed_domains)
-    tokens = _dedupe(token.lower() for token in site.documentation.preferred_path_tokens)
+    aliases = _dedupe([preferred_name or facts.site_name, facts.site_name, *facts.aliases])
+    domains = _dedupe(domain.lower().strip(".") for domain in facts.documentation_domains)
+    tokens = _dedupe(token.lower() for token in facts.preferred_path_tokens)
     return SiteIdentity(
-        site_id=site.site_id,
-        site_name=site.site_name,
+        site_id=facts.site_id,
+        site_name=facts.site_name,
         aliases=aliases,
-        scheduler=site.scheduler,
-        hostname_patterns=[item.lower() for item in site.hostname_patterns],
+        scheduler=measurements.scheduler_type,
+        hostname_patterns=[item.lower() for item in facts.hostname_patterns],
         observed_hosts=_dedupe(hosts),
         allowed_domains=domains,
         preferred_path_tokens=tokens,

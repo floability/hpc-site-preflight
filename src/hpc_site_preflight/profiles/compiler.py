@@ -14,7 +14,12 @@ from hpc_site_preflight.evidence.models import (
 )
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.exceptions import ConfigurationError
-from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementObservation
+from hpc_site_preflight.measurements.base import (
+    MeasurementBundle,
+    MeasurementObservation,
+    MeasurementValue,
+    SiteFacts,
+)
 from hpc_site_preflight.profiles.models import (
     AccountingProfile,
     FieldEvidenceLink,
@@ -31,24 +36,21 @@ from hpc_site_preflight.profiles.models import (
     SubmissionOption,
     UnresolvedWorkItem,
 )
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 _STORAGE_PATH = re.compile(r"^/facts/storage/filesystems/([^/]+)/path$")
 _STORAGE_ROLES = ("home", "project", "data", "scratch")
 
 
 def compile_profile(
-    site: SiteDescriptor,
     measurements: MeasurementBundle,
 ) -> tuple[SiteProfile, EvidenceReport]:
     """Build an initial partial profile from login measurements."""
 
-    if site.site_id != measurements.site_id or site.scheduler != measurements.scheduler_type:
-        raise ConfigurationError("Site descriptor and measurements do not identify the same site.")
     if measurements.scheduler_type == "unknown":
         raise ConfigurationError("Cannot build a profile for an unknown scheduler.")
 
-    observations = [*measurements.common, *measurements.scheduler]
+    site = measurements.site_facts
+    observations = _measurement_observations(measurements)
     by_path = {item.path: item for item in observations}
     evidence = [_evidence_record(site.site_id, measurements, item) for item in observations]
     evidence_ids = {item.field_path: item.evidence_id for item in evidence}
@@ -193,6 +195,154 @@ def _evidence_record(
     )
 
 
+def _measurement_observations(
+    bundle: MeasurementBundle,
+) -> list[MeasurementObservation]:
+    """Adapt structured measurements to the existing field-evidence compiler."""
+
+    observations: list[MeasurementObservation] = []
+
+    def add(
+        path: str,
+        value: MeasurementValue | None,
+        command_id: str,
+    ) -> None:
+        if value is None:
+            return
+        observations.append(
+            MeasurementObservation(
+                path=path,
+                status="observed",
+                value=value,
+                observed_at=bundle.collected_at,
+                method="collector_function",
+                command_id=command_id,
+                source_reference="structured login-measurements.json",
+            )
+        )
+
+    facts = bundle.site_facts
+    add("/facts/identity/hostname", facts.hostname, "hostname_fqdn")
+    add("/facts/identity/fqdn", facts.fqdn, "hostname_fqdn")
+    add("/facts/identity/dns_suffix", facts.dns_suffix, "derive_dns_suffix")
+    add("/facts/platform/os_id", facts.os_id, "read_os_release")
+    add("/facts/platform/os_version", facts.os_version, "read_os_release")
+    add("/facts/platform/kernel_release", facts.kernel_release, "kernel_release")
+    add("/facts/platform/architecture", facts.architecture, "machine_architecture")
+    add("/facts/user/username", facts.username, "getpass_getuser")
+    add("/facts/user/uid", facts.uid, "os_getuid")
+    add("/facts/user/groups", facts.groups, "get_group_names")
+    add("/facts/user/home_directory", facts.home_directory, "HOME")
+    add("/facts/user/working_directory", facts.working_directory, "os_getcwd")
+    add("/facts/scheduler/detected_type", bundle.scheduler_type, "detect_scheduler")
+    add(
+        "/facts/scheduler/submit_command_available",
+        bundle.submit_command_available,
+        "find_submit_command",
+    )
+
+    for name, location in bundle.storage.items():
+        prefix = f"/facts/storage/filesystems/{name}"
+        add(f"{prefix}/path", location.observed_path, "discover_storage_environment")
+        add(f"{prefix}/path_pattern", location.path_pattern, "derive_storage_path_pattern")
+        add(f"{prefix}/filesystem_type", location.filesystem_type, "filesystem_type")
+        add(f"{prefix}/readable", location.readable, "path_readable")
+        add(f"{prefix}/writable", location.writable, "path_writable")
+        add(f"{prefix}/available_bytes", location.available_bytes, "shutil_disk_usage")
+
+    if bundle.networking:
+        add(
+            "/facts/networking/dns_resolution",
+            bundle.networking.dns_resolution,
+            "test_allowlisted_dns",
+        )
+        add(
+            "/facts/networking/outbound_https_to_allowlisted_target",
+            bundle.networking.outbound_https,
+            "test_allowlisted_https",
+        )
+        add(
+            "/facts/networking/local_tcp_bind",
+            bundle.networking.local_tcp_bind,
+            "test_local_tcp_bind",
+        )
+        add(
+            "/facts/networking/local_tcp_loopback",
+            bundle.networking.local_tcp_loopback,
+            "test_tcp_loopback",
+        )
+
+    if bundle.slurm:
+        add("/facts/scheduler/version", bundle.slurm.version, "slurm_version")
+        add(
+            "/facts/scheduler/partitions",
+            [partition.name for partition in bundle.slurm.partitions],
+            "slurm_partition_resources",
+        )
+        add(
+            "/facts/scheduler/default_partition",
+            bundle.slurm.default_partition,
+            "slurm_partition_resources",
+        )
+        add(
+            "/facts/scheduler/visible_accounts",
+            bundle.slurm.visible_accounts,
+            "slurm_associations",
+        )
+        for partition in bundle.slurm.partitions:
+            prefix = f"/facts/scheduler/partitions/{partition.name}"
+            add(f"{prefix}/available", partition.available, "slurm_partition_resources")
+            add(
+                f"{prefix}/visible_walltime_limit",
+                partition.visible_walltime_limit,
+                "slurm_partition_resources",
+            )
+            add(f"{prefix}/node_count", partition.node_count, "slurm_partition_resources")
+            add(f"{prefix}/node_states", partition.node_states, "slurm_partition_resources")
+            shape = f"/facts/scheduler/node_shapes/{partition.name}"
+            add(f"{shape}/cpus", partition.cpus_per_node, "slurm_partition_resources")
+            add(
+                f"{shape}/memory_mib",
+                partition.memory_mib_per_node,
+                "slurm_partition_resources",
+            )
+            add(
+                f"{shape}/gpu_count",
+                partition.gpu_count_per_node,
+                "slurm_partition_resources",
+            )
+            add(f"{shape}/gpu_models", partition.gpu_models, "slurm_partition_resources")
+        add(
+            "/facts/scheduler/node_shapes",
+            [partition.name for partition in bundle.slurm.partitions],
+            "slurm_partition_resources",
+        )
+
+    if bundle.htcondor:
+        add("/facts/scheduler/version", bundle.htcondor.version, "htcondor_version")
+        add(
+            "/facts/scheduler/resource_groups",
+            [group.key for group in bundle.htcondor.resource_groups],
+            "htcondor_resource_groups",
+        )
+        for group in bundle.htcondor.resource_groups:
+            prefix = f"/facts/scheduler/resource_groups/{group.key}"
+            for field in (
+                "machine_count",
+                "slot_count",
+                "cpus",
+                "memory_mib",
+                "disk_kib",
+                "gpu_count",
+            ):
+                add(
+                    f"{prefix}/{field}",
+                    getattr(group, field),
+                    "htcondor_resource_groups",
+                )
+    return observations
+
+
 def _build_partitions(
     observations: dict[str, MeasurementObservation], link: Callable[[str, str], None]
 ) -> list[PartitionProfile]:
@@ -281,8 +431,10 @@ def _build_storage(
         prefix = f"/facts/storage/filesystems/{name}"
         path = f"{prefix}/path"
         measured_path = _string(observations, path)
+        pattern_path = f"{prefix}/path_pattern"
+        measured_pattern = _string(observations, pattern_path)
         path_pattern = _path_pattern(
-            measured_path,
+            measured_pattern or measured_path,
             username=username,
             accounts=visible_accounts,
             groups=groups,
@@ -297,8 +449,11 @@ def _build_storage(
                 available_bytes=_integer(observations, f"{prefix}/available_bytes"),
             )
         )
-        if measured_path is not None:
-            link(f"/storage/{name}/path_pattern", path)
+        if path_pattern is not None:
+            link(
+                f"/storage/{name}/path_pattern",
+                pattern_path if _observed(observations, pattern_path) else path,
+            )
             if path_pattern and "{username}" in path_pattern:
                 link(f"/storage/{name}/path_pattern", "/facts/user/username")
             if path_pattern and "{account}" in path_pattern:
@@ -319,7 +474,7 @@ def _build_storage(
 
 
 def _build_network(
-    site: SiteDescriptor,
+    site: SiteFacts,
     observations: dict[str, MeasurementObservation],
     link: Callable[[str, str], None],
 ) -> NetworkProfile:

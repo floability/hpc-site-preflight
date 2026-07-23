@@ -65,19 +65,19 @@ def select_context(
     maximum_chunks_per_field: int = 4,
     maximum_chunks: int = 12,
     maximum_chars: int = 12_000,
+    expanded_chunks_per_field: int = 6,
+    expanded_maximum_chunks: int = 18,
+    expanded_maximum_chars: int = 18_000,
 ) -> ContextSelection:
     """Retrieve target-site chunks independently for each requested field."""
 
-    target_chunks = sorted(
-        (chunk for chunk in chunks if chunk.scope == "target_site"),
-        key=lambda chunk: chunk.chunk_id,
-    )
+    target_chunks = [chunk for chunk in chunks if chunk.scope == "target_site"]
     eligible = _deduplicate_content(target_chunks)
     resources = resources_by_field or {}
     expanded_queries = expanded_queries_by_field or {}
 
     if mode == "full-corpus":
-        selected = _bounded(eligible, maximum_chunks, maximum_chars)
+        selected = eligible
         retrievals = [
             FieldRetrieval(
                 field=field,
@@ -90,6 +90,11 @@ def select_context(
             for field in fields
         ]
     else:
+        field_limit = (
+            expanded_chunks_per_field
+            if mode == "llm-expanded-bm25"
+            else maximum_chunks_per_field
+        )
         ranked = {
             field: _retrieve_field(
                 eligible,
@@ -97,15 +102,25 @@ def select_context(
                 mode,
                 resources.get(field, set()),
                 expanded_queries.get(field, []),
-                maximum_chunks_per_field,
+                field_limit,
             )
             for field in fields
         }
+        group_maximum_chunks = (
+            expanded_maximum_chunks
+            if mode == "llm-expanded-bm25"
+            else maximum_chunks
+        )
+        group_maximum_chars = (
+            expanded_maximum_chars
+            if mode == "llm-expanded-bm25"
+            else maximum_chars
+        )
         selected, included = _merge_field_results(
             fields,
             ranked,
-            maximum_chunks,
-            maximum_chars,
+            group_maximum_chunks,
+            group_maximum_chars,
         )
         retrievals = [
             FieldRetrieval(
@@ -168,9 +183,10 @@ def _queries(
     resources: set[str],
     expanded_queries: list[str],
 ) -> list[str]:
-    if mode == "llm-expanded-bm25" and expanded_queries:
-        return expanded_queries
-    return base_queries(field, resources)
+    reviewed = base_queries(field, resources)
+    if mode != "llm-expanded-bm25":
+        return reviewed
+    return list(dict.fromkeys([*reviewed, *expanded_queries]))
 
 
 def _merge_field_results(
@@ -212,23 +228,6 @@ def _deduplicate_content(chunks: list[CorpusChunk]) -> list[CorpusChunk]:
             seen.add(chunk.content_hash)
             result.append(chunk)
     return result
-
-
-def _bounded(
-    chunks: list[CorpusChunk],
-    maximum_chunks: int,
-    maximum_chars: int,
-) -> list[CorpusChunk]:
-    selected: list[CorpusChunk] = []
-    characters = 0
-    for chunk in chunks:
-        if len(selected) >= maximum_chunks:
-            break
-        if characters + len(chunk.text) > maximum_chars:
-            continue
-        selected.append(chunk)
-        characters += len(chunk.text)
-    return selected
 
 
 def _bm25(query: str, chunks: list[CorpusChunk]) -> list[float]:

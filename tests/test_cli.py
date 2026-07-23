@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from hpc_site_preflight.cli import build_parser, main
+from hpc_site_preflight.measurements.base import MeasurementBundle
 
 
 def test_parser_accepts_profile_build() -> None:
@@ -14,8 +15,8 @@ def test_parser_accepts_profile_build() -> None:
         [
             "profile",
             "build",
-            "--site-descriptor",
-            "examples/simulate/anvil/site-descriptor.json",
+            "--measurements",
+            "examples/simulate/anvil/login-measurements.json",
         ]
     )
     assert args.command_name == "profile build"
@@ -29,8 +30,6 @@ def test_parser_accepts_documentation_discovery_hints() -> None:
         [
             "profile",
             "build",
-            "--site-descriptor",
-            "examples/simulate/anvil/site-descriptor.json",
             "--site-name",
             "Purdue Anvil",
             "--discovery-note",
@@ -56,8 +55,8 @@ def test_parser_rejects_retired_mode_options(option: str) -> None:
                 "build",
                 option,
                 "simulate",
-                "--site-descriptor",
-                "examples/simulate/anvil/site-descriptor.json",
+                "--measurements",
+                "examples/simulate/anvil/login-measurements.json",
             ]
         )
 
@@ -67,13 +66,23 @@ def test_parser_rejects_retired_mode_options(option: str) -> None:
     [
         (["profile", "validate", "--profile", "site.json"], "profile validate"),
         (["profile", "show", "--site-id", "purdue-anvil"], "profile show"),
-        (["evidence", "capture-login", "--output", "measurements.json"], "evidence capture-login"),
+        (
+            [
+                "evidence",
+                "capture-login",
+                "--short-site-name",
+                "Example",
+                "--output",
+                "measurements.json",
+            ],
+            "evidence capture-login",
+        ),
         (
             [
                 "evidence",
                 "run-pilots",
-                "--site-descriptor",
-                "site.json",
+                "--measurements",
+                "measurements.json",
                 "--output",
                 "pilots.json",
                 "--scheduler",
@@ -85,8 +94,6 @@ def test_parser_rejects_retired_mode_options(option: str) -> None:
             [
                 "evaluate",
                 "documentation",
-                "--site-descriptor",
-                "site.json",
                 "--measurements",
                 "measurements.json",
             ],
@@ -107,7 +114,7 @@ def test_parser_accepts_each_command(argv: list[str], command_name: str) -> None
     ("argv", "expected_text"),
     [
         (["--help"], "{profile,evidence,evaluate,preflight}"),
-        (["profile", "build", "--help"], "--site-descriptor SITE_DESCRIPTOR"),
+        (["profile", "build", "--help"], "--measurements MEASUREMENTS"),
         (
             ["evaluate", "documentation", "--help"],
             "{full-corpus,bm25,llm-expanded-bm25}",
@@ -174,8 +181,6 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
         [
             "profile",
             "build",
-            "--site-descriptor",
-            "examples/simulate/anvil/site-descriptor.json",
             "--measurements",
             "examples/simulate/anvil/login-measurements.json",
             "--model-mode",
@@ -193,7 +198,7 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
     assert exit_code == 0
     profile = json.loads((output_dir / "site-profile.json").read_text(encoding="utf-8"))
     evidence = json.loads((output_dir / "evidence-report.json").read_text(encoding="utf-8"))
-    assert profile["site_id"] == evidence["site_id"] == "purdue-anvil"
+    assert profile["site_id"] == evidence["site_id"] == "anvil"
     assert profile["profile_state"] == "partial"
     assert list(profile)[:4] == ["schema_version", "site_id", "site_name", "aliases"]
     assert list(profile)[-2:] == ["evidence_report", "field_evidence"]
@@ -211,8 +216,7 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
     assert report["mode"] == "site=simulate, model=simulate, web=simulate"
     assert report["model_usage"]["usage_available"] is False
     stage_names = [stage["name"] for stage in report["steps"]]
-    assert stage_names[:4] == [
-        "site_descriptor_load",
+    assert stage_names[:3] == [
         "simulated_measurement_load",
         "simulated_measurement_validate",
         "measurement_profile_build",
@@ -241,8 +245,6 @@ def test_profile_build_prints_concise_discovery_progress(
         [
             "profile",
             "build",
-            "--site-descriptor",
-            "examples/simulate/anvil/site-descriptor.json",
             "--measurements",
             "examples/simulate/anvil/login-measurements.json",
             "--model-mode",
@@ -273,9 +275,7 @@ def test_profile_build_keeps_partial_output_when_documentation_is_missing(
     source = Path("examples/simulate/anvil")
     inputs = tmp_path / "inputs"
     inputs.mkdir()
-    site_path = inputs / "site-descriptor.json"
     measurement_path = inputs / "login-measurements.json"
-    site_path.write_text((source / "site-descriptor.json").read_text(encoding="utf-8"))
     measurement_path.write_text(
         (source / "login-measurements.json").read_text(encoding="utf-8")
     )
@@ -285,8 +285,6 @@ def test_profile_build_keeps_partial_output_when_documentation_is_missing(
         [
             "profile",
             "build",
-            "--site-descriptor",
-            str(site_path),
             "--measurements",
             str(measurement_path),
             "--model-mode",
@@ -308,3 +306,142 @@ def test_profile_build_keeps_partial_output_when_documentation_is_missing(
     assert documentation["findings"] == []
     assert documentation["rejected"]
     assert (output / "site-profile.json").exists()
+
+
+def test_simulated_profile_build_requires_measurements(tmp_path: Path) -> None:
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--model-mode",
+            "simulate",
+            "--web-mode",
+            "simulate",
+            "--run-dir",
+            str(tmp_path / "runs"),
+            "--quiet",
+        ]
+    )
+
+    assert exit_code == 2
+    report_path = next((tmp_path / "runs").glob("*/performance.json"))
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report["error_type"] == "ConfigurationError"
+    assert "requires --measurements" in report["error_message"]
+
+
+def test_capture_login_writes_structured_measurements(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bundle = MeasurementBundle.model_validate(
+        json.loads(
+            Path("examples/simulate/anvil/login-measurements.json").read_text(
+                encoding="utf-8"
+            )
+        )
+    )
+    monkeypatch.setattr(
+        "hpc_site_preflight.operations.LiveMeasurementProvider.collect",
+        lambda self, tracker: bundle,
+    )
+    output = tmp_path / "login-measurements.json"
+
+    exit_code = main(
+        [
+            "evidence",
+            "capture-login",
+            "--short-site-name",
+            "Anvil",
+            "--output",
+            str(output),
+            "--run-dir",
+            str(tmp_path / "runs"),
+            "--quiet",
+        ]
+    )
+
+    assert exit_code == 0
+    result = json.loads(output.read_text(encoding="utf-8"))
+    assert result["schema_version"] == "0.6"
+    assert result["site_facts"]["site_name"] == "Anvil"
+    assert isinstance(result["slurm"]["partitions"], list)
+
+
+def test_live_profile_build_collects_when_measurements_are_missing(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bundle = MeasurementBundle.model_validate(
+        json.loads(
+            Path("examples/simulate/anvil/login-measurements.json").read_text(
+                encoding="utf-8"
+            )
+        )
+    )
+    monkeypatch.setattr(
+        "hpc_site_preflight.operations.LiveMeasurementProvider.collect",
+        lambda self, tracker: bundle,
+    )
+    output = tmp_path / "output"
+
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--site-mode",
+            "live",
+            "--short-site-name",
+            "Anvil",
+            "--model-mode",
+            "simulate",
+            "--web-mode",
+            "simulate",
+            "--output-dir",
+            str(output),
+            "--run-dir",
+            str(tmp_path / "runs"),
+            "--quiet",
+        ]
+    )
+
+    assert exit_code == 0
+    assert (output / "login-measurements.json").exists()
+    assert (output / "site-profile.json").exists()
+
+
+def test_live_profile_build_reuses_supplied_measurements(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def fail_if_called(self, tracker):
+        raise AssertionError("live collection should not run")
+
+    monkeypatch.setattr(
+        "hpc_site_preflight.operations.LiveMeasurementProvider.collect",
+        fail_if_called,
+    )
+
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--site-mode",
+            "live",
+            "--measurements",
+            "examples/simulate/anvil/login-measurements.json",
+            "--model-mode",
+            "simulate",
+            "--web-mode",
+            "simulate",
+            "--output-dir",
+            str(tmp_path / "output"),
+            "--run-dir",
+            str(tmp_path / "runs"),
+            "--quiet",
+        ]
+    )
+
+    assert exit_code == 0
+    assert (tmp_path / "output" / "site-profile.json").exists()
+    assert not (tmp_path / "output" / "login-measurements.json").exists()

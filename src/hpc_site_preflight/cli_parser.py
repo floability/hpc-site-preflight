@@ -28,8 +28,10 @@ def _add_documentation_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--web-recording", type=Path)
     parser.add_argument("--model-recording", type=Path)
     parser.add_argument(
+        "--short-site-name",
         "--site-name",
-        help="Optional site name used for documentation discovery only.",
+        dest="site_name",
+        help="Site name for discovery and required when live collection is needed.",
     )
     parser.add_argument(
         "--discovery-note",
@@ -40,6 +42,12 @@ def _add_documentation_options(parser: argparse.ArgumentParser) -> None:
         action="append",
         default=[],
         help="Additional documentation-search keyword; may be repeated.",
+    )
+    parser.add_argument(
+        "--documentation-domain",
+        action="append",
+        default=[],
+        help="Official documentation domain when it differs from the login domain.",
     )
 
 
@@ -60,7 +68,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--site-mode",
         choices=("simulate", "live"),
         default="simulate",
-        help="Use supplied site files or collect from a live HPC site.",
+        help="Load supplied measurements or collect them from a live HPC login node.",
     )
     profile_build.add_argument(
         "--model-mode",
@@ -74,7 +82,6 @@ def build_parser() -> argparse.ArgumentParser:
         default="live",
         help="Search and fetch official documentation or replay recorded pages.",
     )
-    profile_build.add_argument("--site-descriptor", type=Path, required=True)
     profile_build.add_argument("--measurements", type=Path)
     profile_build.add_argument("--pilot-results", type=Path)
     profile_build.add_argument("--profile", type=Path)
@@ -99,14 +106,24 @@ def build_parser() -> argparse.ArgumentParser:
     capture_login = evidence_sub.add_parser(
         "capture-login", help="Capture safe login-node measurements."
     )
-    capture_login.add_argument("--output", type=Path, required=True)
     capture_login.add_argument(
-        "--scheduler", choices=("auto", "slurm", "htcondor"), default="auto"
+        "--short-site-name",
+        "--site-name",
+        dest="site_name",
+        required=True,
+        help="Short name people use for the HPC site.",
     )
-    _set_operation(capture_login, "evidence capture-login")
+    capture_login.add_argument("--keyword", action="append", default=[])
+    capture_login.add_argument("--documentation-domain", action="append", default=[])
+    capture_login.add_argument(
+        "--output",
+        type=Path,
+        default=Path("login-measurements.json"),
+    )
+    _set_operation(capture_login, "evidence capture-login", "capture_login")
 
     run_pilots = evidence_sub.add_parser("run-pilots", help="Run predefined bounded pilot jobs.")
-    run_pilots.add_argument("--site-descriptor", type=Path, required=True)
+    run_pilots.add_argument("--measurements", type=Path, required=True)
     run_pilots.add_argument("--output", type=Path, required=True)
     run_pilots.add_argument("--scheduler", choices=("slurm", "htcondor"), required=True)
     _set_operation(run_pilots, "evidence run-pilots")
@@ -117,7 +134,6 @@ def build_parser() -> argparse.ArgumentParser:
     documentation = evaluate_sub.add_parser(
         "documentation", help="Evaluate documentation discovery and extraction only."
     )
-    documentation.add_argument("--site-descriptor", type=Path, required=True)
     documentation.add_argument("--measurements", type=Path, required=True)
     documentation.add_argument("--site-mode", choices=("simulate", "live"), default="simulate")
     documentation.add_argument("--model-mode", choices=("live", "simulate"), default="live")

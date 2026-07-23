@@ -25,11 +25,10 @@ not measure machines, run shell commands, decide evidence precedence, or write t
 For a first pass, read these files in order:
 
 1. `docs/SITE_PROFILE.md` — understand the intended final product.
-2. `examples/simulate/anvil/site-descriptor.json` — see explicit target identity.
-3. `examples/simulate/anvil/login-measurements.json` — see normalized observable evidence.
-4. `src/hpc_site_preflight/site_descriptor/models.py` and `measurements/base.py` — read the input
-   contracts.
-5. `src/hpc_site_preflight/cli.py` — see process lifecycle and the small operation dispatch table.
+2. `examples/simulate/anvil/login-measurements.json` — see the single structured site input.
+3. `src/hpc_site_preflight/measurements/base.py` — read its typed contract.
+4. `src/hpc_site_preflight/measurements/capture.py` — see how live values are collected.
+5. `src/hpc_site_preflight/cli.py` — see process lifecycle and operation dispatch.
 6. `src/hpc_site_preflight/operations.py` — follow `build_profile()` and
    `_build_documentation()`.
 7. `src/hpc_site_preflight/documentation/pipeline.py` — see the documentation stages in
@@ -54,8 +53,8 @@ __main__.py
      -> RunTracker(...)
      -> operation dispatch
      -> operations.build_profile()
-        -> load_site_descriptor()
         -> SimulatedMeasurementProvider.collect()
+           or LiveMeasurementProvider.collect()
         -> compile_profile()
            -> build initial measurement-backed profile and evidence
         -> operations._build_documentation()
@@ -89,9 +88,7 @@ The easiest way to understand each module is to know which typed object it recei
 
 | Contract | Defined in | Role |
 | --- | --- | --- |
-| `SiteDescriptor` | `site_descriptor/models.py` | Target identity and documentation boundary |
-| `MeasurementObservation` | `measurements/base.py` | One flat observed or unavailable fact with provenance |
-| `MeasurementBundle` | `measurements/base.py` | All common and scheduler-specific login observations |
+| `MeasurementBundle` | `measurements/base.py` | Site identity, storage, platform, and scheduler observations |
 | `SiteIdentity` | `documentation/models.py` | Normalized identity used for search and scope |
 | `DiscoveryResult` | `documentation/models.py` | Pages selected by bounded discovery |
 | `CorpusDocument`, `CorpusChunk` | `documentation/models.py` | Persistent normalized documentation |
@@ -123,33 +120,22 @@ paper: an AI response and a valid policy field are different stages and differen
 Read `cli_parser.py` only when you need to understand user input. For execution, read `cli.main()`
 and then the selected function in `operations.py`.
 
-### Site descriptor
-
-- `site_descriptor/models.py` defines the explicit site record and documentation allowlist.
-- `site_descriptor/loader.py` reads and validates `site-descriptor.json`.
-
-A site descriptor is not a measurement. It identifies the target site and bounds where its
-documentation may come from. The evidence-backed site profile is a separate pipeline output.
-
 ### Measurements
 
-- `measurements/base.py` defines observation statuses, allowed acquisition methods, valid path
-  families, bundles, and the provider interface.
-- `measurements/simulated.py` loads a bundle from disk and confirms the site, scheduler, and evidence
-  source.
-- `measurements/live.py`, `slurm.py`, `htcondor.py`, and `storage.py` are explicit future live
-  collector placeholders.
+- `measurements/base.py` defines the structured external bundle and provider interface.
+- `measurements/simulated.py` loads and validates a supplied bundle without reading hardware.
+- `measurements/capture.py` uses reviewed local commands and Python APIs to collect the same shape.
+- `measurements/live.py` validates newly captured values before the pipeline consumes them.
 
-The current profile build always uses `SimulatedMeasurementProvider`. `--site-mode live` fails
-explicitly because live collection has not been implemented.
+`--site-mode simulate` requires `--measurements`. In live mode, a supplied file is reused; otherwise
+the collector runs and saves `login-measurements.json` under the profile output directory.
 
 The JSON field catalogs under `schemas/measurement-fields/` describe what future collectors may
 observe. They are allowlists/design contracts, not collected values.
 
-The `0.2` measurement bundle remains flat so every value keeps independent provenance. The profile
-compiler turns exact observed storage paths into supported `{username}`, `{account}`, or `{group}`
-patterns, populates login networking, and leaves compute-node behavior for documentation or pilots.
-See `docs/LOGIN_MEASUREMENTS.md` for those mappings.
+The `0.6` bundle groups addressable site, storage, Slurm, and HTCondor values. The profile compiler
+uses stored path patterns, populates login-visible facts, and leaves compute-node behavior for
+documentation or pilots. See `docs/LOGIN_MEASUREMENTS.md`.
 
 ### Documentation models
 
@@ -185,14 +171,13 @@ raise an explicit not-implemented error today.
 
 ### Site identity and scope
 
-- `documentation/identity.py` merges site descriptor with hostname and scheduler observations,
-  creates deterministic topic queries, and classifies documentation scope.
+- `documentation/identity.py` reads identity, hostname, scheduler, and domain observations, creates
+  deterministic topic queries, and classifies documentation scope.
 
-The optional `--site-name` is a discovery-only search name and does not replace the canonical name
-in `SiteDescriptor` or `SiteProfile`. `--discovery-note` is included in the typed identity shown to the
-discovery model. Each deduplicated `--discovery-keyword` adds a separate search query. No
-disallowed-keyword input is implemented; allowed domains and deterministic source scope remain the
-primary exclusion controls.
+The optional `--site-name` can guide discovery; it is required when a live run must capture missing
+measurements. `--discovery-note` is included in the typed identity shown to the discovery model.
+Each deduplicated `--discovery-keyword` adds a separate search query. Allowed domains and
+deterministic source scope remain the primary exclusion controls.
 
 This module owns a major trust decision. Target-site documents may support policy; sibling-site and
 organization-general documents may help discovery but cannot become target policy.
@@ -232,10 +217,11 @@ documentation agent.
   by `llm-expanded-bm25`.
 
 BM25 scoring is deterministic. It filters scope and duplicate content first, then ranks each
-requested field. Normal BM25 uses reviewed queries; LLM-expanded BM25 asks the model for bounded
-query variants and falls back to the reviewed queries on failure. Field results are merged only for
-the three extraction requests. The model sees selected local chunks, not an unrestricted remote
-page.
+requested field. Normal BM25 uses reviewed queries. LLM-expanded BM25 retains those queries and
+adds bounded model-generated synonyms and site-specific variants, with larger but explicit hit and
+group limits. Full-corpus passes every eligible chunk in stable corpus order. Field results are
+merged only for the three extraction requests. The model sees local corpus chunks, not an
+unrestricted remote page.
 
 ### Extraction and validation
 
@@ -320,7 +306,7 @@ These contracts exist, but their operational functions deliberately fail as unfi
 - `backpack/`: normalized portable-workflow requirements;
 - `preflight/`: deterministic compatibility checks, remediation, and execution plans;
 - `agent/`: the future high-level evidence-action controller;
-- live measurement modules and profile lookup/freshness modules.
+- profile lookup/freshness modules.
 
 Do not include these placeholders when describing the current experimental result as implemented.
 They document intended boundaries and make accidental fake behavior difficult.
@@ -386,8 +372,8 @@ often show the intended trust boundary more directly than comments do.
 
 Implemented end to end:
 
-- supplied site descriptor;
-- supplied simulated login measurements;
+- supplied simulated or measured login measurements;
+- bounded live login capture with basic Slurm facts and HTCondor detection;
 - live or recorded model calls;
 - live or recorded documentation search/fetch;
 - bounded discovery;
@@ -399,8 +385,7 @@ Implemented end to end:
 
 Not yet implemented end to end:
 
-- deriving site descriptor from a live login node;
-- live Slurm and HTCondor collection;
+- detailed HTCondor pool collection and additional login facts;
 - simulated or approved live pilots;
 - complete evidence reconciliation and conflict handling;
 - backpack loading and deterministic workflow preflight;

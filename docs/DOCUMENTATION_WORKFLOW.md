@@ -6,7 +6,7 @@ This document follows the Phase D code in execution order. Each module has one p
 
 Read the small contracts first, then follow the transformations, and finish with orchestration:
 
-1. `site_descriptor/models.py` and `measurements/base.py` define the two starting inputs.
+1. `measurements/base.py` defines the single structured site input.
 2. `documentation/models.py` defines every value passed through the documentation pipeline.
 3. `providers/base.py` defines one structured-model operation; `providers/recorded.py` and
    `providers/openai.py` implement it.
@@ -31,14 +31,14 @@ typed requests to the OpenAI Responses API. The independent web mode either sear
 official allowed domains or replays `documentation-web.json`.
 
 Optional `--site-name`, `--discovery-note`, and repeatable `--discovery-keyword` arguments guide
-discovery without changing the canonical site record or allowed domains.
+discovery. The measured documentation domains remain the deterministic web boundary.
 
 ## What happens during `profile build`
 
 ```text
-site-descriptor.json + login-measurements.json
+login-measurements.json
   |
-  |-- validate both files and confirm site/scheduler agreement
+  |-- validate identity, storage, and scheduler objects
   |
   |-- compile measurements into the initial partial profile
   |
@@ -59,7 +59,8 @@ site-descriptor.json + login-measurements.json
   |
   |-- retrieve context independently for each requested field
   |     mode = full-corpus | bm25 | llm-expanded-bm25
-  |     LLM-expanded mode makes one bounded typed query-expansion call
+  |     full-corpus keeps every eligible target-site chunk
+  |     LLM-expanded mode adds bounded query variants without replacing base queries
   |     merge field-local chunks into submission, network, operational requests
   |
   |-- create exact sentence and table-row span IDs
@@ -85,12 +86,11 @@ may accept or discard.
 
 Each directory under `examples/simulate/` contains:
 
-- `site-descriptor.json`: explicit site identity and documentation scope;
-- `login-measurements.json`: simulated normalized measurements;
+- `login-measurements.json`: simulated identity, documentation scope, and normalized measurements;
 - `documentation-web.json`: optional simulated search results and normalized pages; and
 - `documentation-model.json`: optional simulated source selection and extraction results.
 
-The first two files simulate the HPC site. The documentation files are used only with simulated
+The measurement file simulates the HPC site. The documentation files are used only with simulated
 web or model mode. Model recordings omit token counts because they are not provider-reported usage.
 
 ## Outputs
@@ -117,7 +117,6 @@ child process output and can make a live run appear stuck.
 
 ```bash
 hpc-site-preflight profile build \
-  --site-descriptor examples/simulate/anvil/site-descriptor.json \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model-mode simulate \
   --web-mode simulate \
@@ -125,7 +124,6 @@ hpc-site-preflight profile build \
   --output-dir artifacts/anvil
 
 hpc-site-preflight evaluate documentation \
-  --site-descriptor examples/simulate/anvil/site-descriptor.json \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model-mode simulate \
   --web-mode simulate \

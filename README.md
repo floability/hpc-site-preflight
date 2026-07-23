@@ -4,9 +4,9 @@ HPC Site Preflight constructs an evidence-backed profile of an HPC system and us
 
 The research paper framing is **Evidence-Backed HPC Site Policies with Agentic Discovery**.
 
-A **site descriptor** is the small input that identifies a site and bounds documentation
-discovery. A **site profile** is the larger evidence-backed, actionable output constructed from
-measurements, documentation, and eventually pilot jobs.
+`login-measurements.json` is the single site input. It contains measured or simulated identity,
+storage, platform, and scheduler facts. A **site profile** is the larger evidence-backed,
+actionable output constructed from measurements, documentation, and eventually pilot jobs.
 
 The working machine-readable site-profile contract, field semantics, evidence boundary, and a
 full illustrative example are described in [docs/SITE_PROFILE.md](docs/SITE_PROFILE.md).
@@ -48,9 +48,8 @@ See [MILESTONES.md](MILESTONES.md) for the planned sequence of small implementat
 A backpack is not required.
 
 ```text
-site descriptor
+login measurements
 → profile lookup
-→ measurements
 → documentation evidence
 → approved pilot results
 → reconciliation
@@ -68,7 +67,7 @@ backpack + site profile
 ### Evaluate only the AI/documentation subsystem
 
 ```text
-site descriptor
+login measurements
 → documentation discovery
 → corpus
 → context selection
@@ -85,8 +84,8 @@ Anvil live-AI example is traced in [docs/RUN_RESULT.md](docs/RUN_RESULT.md).
 
 The three concerns are independent:
 
-- `--site-mode simulate` is the default and uses supplied site descriptor and measurement files
-  without querying local hardware. Live site collection is planned.
+- `--site-mode simulate` is the default, requires `--measurements`, and never queries local
+  hardware. `live` reuses `--measurements` when supplied or captures them from the login node.
 - `--model-mode live` is the default and calls the model's inferred provider. `simulate` replays
   model responses.
 - `--web-mode live` is the default and searches and fetches allowed official domains. `simulate`
@@ -97,9 +96,10 @@ and live model calls. Offline tests explicitly simulate all three external input
 whether it was simulated or measured.
 
 Documentation discovery also accepts optional user guidance. `--site-name` supplies a search name
-without changing the canonical site profile, `--discovery-note` adds free-text context for the
-discovery model, and each repeatable `--discovery-keyword` adds a bounded search query. There is no
-exclusion-keyword option: source scope and allowed domains remain deterministic controls.
+and is required only for live collection when measurements are absent. `--discovery-note` adds
+free-text context for the discovery model, and each repeatable `--discovery-keyword` adds a bounded
+search query. There is no exclusion-keyword option: source scope and allowed domains remain
+deterministic controls.
 
 `--model` accepts a provider-neutral model identifier. The current registry maps `gpt-` and
 OpenAI `o`-series names to OpenAI, `claude-` names to Anthropic, and `gemini-` names to Gemini.
@@ -131,9 +131,10 @@ hpc-site-preflight evaluate documentation --help
 hpc-site-preflight preflight --help
 ```
 
-`profile build` constructs measurement and documentation-backed partial profiles in simulate
-site mode. `evaluate documentation` runs the documentation subsystem alone. Other unfinished commands
-create run reports and fail explicitly.
+`evidence capture-login` writes the structured site input without running documentation or profile
+construction. `profile build` constructs measurement and documentation-backed partial profiles.
+`evaluate documentation` runs the documentation subsystem alone. Other unfinished commands create
+run reports and fail explicitly.
 
 Generated profile JSON follows the `SiteProfile` schema order instead of alphabetical key order.
 The evidence-report reference and field-evidence links are the final top-level fields.
@@ -142,7 +143,6 @@ For a normal laptop run, set `OPENAI_API_KEY`, then run:
 
 ```bash
 hpc-site-preflight profile build \
-  --site-descriptor examples/simulate/anvil/site-descriptor.json \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model gpt-5-mini \
   --output-dir artifacts/anvil-live
@@ -157,6 +157,22 @@ conda run --no-capture-output -n hpc-site-preflight hpc-site-preflight profile b
 ```
 
 Add `--model-mode simulate --web-mode simulate` for a fully offline replay.
+
+On a real login node, capture only the site input:
+
+```bash
+hpc-site-preflight evidence capture-login --short-site-name Anvil
+```
+
+Or let profile construction capture and retain it under the output directory:
+
+```bash
+hpc-site-preflight profile build \
+  --site-mode live \
+  --short-site-name Anvil \
+  --model gpt-5-mini \
+  --output-dir artifacts/anvil-live
+```
 
 ## Performance reporting
 

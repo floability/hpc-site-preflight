@@ -6,10 +6,9 @@ collection, pilots, and workflow preflight.
 ## Execution contract
 
 - Site, model, and web modes are independent.
-- Site mode defaults to `simulate`; supplied site descriptor and measurements replace real HPC
-  access.
+- Site mode defaults to `simulate`; a supplied login-measurement file replaces real HPC access.
 - Model and web modes default to `live`; their `simulate` modes replay offline recordings.
-- Live site mode will eventually measure missing inputs on the real login node.
+- Live site mode reuses supplied measurements or captures them on the real login node.
 - Evidence source is `simulated` or `measured`, independent of execution mode.
 - Pilot jobs are never automatic and always require explicit authorization.
 
@@ -52,9 +51,9 @@ Define safely observable Slurm and HTCondor login-node facts.
 
 **Status: Completed**
 
-Validate site descriptor and flat measurement evidence with simple external contracts.
+Validate the structured login-measurement document as the single site input.
 
-- Added site-descriptor, measurement, observation, and scheduler-specific models.
+- Added structured site, storage, Slurm, HTCondor, and measurement-bundle models.
 - Added `simulated | measured` evidence-source validation.
 
 **Test:** Load all example JSON through the Pydantic models.
@@ -67,7 +66,7 @@ Validate site descriptor and flat measurement evidence with simple external cont
 
 Provide laptop inputs for Anvil, Stampede3, and Notre Dame CRC.
 
-- Added site descriptor and simulated measurements for two Slurm sites and one HTCondor site.
+- Added structured simulated measurements for two Slurm sites and one HTCondor site.
 - Preserved observable facts as evidence, including Anvil's visible infinite walltime.
 
 **Test:** Validate every pair under `examples/simulate/`.
@@ -78,7 +77,7 @@ Provide laptop inputs for Anvil, Stampede3, and Notre Dame CRC.
 
 Load simulated evidence without touching the current hardware.
 
-- Added the simulated measurement provider with site and scheduler checks.
+- Added the simulated measurement provider with contract and scheduler-consistency checks.
 - Made simulated site inputs independent from model and web execution.
 
 **Test:** Build a profile from each simulated site.
@@ -114,9 +113,9 @@ Create the smallest provider-neutral interface needed for schema-constrained AI 
 
 **Status: Completed**
 
-Turn site descriptor and measurements into deterministic documentation search inputs.
+Turn measured site facts into deterministic documentation search inputs.
 
-- Added normalized identity from site descriptor and measured host signals.
+- Added normalized identity from site, scheduler, hostname, and domain measurement fields.
 - Added four reproducible policy queries and deterministic source scope.
 
 **Test:** Snapshot the query plans for all three simulated sites.
@@ -161,8 +160,8 @@ Convert fetched official pages into a persistent corpus suitable for repeatable 
 
 Select extraction context using full corpus, BM25, or LLM-expanded BM25.
 
-- Added full-corpus, BM25, and LLM-expanded BM25 selection.
-- LLM-expanded BM25 uses one bounded typed model call; scoring and bounds remain deterministic.
+- Added true full-corpus, BM25, and additive LLM-expanded BM25 selection.
+- Expanded BM25 retains base queries, adds bounded variants, and uses deterministic scoring.
 
 **Test:** Run all modes on one corpus and verify stable selected chunks.
 
@@ -203,26 +202,25 @@ Run real or recorded documentation AI from simulated site inputs to a partial si
 
 ### Milestone 17 — Live input resolver
 
-**Status: Next**
+**Status: Completed**
 
-Allow real-site runs to reuse supplied inputs and collect only what is missing.
+Use one structured measurement file for both laptop simulation and real-site capture.
 
-- Keep both files required in simulated site mode.
-- In live site mode, load supplied site descriptor and measured evidence when present.
-- Derive missing site descriptor and run fixed login-node collectors when absent.
-- Save newly measured inputs before continuing through the same pipeline.
+- Simulated site mode requires `--measurements` and never reads current hardware.
+- Live site mode loads a supplied file or captures and saves one when it is absent.
+- Added `evidence capture-login` for measurement-only collection.
 
 **Test:** Verify supplied, missing, and mixed-input cases with collector fakes.
 
 ### Milestone 18 — Live Slurm and HTCondor collectors
 
-**Status: Incomplete**
+**Status: Partially completed**
 
 Collect the reviewed measurement catalogs safely on real login nodes.
 
 - Use only fixed argument arrays and bounded collector functions.
 - Record unavailable values instead of aborting the bundle.
-- Normalize Slurm and HTCondor output into the existing flat contract.
+- Normalize values into the structured `0.6` contract.
 - Mark the resulting evidence source as `measured`.
 
 **Test:** Parse recorded command outputs, then run explicitly marked site integrations.

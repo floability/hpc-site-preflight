@@ -1,14 +1,15 @@
-"""Provider-neutral measurement interfaces and result contracts."""
+"""Structured login-measurement contracts and provider interface."""
+
+from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Literal, Self, TypeAlias
 
-from pydantic import BaseModel, ConfigDict, Field, RootModel, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from hpc_site_preflight.evidence.models import EvidenceSource
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 ObservationStatus = Literal[
     "observed",
@@ -28,71 +29,19 @@ AcquisitionMethod = Literal[
     "derived",
 ]
 MeasurementScalar: TypeAlias = str | int | float | bool
-MeasurementValue: TypeAlias = MeasurementScalar | list[MeasurementScalar]
-SchemaVersion = Literal["0.2"]
-
-COMMON_SCHEDULER_PATHS = {
-    "/facts/scheduler/detected_type",
-    "/facts/scheduler/version",
-    "/facts/scheduler/available_commands",
-    "/facts/scheduler/submit_command_available",
-}
-COMMON_PATH_PREFIXES = (
-    "/facts/identity/",
-    "/facts/platform/",
-    "/facts/user/",
-    "/facts/storage/",
-    "/facts/software/",
-    "/facts/networking/",
-    "/facts/system_limits/",
-)
-SLURM_PATHS = {
-    "/facts/scheduler/cluster_name",
-    "/facts/scheduler/version",
-    "/facts/scheduler/default_partition",
-    "/facts/scheduler/partitions",
-    "/facts/scheduler/node_states",
-    "/facts/scheduler/node_shapes",
-    "/facts/scheduler/visible_accounts",
-    "/facts/scheduler/visible_qos",
-    "/facts/scheduler/visible_association_limits",
-    "/facts/scheduler/reservations",
-    "/facts/scheduler/visible_configuration",
-}
-SLURM_PATH_PREFIXES = (
-    "/facts/scheduler/partitions/",
-    "/facts/scheduler/node_states/",
-    "/facts/scheduler/node_shapes/",
-)
-HTCONDOR_PATHS = {
-    "/facts/scheduler/collector_host",
-    "/facts/scheduler/version",
-    "/facts/scheduler/pool_version",
-    "/facts/scheduler/collector_ads",
-    "/facts/scheduler/collector_names",
-    "/facts/scheduler/schedd_ads",
-    "/facts/scheduler/schedd_names",
-    "/facts/scheduler/submit_command_available",
-    "/facts/scheduler/submission_client_version",
-    "/facts/scheduler/raw_slot_classads",
-    "/facts/scheduler/execute_machines",
-    "/facts/scheduler/execute_machine_count",
-    "/facts/scheduler/slot_count",
-    "/facts/scheduler/static_slot_count",
-    "/facts/scheduler/partitionable_slot_count",
-    "/facts/scheduler/dynamic_slot_count",
-    "/facts/scheduler/resource_groups",
-}
-HTCONDOR_PATH_PREFIXES = (
-    "/facts/scheduler/raw_slot_classads/",
-    "/facts/scheduler/resource_groups/",
+MeasurementValue: TypeAlias = (
+    MeasurementScalar | list[str] | list[int] | list[float] | list[bool]
 )
 
 
-class MeasurementProvenance(BaseModel):
-    """Flat acquisition provenance shared by every measurement."""
+class StrictModel(BaseModel):
+    """Forbid unreviewed fields in external measurement JSON."""
 
     model_config = ConfigDict(extra="forbid")
+
+
+class MeasurementProvenance(StrictModel):
+    """Legacy per-field provenance retained for evidence compatibility."""
 
     observed_at: datetime
     method: AcquisitionMethod
@@ -101,7 +50,7 @@ class MeasurementProvenance(BaseModel):
 
 
 class MeasurementObservation(MeasurementProvenance):
-    """One flat value and its acquisition provenance."""
+    """Legacy flat observation accepted by evidence helper tests."""
 
     path: str
     status: ObservationStatus
@@ -109,8 +58,6 @@ class MeasurementObservation(MeasurementProvenance):
 
     @model_validator(mode="after")
     def validate_value_status(self) -> Self:
-        """Keep missing values distinct from false, zero, and empty lists."""
-
         if self.status == "observed" and self.value is None:
             raise ValueError("observed measurements require a value.")
         if self.status != "observed" and self.value is not None:
@@ -118,113 +65,190 @@ class MeasurementObservation(MeasurementProvenance):
         return self
 
 
-class CommonMeasurements(RootModel[list[MeasurementObservation]]):
-    """Scheduler-independent observations from the common catalog."""
+class SiteFacts(StrictModel):
+    """Site identity and low-cost login-node context."""
 
-    @model_validator(mode="after")
-    def validate_paths(self) -> Self:
-        invalid = [item.path for item in self.root if not _is_common_path(item.path)]
-        if invalid:
-            raise ValueError(f"paths are not common measurements: {', '.join(invalid)}")
-        return self
+    site_id: str = Field(min_length=1)
+    site_name: str = Field(min_length=1)
+    aliases: list[str] = Field(default_factory=list)
+    hostname: str | None = None
+    fqdn: str | None = None
+    dns_suffix: str | None = None
+    hostname_patterns: list[str] = Field(default_factory=list)
+    documentation_domains: list[str] = Field(default_factory=list)
+    preferred_path_tokens: list[str] = Field(default_factory=list)
+    username: str | None = None
+    uid: int | None = None
+    groups: list[str] = Field(default_factory=list)
+    home_directory: str | None = None
+    working_directory: str | None = None
+    os_id: str | None = None
+    os_version: str | None = None
+    kernel_release: str | None = None
+    architecture: str | None = None
+    cpu_count: int | None = None
+    available_memory_bytes: int | None = None
 
 
-class SlurmMeasurements(RootModel[list[MeasurementObservation]]):
-    """Observations defined by the Slurm measurement catalog."""
+class StorageLocation(StrictModel):
+    """One fixed common storage role."""
 
-    @model_validator(mode="after")
-    def validate_paths(self) -> Self:
-        invalid = [
-            item.path
-            for item in self.root
-            if not _matches_path(item.path, SLURM_PATHS, SLURM_PATH_PREFIXES)
+    source_environment_variable: str | None = None
+    observed_path: str | None = None
+    path_pattern: str | None = None
+    exists: bool | None = None
+    readable: bool | None = None
+    writable: bool | None = None
+    executable: bool | None = None
+    permissions: str | None = None
+    filesystem_type: str | None = None
+    available_bytes: int | None = None
+
+
+class StorageFacts(StrictModel):
+    """The four storage roles deliberately searched by the collector."""
+
+    home: StorageLocation
+    tmp: StorageLocation
+    scratch: StorageLocation
+    project: StorageLocation
+
+    def items(self) -> list[tuple[str, StorageLocation]]:
+        return [
+            ("home", self.home),
+            ("tmp", self.tmp),
+            ("scratch", self.scratch),
+            ("project", self.project),
         ]
-        if invalid:
-            raise ValueError(f"paths are not Slurm measurements: {', '.join(invalid)}")
-        return self
 
 
-class HTCondorMeasurements(RootModel[list[MeasurementObservation]]):
-    """Observations defined by the HTCondor measurement catalog."""
+class SlurmPartition(StrictModel):
+    """One scheduler-visible Slurm partition."""
 
-    @model_validator(mode="after")
-    def validate_paths(self) -> Self:
-        invalid = [
-            item.path
-            for item in self.root
-            if not _matches_path(item.path, HTCONDOR_PATHS, HTCONDOR_PATH_PREFIXES)
-        ]
-        if invalid:
-            raise ValueError(f"paths are not HTCondor measurements: {', '.join(invalid)}")
-        return self
+    name: str
+    node_count: int | None = None
+    memory_mib_per_node: int | None = None
+    cpus_per_node: int | None = None
+    gres: list[str] = Field(default_factory=list)
+    gpu_count_per_node: int | None = None
+    gpu_models: list[str] = Field(default_factory=list)
+    available: bool | None = None
+    visible_walltime_limit: str | None = None
+    node_states: list[str] = Field(default_factory=list)
 
 
-class MeasurementBundle(BaseModel):
-    """Normalized login-node and scheduler measurements."""
+class SlurmFacts(StrictModel):
+    """Structured login-visible Slurm facts."""
 
-    model_config = ConfigDict(extra="forbid")
+    version: str | None = None
+    available_commands: list[str] = Field(default_factory=list)
+    submit_command_available: bool
+    default_partition: str | None = None
+    partitions: list[SlurmPartition] = Field(default_factory=list)
+    visible_accounts: list[str] = Field(default_factory=list)
+    visible_qos: list[str] = Field(default_factory=list)
 
-    schema_version: SchemaVersion
-    site_id: str
-    scheduler_type: Literal["slurm", "htcondor", "unknown"]
+
+class HTCondorResourceGroup(StrictModel):
+    """One observable HTCondor resource group."""
+
+    key: str
+    machine_count: int | None = None
+    slot_count: int | None = None
+    cpus: int | None = None
+    memory_mib: int | None = None
+    disk_kib: int | None = None
+    gpu_count: int | None = None
+
+
+class HTCondorFacts(StrictModel):
+    """Structured login-visible HTCondor facts implemented so far."""
+
+    available_commands: list[str] = Field(default_factory=list)
+    submit_command_available: bool
+    version: str | None = None
+    collector_host: str | None = None
+    resource_groups: list[HTCondorResourceGroup] = Field(default_factory=list)
+
+
+class LoginNetworking(StrictModel):
+    """Optional login-node networking values retained for profile construction."""
+
+    dns_resolution: bool | None = None
+    outbound_https: bool | None = None
+    local_tcp_bind: bool | None = None
+    local_tcp_loopback: bool | None = None
+
+
+class MeasurementBundle(StrictModel):
+    """The single external site identity and login-measurement document."""
+
+    schema_version: Literal["0.6"]
     collected_at: datetime
     evidence_source: EvidenceSource
     collector_version: str
-    common: list[MeasurementObservation] = Field(default_factory=list)
-    scheduler: list[MeasurementObservation] = Field(default_factory=list)
+    detected_schedulers: list[Literal["slurm", "htcondor"]]
+    site_facts: SiteFacts
+    storage: StorageFacts
+    slurm: SlurmFacts | None
+    htcondor: HTCondorFacts | None
+    networking: LoginNetworking | None = None
 
     @model_validator(mode="after")
-    def validate_bundle(self) -> Self:
-        """Validate scheduler-specific paths."""
+    def validate_schedulers(self) -> Self:
+        """Keep scheduler selection consistent with nullable scheduler objects."""
 
-        CommonMeasurements.model_validate(self.common)
-        if self.scheduler_type == "slurm":
-            SlurmMeasurements.model_validate(self.scheduler)
-        elif self.scheduler_type == "htcondor":
-            HTCondorMeasurements.model_validate(self.scheduler)
-        elif self.scheduler:
-            raise ValueError("unknown schedulers cannot contain scheduler-specific measurements.")
+        if ("slurm" in self.detected_schedulers) != (self.slurm is not None):
+            raise ValueError("detected_schedulers and slurm must agree.")
+        if ("htcondor" in self.detected_schedulers) != (self.htcondor is not None):
+            raise ValueError("detected_schedulers and htcondor must agree.")
+        if len(set(self.detected_schedulers)) != len(self.detected_schedulers):
+            raise ValueError("detected_schedulers cannot contain duplicates.")
         return self
 
     @property
-    def storage_names(self) -> set[str]:
-        """Return named filesystems represented by common path observations."""
+    def site_id(self) -> str:
+        return self.site_facts.site_id
 
-        prefix = "/facts/storage/filesystems/"
-        suffix = "/path"
+    @property
+    def scheduler_type(self) -> Literal["slurm", "htcondor", "unknown"]:
+        if "slurm" in self.detected_schedulers:
+            return "slurm"
+        if "htcondor" in self.detected_schedulers:
+            return "htcondor"
+        return "unknown"
+
+    @property
+    def scheduler_version(self) -> str | None:
+        if self.scheduler_type == "slurm" and self.slurm:
+            return self.slurm.version
+        if self.scheduler_type == "htcondor" and self.htcondor:
+            return self.htcondor.version
+        return None
+
+    @property
+    def submit_command_available(self) -> bool:
+        if self.scheduler_type == "slurm" and self.slurm:
+            return self.slurm.submit_command_available
+        if self.scheduler_type == "htcondor" and self.htcondor:
+            return self.htcondor.submit_command_available
+        return False
+
+    @property
+    def storage_names(self) -> set[str]:
         return {
-            item.path.removeprefix(prefix).removesuffix(suffix)
-            for item in self.common
-            if item.status == "observed"
-            and item.path.startswith(prefix)
-            and item.path.endswith(suffix)
+            name
+            for name, location in self.storage.items()
+            if location.observed_path is not None
         }
 
     @property
     def partition_names(self) -> set[str]:
-        """Return visible Slurm partition names."""
-
-        for item in self.scheduler:
-            if item.path == "/facts/scheduler/partitions" and isinstance(item.value, list):
-                return {value for value in item.value if isinstance(value, str)}
-        return set()
-
+        return {item.name for item in self.slurm.partitions} if self.slurm else set()
 
 class MeasurementProvider(ABC):
-    """Load or capture measurement evidence through one stable interface."""
+    """Load or capture login measurements through one stable interface."""
 
     @abstractmethod
-    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> MeasurementBundle:
-        """Return normalized measurements."""
-
-
-def _is_common_path(path: str) -> bool:
-    return (
-        path in {"/observed_at", "/evidence_source"}
-        or path in COMMON_SCHEDULER_PATHS
-        or path.startswith(COMMON_PATH_PREFIXES)
-    )
-
-
-def _matches_path(path: str, exact: set[str], prefixes: tuple[str, ...]) -> bool:
-    return path in exact or path.startswith(prefixes)
+    def collect(self, tracker: RunTracker) -> MeasurementBundle:
+        """Return validated structured measurements."""

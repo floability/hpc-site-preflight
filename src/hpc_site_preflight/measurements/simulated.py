@@ -8,7 +8,6 @@ from pydantic import ValidationError
 from hpc_site_preflight.exceptions import SimulationLoadError, SimulationValidationError
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementProvider
 from hpc_site_preflight.reporting.tracker import RunTracker
-from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 
 class SimulatedMeasurementProvider(MeasurementProvider):
@@ -17,7 +16,7 @@ class SimulatedMeasurementProvider(MeasurementProvider):
     def __init__(self, path: Path) -> None:
         self.path = path
 
-    def collect(self, site: SiteDescriptor, tracker: RunTracker) -> MeasurementBundle:
+    def collect(self, tracker: RunTracker) -> MeasurementBundle:
         with tracker.stage("simulated_measurement_load"):
             try:
                 payload = json.loads(self.path.read_text(encoding="utf-8"))
@@ -38,19 +37,5 @@ class SimulatedMeasurementProvider(MeasurementProvider):
                 raise SimulationValidationError(
                     f"Simulated measurements failed {exc.error_count()} contract validation(s)."
                 ) from exc
-
-            if bundle.evidence_source != "simulated":
-                raise SimulationValidationError(
-                    "Simulation provider requires evidence_source 'simulated'."
-                )
-            if bundle.site_id != site.site_id:
-                raise SimulationValidationError(
-                    f"Simulated site_id '{bundle.site_id}' does not match '{site.site_id}'."
-                )
-            if bundle.scheduler_type != site.scheduler:
-                raise SimulationValidationError(
-                    "Simulated scheduler "
-                    f"'{bundle.scheduler_type}' does not match '{site.scheduler}'."
-                )
 
         return bundle
