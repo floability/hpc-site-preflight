@@ -93,7 +93,7 @@ Adapt the existing `hpc-site-policy-agent` code behind the interface in `documen
 - target-site and sibling-site scope filtering;
 - normalized persistent corpus;
 - heading-aware chunking and table preservation;
-- BM25 and schema-expanded BM25 modes;
+- BM25 and LLM-expanded BM25 modes;
 - constrained extraction;
 - evidence validation;
 - detailed provenance.

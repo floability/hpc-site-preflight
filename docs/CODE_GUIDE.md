@@ -221,11 +221,15 @@ documentation agent.
 - `documentation/corpus.py` normalizes HTML into stable documents and heading-aware chunks, keeps
   tables intact, hashes content, and writes JSONL artifacts.
 - `documentation/retrieval.py` implements `full-corpus`, `bm25`, and
-  `schema-expanded-bm25` context selection.
+  `llm-expanded-bm25` context selection.
+- `documentation/query_expansion.py` makes the single bounded typed query-expansion call used only
+  by `llm-expanded-bm25`.
 
-Retrieval is deterministic. It filters scope and duplicate content first, then runs fixed query
-variants independently for each requested field. Field results are merged only for the three model
-requests. The model sees selected local chunks, not an unrestricted remote page.
+BM25 scoring is deterministic. It filters scope and duplicate content first, then ranks each
+requested field. Normal BM25 uses reviewed queries; LLM-expanded BM25 asks the model for bounded
+query variants and falls back to the reviewed queries on failure. Field results are merged only for
+the three extraction requests. The model sees selected local chunks, not an unrestricted remote
+page.
 
 ### Extraction and validation
 

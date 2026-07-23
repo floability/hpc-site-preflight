@@ -27,6 +27,7 @@ from hpc_site_preflight.documentation.models import (
     SubmissionExtractionResult,
     SubmissionOptionFinding,
 )
+from hpc_site_preflight.documentation.query_expansion import expand_queries
 from hpc_site_preflight.documentation.retrieval import select_context
 from hpc_site_preflight.exceptions import ModelProviderError
 from hpc_site_preflight.providers.base import (
@@ -105,14 +106,33 @@ def extract_documentation(
     and combined into accepted, rejected, and unresolved documentation evidence.
     """
 
-    findings: list[DocumentationFinding] = []
-    rejected: list[str] = []
-    selected_chunk_ids: list[str] = []
-    retrievals: list[FieldRetrieval] = []
     resources_by_field = {
         "maximum_walltime_seconds": partition_names,
         "purge_after_days": storage_names,
     }
+    requested_query_fields = tuple(
+        dict.fromkeys(
+            field
+            for group in _GROUPS
+            for field in _requested_fields(group, scheduler, storage_names)
+        )
+    )
+    expanded_queries: dict[str, list[str]] = {}
+    expansion_error: str | None = None
+    if context_mode == "llm-expanded-bm25":
+        expanded_queries, expansion_error = expand_queries(
+            site_name=site_name,
+            scheduler=scheduler,
+            fields=requested_query_fields,
+            resources_by_field=resources_by_field,
+            provider=provider,
+            tracker=tracker,
+        )
+
+    findings: list[DocumentationFinding] = []
+    rejected: list[str] = [expansion_error] if expansion_error else []
+    selected_chunk_ids: list[str] = []
+    retrievals: list[FieldRetrieval] = []
 
     for group in _GROUPS:
         requested_fields = _requested_fields(group, scheduler, storage_names)
@@ -123,6 +143,7 @@ def extract_documentation(
                 fields=requested_fields,
                 mode=context_mode,
                 resources_by_field=resources_by_field,
+                expanded_queries_by_field=expanded_queries,
             )
             spans = build_evidence_spans(selection)
             prompt = build_extraction_prompt(site_name, group, selection, spans)

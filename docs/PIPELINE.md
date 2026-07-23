@@ -5,7 +5,7 @@
 3. Load simulated measurements or obtain measured login-node evidence.
 4. Discover official target-site documentation with bounded AI assistance.
 5. Build and persist a scoped corpus.
-6. Select extraction context using full-corpus, BM25, or schema-expanded BM25.
+6. Select extraction context using full-corpus, BM25, or one-call AI-expanded BM25.
 7. Extract submission, network, and operational groups with constrained calls.
 8. Validate schema, citations, quotes, field context, and site scope.
 9. Classify unresolved fields by required next action.

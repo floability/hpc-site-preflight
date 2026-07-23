@@ -159,10 +159,10 @@ Convert fetched official pages into a persistent corpus suitable for repeatable 
 
 **Status: Completed**
 
-Select extraction context using full corpus, BM25, or schema-expanded BM25.
+Select extraction context using full corpus, BM25, or LLM-expanded BM25.
 
-- Added full-corpus, BM25, and schema-expanded BM25 selection.
-- Added field-level query variants, score fusion, content deduplication, and retrieval audit data.
+- Added full-corpus, BM25, and LLM-expanded BM25 selection.
+- LLM-expanded BM25 uses one bounded typed model call; scoring and bounds remain deterministic.
 
 **Test:** Run all modes on one corpus and verify stable selected chunks.
 

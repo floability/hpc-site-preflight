@@ -8,6 +8,22 @@
       "data": {"source_urls": ["https://docs.tacc.utexas.edu/stampede3/jobs", "https://docs.tacc.utexas.edu/stampede3/policies"], "summary": "Selected Stampede3 job and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
     },
     {
+      "output_name": "expand_retrieval_queries",
+      "response_id": "stampede3-query-expansion",
+      "data": {
+        "queries": [
+          {"field": "allocation_required", "query": "Stampede3 TACC allocation project account required job submission"},
+          {"field": "required_submission_options", "query": "Stampede3 Slurm sbatch required account partition nodes time directives"},
+          {"field": "maximum_walltime_seconds", "query": "Stampede3 spr skx partition queue maximum walltime time limit"},
+          {"field": "manager_worker_connectivity", "query": "Stampede3 compute node connect login node workflow manager firewall socket"},
+          {"field": "worker_worker_connectivity", "query": "Stampede3 compute node inter-node peer connectivity firewall socket"},
+          {"field": "outbound_compute", "query": "Stampede3 compute node outbound internet external network access egress"},
+          {"field": "charging_model", "query": "Stampede3 TACC service units charging project allocation job consumption"},
+          {"field": "purge_after_days", "query": "Stampede3 scratch filesystem purge retention inactive files days"}
+        ]
+      }
+    },
+    {
       "output_name": "extract_submission",
       "response_id": "stampede3-extraction-submission",
       "data": {

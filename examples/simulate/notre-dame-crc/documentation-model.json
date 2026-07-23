@@ -8,6 +8,20 @@
       "data": {"source_urls": ["https://docs.crc.nd.edu/crc/condor", "https://docs.crc.nd.edu/crc/policies"], "summary": "Selected CRC HTCondor and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
     },
     {
+      "output_name": "expand_retrieval_queries",
+      "response_id": "crc-query-expansion",
+      "data": {
+        "queries": [
+          {"field": "allocation_required", "query": "Notre Dame CRC HTCondor allocation project account required job submission"},
+          {"field": "required_submission_options", "query": "Notre Dame CRC HTCondor required request_cpus request_memory request_gpus submit options"},
+          {"field": "manager_worker_connectivity", "query": "CRC execute node connect submit node workflow manager firewall socket"},
+          {"field": "worker_worker_connectivity", "query": "CRC execute node inter-node peer connectivity firewall socket"},
+          {"field": "outbound_compute", "query": "CRC execute node outbound internet external network access egress"},
+          {"field": "charging_model", "query": "Notre Dame CRC charging allocation credits job resource consumption"}
+        ]
+      }
+    },
+    {
       "output_name": "extract_submission",
       "response_id": "crc-extraction-submission",
       "data": {

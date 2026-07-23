@@ -15,6 +15,22 @@
       }
     },
     {
+      "output_name": "expand_retrieval_queries",
+      "response_id": "anvil-query-expansion",
+      "data": {
+        "queries": [
+          {"field": "allocation_required", "query": "Anvil ACCESS allocation project account required job submission"},
+          {"field": "required_submission_options", "query": "Anvil Slurm sbatch required account partition nodes time directives"},
+          {"field": "maximum_walltime_seconds", "query": "Anvil shared wholenode gpu partition maximum walltime time limit"},
+          {"field": "manager_worker_connectivity", "query": "Anvil compute node connect login node workflow manager firewall socket"},
+          {"field": "worker_worker_connectivity", "query": "Anvil compute node inter-node peer connectivity firewall socket"},
+          {"field": "outbound_compute", "query": "Anvil compute node outbound internet external network access egress"},
+          {"field": "charging_model", "query": "Anvil ACCESS service units charging allocation job consumption"},
+          {"field": "purge_after_days", "query": "Anvil scratch filesystem purge retention inactive files days"}
+        ]
+      }
+    },
+    {
       "output_name": "extract_submission",
       "response_id": "anvil-extraction-submission",
       "data": {

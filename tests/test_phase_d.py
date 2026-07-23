@@ -20,6 +20,7 @@ from hpc_site_preflight.documentation.models import (
     SubmissionExtractionResult,
 )
 from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
+from hpc_site_preflight.documentation.query_expansion import expand_queries
 from hpc_site_preflight.documentation.retrieval import select_context
 from hpc_site_preflight.documentation.tools import (
     DocumentationTools,
@@ -362,7 +363,7 @@ def test_corpus_is_deterministic_and_preserves_tables() -> None:
     assert len({chunk.chunk_id for chunk in first[2]}) == len(first[2])
 
 
-@pytest.mark.parametrize("mode", ["full-corpus", "bm25", "schema-expanded-bm25"])
+@pytest.mark.parametrize("mode", ["full-corpus", "bm25", "llm-expanded-bm25"])
 def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
     site, measurements = _inputs("anvil")
     identity = build_site_identity(site, measurements)
@@ -404,6 +405,62 @@ def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
     else:
         assert len(walltime.queries) >= 2
         assert all(hit.score is not None for hit in walltime.hits)
+
+
+def test_model_expands_bm25_queries_once_and_python_bounds_the_result(
+    tmp_path: Path,
+) -> None:
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="query expansion",
+            responses=[
+                RecordedModelResponse(
+                    output_name="expand_retrieval_queries",
+                    response_id="query-expansion",
+                    data={
+                        "queries": [
+                            {
+                                "field": "maximum_walltime_seconds",
+                                "query": "partition queue wall clock limit duration",
+                            },
+                            {
+                                "field": "maximum_walltime_seconds",
+                                "query": "batch maximum elapsed runtime",
+                            },
+                            {
+                                "field": "maximum_walltime_seconds",
+                                "query": "third query is ignored",
+                            },
+                            {
+                                "field": "unknown_field",
+                                "query": "unknown field is ignored",
+                            },
+                        ]
+                    },
+                )
+            ],
+        )
+    )
+    tracker = _tracker(tmp_path, "query-expansion")
+
+    expanded, error = expand_queries(
+        site_name="Example HPC",
+        scheduler="slurm",
+        fields=("maximum_walltime_seconds",),
+        resources_by_field={"maximum_walltime_seconds": {"shared"}},
+        provider=provider,
+        tracker=tracker,
+    )
+
+    assert error is None
+    assert expanded == {
+        "maximum_walltime_seconds": [
+            "partition queue wall clock limit duration",
+            "batch maximum elapsed runtime",
+        ]
+    }
+    assert tracker.report.model_usage.requests == 1
 
 
 def test_retrieval_filters_scope_and_deduplicates_content() -> None:
@@ -589,7 +646,7 @@ def test_finding_must_cite_context_retrieved_for_its_field(tmp_path: Path) -> No
     [
         (site_name, mode)
         for site_name in ("anvil", "stampede3", "notre-dame-crc")
-        for mode in ("full-corpus", "bm25", "schema-expanded-bm25")
+        for mode in ("full-corpus", "bm25", "llm-expanded-bm25")
     ],
 )
 def test_end_to_end_documentation_profile_is_reproducible(

@@ -323,7 +323,7 @@ that an accepted AI proposal and a profile-applied policy value are not the same
 
 ## Recommended next experiment
 
-Run the same inputs, provider, and live web backend with `schema-expanded-bm25`, then compare:
+Run the same inputs, provider, and live web backend with `llm-expanded-bm25`, then compare:
 
 - recovered partition walltimes;
 - selected chunks per extraction group;

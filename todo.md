@@ -15,7 +15,7 @@ one change at a time, run the Anvil evaluation after each step, and do not conti
 - Keep `site`, `model`, and `web` modes independent.
 - Keep domain allowlists, target/sibling scope checks, exact evidence spans, local validation, and
   deterministic profile construction.
-- Keep all three context modes: `full-corpus`, `bm25`, and `schema-expanded-bm25`.
+- Keep all three context modes: `full-corpus`, `bm25`, and `llm-expanded-bm25`.
 - Unknown fields remain empty and become explicit unresolved work; they do not fail the run.
 
 ## Step 1 — Replace the discovery loop
@@ -63,7 +63,7 @@ group.
 - Apply site scope before scoring, deduplicate identical content, and add only small reviewed noise
   guards where evaluation demonstrates a need.
 - Preserve the three context modes. `full-corpus` remains the no-ranking comparison;
-  `bm25` uses basic field queries; `schema-expanded-bm25` adds reviewed field vocabulary.
+  `bm25` uses reviewed field queries; `llm-expanded-bm25` adds bounded model-generated queries.
 - Group the selected field-local chunks only when constructing model requests.
 - Persist retrieval queries, scores, selected chunk IDs, and retrieved-but-uncited chunks for audit.
 

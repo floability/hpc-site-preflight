@@ -1,5 +1,6 @@
 """Recorded structured model responses for offline simulation."""
 
+from collections import defaultdict, deque
 from pathlib import Path
 from typing import Any, Literal
 
@@ -33,11 +34,13 @@ class ModelRecording(BaseModel):
 
 
 class RecordedModelProvider(ModelProvider):
-    """Return reviewed model responses in their recorded order."""
+    """Return reviewed model responses in order within each output type."""
 
     def __init__(self, recording: ModelRecording) -> None:
         self.recording = recording
-        self._index = 0
+        self._responses: dict[str, deque[RecordedModelResponse]] = defaultdict(deque)
+        for response in recording.responses:
+            self._responses[response.output_name].append(response)
 
     @classmethod
     def from_path(cls, path: Path) -> "RecordedModelProvider":
@@ -58,15 +61,12 @@ class RecordedModelProvider(ModelProvider):
         tracker: RunTracker,
     ) -> ResultModel:
         with tracker.stage("structured_model_call"):
-            if self._index >= len(self.recording.responses):
-                raise ModelProviderError("Model recording has no response left for this call.")
-            recorded = self.recording.responses[self._index]
-            self._index += 1
-            if recorded.output_name != request.output_name:
+            responses = self._responses[request.output_name]
+            if not responses:
                 raise ModelProviderError(
-                    f"Expected recorded output '{request.output_name}', "
-                    f"found '{recorded.output_name}'."
+                    f"Model recording has no '{request.output_name}' response left."
                 )
+            recorded = responses.popleft()
             try:
                 result = result_type.model_validate(recorded.data)
             except ValidationError as exc:

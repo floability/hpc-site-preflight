@@ -39,6 +39,9 @@ site descriptor + measurements
        normalized corpus
               |
               v
+  optional query expansion   <---- one model call in llm-expanded-bm25
+              |
+              v
        context selection
               |
               v
@@ -57,8 +60,8 @@ site descriptor + measurements
  deterministic profile mapping
 ```
 
-There are two kinds of model judgment: one source-selection call during discovery and constrained
-fact extraction calls. Every other transition is ordinary Python code with typed inputs and
+There are three kinds of model judgment: source selection, optional BM25 query expansion, and
+constrained fact extraction. Every other transition is ordinary Python code with typed inputs and
 deterministic results.
 
 ## 1. Build site identity and queries
@@ -127,12 +130,17 @@ AI run inspectable and repeatable without downloading the pages again.
 
 - `full-corpus`: use bounded, deduplicated target-site chunks in stable order without ranking;
 - `bm25`: rank chunks independently for each field using fixed query variants; and
-- `schema-expanded-bm25`: add reviewed field vocabulary to those variants before ranking.
+- `llm-expanded-bm25`: make one typed model call that proposes up to two optimized query
+  variants per applicable profile field.
 
-Target-site scope is applied before scoring and identical content is removed by content hash. Query
-variant scores are fused deterministically, and measured partition or storage names extend fixed
-resource-query templates. A fair merge combines the field-local results only when building each
-group model request.
+The expansion prompt contains the site, scheduler, field meanings, reviewed base queries, and at
+most 20 known resource names per field. Its typed result is limited to 16 query rows, 240 characters
+and 24 words per query, and two accepted queries per requested field. Unknown fields are ignored.
+There is no correction call; a failed or missing expansion falls back to that field's reviewed BM25
+queries.
+
+Target-site scope is applied before scoring and identical content is removed by content hash.
+BM25 scoring, score fusion, chunk limits, and the fair field merge remain deterministic.
 
 Retrieval runs independently for three extraction groups:
 
@@ -230,7 +238,8 @@ quote.
 `providers/base.py` defines one provider-neutral operation: return a validated Pydantic result for
 a structured request.
 
-- `providers/recorded.py` replays ordered responses from `documentation-model.json`.
+- `providers/recorded.py` replays responses in order within each structured output type from
+  `documentation-model.json`.
 - `providers/openai.py` translates the same request into a forced function call through the OpenAI
   Responses API and validates the returned arguments locally.
 - `providers/registry.py` maps the provider-neutral `--model` value to OpenAI, Anthropic, or

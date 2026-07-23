@@ -110,7 +110,7 @@ def test_parser_accepts_each_command(argv: list[str], command_name: str) -> None
         (["profile", "build", "--help"], "--site-descriptor SITE_DESCRIPTOR"),
         (
             ["evaluate", "documentation", "--help"],
-            "{full-corpus,bm25,schema-expanded-bm25}",
+            "{full-corpus,bm25,llm-expanded-bm25}",
         ),
     ],
 )

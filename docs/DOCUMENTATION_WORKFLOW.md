@@ -55,7 +55,8 @@ site-descriptor.json + login-measurements.json
   |     headings and tables are preserved
   |
   |-- retrieve context independently for each requested field
-  |     mode = full-corpus | bm25 | schema-expanded-bm25
+  |     mode = full-corpus | bm25 | llm-expanded-bm25
+  |     LLM-expanded mode makes one bounded typed query-expansion call
   |     merge field-local chunks into submission, network, operational requests
   |
   |-- create exact sentence and table-row span IDs
@@ -127,6 +128,6 @@ hpc-site-preflight evaluate documentation \
   --measurements examples/simulate/anvil/login-measurements.json \
   --model-mode simulate \
   --web-mode simulate \
-  --context-mode schema-expanded-bm25 \
+  --context-mode llm-expanded-bm25 \
   --output-dir artifacts/anvil-documentation
 ```

@@ -48,17 +48,6 @@ _FIELD_QUERIES: dict[str, tuple[str, ...]] = {
     ),
 }
 
-_FIELD_EXPANSIONS = {
-    "allocation_required": "project account ACCESS allocation",
-    "required_submission_options": "#SBATCH --account --partition --time --nodes",
-    "maximum_walltime_seconds": "wall clock limit max time duration",
-    "manager_worker_connectivity": "firewall socket head node login node",
-    "worker_worker_connectivity": "interconnect peer socket firewall",
-    "outbound_compute": "external internet egress firewall",
-    "charging_model": "SU service unit credit billing consumption",
-    "purge_after_days": "retention cleanup deletion inactive filesystem",
-}
-
 _RESOURCE_QUERY = {
     "maximum_walltime_seconds": "partition queue maximum walltime",
     "purge_after_days": "storage scratch purge retention days",
@@ -72,6 +61,7 @@ def select_context(
     fields: tuple[str, ...],
     mode: ContextMode,
     resources_by_field: dict[str, set[str]] | None = None,
+    expanded_queries_by_field: dict[str, list[str]] | None = None,
     maximum_chunks_per_field: int = 4,
     maximum_chunks: int = 12,
     maximum_chars: int = 12_000,
@@ -84,6 +74,7 @@ def select_context(
     )
     eligible = _deduplicate_content(target_chunks)
     resources = resources_by_field or {}
+    expanded_queries = expanded_queries_by_field or {}
 
     if mode == "full-corpus":
         selected = _bounded(eligible, maximum_chunks, maximum_chars)
@@ -105,6 +96,7 @@ def select_context(
                 field,
                 mode,
                 resources.get(field, set()),
+                expanded_queries.get(field, []),
                 maximum_chunks_per_field,
             )
             for field in fields
@@ -118,7 +110,12 @@ def select_context(
         retrievals = [
             FieldRetrieval(
                 field=field,
-                queries=_queries(field, mode, resources.get(field, set())),
+                queries=_queries(
+                    field,
+                    mode,
+                    resources.get(field, set()),
+                    expanded_queries.get(field, []),
+                ),
                 hits=[
                     RetrievalHit(chunk_id=chunk.chunk_id, score=round(score, 6))
                     for score, chunk in included[field]
@@ -141,9 +138,10 @@ def _retrieve_field(
     field: str,
     mode: ContextMode,
     resources: set[str],
+    expanded_queries: list[str],
     limit: int,
 ) -> list[tuple[float, CorpusChunk]]:
-    queries = _queries(field, mode, resources)
+    queries = _queries(field, mode, resources, expanded_queries)
     variant_scores = [_bm25(query, chunks) for query in queries]
     ranked: list[tuple[float, CorpusChunk]] = []
     for index, chunk in enumerate(chunks):
@@ -155,14 +153,24 @@ def _retrieve_field(
     return ranked[:limit]
 
 
-def _queries(field: str, mode: ContextMode, resources: set[str]) -> list[str]:
+def base_queries(field: str, resources: set[str]) -> list[str]:
+    """Return reviewed BM25 query variants for one profile field."""
+
     queries = list(_FIELD_QUERIES[field])
     if resources and field in _RESOURCE_QUERY:
         queries.append(f"{' '.join(sorted(resources))} {_RESOURCE_QUERY[field]}")
-    if mode == "schema-expanded-bm25":
-        expansion = _FIELD_EXPANSIONS[field]
-        queries = [f"{query} {expansion}" for query in queries]
     return queries
+
+
+def _queries(
+    field: str,
+    mode: ContextMode,
+    resources: set[str],
+    expanded_queries: list[str],
+) -> list[str]:
+    if mode == "llm-expanded-bm25" and expanded_queries:
+        return expanded_queries
+    return base_queries(field, resources)
 
 
 def _merge_field_results(

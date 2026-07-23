@@ -74,7 +74,7 @@ site descriptor
 → evidence validation
 ```
 
-The implemented context modes are `full-corpus`, `bm25`, and `schema-expanded-bm25`. See
+The implemented context modes are `full-corpus`, `bm25`, and `llm-expanded-bm25`. See
 [docs/DOCUMENTATION_WORKFLOW.md](docs/DOCUMENTATION_WORKFLOW.md) for the code and artifact flow.
 For a repository-wide reading order, see [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md). The evaluated
 Anvil live-AI example is traced in [docs/RUN_RESULT.md](docs/RUN_RESULT.md).

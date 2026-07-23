@@ -10,7 +10,7 @@ from hpc_site_preflight.providers.base import ModelProviderName
 DocumentationScope = Literal[
     "target_site", "organization_general", "sibling_site", "out_of_scope"
 ]
-ContextMode = Literal["full-corpus", "bm25", "schema-expanded-bm25"]
+ContextMode = Literal["full-corpus", "bm25", "llm-expanded-bm25"]
 RuntimeMode = Literal["live", "simulate"]
 ExtractionGroupName = Literal["submission", "network", "operational"]
 BlockKind = Literal["text", "table"]
@@ -148,6 +148,15 @@ class ContextSelection(StrictModel):
     chunks: list[CorpusChunk]
     selected_chunk_ids: list[str]
     retrievals: list[FieldRetrieval]
+
+
+class ExpandedRetrievalQuery(StrictModel):
+    field: str = Field(min_length=1, max_length=64, pattern=r"^[a-z][a-z0-9_]*$")
+    query: str = Field(min_length=3, max_length=240)
+
+
+class QueryExpansionResult(StrictModel):
+    queries: list[ExpandedRetrievalQuery] = Field(max_length=16)
 
 
 class EvidenceSpan(StrictModel):

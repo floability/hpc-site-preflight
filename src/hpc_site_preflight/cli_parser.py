@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-_CONTEXT_MODES = ("full-corpus", "bm25", "schema-expanded-bm25")
+_CONTEXT_MODES = ("full-corpus", "bm25", "llm-expanded-bm25")
 
 
 def _add_runtime_options(parser: argparse.ArgumentParser) -> None:
