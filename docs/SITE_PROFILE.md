@@ -17,9 +17,9 @@ The implemented contract is defined by:
 
 ## Design
 
-The JSON is intentionally shallow. Top-level metadata is followed by flat records for submission
-options, partitions, HTCondor resource groups, resource shapes, storage, network capabilities,
-validation states, unresolved work, conflicts, and evidence links.
+The JSON is intentionally compact. Top-level metadata is followed by records for submission
+options, scheduler resources, storage, validation, unresolved work, conflicts, and evidence links.
+Network facts are grouped under login, compute, login-compute, and compute-compute sections.
 
 Serialized profiles preserve this schema order instead of sorting keys alphabetically. The
 evidence-report reference and field-evidence links are kept at the end so the actionable policy is
@@ -48,7 +48,7 @@ array. The first item is the preferred form:
 {
   "name": "account",
   "syntax": ["-A {account}", "--account={account}"],
-  "requirement": "required",
+  "required": true,
   "value": null,
   "example": "<account>",
   "allowed_values": null
@@ -66,14 +66,14 @@ limit, official target-site documentation precedes visible scheduler configurati
 conflict is retained. Compute-node network and storage behavior requests an approved pilot when no
 accepted source establishes it.
 
-## Minimal complete-shape example
+## Compact shape example
 
-This is a structurally complete partial profile. Its values are illustrative, not current site
-policy.
+This shortened partial profile shows the main structures. Generated profiles include all four
+common storage roles. Its values are illustrative, not current site policy.
 
 ```json
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "site_id": "purdue-anvil",
   "site_name": "Purdue Anvil",
   "aliases": ["Anvil"],
@@ -86,7 +86,7 @@ policy.
     {
       "name": "partition",
       "syntax": ["-p {partition}", "--partition={partition}"],
-      "requirement": "required",
+      "required": true,
       "value": null,
       "example": "shared",
       "allowed_values": ["shared", "wholenode", "gpu"]
@@ -116,20 +116,41 @@ policy.
   "storage": [
     {
       "name": "scratch",
-      "path": "/anvil/scratch/mockuser",
-      "login_readable": null,
-      "login_writable": null,
+      "path_pattern": "/anvil/scratch/{username}",
+      "filesystem_type": "gpfs",
+      "login_readable": true,
+      "login_writable": true,
       "compute_visible": null,
+      "compute_readable": null,
       "compute_writable": null,
       "available_bytes": null,
       "purge_after_days": null
     }
   ],
-  "network": [
-    {"name": "manager_worker", "available": null},
-    {"name": "worker_worker", "available": null},
-    {"name": "outbound_compute", "available": null}
-  ],
+  "network": {
+    "login": {
+      "hostname_patterns": ["*.anvil.rcac.purdue.edu"],
+      "dns_resolution": true,
+      "outbound_https": true,
+      "local_tcp_bind": true,
+      "local_tcp_loopback": true
+    },
+    "compute": {
+      "hostname_patterns": [],
+      "dns_resolution": null,
+      "outbound_https": null,
+      "local_tcp_bind": null,
+      "local_tcp_loopback": null
+    },
+    "login_compute": {
+      "tcp_connect": null,
+      "verified_tcp_port_range": null
+    },
+    "compute_compute": {
+      "tcp_connect": null,
+      "verified_tcp_port_range": null
+    }
+  },
   "accounting": {
     "allocation_required": null,
     "visible_accounts": ["mock-account"],
@@ -170,9 +191,10 @@ policy.
 
 ## Current builder boundary
 
-The Phase D builder consumes validated login measurements and accepted documentation findings. It
-fills observable scheduler and resource fields, then adds documented submission, limit, storage,
-accounting, and network policy through reviewed mappings. Missing policy and compute-node behavior
-remain null and become work items. Pilot evidence is planned for Phase E.
+The Phase D builder consumes validated `0.2` login measurements and accepted documentation
+findings. Measurements populate storage path patterns, login access, login networking, scheduler,
+and resource fields. Documentation sets Boolean submission requirements and may add limits,
+retention, accounting, and compute-network policy through reviewed mappings. Missing policy and
+compute-node behavior remain null and become work items. Pilot evidence is planned for Phase E.
 
 The profile does not submit or launch a workflow.

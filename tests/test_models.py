@@ -30,7 +30,8 @@ def test_example_measurements_validate() -> None:
     assert model.evidence_source == "simulated"
     assert model.scheduler_type == "slurm"
     assert model.partition_names == {"shared", "wholenode", "gpu"}
-    assert model.storage_names == {"home", "scratch"}
+    assert model.schema_version == "0.2"
+    assert model.storage_names == {"home", "project", "scratch"}
 
 
 def test_measurement_bundle_supports_both_scheduler_types() -> None:

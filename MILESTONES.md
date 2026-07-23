@@ -92,7 +92,7 @@ Load simulated evidence without touching the current hardware.
 Produce a useful partial site profile and detailed evidence report without failing on unknowns.
 
 - Added deterministic compilation, evidence links, and unresolved actions.
-- Added profile and evidence artifacts for Slurm and HTCondor simulations.
+- Added `0.2` storage path patterns and structured login/compute networking.
 
 **Test:** Run `profile build` for all three sites and inspect both output files.
 

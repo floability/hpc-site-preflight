@@ -29,7 +29,7 @@ AcquisitionMethod = Literal[
 ]
 MeasurementScalar: TypeAlias = str | int | float | bool
 MeasurementValue: TypeAlias = MeasurementScalar | list[MeasurementScalar]
-SchemaVersion = Literal["0.1"]
+SchemaVersion = Literal["0.2"]
 
 COMMON_SCHEDULER_PATHS = {
     "/facts/scheduler/detected_type",
@@ -195,7 +195,9 @@ class MeasurementBundle(BaseModel):
         return {
             item.path.removeprefix(prefix).removesuffix(suffix)
             for item in self.common
-            if item.path.startswith(prefix) and item.path.endswith(suffix)
+            if item.status == "observed"
+            and item.path.startswith(prefix)
+            and item.path.endswith(suffix)
         }
 
     @property

@@ -6,7 +6,6 @@ import re
 from collections.abc import Callable
 from typing import Literal
 
-from hpc_site_preflight.documentation.models import DocumentationEvidence
 from hpc_site_preflight.evidence.bundle import EvidenceReport
 from hpc_site_preflight.evidence.models import (
     EvidenceLink,
@@ -16,11 +15,12 @@ from hpc_site_preflight.evidence.models import (
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.exceptions import ConfigurationError
 from hpc_site_preflight.measurements.base import MeasurementBundle, MeasurementObservation
-from hpc_site_preflight.profiles.documentation import apply_documentation
 from hpc_site_preflight.profiles.models import (
     AccountingProfile,
     FieldEvidenceLink,
-    NetworkCapability,
+    NetworkConnectionProfile,
+    NetworkProfile,
+    NodeNetworkProfile,
     PartitionProfile,
     ResourceGroupProfile,
     ResourceShapeProfile,
@@ -34,14 +34,14 @@ from hpc_site_preflight.profiles.models import (
 from hpc_site_preflight.site_descriptor.models import SiteDescriptor
 
 _STORAGE_PATH = re.compile(r"^/facts/storage/filesystems/([^/]+)/path$")
+_STORAGE_ROLES = ("home", "project", "data", "scratch")
 
 
 def compile_profile(
     site: SiteDescriptor,
     measurements: MeasurementBundle,
-    documentation: DocumentationEvidence | None = None,
 ) -> tuple[SiteProfile, EvidenceReport]:
-    """Build a partial profile from measurements and optional documentation."""
+    """Build an initial partial profile from login measurements."""
 
     if site.site_id != measurements.site_id or site.scheduler != measurements.scheduler_type:
         raise ConfigurationError("Site descriptor and measurements do not identify the same site.")
@@ -59,10 +59,27 @@ def compile_profile(
         evidence_id = evidence_ids.get(observation_path)
         if evidence_id is None:
             return
-        profile_links.append(FieldEvidenceLink(field=profile_field, evidence_ids=[evidence_id]))
-        report_links.append(
-            EvidenceLink(profile_field=profile_field, evidence_ids=[evidence_id])
+        profile_link = next(
+            (item for item in profile_links if item.field == profile_field),
+            None,
         )
+        if profile_link is None:
+            profile_links.append(
+                FieldEvidenceLink(field=profile_field, evidence_ids=[evidence_id])
+            )
+        elif evidence_id not in profile_link.evidence_ids:
+            profile_link.evidence_ids.append(evidence_id)
+
+        report_link = next(
+            (item for item in report_links if item.profile_field == profile_field),
+            None,
+        )
+        if report_link is None:
+            report_links.append(
+                EvidenceLink(profile_field=profile_field, evidence_ids=[evidence_id])
+            )
+        elif evidence_id not in report_link.evidence_ids:
+            report_link.evidence_ids.append(evidence_id)
 
     scheduler_version = _string(by_path, "/facts/scheduler/version")
     link("/scheduler_type", "/facts/scheduler/detected_type")
@@ -78,8 +95,8 @@ def compile_profile(
     partitions = _build_partitions(by_path, link)
     resource_groups = _build_resource_groups(by_path, link)
     resource_shapes = _build_resource_shapes(by_path, link)
-    storage = _build_storage(by_path, link)
     visible_accounts = _strings(by_path, "/facts/scheduler/visible_accounts") or []
+    storage = _build_storage(by_path, visible_accounts, link)
     if visible_accounts:
         link("/accounting/visible_accounts", "/facts/scheduler/visible_accounts")
 
@@ -88,15 +105,14 @@ def compile_profile(
         workflow_tools=_strings(by_path, "/facts/software/workflow_tools") or [],
         container_runtimes=_strings(by_path, "/facts/software/container_runtimes") or [],
     )
-    network = [
-        NetworkCapability(name="manager_worker", available=None),
-        NetworkCapability(name="worker_worker", available=None),
-        NetworkCapability(name="outbound_compute", available=None),
-    ]
+    network = _build_network(site, by_path, link)
+    submission_options = _submission_options(measurements.scheduler_type, partitions)
     unresolved = _unresolved_items(
         measurements.scheduler_type,
+        submission_options,
         partitions,
         storage,
+        network,
         submit_command,
     )
     report_unresolved = [
@@ -110,7 +126,7 @@ def compile_profile(
     ]
 
     profile = SiteProfile(
-        schema_version="0.1",
+        schema_version="0.2",
         site_id=site.site_id,
         site_name=site.site_name,
         aliases=site.aliases,
@@ -119,7 +135,7 @@ def compile_profile(
         scheduler_type=measurements.scheduler_type,
         submit_command=submit_command,
         scheduler_version=scheduler_version,
-        submission_options=_submission_options(measurements.scheduler_type, partitions),
+        submission_options=submission_options,
         partitions=partitions,
         resource_groups=resource_groups,
         resource_shapes=resource_shapes,
@@ -128,7 +144,6 @@ def compile_profile(
         accounting=AccountingProfile(visible_accounts=visible_accounts),
         software=software,
         validation=_validation_states(
-            submit_command=submit_command,
             resources=bool(partitions or resource_groups or resource_shapes),
             storage=bool(storage),
         ),
@@ -150,8 +165,6 @@ def compile_profile(
         links=report_links,
         unresolved=report_unresolved,
     )
-    if documentation is not None:
-        return apply_documentation(profile, report, documentation)
     return profile, report
 
 
@@ -249,26 +262,109 @@ def _build_resource_groups(
 
 
 def _build_storage(
-    observations: dict[str, MeasurementObservation], link: Callable[[str, str], None]
+    observations: dict[str, MeasurementObservation],
+    visible_accounts: list[str],
+    link: Callable[[str, str], None],
 ) -> list[StorageProfile]:
+    """Build common storage roles and generalize only measured path components."""
+
+    observed_names = {
+        match.group(1)
+        for path in observations
+        if (match := _STORAGE_PATH.match(path)) is not None
+    }
+    names = [*_STORAGE_ROLES, *sorted(observed_names - set(_STORAGE_ROLES))]
+    username = _string(observations, "/facts/user/username")
+    groups = _strings(observations, "/facts/user/groups") or []
     result: list[StorageProfile] = []
-    for path in sorted(observations):
-        match = _STORAGE_PATH.match(path)
-        if match is None:
-            continue
-        name = match.group(1)
+    for name in names:
         prefix = f"/facts/storage/filesystems/{name}"
+        path = f"{prefix}/path"
+        measured_path = _string(observations, path)
+        path_pattern = _path_pattern(
+            measured_path,
+            username=username,
+            accounts=visible_accounts,
+            groups=groups,
+        )
         result.append(
             StorageProfile(
                 name=name,
-                path=_string(observations, path),
+                path_pattern=path_pattern,
+                filesystem_type=_string(observations, f"{prefix}/filesystem_type"),
                 login_readable=_boolean(observations, f"{prefix}/readable"),
                 login_writable=_boolean(observations, f"{prefix}/writable"),
                 available_bytes=_integer(observations, f"{prefix}/available_bytes"),
             )
         )
-        link(f"/storage/{name}/path", path)
+        if measured_path is not None:
+            link(f"/storage/{name}/path_pattern", path)
+            if path_pattern and "{username}" in path_pattern:
+                link(f"/storage/{name}/path_pattern", "/facts/user/username")
+            if path_pattern and "{account}" in path_pattern:
+                link(
+                    f"/storage/{name}/path_pattern",
+                    "/facts/scheduler/visible_accounts",
+                )
+            if path_pattern and "{group}" in path_pattern:
+                link(f"/storage/{name}/path_pattern", "/facts/user/groups")
+        for field in ("filesystem_type", "readable", "writable", "available_bytes"):
+            profile_field = {
+                "readable": "login_readable",
+                "writable": "login_writable",
+            }.get(field, field)
+            if _observed(observations, f"{prefix}/{field}") is not None:
+                link(f"/storage/{name}/{profile_field}", f"{prefix}/{field}")
     return result
+
+
+def _build_network(
+    site: SiteDescriptor,
+    observations: dict[str, MeasurementObservation],
+    link: Callable[[str, str], None],
+) -> NetworkProfile:
+    """Build login networking from measurements and leave compute behavior unresolved."""
+
+    measurement_paths = {
+        "dns_resolution": "/facts/networking/dns_resolution",
+        "outbound_https": "/facts/networking/outbound_https_to_allowlisted_target",
+        "local_tcp_bind": "/facts/networking/local_tcp_bind",
+        "local_tcp_loopback": "/facts/networking/local_tcp_loopback",
+    }
+    login_values = {
+        field: _boolean(observations, path)
+        for field, path in measurement_paths.items()
+    }
+    for field, path in measurement_paths.items():
+        if login_values[field] is not None:
+            link(f"/network/login/{field}", path)
+    return NetworkProfile(
+        login=NodeNetworkProfile(
+            hostname_patterns=site.hostname_patterns,
+            **login_values,
+        ),
+        compute=NodeNetworkProfile(),
+        login_compute=NetworkConnectionProfile(),
+        compute_compute=NetworkConnectionProfile(),
+    )
+
+
+def _path_pattern(
+    path: str | None,
+    *,
+    username: str | None,
+    accounts: list[str],
+    groups: list[str],
+) -> str | None:
+    """Replace exact measured path components with supported profile placeholders."""
+
+    if path is None:
+        return None
+    replacements = {group: "{group}" for group in groups}
+    replacements.update({account: "{account}" for account in accounts})
+    if username:
+        replacements[username] = "{username}"
+    return "/".join(replacements.get(component, component) for component in path.split("/"))
 
 
 def _submission_options(
@@ -280,31 +376,31 @@ def _submission_options(
             SubmissionOption(
                 name="account",
                 syntax=["-A {account}", "--account={account}"],
-                requirement="required",
+                required=None,
                 example="<account>",
             ),
             SubmissionOption(
                 name="partition",
                 syntax=["-p {partition}", "--partition={partition}"],
-                requirement="required",
+                required=None,
                 allowed_values=partition_names or None,
             ),
             SubmissionOption(
                 name="nodes",
                 syntax=["--nodes={count}", "-N {count}"],
-                requirement="required",
+                required=None,
                 example="1",
             ),
             SubmissionOption(
                 name="cpus-per-task",
                 syntax=["--cpus-per-task={count}"],
-                requirement="required",
+                required=None,
                 example="1",
             ),
             SubmissionOption(
                 name="time",
                 syntax=["-t {time}", "--time={time}"],
-                requirement="required",
+                required=None,
                 example="01:00:00",
             ),
         ]
@@ -312,19 +408,19 @@ def _submission_options(
         SubmissionOption(
             name="request_cpus",
             syntax=["request_cpus = {count}"],
-            requirement="required",
+            required=None,
             example="1",
         ),
         SubmissionOption(
             name="request_memory",
             syntax=["request_memory = {memory_mib}MB"],
-            requirement="required",
+            required=None,
             example="1024MB",
         ),
         SubmissionOption(
             name="request_gpus",
             syntax=["request_gpus = {count}"],
-            requirement="conditional",
+            required=None,
             example="1",
         ),
     ]
@@ -332,8 +428,10 @@ def _submission_options(
 
 def _unresolved_items(
     scheduler: str,
+    submission_options: list[SubmissionOption],
     partitions: list[PartitionProfile],
     storage: list[StorageProfile],
+    network: NetworkProfile,
     submit_command: str | None,
 ) -> list[UnresolvedWorkItem]:
     items: list[UnresolvedWorkItem] = []
@@ -356,24 +454,68 @@ def _unresolved_items(
                     action_id="partition_policy_search",
                 )
             )
-    for capability in ("manager_worker", "worker_worker", "outbound_compute"):
+    for option in submission_options:
+        if option.required is None:
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/submission_options/{option.name}/required",
+                    reason="Login measurements do not establish whether this option is required.",
+                    next_action="additional_documentation",
+                    action_id="submission_policy_search",
+                )
+            )
+    for field in (
+        "dns_resolution",
+        "outbound_https",
+        "local_tcp_bind",
+        "local_tcp_loopback",
+    ):
+        if getattr(network.login, field) is None:
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/network/login/{field}",
+                    reason="This login-node network fact was not measured.",
+                    next_action="login_measurement",
+                    action_id=f"login_{field}",
+                )
+            )
         items.append(
             UnresolvedWorkItem(
-                field=f"/network/{capability}",
+                field=f"/network/compute/{field}",
                 reason="Compute-node network behavior requires approved evidence.",
                 next_action="run_pilot",
-                action_id=f"{capability}_check",
+                action_id=f"compute_{field}",
             )
         )
+    for section in ("login_compute", "compute_compute"):
+        for field in ("tcp_connect", "verified_tcp_port_range"):
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/network/{section}/{field}",
+                    reason="Cross-node TCP behavior requires approved evidence.",
+                    next_action="run_pilot",
+                    action_id=f"{section}_{field}",
+                )
+            )
     for item in storage:
-        items.append(
-            UnresolvedWorkItem(
-                field=f"/storage/{item.name}/compute_visible",
-                reason="Login-node visibility does not establish compute-node visibility.",
-                next_action="run_pilot",
-                action_id="shared_storage_visibility",
+        if item.path_pattern is None:
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/storage/{item.name}/path_pattern",
+                    reason="The storage role was not observed from the login node.",
+                    next_action="login_measurement",
+                    action_id=f"{item.name}_path",
+                )
             )
-        )
+        for field in ("compute_visible", "compute_readable", "compute_writable"):
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/storage/{item.name}/{field}",
+                    reason="Login-node access does not establish compute-node access.",
+                    next_action="run_pilot",
+                    action_id=f"{item.name}_{field}",
+                )
+            )
     items.append(
         UnresolvedWorkItem(
             field="/accounting/charging_model",
@@ -385,16 +527,12 @@ def _unresolved_items(
     return items
 
 
-def _validation_states(
-    *, submit_command: str | None, resources: bool, storage: bool
-) -> list[SectionValidation]:
+def _validation_states(*, resources: bool, storage: bool) -> list[SectionValidation]:
     return [
         SectionValidation(section="scheduler", state="measured"),
-        SectionValidation(
-            section="submission", state="measured" if submit_command else "partial"
-        ),
+        SectionValidation(section="submission", state="partial"),
         SectionValidation(section="resources", state="measured" if resources else "partial"),
-        SectionValidation(section="network", state="requires_pilot"),
+        SectionValidation(section="network", state="partial"),
         SectionValidation(section="storage", state="partial" if storage else "requires_pilot"),
         SectionValidation(section="accounting", state="partial"),
         SectionValidation(section="software", state="partial"),

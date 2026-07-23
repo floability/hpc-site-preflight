@@ -56,6 +56,8 @@ __main__.py
      -> operations.build_profile()
         -> load_site_descriptor()
         -> SimulatedMeasurementProvider.collect()
+        -> compile_profile()
+           -> build initial measurement-backed profile and evidence
         -> operations._build_documentation()
            -> provider_for_model()
            -> create_live_model_provider() or RecordedModelProvider
@@ -73,9 +75,8 @@ __main__.py
                  -> build exact spans
                  -> ModelProvider.generate_structured()
                  -> validate findings locally
-        -> compile_profile()
-           -> build measurement-backed profile and evidence
-           -> apply_documentation()
+        -> apply_documentation()
+           -> apply accepted findings to reviewed profile fields
         -> write_json() for final artifacts
      -> RunTracker.finalize()
 ```
@@ -144,6 +145,11 @@ explicitly because live collection has not been implemented.
 
 The JSON field catalogs under `schemas/measurement-fields/` describe what future collectors may
 observe. They are allowlists/design contracts, not collected values.
+
+The `0.2` measurement bundle remains flat so every value keeps independent provenance. The profile
+compiler turns exact observed storage paths into supported `{username}`, `{account}`, or `{group}`
+patterns, populates login networking, and leaves compute-node behavior for documentation or pilots.
+See `docs/LOGIN_MEASUREMENTS.md` for those mappings.
 
 ### Documentation models
 

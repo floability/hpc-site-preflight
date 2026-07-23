@@ -54,9 +54,10 @@ def test_submission_option_preserves_syntax_order() -> None:
     option = SubmissionOption(
         name="account",
         syntax=["-A {account}", "--account={account}"],
-        requirement="required",
+        required=True,
     )
     assert option.syntax == ["-A {account}", "--account={account}"]
+    assert option.required is True
 
 
 def test_detailed_evidence_supports_documentation_provenance() -> None:
@@ -86,7 +87,7 @@ def test_detailed_evidence_supports_documentation_provenance() -> None:
             "documented_limit_over_visible_configuration",
             "documentation",
         ),
-        ("/network/manager_worker", "compute_network_behavior", "pilot"),
+        ("/network/login_compute/tcp_connect", "compute_network_behavior", "pilot"),
         ("/accounting/visible_accounts", "visible_accounts", "measurement"),
         ("/accounting/allocation_required", "allocation_requirement", "documentation"),
     ],
@@ -131,7 +132,7 @@ def test_measurement_only_builder_supports_all_sites(
     assert profile.conflicts == []
     assert report.site_id == profile.site_id
     assert len(report.evidence) > 0
-    assert _object_depth(profile_payload) <= 2
+    assert _object_depth(profile_payload) <= 3
     assert _object_depth(report_payload) <= 2
 
     evidence_ids = {item.evidence_id for item in report.evidence}
@@ -146,6 +147,32 @@ def test_anvil_visible_infinite_is_not_promoted_to_policy() -> None:
     shared = next(item for item in profile.partitions if item.name == "shared")
     assert shared.visible_walltime_seconds is None
     assert shared.maximum_walltime_seconds is None
+
+
+def test_anvil_measurements_build_storage_patterns_and_login_network() -> None:
+    profile, report = _compile("anvil")
+    storage = {item.name: item for item in profile.storage}
+
+    assert list(storage) == ["home", "project", "data", "scratch"]
+    assert storage["home"].path_pattern == "/home/{username}"
+    assert storage["project"].path_pattern == "/anvil/projects/{account}"
+    assert storage["data"].path_pattern is None
+    assert storage["scratch"].path_pattern == "/anvil/scratch/{username}"
+    assert storage["scratch"].login_readable is True
+    assert storage["scratch"].login_writable is True
+    assert storage["scratch"].compute_visible is None
+    assert profile.network.login.hostname_patterns == ["*.anvil.rcac.purdue.edu"]
+    assert profile.network.login.outbound_https is True
+    assert profile.network.compute.outbound_https is None
+    assert profile.network.login_compute.tcp_connect is None
+    assert profile.network.compute_compute.verified_tcp_port_range is None
+
+    evidence_paths = {item.field_path for item in report.evidence}
+    assert "/facts/storage/filesystems/scratch/path" in evidence_paths
+    assert "/facts/networking/local_tcp_bind" in evidence_paths
+    links = {item.field: item.evidence_ids for item in profile.field_evidence}
+    assert len(links["/storage/scratch/path_pattern"]) == 2
+    assert len(links["/storage/project/path_pattern"]) == 2
 
 
 def test_stampede_visible_duration_is_normalized() -> None:

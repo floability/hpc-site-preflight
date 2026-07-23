@@ -16,12 +16,13 @@ Read the small contracts first, then follow the transformations, and finish with
 6. `documentation/discovery_agent.py` runs one agent that uses bounded search/download tools, then
    asks the model to select sources once.
 7. `documentation/corpus.py` converts selected pages into stable documents and chunks.
-8. `documentation/retrieval.py` implements full corpus, BM25, and expanded BM25 selection.
+8. `documentation/retrieval.py` implements full corpus, BM25, and LLM-expanded BM25 selection.
 9. `documentation/extraction.py` creates exact spans and validates the model's typed proposals.
 10. `documentation/pipeline.py` calls those documentation stages in a straight line.
 11. `profiles/documentation.py` maps accepted findings onto known profile fields.
-12. `profiles/compiler.py` builds the measurement profile and applies documentation findings.
-13. `operations.py` loads files, chooses providers, calls the pipeline, and writes artifacts.
+12. `profiles/compiler.py` builds the initial measurement-backed profile.
+13. `operations.py` builds that initial profile, runs documentation, applies findings, and writes
+    artifacts.
 14. `cli_parser.py` defines arguments; `cli.py` dispatches the selected operation and owns the run
     lifecycle.
 
@@ -38,6 +39,8 @@ discovery without changing the canonical site record or allowed domains.
 site-descriptor.json + login-measurements.json
   |
   |-- validate both files and confirm site/scheduler agreement
+  |
+  |-- compile measurements into the initial partial profile
   |
   |-- build deterministic site identity
   |     name, aliases, scheduler, host signals, allowed domains, path tokens
@@ -67,8 +70,6 @@ site-descriptor.json + login-measurements.json
   |-- validate locally
   |     reject unknown fields, resources, spans, scopes, and value types
   |     retry invalid findings once, then leave them unresolved
-  |
-  |-- compile measurements into the base partial profile
   |
   |-- apply accepted documentation findings deterministically
   |     append exact quotes and URLs to evidence-report.json

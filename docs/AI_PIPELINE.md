@@ -19,7 +19,7 @@ model and web modes. Fully offline tests explicitly simulate the model and web m
 ## Pipeline at a glance
 
 ```text
-site descriptor + measurements
+site descriptor + measurements ----> initial measurement-backed profile
               |
               v
      deterministic identity
@@ -57,7 +57,10 @@ site descriptor + measurements
  documentation evidence
               |
               v
- deterministic profile mapping
+ deterministic profile mapping <---- initial measurement-backed profile
+              |
+              v
+       combined partial profile
 ```
 
 There are three kinds of model judgment: source selection, optional BM25 query expansion, and
@@ -227,6 +230,12 @@ PartitionFinding(name="shared", maximum_walltime_seconds=345600)
 
 StoragePolicyFinding(name="scratch", purge_after_days=60)
     -> /storage/scratch/purge_after_days
+
+SubmissionOptionFinding(name="account", requirement="required")
+    -> /submission_options/account/required = true
+
+NetworkFinding(name="manager_worker", available=true)
+    -> /network/login_compute/tcp_connect = true
 ```
 
 There is no generic string field dispatch between extraction and the profile. Each applied value

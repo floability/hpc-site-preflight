@@ -12,6 +12,8 @@ The working machine-readable site-profile contract, field semantics, evidence bo
 full illustrative example are described in [docs/SITE_PROFILE.md](docs/SITE_PROFILE.md).
 Common scheduler-independent login-node observations and their safety boundary are defined in
 [docs/MEASUREMENT_FIELDS.md](docs/MEASUREMENT_FIELDS.md).
+The versioned measurement result and its profile mappings are described in
+[docs/LOGIN_MEASUREMENTS.md](docs/LOGIN_MEASUREMENTS.md).
 
 The project combines four evidence sources:
 

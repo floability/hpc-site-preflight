@@ -16,6 +16,9 @@ from hpc_site_preflight.documentation.models import (
     ContextMode,
     CorpusChunk,
     DiscoverySelection,
+    DocumentationCitation,
+    DocumentationEvidence,
+    NetworkFinding,
     SearchResult,
     SubmissionExtractionResult,
 )
@@ -30,6 +33,7 @@ from hpc_site_preflight.documentation.tools import (
 from hpc_site_preflight.exceptions import DocumentationError
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.profiles.compiler import compile_profile
+from hpc_site_preflight.profiles.documentation import apply_documentation
 from hpc_site_preflight.providers.recorded import (
     ModelRecording,
     RecordedModelProvider,
@@ -671,7 +675,8 @@ def test_end_to_end_documentation_profile_is_reproducible(
         _tracker(tmp_path, f"{site_name}-{mode}"),
         context_mode=mode,
     )
-    profile, report = compile_profile(site, measurements, documentation)
+    profile, report = compile_profile(site, measurements)
+    profile, report = apply_documentation(profile, report, documentation)
 
     assert documentation.rejected == []
     assert documentation.findings
@@ -682,7 +687,7 @@ def test_end_to_end_documentation_profile_is_reproducible(
         if item.source_type == "documentation"
     )
     assert all(citation.quote for item in documentation.findings for citation in item.citations)
-    assert len(documentation.retrieval) == (6 if site_name == "notre-dame-crc" else 8)
+    assert len(documentation.retrieval) == (7 if site_name == "notre-dame-crc" else 8)
     assert any(not hit.cited for item in documentation.retrieval for hit in item.hits)
     assert all(
         any(
@@ -715,10 +720,16 @@ def test_end_to_end_documentation_profile_is_reproducible(
             "/partitions/shared/maximum_walltime_seconds",
             "/partitions/wholenode/maximum_walltime_seconds",
             "/storage/scratch/purge_after_days",
-            "/submission_options/account/requirement",
-            "/submission_options/partition/requirement",
+            "/submission_options/account/required",
+            "/submission_options/partition/required",
         }
         assert documentation_paths <= {item.field for item in profile.field_evidence}
+        account = next(item for item in profile.submission_options if item.name == "account")
+        partition = next(
+            item for item in profile.submission_options if item.name == "partition"
+        )
+        assert account.required is True
+        assert partition.required is True
     elif site_name == "stampede3":
         scratch = next(item for item in profile.storage if item.name == "scratch")
         assert scratch.purge_after_days == 10
@@ -749,3 +760,44 @@ def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
     assert set(schema["required"]) == set(schema["properties"])
     for definition in schema["$defs"].values():
         assert set(definition["required"]) == set(definition["properties"])
+
+
+def test_documented_network_findings_fill_structured_profile() -> None:
+    site, measurements = _inputs("anvil")
+    citation = DocumentationCitation(
+        span_id="network:c1:s1",
+        chunk_id="network:c1",
+        url="https://docs.rcac.purdue.edu/anvil/network",
+        title="Network policy",
+        heading="Compute networking",
+        quote="Compute workers can connect to a manager on the login system.",
+    )
+    documentation = DocumentationEvidence(
+        site_id=site.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        context_mode="bm25",
+        findings=[
+            NetworkFinding(
+                name="manager_worker",
+                available=True,
+                note="Documented manager connection.",
+                citations=[citation],
+            )
+        ],
+        rejected=[],
+        unresolved=[],
+        selected_chunk_ids=["network:c1"],
+        retrieval=[],
+    )
+
+    profile, report = compile_profile(site, measurements)
+    profile, _ = apply_documentation(profile, report, documentation)
+
+    assert profile.network.login_compute.tcp_connect is True
+    assert any(
+        link.field == "/network/login_compute/tcp_connect"
+        for link in profile.field_evidence
+    )

@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2-draft",
+  "schema_version": "0.2",
   "example": true,
   "note": "Design target based on official Anvil documentation; live measurements and pilot-only facts remain unresolved.",
   "site_id": "purdue-anvil",
@@ -17,7 +17,7 @@
     {
       "name": "account",
       "syntax": ["-A {account}", "--account={account}"],
-      "requirement": "required",
+      "required": true,
       "value": null,
       "example": "<allocation>",
       "allowed_values": null
@@ -25,7 +25,7 @@
     {
       "name": "partition",
       "syntax": ["-p {partition}", "--partition={partition}"],
-      "requirement": "required",
+      "required": true,
       "value": null,
       "example": "shared",
       "allowed_values": [
@@ -42,7 +42,7 @@
     {
       "name": "nodes",
       "syntax": ["--nodes={count}", "-N {count}"],
-      "requirement": "optional",
+      "required": false,
       "value": null,
       "example": "1",
       "allowed_values": null
@@ -50,7 +50,7 @@
     {
       "name": "ntasks",
       "syntax": ["--ntasks={count}", "-n {count}"],
-      "requirement": "optional",
+      "required": false,
       "value": null,
       "example": "1",
       "allowed_values": null
@@ -58,7 +58,7 @@
     {
       "name": "cpus-per-task",
       "syntax": ["--cpus-per-task={count}"],
-      "requirement": "optional",
+      "required": false,
       "value": null,
       "example": "1",
       "allowed_values": null
@@ -66,7 +66,7 @@
     {
       "name": "memory",
       "syntax": ["--mem={size}", "--mem-per-cpu={size}"],
-      "requirement": "optional",
+      "required": false,
       "value": null,
       "example": "4G",
       "allowed_values": null
@@ -74,7 +74,7 @@
     {
       "name": "gpus-per-node",
       "syntax": ["--gpus-per-node={count}"],
-      "requirement": "conditional",
+      "required": false,
       "value": null,
       "example": "1",
       "allowed_values": null
@@ -82,7 +82,7 @@
     {
       "name": "time",
       "syntax": ["-t {time}", "--time={time}"],
-      "requirement": "recommended",
+      "required": false,
       "value": null,
       "example": "01:00:00",
       "allowed_values": null
@@ -90,7 +90,7 @@
     {
       "name": "job-name",
       "syntax": ["-J {name}", "--job-name={name}"],
-      "requirement": "optional",
+      "required": false,
       "value": null,
       "example": "workflow-job",
       "allowed_values": null
@@ -278,66 +278,92 @@
     {
       "name": "home",
       "environment_variable": "HOME",
-      "path": "/home/{username}",
+      "path_pattern": "/home/{username}",
       "filesystem_type": "ZFS",
       "quota_bytes": 25000000000,
       "file_limit": null,
       "login_readable": true,
       "login_writable": true,
       "compute_visible": true,
+      "compute_readable": true,
       "compute_writable": null,
       "snapshots": "nightly for 7 days, weekly for 3 weeks, monthly for 2 months",
       "purge_after_days": null,
       "purge_condition": "not_purged"
     },
     {
-      "name": "scratch",
-      "environment_variable": "SCRATCH",
-      "path": "/anvil/scratch/{username}",
-      "filesystem_type": "GPFS",
-      "quota_bytes": 100000000000000,
-      "file_limit": 1000000,
-      "login_readable": true,
-      "login_writable": true,
-      "compute_visible": true,
-      "compute_writable": null,
-      "snapshots": "none",
-      "purge_after_days": 30,
-      "purge_condition": "last access time or content modification time"
-    },
-    {
       "name": "project",
       "environment_variable": "PROJECT",
-      "path": "/anvil/projects/{allocation}",
+      "path_pattern": "/anvil/projects/{account}",
       "filesystem_type": "GPFS",
       "quota_bytes": 5000000000000,
       "file_limit": 1000000,
       "login_readable": true,
       "login_writable": true,
       "compute_visible": true,
+      "compute_readable": true,
       "compute_writable": true,
       "snapshots": "nightly for 7 days, weekly for 3 weeks, monthly for 2 months",
       "purge_after_days": 90,
       "purge_condition": "after allocation expiration"
-    }
-  ],
-  "network": [
-    {
-      "name": "manager_worker",
-      "available": null,
-      "evidence_state": "requires_pilot"
     },
     {
-      "name": "worker_worker",
-      "available": null,
-      "evidence_state": "requires_pilot"
+      "name": "data",
+      "environment_variable": null,
+      "path_pattern": null,
+      "filesystem_type": null,
+      "quota_bytes": null,
+      "file_limit": null,
+      "login_readable": null,
+      "login_writable": null,
+      "compute_visible": null,
+      "compute_readable": null,
+      "compute_writable": null,
+      "snapshots": null,
+      "purge_after_days": null,
+      "purge_condition": null
     },
     {
-      "name": "outbound_compute",
-      "available": null,
-      "evidence_state": "requires_pilot"
+      "name": "scratch",
+      "environment_variable": "SCRATCH",
+      "path_pattern": "/anvil/scratch/{username}",
+      "filesystem_type": "GPFS",
+      "quota_bytes": 100000000000000,
+      "file_limit": 1000000,
+      "login_readable": true,
+      "login_writable": true,
+      "compute_visible": true,
+      "compute_readable": true,
+      "compute_writable": null,
+      "snapshots": "none",
+      "purge_after_days": 30,
+      "purge_condition": "last access time or content modification time"
     }
   ],
+  "network": {
+    "login": {
+      "hostname_patterns": ["*.anvil.rcac.purdue.edu"],
+      "dns_resolution": true,
+      "outbound_https": true,
+      "local_tcp_bind": true,
+      "local_tcp_loopback": true
+    },
+    "compute": {
+      "hostname_patterns": [],
+      "dns_resolution": null,
+      "outbound_https": null,
+      "local_tcp_bind": null,
+      "local_tcp_loopback": null
+    },
+    "login_compute": {
+      "tcp_connect": null,
+      "verified_tcp_port_range": null
+    },
+    "compute_compute": {
+      "tcp_connect": null,
+      "verified_tcp_port_range": null
+    }
+  },
   "accounting": {
     "allocation_required": true,
     "visible_accounts": [],
@@ -356,7 +382,7 @@
     {"section": "scheduler", "state": "partial"},
     {"section": "submission", "state": "documented"},
     {"section": "resources", "state": "partial"},
-    {"section": "network", "state": "requires_pilot"},
+    {"section": "network", "state": "partial"},
     {"section": "storage", "state": "partial"},
     {"section": "accounting", "state": "documented"},
     {"section": "software", "state": "documented"}
@@ -387,19 +413,19 @@
       "action_id": "slurm_partitions"
     },
     {
-      "field": "/network/manager_worker",
+      "field": "/network/login_compute/tcp_connect",
       "reason": "Documentation does not establish arbitrary TCP connectivity from compute nodes to a workflow manager.",
       "next_action": "run_pilot",
       "action_id": "manager_worker_tcp"
     },
     {
-      "field": "/network/worker_worker",
+      "field": "/network/compute_compute/tcp_connect",
       "reason": "Interconnect architecture does not establish arbitrary worker-to-worker TCP policy.",
       "next_action": "run_pilot",
       "action_id": "worker_worker_tcp"
     },
     {
-      "field": "/network/outbound_compute",
+      "field": "/network/compute/outbound_https",
       "reason": "Compute-node internet egress is not established by the reviewed documentation.",
       "next_action": "run_pilot",
       "action_id": "outbound_https"
@@ -437,15 +463,18 @@
   ],
   "evidence_report": "evidence-report.json",
   "field_evidence": [
-    {"field": "/scheduler_type", "evidence_ids": ["documentation:anvil-architecture"]},
-    {"field": "/submit_command", "evidence_ids": ["documentation:anvil-job-submission"]},
-    {"field": "/default_partition", "evidence_ids": ["documentation:anvil-job-partitions"]},
-    {"field": "/submission_options/account", "evidence_ids": ["documentation:anvil-faq"]},
-    {"field": "/submission_options/partition", "evidence_ids": ["documentation:anvil-faq"]},
-    {"field": "/partitions", "evidence_ids": ["documentation:anvil-job-partitions"]},
+    {"field": "/scheduler_type", "evidence_ids": ["measurement:scheduler-type"]},
+    {"field": "/submit_command", "evidence_ids": ["measurement:submit-command"]},
+    {"field": "/default_partition", "evidence_ids": ["measurement:default-partition"]},
+    {"field": "/submission_options/account/required", "evidence_ids": ["documentation:anvil-faq"]},
+    {"field": "/submission_options/partition/required", "evidence_ids": ["documentation:anvil-faq"]},
+    {"field": "/partitions", "evidence_ids": ["measurement:slurm-partitions"]},
     {"field": "/partitions/*/node_resources", "evidence_ids": ["documentation:anvil-architecture"]},
-    {"field": "/storage", "evidence_ids": ["documentation:anvil-file-management"]},
+    {"field": "/storage/home/path_pattern", "evidence_ids": ["measurement:home-path"]},
+    {"field": "/storage/project/path_pattern", "evidence_ids": ["measurement:project-path"]},
+    {"field": "/storage/scratch/path_pattern", "evidence_ids": ["measurement:scratch-path"]},
     {"field": "/storage/scratch/purge_after_days", "evidence_ids": ["documentation:anvil-scratch-policy"]},
+    {"field": "/network/login", "evidence_ids": ["measurement:login-network"]},
     {"field": "/accounting", "evidence_ids": ["documentation:anvil-job-accounting"]},
     {"field": "/software", "evidence_ids": ["documentation:anvil-software", "documentation:anvil-faq"]}
   ]

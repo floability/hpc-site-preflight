@@ -24,6 +24,7 @@ from hpc_site_preflight.exceptions import (
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
 from hpc_site_preflight.profiles.compiler import compile_profile
+from hpc_site_preflight.profiles.documentation import apply_documentation
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.providers.registry import create_live_model_provider, provider_for_model
@@ -49,8 +50,9 @@ def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
 def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
     """Build profile artifacts from the CLI's site descriptor and simulated measurements.
 
-    The operation runs documentation analysis, compiles deterministic policy output, and writes a
-    site profile, evidence report, and documentation evidence. It returns no in-memory result.
+    The operation builds a measurement-backed profile, runs documentation analysis, applies
+    accepted findings, and writes the profile and evidence artifacts. It returns no in-memory
+    result.
     """
 
     if args.site_mode != "simulate":
@@ -62,10 +64,12 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
         site = load_site_descriptor(args.site_descriptor)
 
     measurements = SimulatedMeasurementProvider(args.measurements).collect(site, tracker)
-    documentation = _build_documentation(args, site, measurements, tracker)
-
     with tracker.stage("measurement_profile_build"):
-        profile, report = compile_profile(site, measurements, documentation)
+        profile, report = compile_profile(site, measurements)
+
+    documentation = _build_documentation(args, site, measurements, tracker)
+    with tracker.stage("documentation_profile_apply"):
+        profile, report = apply_documentation(profile, report, documentation)
 
     profile_path = args.output_dir / "site-profile.json"
     report_path = args.output_dir / "evidence-report.json"

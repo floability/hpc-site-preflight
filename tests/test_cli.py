@@ -215,12 +215,12 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
         "site_descriptor_load",
         "simulated_measurement_load",
         "simulated_measurement_validate",
-        "documentation_identity",
+        "measurement_profile_build",
     ]
     assert "documentation_corpus" in stage_names
     assert "documentation_context_selection" in stage_names
     assert "documentation_evidence_validation" in stage_names
-    assert stage_names[-2:] == ["measurement_profile_build", "profile_artifact_write"]
+    assert stage_names[-2:] == ["documentation_profile_apply", "profile_artifact_write"]
     assert {artifact["kind"] for artifact in report["artifacts"]} >= {
         "site_profile",
         "evidence_report",

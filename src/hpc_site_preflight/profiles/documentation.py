@@ -83,12 +83,17 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             None,
         )
         if option is not None:
-            option.requirement = finding.requirement
-            return [f"/submission_options/{option.name}/requirement"]
+            option.required = finding.requirement == "required"
+            return [f"/submission_options/{option.name}/required"]
     if isinstance(finding, NetworkFinding):
-        capability = next(item for item in profile.network if item.name == finding.name)
-        capability.available = finding.available
-        return [f"/network/{finding.name}"]
+        if finding.name == "manager_worker":
+            profile.network.login_compute.tcp_connect = finding.available
+            return ["/network/login_compute/tcp_connect"]
+        if finding.name == "worker_worker":
+            profile.network.compute_compute.tcp_connect = finding.available
+            return ["/network/compute_compute/tcp_connect"]
+        profile.network.compute.outbound_https = finding.available
+        return ["/network/compute/outbound_https"]
     return []
 
 
@@ -132,7 +137,7 @@ def _finding_value(finding: DocumentationFinding) -> bool | int | str:
     if isinstance(finding, AllocationRequiredFinding):
         return finding.allocation_required
     if isinstance(finding, SubmissionOptionFinding):
-        return finding.requirement
+        return finding.requirement == "required"
     if isinstance(finding, PartitionFinding):
         return finding.maximum_walltime_seconds
     if isinstance(finding, NetworkFinding):
@@ -148,12 +153,13 @@ def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:
         section_states["resources"].state = "documented"
     if any(path.startswith("/accounting/") for path in resolved_paths):
         section_states["accounting"].state = "documented"
+    if any(path.startswith("/submission_options/") for path in resolved_paths):
+        section_states["submission"].state = (
+            "documented"
+            if all(option.required is not None for option in profile.submission_options)
+            else "partial"
+        )
     if any(path.startswith("/storage/") for path in resolved_paths):
         section_states["storage"].state = "partial"
-    network_paths = {
-        "/network/manager_worker",
-        "/network/worker_worker",
-        "/network/outbound_compute",
-    }
-    if network_paths <= resolved_paths:
-        section_states["network"].state = "documented"
+    if any(path.startswith("/network/") for path in resolved_paths):
+        section_states["network"].state = "partial"

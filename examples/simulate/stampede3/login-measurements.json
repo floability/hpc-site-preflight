@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "site_id": "tacc-stampede3",
   "scheduler_type": "slurm",
   "collected_at": "2026-07-19T12:00:00Z",
@@ -13,6 +13,24 @@
       "observed_at": "2026-07-19T12:00:00Z",
       "method": "python_api",
       "command_id": "socket_getfqdn",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/user/username",
+      "status": "observed",
+      "value": "mockuser",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "getpass_getuser",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/user/groups",
+      "status": "observed",
+      "value": ["mockgroup"],
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "user_groups",
       "source_reference": "simulated evidence; not a real observation"
     },
     {
@@ -49,6 +67,78 @@
       "observed_at": "2026-07-19T12:00:00Z",
       "method": "collector_function",
       "command_id": "resolve_reviewed_path",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/storage/filesystems/scratch/filesystem_type",
+      "status": "observed",
+      "value": "lustre",
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "fixed_command",
+      "command_id": "filesystem_type",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/storage/filesystems/scratch/readable",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "path_readable",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/storage/filesystems/scratch/writable",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "path_writable",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/storage/filesystems/scratch/available_bytes",
+      "status": "observed",
+      "value": 2000000000000,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "python_api",
+      "command_id": "shutil_disk_usage",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/networking/dns_resolution",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "collector_function",
+      "command_id": "test_allowlisted_dns",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/networking/outbound_https_to_allowlisted_target",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "collector_function",
+      "command_id": "test_allowlisted_https",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/networking/local_tcp_bind",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "collector_function",
+      "command_id": "test_local_tcp_bind",
+      "source_reference": "simulated evidence; not a real observation"
+    },
+    {
+      "path": "/facts/networking/local_tcp_loopback",
+      "status": "observed",
+      "value": true,
+      "observed_at": "2026-07-19T12:00:00Z",
+      "method": "collector_function",
+      "command_id": "test_tcp_loopback",
       "source_reference": "simulated evidence; not a real observation"
     }
   ],

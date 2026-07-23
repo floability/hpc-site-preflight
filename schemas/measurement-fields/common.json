@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "catalog_id": "common-login-node-facts",
   "statuses": {
     "observed": "The value was collected successfully.",
@@ -439,6 +439,16 @@
     ],
     "networking": [
       {
+        "path": "/facts/networking/dns_resolution",
+        "type": "boolean",
+        "description": "Whether one fixed allowlisted hostname resolves from the login node.",
+        "method": "collector_function",
+        "command_id": "test_allowlisted_dns",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
         "path": "/facts/networking/outbound_https_to_allowlisted_target",
         "type": "boolean",
         "description": "Whether HTTPS succeeds to one fixed allowlisted target.",
@@ -449,9 +459,19 @@
         "optional": true
       },
       {
+        "path": "/facts/networking/local_tcp_bind",
+        "type": "boolean",
+        "description": "Whether a bounded TCP listener can bind to the local login-node interface.",
+        "method": "collector_function",
+        "command_id": "test_local_tcp_bind",
+        "command": null,
+        "requires_write": false,
+        "optional": true
+      },
+      {
         "path": "/facts/networking/local_tcp_loopback",
         "type": "boolean",
-        "description": "Whether a bounded local TCP bind and loopback connection succeeds.",
+        "description": "Whether a bounded local TCP loopback connection succeeds.",
         "method": "collector_function",
         "command_id": "test_tcp_loopback",
         "command": null,

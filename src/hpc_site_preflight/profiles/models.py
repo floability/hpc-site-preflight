@@ -5,7 +5,7 @@ from typing import Literal, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SchemaVersion = Literal["0.1"]
+SchemaVersion = Literal["0.2"]
 ProfileScalar: TypeAlias = str | int | float | bool
 ProfileValue: TypeAlias = ProfileScalar | list[ProfileScalar]
 ValidationState = Literal[
@@ -18,6 +18,7 @@ ValidationState = Literal[
     "not_applicable",
 ]
 NextAction = Literal[
+    "login_measurement",
     "run_pilot",
     "additional_documentation",
     "user_input",
@@ -32,7 +33,7 @@ class SubmissionOption(BaseModel):
 
     name: str
     syntax: list[str] = Field(min_length=1)
-    requirement: Literal["required", "recommended", "optional", "conditional"]
+    required: bool | None = None
     value: ProfileScalar | None = None
     example: str | None = None
     allowed_values: list[str] | None = None
@@ -84,22 +85,47 @@ class StorageProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str
-    path: str | None = None
+    path_pattern: str | None = None
+    filesystem_type: str | None = None
     login_readable: bool | None = None
     login_writable: bool | None = None
     compute_visible: bool | None = None
+    compute_readable: bool | None = None
     compute_writable: bool | None = None
     available_bytes: int | None = None
     purge_after_days: int | None = None
 
 
-class NetworkCapability(BaseModel):
-    """One named network capability."""
+class NodeNetworkProfile(BaseModel):
+    """Networking facts for one node class."""
 
     model_config = ConfigDict(extra="forbid")
 
-    name: str
-    available: bool | None = None
+    hostname_patterns: list[str] = Field(default_factory=list)
+    dns_resolution: bool | None = None
+    outbound_https: bool | None = None
+    local_tcp_bind: bool | None = None
+    local_tcp_loopback: bool | None = None
+
+
+class NetworkConnectionProfile(BaseModel):
+    """TCP behavior between two node classes."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    tcp_connect: bool | None = None
+    verified_tcp_port_range: str | None = None
+
+
+class NetworkProfile(BaseModel):
+    """Login, compute, and cross-node networking."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    login: NodeNetworkProfile
+    compute: NodeNetworkProfile
+    login_compute: NetworkConnectionProfile
+    compute_compute: NetworkConnectionProfile
 
 
 class AccountingProfile(BaseModel):
@@ -191,7 +217,7 @@ class SiteProfile(BaseModel):
     resource_groups: list[ResourceGroupProfile] = Field(default_factory=list)
     resource_shapes: list[ResourceShapeProfile] = Field(default_factory=list)
     storage: list[StorageProfile] = Field(default_factory=list)
-    network: list[NetworkCapability] = Field(default_factory=list)
+    network: NetworkProfile
     accounting: AccountingProfile
     software: SoftwareProfile
     validation: list[SectionValidation]

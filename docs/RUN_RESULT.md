@@ -213,9 +213,10 @@ accepted.
 
 Stage: `measurement_profile_build`
 
-`compile_profile()` first converted observations into a base `SiteProfile` and an
-`EvidenceReport`. It then called `apply_documentation()` to map only reviewed documentation fields
-onto profile paths.
+`compile_profile()` converts observations into an initial `SiteProfile` and `EvidenceReport`.
+Current runs perform this stage before documentation acquisition, then use a separate
+`documentation_profile_apply` stage to map only accepted documentation findings onto profile
+paths. This separation makes the measurement and AI contributions visible in the trace.
 
 Produced in memory:
 

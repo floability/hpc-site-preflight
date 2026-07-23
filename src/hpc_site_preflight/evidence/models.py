@@ -63,6 +63,7 @@ class UnresolvedAction(BaseModel):
 
     field_path: str
     action: Literal[
+        "login_measurement",
         "run_pilot",
         "additional_documentation",
         "user_input",

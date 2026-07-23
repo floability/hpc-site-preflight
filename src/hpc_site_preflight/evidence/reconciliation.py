@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 SourceType = Literal["measurement", "documentation", "pilot", "user"]
 RuleAction = Literal[
+    "login_measurement",
     "run_pilot",
     "additional_documentation",
     "user_input",
@@ -57,7 +58,7 @@ RULES = (
     ),
     FieldRule(
         rule_id="documented_submission_requirement",
-        field_pattern="/submission_options/*/requirement",
+        field_pattern="/submission_options/*/required",
         allowed_sources=["documentation", "user"],
         precedence=["documentation", "user"],
         conflict_behavior="retain_note",
@@ -95,12 +96,21 @@ RULES = (
     ),
     FieldRule(
         rule_id="storage_login_observation",
-        field_pattern="/storage/*/path",
+        field_pattern="/storage/*/path_pattern",
         allowed_sources=["measurement", "documentation"],
         precedence=["measurement", "documentation"],
         conflict_behavior="retain_note",
-        unresolved_action="user_input",
+        unresolved_action="login_measurement",
         action_id="storage_path_input",
+    ),
+    FieldRule(
+        rule_id="storage_login_access",
+        field_pattern="/storage/*/login_*",
+        allowed_sources=["measurement", "documentation"],
+        precedence=["measurement", "documentation"],
+        conflict_behavior="retain_note",
+        unresolved_action="login_measurement",
+        action_id="storage_login_access",
     ),
     FieldRule(
         rule_id="storage_compute_behavior",
@@ -119,6 +129,15 @@ RULES = (
         conflict_behavior="retain_note",
         unresolved_action="additional_documentation",
         action_id="storage_policy_search",
+    ),
+    FieldRule(
+        rule_id="login_network_observation",
+        field_pattern="/network/login/*",
+        allowed_sources=["measurement", "documentation"],
+        precedence=["measurement", "documentation"],
+        conflict_behavior="retain_note",
+        unresolved_action="login_measurement",
+        action_id="login_network_check",
     ),
     FieldRule(
         rule_id="compute_network_behavior",
