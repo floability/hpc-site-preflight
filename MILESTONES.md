@@ -1,280 +1,166 @@
 # HPC Site Preflight Milestones
 
-Build the smallest complete path from site evidence to an evidence-backed profile, then add live
-collection, pilots, and workflow preflight.
+Build evidence-backed HPC site profiles, evaluate how they are constructed, and use them for
+deterministic preflight before submission.
+
+## Research questions
+
+- **RQ1:** Can the system discover authoritative documentation and construct accurate,
+  evidence-backed fields while abstaining where the site is silent?
+- **RQ2:** How do retrieval strategies trade coverage and correctness against token cost, latency,
+  and run-to-run variance?
+- **RQ3:** Do constructed profiles catch incompatibilities before submission, and at what
+  false-rejection rate?
 
 ## Execution contract
 
-- Site, model, and web modes are independent.
-- Site mode defaults to `simulate`; a supplied login-measurement file replaces real HPC access.
-- Model and web modes default to `live`; their `simulate` modes replay offline recordings.
-- Live site mode reuses supplied measurements or captures them on the real login node.
-- Evidence source is `simulated` or `measured`, independent of execution mode.
-- Pilot jobs are never automatic and always require explicit authorization.
+- Site, model, and web modes are independent; site simulation never queries laptop hardware.
+- Live site mode reuses supplied measurements or captures them from the login node.
+- AI is limited to documentation discovery, query expansion, and typed extraction.
+- Pilot submission always requires explicit authorization.
 
-## Phase A — Foundations
+## Phase A — Implemented foundation
 
-### Milestone 1 — Project skeleton
+### Milestone 1 — Evidence and profile contracts
 
 **Status: Completed**
 
-Provide a runnable package with explicit boundaries and observable command execution.
+Define typed login measurements, evidence records, simulated sites, and the partial site profile.
 
-- Added the CLI, typed placeholders, project exceptions, and performance tracking.
-- Added offline tests and explicit failures for unfinished commands.
+- Implemented Slurm and HTCondor contracts, three simulated sites, and measurement-backed profiles.
 
-**Test:** Run `hpc-site-preflight --help` and `pytest`.
+**Test:** Validate every example through its Pydantic model and build all simulated profiles.
 
-### Milestone 2 — Common login facts
-
-**Status: Completed**
-
-Define scheduler-independent facts that are safe to observe from a login node.
-
-- Added a compact common field catalog with fixed acquisition methods.
-- Kept compute-node, batch-job, and unrestricted network facts out of scope.
-
-**Test:** Validate `schemas/measurement-fields/common.json` and its catalog test.
-
-### Milestone 3 — Scheduler facts
+### Milestone 2 — Bounded documentation agent
 
 **Status: Completed**
 
-Define safely observable Slurm and HTCondor login-node facts.
+Discover official target-site pages without giving the model unrestricted web access.
 
-- Added reviewed Slurm commands and derived partition and node facts.
-- Added HTCondor ClassAd and resource-group facts without inventing partitions.
+- Implemented deterministic DuckDuckGo search, bounded fetch tools, domain checks, and one AI
+  source-selection step.
 
-**Test:** Validate both scheduler catalogs and their command allowlists.
+**Test:** Replay successful, partial, out-of-scope, and failed-fetch discovery cases.
 
-### Milestone 4 — Evidence contracts
-
-**Status: Completed**
-
-Validate the structured login-measurement document as the single site input.
-
-- Added structured site, storage, Slurm, HTCondor, and measurement-bundle models.
-- Added `simulated | measured` evidence-source validation.
-
-**Test:** Load all example JSON through the Pydantic models.
-
-## Phase B — Simulated sites
-
-### Milestone 5 — Three site simulations
+### Milestone 3 — Corpus, retrieval, and extraction
 
 **Status: Completed**
 
-Provide laptop inputs for Anvil, Stampede3, and Notre Dame CRC.
+Turn official pages into exact evidence spans and typed profile-field candidates.
 
-- Added structured simulated measurements for two Slurm sites and one HTCondor site.
-- Preserved observable facts as evidence, including Anvil's visible infinite walltime.
+- Implemented persistent corpora, batched full corpus, BM25, additive-query BM25, typed extraction,
+  citation validation, and bounded correction.
 
-**Test:** Validate every pair under `examples/simulate/`.
+**Test:** Rebuild a corpus deterministically and run all three context modes offline.
 
-### Milestone 6 — Simulated provider
-
-**Status: Completed**
-
-Load simulated evidence without touching the current hardware.
-
-- Added the simulated measurement provider with contract and scheduler-consistency checks.
-- Made simulated site inputs independent from model and web execution.
-
-**Test:** Build a profile from each simulated site.
-
-## Phase C — First partial profile
-
-### Milestone 7 — Measurement-only profile
+### Milestone 4 — End-to-end profile build
 
 **Status: Completed**
 
-Produce a useful partial site profile and detailed evidence report without failing on unknowns.
+Run measured or simulated site evidence through live or recorded documentation analysis.
 
-- Added deterministic compilation, evidence links, and unresolved actions.
-- Added `0.2` storage path patterns and structured login/compute networking.
+- Implemented independent execution modes, progress traces, provider usage, and profile artifacts.
 
-**Test:** Run `profile build` for all three sites and inspect both output files.
+**Test:** Reproduce the three offline site profiles and validate every evidence link.
 
-## Phase D — Documentation AI building blocks
+## Phase B — Evidence-safe AI results
 
-### Milestone 8 — Model provider and structured calls
+### Milestone 5 — Abstention and canonical extraction
 
-**Status: Completed**
+**Status: Incomplete**
 
-Create the smallest provider-neutral interface needed for schema-constrained AI results.
+Prevent unsupported findings and make model outputs match the profile contract directly.
 
-- Added a provider-neutral typed-result interface with a basic OpenAI adapter.
-- Added model-to-provider inference for OpenAI and future Anthropic and Gemini adapters.
-- Added local validation, retry tracking, usage reporting, and offline recordings.
+- Reject absence-as-false and indirect networking inferences.
+- Constrain and normalize scheduler option and storage names.
+- Preserve valid fields while correcting only invalid fields once.
 
-**Test:** Parse valid, invalid, and partial recorded model responses without an API key.
+**Test:** Anvil fills documented submission fields while silent network fields remain `null`.
 
-### Milestone 9 — Site identity and query plan
+### Milestone 6 — Authoritative discovery coverage
 
-**Status: Completed**
+**Status: Needs more work**
 
-Turn measured site facts into deterministic documentation search inputs.
+Find the small set of official pages needed for every profile topic.
 
-- Added normalized identity from site, scheduler, hostname, and domain measurement fields.
-- Added four reproducible policy queries and deterministic source scope.
+- Balance selection across submission, resources, filesystem storage, networking, and operations.
+- Record topic gaps and distinguish filesystem policy from object-storage documentation.
+- Verify target-site scope and authority for every selected page.
 
-**Test:** Snapshot the query plans for all three simulated sites.
+**Test:** Anvil discovery retrieves the documented partition, charging, scratch, and project rules.
 
-### Milestone 10 — Bounded search and fetch tools
+### Milestone 7 — Controlled retrieval comparison
 
-**Status: Completed**
+**Status: Incomplete**
 
-Expose only the reviewed tools needed for documentation discovery.
+Evaluate retrieval modes against an identical frozen corpus.
 
-- Added bounded live and recorded search/fetch tools over one interface.
-- Added HTTPS, domain, budget, size, timeout, and body-free trace controls.
+- Preserve base BM25 hits and append expanded-query hits.
+- Load a captured corpus without rerunning discovery.
+- Record field coverage, correctness, tokens, latency, and repeated-run variance.
 
-**Test:** Use recorded search results and pages to verify every bound and rejection.
+**Test:** Reproduce all RQ2 modes from one corpus fingerprint with one evaluation command.
 
-### Milestone 11 — Bounded discovery agent
+## Phase C — Complete site evidence
 
-**Status: Completed**
-
-Let one agent find useful official pages while deterministic code controls its scope and budget.
-
-- Added one discovery agent with bounded search and download tools.
-- Added one structured source-selection call, one correction bound, partial fallback, and sibling
-  rejection.
-
-**Test:** Replay successful, partial, out-of-scope, and budget-exhausted discovery runs.
-
-### Milestone 12 — Normalized document corpus
-
-**Status: Completed**
-
-Convert fetched official pages into a persistent corpus suitable for repeatable extraction.
-
-- Added heading-aware, table-preserving records with stable IDs and hashes.
-- Added persistent manifest, document JSONL, and chunk JSONL artifacts.
-
-**Test:** Rebuild the same recorded corpus twice and compare identifiers and hashes.
-
-### Milestone 13 — Three context modes
-
-**Status: Completed**
-
-Select extraction context using full corpus, BM25, or LLM-expanded BM25.
-
-- Added bounded full-corpus batches, BM25, and additive LLM-expanded BM25 selection.
-- Expanded BM25 retains base queries, adds bounded variants, and uses deterministic scoring.
-
-**Test:** Verify full-corpus batches cover every chunk once and ranked modes select stable chunks.
-
-### Milestone 14 — Evidence-span extraction
-
-**Status: Completed**
-
-Extract typed field candidates that point to exact local evidence spans.
-
-- Added exact local spans, three group schemas, and one combined full-corpus batch schema.
-- Added independent resource, scope, and citation validation with one bounded correction.
-
-**Test:** Replay valid, unsupported, misquoted, and absent-field responses.
-
-### Milestone 15 — Documentation policy result
-
-**Status: Completed**
-
-Produce a documentation-derived partial policy with evidence for every accepted field.
-
-- Added canonical accepted findings plus rejected and unresolved results.
-- Added direct typed profile application and exact evidence-report provenance.
-
-**Test:** Build documentation results for each site and validate every evidence link.
-
-### Milestone 16 — End-to-end live and replayable AI profile
-
-**Status: Completed**
-
-Run real or recorded documentation AI from simulated site inputs to a partial site profile.
-
-- Defaulted to live model and web modes while keeping site simulation independent.
-- Kept recorded web/model modes for deterministic offline tests.
-
-**Test:** Reproduce all three site profiles offline and compare deterministic artifacts.
-
-## Phase E — Live evidence and pilots
-
-### Milestone 17 — Live input resolver
-
-**Status: Completed**
-
-Use one structured measurement file for both laptop simulation and real-site capture.
-
-- Simulated site mode requires `--measurements` and never reads current hardware.
-- Live site mode loads a supplied file or captures and saves one when it is absent.
-- Added `evidence capture-login` for measurement-only collection.
-
-**Test:** Verify supplied, missing, and mixed-input cases with collector fakes.
-
-### Milestone 18 — Live Slurm and HTCondor collectors
+### Milestone 8 — Live scheduler collection
 
 **Status: Partially completed**
 
-Collect the reviewed measurement catalogs safely on real login nodes.
+Finish safe login-node collection for both scheduler families.
 
-- Use only fixed argument arrays and bounded collector functions.
-- Record unavailable values instead of aborting the bundle.
-- Normalize values into the structured `0.6` contract.
-- Mark the resulting evidence source as `measured`.
+- Complete reviewed Slurm parsing and HTCondor ClassAd resource groups.
+- Record unavailable observations rather than failing collection.
+- Validate real Anvil, Stampede3, and Notre Dame CRC captures.
 
-**Test:** Parse recorded command outputs, then run explicitly marked site integrations.
+**Test:** Parse recorded command outputs before running marked live-site integrations.
 
-### Milestone 19 — Approved pilots
-
-**Status: Incomplete**
-
-Fill selected documentation gaps with predefined simulated or explicitly approved pilot jobs.
-
-- Define a small pilot catalog for network and compute-node facts.
-- Add simulated pilot results for laptop development.
-- Require explicit authorization before any live submission.
-- Preserve queue time, result status, and pilot provenance.
-
-**Test:** Replay each pilot result and verify that live submission is never implicit.
-
-### Milestone 20 — Deterministic reconciliation
+### Milestone 9 — Approved pilot evidence
 
 **Status: Incomplete**
 
-Combine measurement, documentation, pilot, and user evidence without silent conflict resolution.
+Measure unresolved compute-node behavior with predefined, explicitly approved jobs.
 
-- Define field-level precedence and freshness rules in code.
-- Record conflicts, selected evidence, and the applied rule.
-- Keep unresolved fields empty with a concrete next action.
+- Add simulated and live pilot contracts for networking and compute-visible storage.
+- Preserve approval, queue time, result status, and exact pilot provenance.
+- Never generate arbitrary commands or submit automatically.
+
+**Test:** Replay every pilot and prove that live submission cannot occur without authorization.
+
+### Milestone 10 — Deterministic reconciliation
+
+**Status: Incomplete**
+
+Combine measurement, documentation, and pilots without silent conflict resolution.
+
+- Apply field-specific authority and freshness rules.
+- Preserve conflicts, abstentions, selected evidence, and next actions.
 - Validate the final profile and evidence report together.
 
-**Test:** Cover agreement, conflict, stale evidence, and missing evidence cases.
+**Test:** Cover agreement, conflict, stale evidence, silence, and missing evidence.
 
-## Phase F — Preflight and paper evaluation
+## Phase D — Preflight and paper evaluation
 
-### Milestone 21 — Workflow preflight
+### Milestone 11 — Workflow preflight
 
 **Status: Incomplete**
 
-Compare workflow requirements with a site profile and produce an actionable result.
+Compare portable workflow requirements with a validated site profile before submission.
 
-- Load a minimal Backpack requirement contract.
 - Check scheduler, submission, resources, storage, software, and networking deterministically.
-- Emit an execution plan or an early failure with remediation.
+- Emit an execution plan, an unknown-policy result, or an early failure with remediation.
 - Never deploy or resubmit a workflow automatically.
 
 **Test:** Cover runnable, remediable, blocked, and unknown-policy workflows.
 
-### Milestone 22 — Evaluation harness
+### Milestone 12 — Reproducible RQ evaluation
 
 **Status: Incomplete**
 
-Measure the paper's discovery quality, evidence quality, completeness, cost, and reproducibility.
+Produce the evidence needed to answer RQ1, RQ2, and RQ3.
 
-- Evaluate Anvil, Stampede3, and Notre Dame CRC across all context modes.
-- Report field precision, recall, abstention, citation validity, and profile completeness.
-- Record model usage, wall time, tool calls, pilot count, and run-to-run variation.
-- Keep reviewed ground truth separate from simulated development inputs.
+- Maintain reviewed field truth and authoritative citations separately from development fixtures.
+- Measure accuracy, abstention, citation validity, cost, latency, variance, and profile completeness.
+- Inject workflow incompatibilities and report detection and false-rejection rates.
 
-**Test:** Reproduce tables from versioned inputs with one documented command.
+**Test:** Reproduce every paper table from versioned inputs with documented commands.

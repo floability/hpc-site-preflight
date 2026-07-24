@@ -1,132 +1,100 @@
-# Documentation pipeline TODO
+# Improvement TODO
 
-This file records the agreed incremental redesign of documentation discovery and extraction. Make
-one change at a time, run the Anvil evaluation after each step, and do not continue automatically.
+This file records improvements discovered through live Anvil runs. Implement one item at a time,
+rerun its focused test, and do not advance automatically.
 
 ## Decisions to preserve
 
-- Documentation discovery is the job of one bounded agent. Search and page download are the
-  agent's reviewed tools; the model supplies source-selection judgment inside that agent.
-- Use DuckDuckGo through the `ddgs` package for live search.
-- Treat query construction, filtering, ranking, and fetch selection as deterministic given the
-  returned search results. Record live results and pages for reproducible replay.
-- Use AI to select useful fetched documents and extract typed policy values, not as the primary
-  search engine.
-- Keep `site`, `model`, and `web` modes independent.
-- Keep domain allowlists, target/sibling scope checks, exact evidence spans, local validation, and
-  deterministic profile construction.
-- Keep all three context modes: `full-corpus`, `bm25`, and `llm-expanded-bm25`.
-- Unknown fields remain empty and become explicit unresolved work; they do not fail the run.
+- One bounded discovery agent uses deterministic DuckDuckGo search and reviewed download tools.
+- AI selects documentation, expands queries, and proposes typed findings; validation and profile
+  construction remain deterministic.
+- Every accepted value requires target-site evidence, and documentation silence remains unknown.
+- Keep `full-corpus`, `bm25`, and `llm-expanded-bm25` as separate evaluation modes.
 
-## Step 1 — Replace the discovery loop
+## Latest Anvil checkpoint
 
-**Status:** Implementation complete; live Anvil comparison pending.
+The v3 runs completed with live web and model modes:
 
-Replace the model-driven search/fetch loop with deterministic bootstrap discovery followed by one
-bounded AI source-selection call.
+| Mode | Selected chunks | Model calls | Tokens | Time |
+| --- | ---: | ---: | ---: | ---: |
+| Batched full corpus | 310 | 16 | 91,333 | 350.0 s |
+| BM25 | 22 | 6 | 29,346 | 155.7 s |
+| LLM-expanded BM25 | 34 | 6 | 31,971 | 182.1 s |
 
-- Generate fixed searches for canonical documentation, submission/resources, networking, and
-  operational/storage policy; append user discovery keywords within the search budget.
-- Execute searches with DuckDuckGo, enforce the HTTPS domain allowlist, classify target and sibling
-  sites locally, rank candidates, fetch the canonical guide, follow useful guide links, and fetch a
-  small number of high-ranking pages per topic.
-- Give the model compact metadata and excerpts from already fetched pages. The model may only select
-  fetched eligible pages and report unanswered topics.
-- Permit at most one correction call for an invalid selection. Preserve deterministic crawl results
-  as a partial selection if the model fails.
-- Do not put complete downloaded pages into repeated model history.
+All modes found the allocation requirement and eight documented partition walltimes. The runs also
+exposed the following correctness and evaluation problems.
 
-Test after this step: run Anvil with live model and web modes and compare the new run with the saved
-baseline in `docs/RUN_RESULT.md`.
+## 1. Enforce abstention
 
-Record at least:
+**Priority: Highest**
 
-- model calls, input/output tokens, and elapsed time;
-- searches, successful and failed fetches, and selected pages;
-- corpus document/chunk counts;
-- topic coverage and unresolved documentation topics.
+- Reject network findings that interpret missing documentation as `false`.
+- Do not treat MPI or multi-node execution as proof of arbitrary TCP connectivity.
+- Leave undocumented compute networking `null` and assign it to documentation follow-up or pilots.
+- Add tests for explicit permission, explicit prohibition, indirect evidence, and silence.
 
-Target: reduce discovery from eight model calls to one normally, fetch multiple relevant Anvil
-pages, cover every planned topic, and avoid repeated-search actions.
+**Test:** Anvil documentation must leave all three compute-network fields unknown with the current
+corpus.
 
-Offline Anvil replay now uses ten fixed searches, fetches two target-site pages, builds four corpus
-chunks, and makes four model calls total: one source selection plus three extraction groups.
+## 2. Constrain canonical names
 
-## Step 2 — Restore field-level retrieval
+**Priority: High**
 
-**Status:** Implementation complete; live context-mode comparison pending.
+- Constrain Slurm and HTCondor option names in the typed schema instead of accepting free text.
+- Give extraction the allowed canonical option, partition, and storage names.
+- Normalize documented forms such as `-A`, `--account`, and `$SCRATCH` before validation.
+- Ensure correction calls return only invalid fields and can repair names.
 
-Retrieve evidence for individual profile fields instead of using only one broad query per extraction
-group.
+**Test:** Anvil must populate required `account` and `partition` options without accepting unknown
+options or storage resources.
 
-- Define multiple fixed query variants for each requested field.
-- Apply site scope before scoring, deduplicate identical content, and add only small reviewed noise
-  guards where evaluation demonstrates a need.
-- Preserve the three context modes. `full-corpus` remains the no-ranking comparison;
-  `bm25` uses reviewed field queries; `llm-expanded-bm25` adds bounded model-generated queries.
-- Group the selected field-local chunks only when constructing model requests.
-- Persist retrieval queries, scores, selected chunk IDs, and retrieved-but-uncited chunks for audit.
+## 3. Make expanded BM25 truly additive
 
-Test after this step: verify that the Anvil partition-limit table is retrieved for partition and
-walltime fields, then compare all three context modes.
+**Priority: High**
 
-Offline replay now retrieves the Anvil queue-limit table for `maximum_walltime_seconds` in all
-three modes. `documentation-evidence.json` records field queries, fused scores, selected chunk IDs,
-and whether each retrieved chunk was cited. The run still makes four model calls total.
+- Preserve ordinary BM25 hits before adding hits from model-expanded queries.
+- Append new deduplicated hits within the expanded budget instead of globally reranking base hits.
+- Retain the Anvil partition requirement chunk `doc-anvil-jobs:c44`.
 
-## Step 3 — Use canonical typed extraction schemas
+**Test:** Every base BM25 hit must remain in the expanded result, with at least one additional hit
+when expansion finds new evidence.
 
-**Status:** Implementation complete; live Anvil comparison pending.
+## 4. Improve discovery coverage
 
-Replace the generic `field + resource + value` candidate list with small typed schemas whose names
-and value shapes match the site-profile contract.
+**Priority: High**
 
-- Use independent submission/resource, networking, and operational/storage schemas.
-- Represent submission options, partitions, limits, connectivity, charging, and purge values with
-  canonical field names and types.
-- Let the model select field-local evidence-span IDs; Python inserts exact quotes and provenance.
-- Validate each field independently and retry only invalid fields once.
-- Remove the fragile string-name translation that currently sits between accepted findings and
-  profile fields.
+- Balance selected pages across submission, resources, filesystem storage, networking, and policy.
+- Distinguish filesystem storage documentation from unrelated object-storage documentation.
+- Preserve partial results when a fetch fails, but keep missing topics visible.
 
-Test after this step: confirm that accepted submission options and partition limits map directly to
-profile fields and every applied value has evidence.
+**Test:** Anvil discovery must include the official filesystem page that states scratch and project
+retention rules.
 
-Offline replay now returns shallow group-specific schemas, preserves valid fields when another
-field needs correction, and applies typed findings without a generic field-name translation. The
-Anvil run still makes four model calls and links all seven applied documentation values to exact
-evidence spans.
+## 5. Freeze the corpus for retrieval evaluation
 
-## Step 4 — Simplify after quality is stable
+**Priority: High**
 
-**Status:** Partially completed; artifact consolidation remains.
+- Add an extraction path that loads a previously captured corpus without rerunning discovery.
+- Run all retrieval modes against the same documents, chunks, model, and field schemas.
+- Repeat each mode to measure correctness, cost, latency, and model variance separately from
+  discovery variance.
 
-Simplify artifacts and module boundaries only after the first three steps produce stable output.
+**Test:** One command must produce comparable full-corpus, BM25, and expanded-BM25 results from an
+identical corpus fingerprint.
 
-- Keep one compact actionable `site-profile.json` and one detailed `evidence-report.json` as the
-  primary profile-build artifacts.
-- Retain documentation-only evaluation data where needed for the paper, but avoid duplicating the
-  same findings across multiple normal-run files.
-- Keep the CLI parser, process lifecycle, and top-level operations separate.
-- Review adapters and placeholder modules using the real call path; combine wrappers that add no
-  safety, provider boundary, or test seam.
-- Update `docs/CODE_GUIDE.md`, `docs/AI_PIPELINE.md`, figures, and run-result documentation after the
-  final structure is known.
+## 6. Complete residual evidence and preflight
 
-Test after this step: reproduce the Anvil result, validate all artifact links, and confirm that the
-documented code-reading path matches the actual call graph.
+**Priority: Later**
 
-Removed fragment-duplicate web work, redundant model-response validation, pass-through discovery
-completion data, unused interfaces, and repeated URL/resource parsing. Primary artifact
-consolidation remains deferred until live output quality is stable.
+- Add approved simulated and live pilots for unresolved compute networking and storage behavior.
+- Reconcile measurement, documentation, and pilot evidence without hiding conflicts.
+- Build deterministic preflight cases and measure false acceptance and false rejection.
 
-## Deferred work
+**Test:** Reproduce RQ3 fault-injection results from versioned profiles and workflow requirements.
 
-Do not mix these tasks into the documentation redesign:
+## Deferred engineering
 
-- richer Slurm `sinfo` login measurements;
-- partition CPU, memory, GPU, and node aggregation;
-- live login-node collection;
-- pilot jobs;
-- backpack preflight;
-- Anthropic and Gemini provider implementations.
+- Finish HTCondor live collection and richer scheduler measurements.
+- Mark runs with failed extraction groups as partial rather than fully completed.
+- Consolidate normal-run artifacts after output quality stabilizes.
+- Add Anthropic and Gemini provider adapters after the OpenAI path is stable.
