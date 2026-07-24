@@ -7,7 +7,7 @@
 5. Discover official target-site documentation with bounded AI assistance.
 6. Build and persist a scoped corpus.
 7. Select extraction context using full-corpus, BM25, or one-call AI-expanded BM25.
-8. Extract submission, network, and operational groups with constrained calls.
+8. Extract bounded full-corpus batches or ranked policy groups with constrained calls.
 9. Validate schema, citations, quotes, field context, and site scope.
 10. Apply accepted documentation findings deterministically.
 11. Run approved pilots or load simulated pilot results.

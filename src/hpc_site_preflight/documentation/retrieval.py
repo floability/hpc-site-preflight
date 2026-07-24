@@ -53,6 +53,8 @@ _RESOURCE_QUERY = {
     "purge_after_days": "storage scratch purge retention days",
 }
 
+FULL_CORPUS_BATCH_CHARS = 12_000
+
 
 def select_context(
     chunks: list[CorpusChunk],
@@ -148,6 +150,35 @@ def select_context(
     )
 
 
+def batch_full_corpus(
+    selection: ContextSelection,
+    *,
+    maximum_chars: int = FULL_CORPUS_BATCH_CHARS,
+) -> list[ContextSelection]:
+    """Split full-corpus context into ordered batches without splitting chunks."""
+
+    if selection.mode != "full-corpus":
+        raise ValueError("Only full-corpus context can be batched.")
+    if maximum_chars < 1:
+        raise ValueError("maximum_chars must be positive.")
+
+    chunk_batches: list[list[CorpusChunk]] = []
+    current: list[CorpusChunk] = []
+    current_chars = 0
+    for chunk in selection.chunks:
+        chunk_chars = _context_chars(chunk)
+        if current and current_chars + chunk_chars > maximum_chars:
+            chunk_batches.append(current)
+            current = []
+            current_chars = 0
+        current.append(chunk)
+        current_chars += chunk_chars
+    if current:
+        chunk_batches.append(current)
+
+    return [_selection_batch(selection, chunks) for chunks in chunk_batches]
+
+
 def _retrieve_field(
     chunks: list[CorpusChunk],
     field: str,
@@ -228,6 +259,41 @@ def _deduplicate_content(chunks: list[CorpusChunk]) -> list[CorpusChunk]:
             seen.add(chunk.content_hash)
             result.append(chunk)
     return result
+
+
+def _context_chars(chunk: CorpusChunk) -> int:
+    """Approximate prompt size while retaining each heading-aware chunk whole."""
+
+    return (
+        len(chunk.text)
+        + len(chunk.source_url)
+        + len(chunk.title)
+        + sum(len(heading) for heading in chunk.heading_path)
+        + 100
+    )
+
+
+def _selection_batch(
+    selection: ContextSelection,
+    chunks: list[CorpusChunk],
+) -> ContextSelection:
+    chunk_ids = {chunk.chunk_id for chunk in chunks}
+    return selection.model_copy(
+        update={
+            "chunks": chunks,
+            "selected_chunk_ids": [chunk.chunk_id for chunk in chunks],
+            "retrievals": [
+                retrieval.model_copy(
+                    update={
+                        "hits": [
+                            hit for hit in retrieval.hits if hit.chunk_id in chunk_ids
+                        ]
+                    }
+                )
+                for retrieval in selection.retrievals
+            ],
+        }
+    )
 
 
 def _bm25(query: str, chunks: list[CorpusChunk]) -> list[float]:

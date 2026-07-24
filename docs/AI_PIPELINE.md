@@ -130,7 +130,8 @@ AI run inspectable and repeatable without downloading the pages again.
 
 `documentation/retrieval.py` supports three context modes:
 
-- `full-corpus`: use every deduplicated target-site chunk in stable corpus order without ranking;
+- `full-corpus`: cover every deduplicated target-site chunk once in stable, bounded batches without
+  ranking;
 - `bm25`: rank chunks independently for each field using fixed query variants; and
 - `llm-expanded-bm25`: preserve the reviewed queries and add up to two model-generated synonym or
   site-specific query variants per applicable profile field.
@@ -145,7 +146,7 @@ group, compared with four hits per field and 12 chunks or 12,000 characters for 
 Target-site scope is applied before scoring and identical content is removed by content hash.
 BM25 scoring, score fusion, chunk limits, and the fair field merge remain deterministic.
 
-Retrieval runs independently for three extraction groups:
+BM25 retrieval runs independently for three extraction groups:
 
 | Group | Proposed fields |
 | --- | --- |
@@ -172,9 +173,11 @@ library, preventing the model from silently rewriting the source.
 
 ## 6. Request typed findings
 
-There is one structured extraction request for each group. The schemas are shallow and match the
-profile concepts directly. A submission result can contain an allocation requirement, individual
-submission options, and individual partition limits:
+BM25 modes make one structured extraction request for each group. Full-corpus mode instead sends
+each bounded batch once through a combined schema containing the same three groups. This retains
+complete corpus coverage without repeating the full text three times. The schemas are shallow and
+match the profile concepts directly. A submission result can contain an allocation requirement,
+individual submission options, and individual partition limits:
 
 ```json
 {

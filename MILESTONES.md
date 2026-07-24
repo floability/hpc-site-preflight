@@ -160,10 +160,10 @@ Convert fetched official pages into a persistent corpus suitable for repeatable 
 
 Select extraction context using full corpus, BM25, or LLM-expanded BM25.
 
-- Added true full-corpus, BM25, and additive LLM-expanded BM25 selection.
+- Added bounded full-corpus batches, BM25, and additive LLM-expanded BM25 selection.
 - Expanded BM25 retains base queries, adds bounded variants, and uses deterministic scoring.
 
-**Test:** Run all modes on one corpus and verify stable selected chunks.
+**Test:** Verify full-corpus batches cover every chunk once and ranked modes select stable chunks.
 
 ### Milestone 14 — Evidence-span extraction
 
@@ -171,7 +171,7 @@ Select extraction context using full corpus, BM25, or LLM-expanded BM25.
 
 Extract typed field candidates that point to exact local evidence spans.
 
-- Added exact local spans and three small typed extraction schemas.
+- Added exact local spans, three group schemas, and one combined full-corpus batch schema.
 - Added independent resource, scope, and citation validation with one bounded correction.
 
 **Test:** Replay valid, unsupported, misquoted, and absent-field responses.

@@ -18,6 +18,7 @@ from hpc_site_preflight.documentation.models import (
     EvidenceSpan,
     ExtractionGroupName,
     FieldRetrieval,
+    FullCorpusExtractionResult,
     NetworkExtractionResult,
     NetworkFinding,
     OperationalExtractionResult,
@@ -28,7 +29,7 @@ from hpc_site_preflight.documentation.models import (
     SubmissionOptionFinding,
 )
 from hpc_site_preflight.documentation.query_expansion import expand_queries
-from hpc_site_preflight.documentation.retrieval import select_context
+from hpc_site_preflight.documentation.retrieval import batch_full_corpus, select_context
 from hpc_site_preflight.exceptions import ModelProviderError
 from hpc_site_preflight.providers.base import (
     ModelProvider,
@@ -134,7 +135,10 @@ def extract_documentation(
     selected_chunk_ids: list[str] = []
     retrievals: list[FieldRetrieval] = []
 
-    for group in _GROUPS:
+    groups: tuple[ExtractionGroupName, ...] = (
+        () if context_mode == "full-corpus" else _GROUPS
+    )
+    for group in groups:
         requested_fields = _requested_fields(group, scheduler, storage_names)
         with tracker.stage("documentation_context_selection", display=False):
             selection = select_context(
@@ -227,6 +231,24 @@ def extract_documentation(
             findings.extend(corrected.findings)
             rejected.extend(f"after correction: {item}" for item in corrected.rejected)
 
+    if context_mode == "full-corpus":
+        full_findings, full_rejected, full_chunk_ids, full_retrievals = (
+            _extract_full_corpus_batches(
+                site_name=site_name,
+                scheduler=scheduler,
+                partition_names=partition_names,
+                storage_names=storage_names,
+                chunks=chunks,
+                resources_by_field=resources_by_field,
+                provider=provider,
+                tracker=tracker,
+            )
+        )
+        findings.extend(full_findings)
+        rejected.extend(full_rejected)
+        selected_chunk_ids.extend(full_chunk_ids)
+        retrievals.extend(full_retrievals)
+
     accepted_findings = _deduplicate_findings(findings)
     found_fields = {_retrieval_field(finding) for finding in accepted_findings}
     unresolved = sorted(_expected_fields(scheduler, storage_names) - found_fields)
@@ -243,6 +265,158 @@ def extract_documentation(
         selected_chunk_ids=list(dict.fromkeys(selected_chunk_ids)),
         retrieval=_mark_cited(retrievals, accepted_findings),
     )
+
+
+def _extract_full_corpus_batches(
+    *,
+    site_name: str,
+    scheduler: str,
+    partition_names: set[str],
+    storage_names: set[str],
+    chunks: list[CorpusChunk],
+    resources_by_field: dict[str, set[str]],
+    provider: ModelProvider,
+    tracker: RunTracker,
+) -> tuple[
+    list[DocumentationFinding],
+    list[str],
+    list[str],
+    list[FieldRetrieval],
+]:
+    """Extract every target-site chunk through bounded combined-schema calls."""
+
+    with tracker.stage("documentation_context_selection", display=False):
+        selections = {
+            group: select_context(
+                chunks,
+                group=group,
+                fields=_requested_fields(group, scheduler, storage_names),
+                mode="full-corpus",
+                resources_by_field=resources_by_field,
+            )
+            for group in _GROUPS
+        }
+        batches = {
+            group: batch_full_corpus(selection)
+            for group, selection in selections.items()
+        }
+
+    batch_count = len(batches["submission"])
+    selected_chunk_ids = selections["submission"].selected_chunk_ids
+    retrievals = [
+        retrieval
+        for group in _GROUPS
+        for retrieval in selections[group].retrievals
+    ]
+    tracker.progress(
+        f"Full corpus selected {len(selected_chunk_ids)} unique chunk(s) "
+        f"in {batch_count} bounded batch(es)"
+    )
+
+    findings: list[DocumentationFinding] = []
+    rejected: list[str] = []
+    for index in range(batch_count):
+        batch_number = index + 1
+        batch_selections = {group: batches[group][index] for group in _GROUPS}
+        spans = build_evidence_spans(batch_selections["submission"])
+        prompt = build_full_corpus_prompt(
+            site_name,
+            batch_number,
+            batch_count,
+            batch_selections,
+            spans,
+        )
+        tracker.progress(
+            f"Requesting full-corpus batch {batch_number}/{batch_count} "
+            f"({len(batch_selections['submission'].chunks)} chunk(s))"
+        )
+        try:
+            result = provider.generate_structured(
+                StructuredModelRequest(
+                    system_prompt=_SYSTEM_PROMPT,
+                    user_prompt=prompt,
+                    output_name="extract_full_corpus",
+                    output_description=(
+                        "Submit documented policy findings from this corpus batch."
+                    ),
+                ),
+                FullCorpusExtractionResult,
+                tracker,
+            )
+        except ModelProviderError as exc:
+            rejected.append(
+                f"full-corpus batch {batch_number}/{batch_count}: "
+                f"model request failed: {exc}"
+            )
+            continue
+
+        validated = _validate_full_corpus_result(
+            result,
+            batch_selections,
+            spans,
+            scheduler,
+            partition_names,
+            storage_names,
+            tracker,
+        )
+        findings.extend(validated.findings)
+        rejected.extend(
+            f"batch {batch_number}/{batch_count}: {item}"
+            for item in validated.rejected
+        )
+        tracker.progress(
+            f"Validated full-corpus batch {batch_number}/{batch_count}: "
+            f"{len(validated.findings)} accepted, "
+            f"{len(validated.rejected)} rejected"
+        )
+
+        if not validated.rejected:
+            continue
+        tracker.progress(
+            f"Requesting one correction for full-corpus batch "
+            f"{batch_number}/{batch_count}"
+        )
+        correction_prompt = (
+            prompt
+            + "\n\nCORRECTION: Return only corrected values for these local errors. "
+            "Use null or empty lists for all other schema fields:\n- "
+            + "\n- ".join(validated.rejected)
+        )
+        try:
+            corrected_result = provider.generate_structured(
+                StructuredModelRequest(
+                    system_prompt=_SYSTEM_PROMPT,
+                    user_prompt=correction_prompt,
+                    output_name="extract_full_corpus",
+                    output_description=(
+                        "Correct invalid findings from this corpus batch once."
+                    ),
+                ),
+                FullCorpusExtractionResult,
+                tracker,
+            )
+        except ModelProviderError as exc:
+            rejected.append(
+                f"full-corpus batch {batch_number}/{batch_count}: "
+                f"correction failed: {exc}"
+            )
+            continue
+        corrected = _validate_full_corpus_result(
+            corrected_result,
+            batch_selections,
+            spans,
+            scheduler,
+            partition_names,
+            storage_names,
+            tracker,
+        )
+        findings.extend(corrected.findings)
+        rejected.extend(
+            f"after correction batch {batch_number}/{batch_count}: {item}"
+            for item in corrected.rejected
+        )
+
+    return findings, rejected, selected_chunk_ids, retrievals
 
 
 def empty_documentation(
@@ -344,6 +518,77 @@ def build_extraction_prompt(
     if not spans:
         lines.append("NO TARGET-SITE SPANS WERE SELECTED.")
     return "\n".join(lines)
+
+
+def build_full_corpus_prompt(
+    site_name: str,
+    batch_number: int,
+    batch_count: int,
+    selections: dict[ExtractionGroupName, ContextSelection],
+    spans: list[EvidenceSpan],
+) -> str:
+    """Build one compact prompt covering all policy groups for a corpus batch."""
+
+    chunks = selections["submission"].chunks
+    lines = [
+        f"SITE: {site_name}",
+        f"FULL-CORPUS BATCH: {batch_number}/{batch_count}",
+        "TARGET FIELDS:",
+    ]
+    for group in _GROUPS:
+        fields = ", ".join(item.field for item in selections[group].retrievals)
+        lines.append(f"{group}: {fields}")
+    lines.extend(
+        [
+            "BATCH CHUNKS: " + ", ".join(chunk.chunk_id for chunk in chunks),
+            "EXACT SPANS:",
+        ]
+    )
+    for span in spans:
+        lines.extend(
+            [
+                f"[{span.span_id}]",
+                f"URL: {span.source_url}",
+                f"HEADING: {span.heading}",
+                span.quote,
+            ]
+        )
+    if not spans:
+        lines.append("NO TARGET-SITE SPANS WERE SELECTED.")
+    return "\n".join(lines)
+
+
+def _validate_full_corpus_result(
+    result: FullCorpusExtractionResult,
+    selections: dict[ExtractionGroupName, ContextSelection],
+    spans: list[EvidenceSpan],
+    scheduler: str,
+    partition_names: set[str],
+    storage_names: set[str],
+    tracker: RunTracker,
+) -> _ValidatedGroup:
+    """Validate the three typed groups returned for one full-corpus batch."""
+
+    results: dict[ExtractionGroupName, _ExtractionResult] = {
+        "submission": result.submission,
+        "network": result.network,
+        "operational": result.operational,
+    }
+    findings: list[DocumentationFinding] = []
+    rejected: list[str] = []
+    with tracker.stage("documentation_evidence_validation", display=False):
+        for group in _GROUPS:
+            validated = _validate_group(
+                results[group],
+                spans,
+                selections[group].retrievals,
+                scheduler,
+                partition_names,
+                storage_names,
+            )
+            findings.extend(validated.findings)
+            rejected.extend(f"{group}: {item}" for item in validated.rejected)
+    return _ValidatedGroup(findings=findings, rejected=rejected)
 
 
 def _validate_group(

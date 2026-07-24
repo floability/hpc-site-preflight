@@ -59,14 +59,15 @@ login-measurements.json
   |
   |-- retrieve context independently for each requested field
   |     mode = full-corpus | bm25 | llm-expanded-bm25
-  |     full-corpus keeps every eligible target-site chunk
+  |     full-corpus keeps every eligible target-site chunk in bounded batches
   |     LLM-expanded mode adds bounded query variants without replacing base queries
   |     merge field-local chunks into submission, network, operational requests
   |
   |-- create exact sentence and table-row span IDs
   |
   |-- request structured findings
-  |     model returns typed group values and span IDs
+  |     full-corpus uses one combined typed result per batch
+  |     ranked modes use one typed result per policy group
   |
   |-- validate locally
   |     reject unknown fields, resources, spans, scopes, and value types

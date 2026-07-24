@@ -24,7 +24,10 @@ from hpc_site_preflight.documentation.models import (
 )
 from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
 from hpc_site_preflight.documentation.query_expansion import expand_queries
-from hpc_site_preflight.documentation.retrieval import select_context
+from hpc_site_preflight.documentation.retrieval import (
+    batch_full_corpus,
+    select_context,
+)
 from hpc_site_preflight.documentation.tools import (
     DocumentationTools,
     LiveWebBackend,
@@ -470,6 +473,44 @@ def test_llm_expanded_bm25_keeps_base_queries_and_adds_hits() -> None:
     assert "expanded:c1" in expanded.selected_chunk_ids
 
 
+def test_full_corpus_batches_cover_every_chunk_once() -> None:
+    chunks = [
+        CorpusChunk(
+            chunk_id=f"document:c{index}",
+            document_id="document",
+            source_url="https://docs.example.edu/site",
+            title="Site guide",
+            scope="target_site",
+            heading_path=["Jobs"],
+            block_kind="text",
+            text=f"Chunk {index} " + ("content " * 12),
+            content_hash=f"hash-{index}",
+        )
+        for index in range(3)
+    ]
+    selection = select_context(
+        chunks,
+        group="submission",
+        fields=SUBMISSION_FIELDS,
+        mode="full-corpus",
+    )
+
+    batches = batch_full_corpus(selection, maximum_chars=350)
+
+    assert len(batches) == 3
+    assert [
+        chunk_id
+        for batch in batches
+        for chunk_id in batch.selected_chunk_ids
+    ] == selection.selected_chunk_ids
+    for batch in batches:
+        batch_ids = set(batch.selected_chunk_ids)
+        assert all(
+            {hit.chunk_id for hit in retrieval.hits} == batch_ids
+            for retrieval in batch.retrievals
+        )
+
+
 def test_model_expands_bm25_queries_once_and_python_bounds_the_result(
     tmp_path: Path,
 ) -> None:
@@ -562,31 +603,37 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
     chunks = build_corpus(measurements.site_id, pages)[2]
     responses = [
         (
-            "extract_submission",
+            "extract_full_corpus",
             {
-                "allocation_required": {
-                    "value": True,
-                    "evidence_span_ids": ["missing"],
-                    "note": "bad",
+                "submission": {
+                    "allocation_required": {
+                        "value": True,
+                        "evidence_span_ids": ["missing"],
+                        "note": "bad",
+                    },
+                    "submission_options": [],
+                    "partitions": [],
                 },
-                "submission_options": [],
-                "partitions": [],
+                "network": {"network": []},
+                "operational": {"charging_model": None, "storage": []},
             },
         ),
         (
-            "extract_submission",
+            "extract_full_corpus",
             {
-                "allocation_required": {
-                    "value": True,
-                    "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
-                    "note": "corrected",
+                "submission": {
+                    "allocation_required": {
+                        "value": True,
+                        "evidence_span_ids": ["doc-anvil-policies:c1:s1"],
+                        "note": "corrected",
+                    },
+                    "submission_options": [],
+                    "partitions": [],
                 },
-                "submission_options": [],
-                "partitions": [],
+                "network": {"network": []},
+                "operational": {"charging_model": None, "storage": []},
             },
         ),
-        ("extract_network", {"network": []}),
-        ("extract_operational", {"charging_model": None, "storage": []}),
     ]
     provider = RecordedModelProvider(
         ModelRecording(
@@ -623,6 +670,100 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
     assert result.findings[0].allocation_required is True
     assert result.findings[0].citations[0].quote.startswith("Anvil requires")
     assert any("unknown evidence span" in error for error in result.rejected)
+
+
+def test_full_corpus_extracts_multiple_bounded_batches(tmp_path: Path) -> None:
+    chunks = [
+        CorpusChunk(
+            chunk_id="allocation:c1",
+            document_id="allocation",
+            source_url="https://docs.example.edu/site/allocation",
+            title="Allocation policy",
+            scope="target_site",
+            heading_path=["Allocation"],
+            block_kind="text",
+            text="Every job requires a project allocation. " + ("detail " * 1000),
+            content_hash="allocation",
+        ),
+        CorpusChunk(
+            chunk_id="charging:c1",
+            document_id="charging",
+            source_url="https://docs.example.edu/site/charging",
+            title="Charging policy",
+            scope="target_site",
+            heading_path=["Charging"],
+            block_kind="text",
+            text="Jobs consume project service units. " + ("detail " * 1000),
+            content_hash="charging",
+        ),
+    ]
+    responses = [
+        {
+            "submission": {
+                "allocation_required": {
+                    "value": True,
+                    "evidence_span_ids": ["allocation:c1:s1"],
+                    "note": "Allocation required.",
+                },
+                "submission_options": [],
+                "partitions": [],
+            },
+            "network": {"network": []},
+            "operational": {"charging_model": None, "storage": []},
+        },
+        {
+            "submission": {
+                "allocation_required": None,
+                "submission_options": [],
+                "partitions": [],
+            },
+            "network": {"network": []},
+            "operational": {
+                "charging_model": {
+                    "value": "project service units",
+                    "evidence_span_ids": ["charging:c1:s1"],
+                    "note": "Jobs consume service units.",
+                },
+                "storage": [],
+            },
+        },
+    ]
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="two full-corpus batches",
+            responses=[
+                RecordedModelResponse(
+                    output_name="extract_full_corpus",
+                    data=data,
+                    response_id=f"full-batch-{index}",
+                )
+                for index, data in enumerate(responses)
+            ],
+        )
+    )
+    tracker = _tracker(tmp_path, "full-corpus-batches")
+
+    result = extract_documentation(
+        site_id="example",
+        site_name="Example",
+        scheduler="slurm",
+        partition_names=set(),
+        storage_names=set(),
+        chunks=chunks,
+        context_mode="full-corpus",
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        provider=provider,
+        tracker=tracker,
+    )
+
+    assert result.selected_chunk_ids == ["allocation:c1", "charging:c1"]
+    assert len(result.findings) == 2
+    assert result.rejected == []
+    assert tracker.report.model_usage.requests == 2
 
 
 def test_finding_must_cite_context_retrieved_for_its_field(tmp_path: Path) -> None:

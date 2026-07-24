@@ -24,6 +24,77 @@
       }
     },
     {
+      "output_name": "extract_full_corpus",
+      "response_id": "stampede3-extraction-full-corpus",
+      "data": {
+        "submission": {
+          "allocation_required": {
+            "value": true,
+            "evidence_span_ids": ["doc-stampede3-policies:c1:s1"],
+            "note": "A project allocation is required."
+          },
+          "submission_options": [
+            {
+              "name": "account",
+              "requirement": "required",
+              "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"],
+              "note": "The account is required."
+            },
+            {
+              "name": "partition",
+              "requirement": "required",
+              "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"],
+              "note": "The partition is required."
+            },
+            {
+              "name": "nodes",
+              "requirement": "required",
+              "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"],
+              "note": "The node count is required."
+            },
+            {
+              "name": "time",
+              "requirement": "required",
+              "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"],
+              "note": "Walltime is required."
+            }
+          ],
+          "partitions": [
+            {
+              "name": "spr",
+              "maximum_walltime_seconds": 172800,
+              "evidence_span_ids": ["doc-stampede3-jobs:c2:s2"],
+              "note": "The SPR maximum is two days."
+            },
+            {
+              "name": "skx",
+              "maximum_walltime_seconds": 172800,
+              "evidence_span_ids": ["doc-stampede3-jobs:c2:s3"],
+              "note": "The SKX maximum is two days."
+            }
+          ]
+        },
+        "network": {
+          "network": []
+        },
+        "operational": {
+          "charging_model": {
+            "value": "project allocation service units",
+            "evidence_span_ids": ["doc-stampede3-policies:c1:s2"],
+            "note": "Running jobs consumes service units."
+          },
+          "storage": [
+            {
+              "name": "scratch",
+              "purge_after_days": 10,
+              "evidence_span_ids": ["doc-stampede3-policies:c2:s1"],
+              "note": "Inactive scratch data becomes purge eligible after ten days."
+            }
+          ]
+        }
+      }
+    },
+    {
       "output_name": "extract_submission",
       "response_id": "stampede3-extraction-submission",
       "data": {

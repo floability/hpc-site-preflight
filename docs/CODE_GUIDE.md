@@ -219,9 +219,9 @@ documentation agent.
 BM25 scoring is deterministic. It filters scope and duplicate content first, then ranks each
 requested field. Normal BM25 uses reviewed queries. LLM-expanded BM25 retains those queries and
 adds bounded model-generated synonyms and site-specific variants, with larger but explicit hit and
-group limits. Full-corpus passes every eligible chunk in stable corpus order. Field results are
-merged only for the three extraction requests. The model sees local corpus chunks, not an
-unrestricted remote page.
+group limits. Full-corpus covers every eligible chunk once in stable, 12,000-character batches and
+uses one combined typed extraction per batch. Ranked field results are merged for the three group
+requests. The model sees local corpus chunks, not an unrestricted remote page.
 
 ### Extraction and validation
 

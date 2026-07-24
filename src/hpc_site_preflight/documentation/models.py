@@ -224,6 +224,12 @@ class OperationalExtractionResult(StrictModel):
     storage: list[ExtractedStoragePolicy]
 
 
+class FullCorpusExtractionResult(StrictModel):
+    submission: SubmissionExtractionResult
+    network: NetworkExtractionResult
+    operational: OperationalExtractionResult
+
+
 class DocumentationCitation(StrictModel):
     span_id: str
     chunk_id: str
