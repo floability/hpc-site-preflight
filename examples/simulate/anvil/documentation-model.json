@@ -10,6 +10,8 @@
           "https://docs.rcac.purdue.edu/anvil/jobs",
           "https://docs.rcac.purdue.edu/anvil/policies"
         ],
+        "decision": "complete",
+        "follow_up_queries": [],
         "summary": "Selected target-site job and policy documentation.",
         "unanswered_topics": ["Compute-node networking behavior is not documented."]
       }

@@ -1,20 +1,56 @@
-// High-level site-profile construction. Reviewed 2026-07-23.
+// Construction of an evidence-backed site profile. Reviewed 2026-07-24.
 digraph construct {
   rankdir=LR;
   bgcolor="white";
-  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11,
+  graph [fontname="Helvetica", fontsize=11, nodesep=0.4, ranksep=0.65];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10,
         fillcolor="white", color="#3D4A56", penwidth=1.2];
   edge [fontname="Helvetica", fontsize=9, color="#3D4A56", penwidth=1.1];
 
-  measure [label="Login measurements\nsite + scheduler facts", color="#0E7C86"];
-  docs [label="Discovery agent\nsearch + download tools", color="#534AB7"];
-  pilots [label="Approved pilot jobs\nplanned", color="#B0710E", style="rounded,dashed"];
-  construct [label="Deterministic validation\n+ reconciliation", color="#0E7C86"];
-  output [label="Site profile\n+ evidence report", color="#0E7C86"];
+  measure [label="Login measurement\nsite identity + configuration",
+           color="#0E7C86"];
 
-  measure -> docs [label="site signals"];
-  measure -> construct;
-  docs -> construct;
-  pilots -> construct [style=dashed];
-  construct -> output;
+  subgraph cluster_documentation {
+    label="Documentation evidence";
+    color="#C8CDD2";
+    style="rounded";
+
+    discover [label="Discovery agent\nofficial search + fetch tools",
+              color="#534AB7"];
+    corpus [label="Corpus + retrieval\nfull | BM25 | expanded",
+            color="#0E7C86"];
+    extract [label="Typed AI extraction\nfield + evidence spans",
+             color="#534AB7"];
+    validate [label="Evidence validation\naccept or abstain",
+              color="#0E7C86"];
+  }
+
+  pilots [label="Approved pilot jobs\nresidual capabilities",
+          color="#B0710E", style="rounded,dashed"];
+  reconcile [label="Deterministic reconciliation\npreserve conflicts + unknowns",
+             color="#B0710E", style="rounded,dashed"];
+  profile [label="Site profile JSON\n+ evidence report",
+           color="#0E7C86"];
+
+  measure -> discover [label="scope + search signals"];
+  discover -> corpus [label="official pages"];
+  corpus -> extract [label="bounded context"];
+  extract -> validate [label="typed candidates"];
+
+  measure -> reconcile [label="configuration", style=dashed];
+  validate -> reconcile [label="documented fields", style=dashed];
+  validate -> pilots [label="unresolved fields", style=dashed];
+  pilots -> reconcile [label="demonstrated fields", style=dashed];
+  reconcile -> profile [style=dashed];
+
+  subgraph cluster_legend {
+    label="";
+    color="white";
+    rank=sink;
+
+    legend_ai [label="AI-assisted", color="#534AB7", fontsize=9];
+    legend_deterministic [label="Deterministic", color="#0E7C86", fontsize=9];
+    legend_planned [label="Planned", color="#B0710E",
+                    style="rounded,dashed", fontsize=9];
+  }
 }

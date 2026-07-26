@@ -5,7 +5,7 @@
     {
       "output_name": "documentation_selection",
       "response_id": "crc-documentation-selection",
-      "data": {"source_urls": ["https://docs.crc.nd.edu/crc/condor", "https://docs.crc.nd.edu/crc/policies"], "summary": "Selected CRC HTCondor and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
+        "data": {"source_urls": ["https://docs.crc.nd.edu/crc/condor", "https://docs.crc.nd.edu/crc/policies"], "decision": "complete", "follow_up_queries": [], "summary": "Selected CRC HTCondor and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
     },
     {
       "output_name": "expand_retrieval_queries",

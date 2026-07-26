@@ -5,7 +5,7 @@
     {
       "output_name": "documentation_selection",
       "response_id": "stampede3-documentation-selection",
-      "data": {"source_urls": ["https://docs.tacc.utexas.edu/stampede3/jobs", "https://docs.tacc.utexas.edu/stampede3/policies"], "summary": "Selected Stampede3 job and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
+        "data": {"source_urls": ["https://docs.tacc.utexas.edu/stampede3/jobs", "https://docs.tacc.utexas.edu/stampede3/policies"], "decision": "complete", "follow_up_queries": [], "summary": "Selected Stampede3 job and policy pages.", "unanswered_topics": ["Compute-node networking behavior is not documented."]}
     },
     {
       "output_name": "expand_retrieval_queries",

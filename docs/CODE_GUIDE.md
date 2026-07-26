@@ -198,9 +198,11 @@ slots or appear as duplicate source-selection candidates.
 
 The agent owns two reviewed tools: documentation search and page download. It executes fixed topic
 queries, filters and ranks results locally, downloads a bounded candidate set, and follows allowed
-links. It then makes one normal model call for `DiscoverySelection`. The response may only name
-already fetched target-site URLs. One correction is allowed for an invalid selection; a model
-failure preserves the deterministically fetched pages.
+links. It then asks the model for a typed `DiscoverySelection`. The response may only name already
+fetched target-site URLs, and it may request another bounded search step using at most three search
+queries. The same domain and scope checks apply to those queries and newly fetched pages. Discovery
+defaults to two steps; `--max-discovery-steps 1` performs one selection call. One correction is
+allowed for an invalid selection across the run, and a model failure preserves the fetched pages.
 
 The top-level `agent/` package is different. It defines future evidence-controller actions and
 state, but `agent/controller.py` is not implemented or called by `profile build`. That later

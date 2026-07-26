@@ -37,8 +37,8 @@ Define typed login measurements, evidence records, simulated sites, and the part
 
 Discover official target-site pages without giving the model unrestricted web access.
 
-- Implemented deterministic DuckDuckGo search, bounded fetch tools, domain checks, and one AI
-  source-selection step.
+- Implemented deterministic DuckDuckGo tools, domain checks, and bounded model-directed source
+  selection with an optional follow-up search.
 
 **Test:** Replay successful, partial, out-of-scope, and failed-fetch discovery cases.
 

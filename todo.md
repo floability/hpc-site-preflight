@@ -63,6 +63,7 @@ when expansion finds new evidence.
 
 **Priority: High**
 
+- Use the implemented bounded model-directed follow-up step when the first pass is insufficient.
 - Balance selected pages across submission, resources, filesystem storage, networking, and policy.
 - Distinguish filesystem storage documentation from unrelated object-storage documentation.
 - Preserve partial results when a fetch fails, but keep missing topics visible.

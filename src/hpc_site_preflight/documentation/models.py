@@ -90,6 +90,8 @@ class FetchedPage(RecordedPage):
 
 class DiscoverySelection(StrictModel):
     source_urls: list[str] = Field(max_length=10)
+    decision: Literal["complete", "search_more"]
+    follow_up_queries: list[str] = Field(max_length=3)
     summary: str = Field(min_length=1)
     unanswered_topics: list[str]
 

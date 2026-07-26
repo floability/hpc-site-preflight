@@ -8,8 +8,11 @@ schemas, and validation rules belong in the surrounding prose documentation.
 | Source | Purpose | Scope |
 | --- | --- | --- |
 | `problem.dot` | Explain why scheduler observations alone are insufficient | Paper motivation |
-| `construct.dot` | Show the three evidence classes becoming a site profile | Current construction plus planned pilots |
+| `construct.dot` | Show measured, documented, and pilot evidence becoming a site profile | Paper construction figure |
 | `pipeline.dot` | Show the complete package-to-preflight vision | Current construction plus planned preflight |
+| `proposed-pipeline.dot` | Trace the complete proposed evidence and preflight pipeline | Full development roadmap |
+| `discovery-agent-loop.svg` | Show the bounded search, fetch, selection, and follow-up loops | Documentation agent |
+| `discovery-agent-loop-paper.svg` | Summarize the bounded discovery loop with minimal detail | Paper figure |
 
 ## Visual conventions
 
@@ -40,6 +43,7 @@ With Graphviz installed, render each source to a temporary file:
 dot -Tsvg docs/figures/problem.dot -o /tmp/hpc-preflight-problem.svg
 dot -Tsvg docs/figures/construct.dot -o /tmp/hpc-preflight-construct.svg
 dot -Tsvg docs/figures/pipeline.dot -o /tmp/hpc-preflight-pipeline.svg
+dot -Tsvg docs/figures/proposed-pipeline.dot -o /tmp/hpc-preflight-proposed-pipeline.svg
 ```
 
 Graphviz parsing during rendering is the syntax validation step. Inspect the generated SVGs before

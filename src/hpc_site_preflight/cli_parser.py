@@ -8,6 +8,15 @@ from pathlib import Path
 _CONTEXT_MODES = ("full-corpus", "bm25", "llm-expanded-bm25")
 
 
+def _positive_int(value: str) -> int:
+    """Parse a command-line integer that must be at least one."""
+
+    parsed = int(value)
+    if parsed < 1:
+        raise argparse.ArgumentTypeError("must be at least 1")
+    return parsed
+
+
 def _add_runtime_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--run-dir", type=Path, default=Path("runs"))
     parser.add_argument("--quiet", action="store_true")
@@ -27,6 +36,12 @@ def _add_documentation_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--model")
     parser.add_argument("--web-recording", type=Path)
     parser.add_argument("--model-recording", type=Path)
+    parser.add_argument(
+        "--max-discovery-steps",
+        type=_positive_int,
+        default=2,
+        help="Maximum model-directed documentation discovery steps (default: 2).",
+    )
     parser.add_argument(
         "--short-site-name",
         "--site-name",

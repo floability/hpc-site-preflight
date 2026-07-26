@@ -19,6 +19,7 @@ from hpc_site_preflight.documentation.models import (
     DocumentationCitation,
     DocumentationEvidence,
     NetworkFinding,
+    RecordedPage,
     SearchResult,
     SubmissionExtractionResult,
 )
@@ -66,6 +67,41 @@ def _inputs(site_name: str) -> MeasurementBundle:
 
 def _tracker(tmp_path: Path, run_id: str) -> RunTracker:
     return RunTracker(command="test", run_root=tmp_path, quiet=True, run_id=run_id)
+
+
+class _FollowUpWebBackend:
+    """Expose one page initially and a second page only for the model's follow-up query."""
+
+    def __init__(self) -> None:
+        self.recorded = RecordedWebBackend.from_path(
+            SIMULATE_ROOT / "anvil" / "documentation-web.json"
+        )
+
+    def search(
+        self,
+        query: str,
+        limit: int,
+        timeout_seconds: float,
+    ) -> list[SearchResult]:
+        del limit, timeout_seconds
+        if "quota lifecycle details" in query.lower():
+            return [
+                SearchResult(
+                    url="https://docs.rcac.purdue.edu/anvil/policies",
+                    title="Anvil policies",
+                    snippet="Storage and allocation policies.",
+                )
+            ]
+        return [
+            SearchResult(
+                url="https://docs.rcac.purdue.edu/anvil/jobs",
+                title="Anvil jobs",
+                snippet="Job submission guide.",
+            )
+        ]
+
+    def fetch(self, url: str, timeout_seconds: float) -> RecordedPage:
+        return self.recorded.fetch(url, timeout_seconds)
 
 
 @pytest.mark.parametrize(
@@ -235,6 +271,8 @@ def test_discovery_uses_tools_then_one_model_selection(tmp_path: Path) -> None:
             "https://docs.rcac.purdue.edu/anvil/jobs",
             "https://docs.rcac.purdue.edu/anvil/policies",
         ],
+        decision="complete",
+        follow_up_queries=[],
         summary="Selected both target-site pages.",
         unanswered_topics=["networking"],
     )
@@ -294,6 +332,102 @@ def test_discovery_preserves_pages_when_model_fails(tmp_path: Path) -> None:
     assert len(result.selected_pages) == 2
 
 
+def test_discovery_runs_model_requested_follow_up(tmp_path: Path) -> None:
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
+    tools = DocumentationTools(identity, _FollowUpWebBackend())
+    selections = [
+        DiscoverySelection(
+            source_urls=["https://docs.rcac.purdue.edu/anvil/jobs"],
+            decision="search_more",
+            follow_up_queries=["Anvil quota lifecycle details"],
+            summary="Jobs are covered; policy details may be missing.",
+            unanswered_topics=["storage policy"],
+        ),
+        DiscoverySelection(
+            source_urls=[
+                "https://docs.rcac.purdue.edu/anvil/jobs",
+                "https://docs.rcac.purdue.edu/anvil/policies",
+            ],
+            decision="complete",
+            follow_up_queries=[],
+            summary="Job and policy documentation are now covered.",
+            unanswered_topics=[],
+        ),
+    ]
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="two-step discovery",
+            responses=[
+                RecordedModelResponse(
+                    output_name="documentation_selection",
+                    data=selection.model_dump(mode="json"),
+                    response_id=f"selection-{index}",
+                )
+                for index, selection in enumerate(selections)
+            ],
+        )
+    )
+    tracker = _tracker(tmp_path, "discovery-follow-up")
+
+    result = DiscoveryAgent(provider, max_steps=2).run(
+        identity,
+        build_query_plan(identity),
+        tools,
+        tracker,
+    )
+
+    assert [page.url for page in result.selected_pages] == [
+        "https://docs.rcac.purdue.edu/anvil/jobs",
+        "https://docs.rcac.purdue.edu/anvil/policies",
+    ]
+    assert tracker.report.model_usage.requests == 2
+    assert tools.searches_used == 11
+    assert tools.pages_used == 2
+
+
+def test_one_discovery_step_does_not_run_requested_follow_up(tmp_path: Path) -> None:
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
+    tools = DocumentationTools(identity, _FollowUpWebBackend())
+    selection = DiscoverySelection(
+        source_urls=["https://docs.rcac.purdue.edu/anvil/jobs"],
+        decision="search_more",
+        follow_up_queries=["Anvil quota lifecycle details"],
+        summary="More policy documentation could help.",
+        unanswered_topics=["storage policy"],
+    )
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="one-step discovery",
+            responses=[
+                RecordedModelResponse(
+                    output_name="documentation_selection",
+                    data=selection.model_dump(mode="json"),
+                    response_id="selection",
+                )
+            ],
+        )
+    )
+    tracker = _tracker(tmp_path, "discovery-one-step")
+
+    result = DiscoveryAgent(provider, max_steps=1).run(
+        identity,
+        build_query_plan(identity),
+        tools,
+        tracker,
+    )
+
+    assert [page.url for page in result.selected_pages] == [
+        "https://docs.rcac.purdue.edu/anvil/jobs"
+    ]
+    assert tracker.report.model_usage.requests == 1
+    assert tools.searches_used == 10
+    assert tools.pages_used == 1
+
+
 def test_discovery_corrects_invalid_model_selection(tmp_path: Path) -> None:
     measurements = _inputs("anvil")
     identity = build_site_identity(measurements)
@@ -306,11 +440,15 @@ def test_discovery_corrects_invalid_model_selection(tmp_path: Path) -> None:
     selections = [
         DiscoverySelection(
             source_urls=["https://docs.rcac.purdue.edu/anvil/not-fetched"],
+            decision="complete",
+            follow_up_queries=[],
             summary="Invalid selection.",
             unanswered_topics=[],
         ),
         DiscoverySelection(
             source_urls=["https://docs.rcac.purdue.edu/anvil/jobs"],
+            decision="complete",
+            follow_up_queries=[],
             summary="Corrected selection.",
             unanswered_topics=["networking"],
         ),

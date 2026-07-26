@@ -1,0 +1,51 @@
+// Complete proposed evidence-backed preflight pipeline. Reviewed 2026-07-24.
+digraph proposed_pipeline {
+  rankdir=LR;
+  bgcolor="white";
+  graph [fontname="Helvetica", fontsize=11, nodesep=0.35, ranksep=0.6];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10,
+        fillcolor="white", color="#3D4A56", penwidth=1.2];
+  edge [fontname="Helvetica", fontsize=9, color="#3D4A56", penwidth=1.1];
+
+  site [label="Target HPC site"];
+  workflow [label="Portable workflow\nrequirements"];
+
+  subgraph cluster_acquisition {
+    label="Evidence acquisition";
+    color="#C8CDD2";
+    style="rounded";
+
+    measure [label="Login measurement\nconfiguration", color="#0E7C86"];
+    discover [label="Discovery agent\nsearch + fetch tools", color="#534AB7"];
+    retrieve [label="Corpus + retrieval\nfull | BM25 | expanded", color="#0E7C86"];
+    extract [label="Typed AI extraction\nfield + evidence spans", color="#534AB7"];
+    validate [label="Deterministic evidence\nvalidation + abstention", color="#0E7C86"];
+    pilots [label="Approved pilot jobs\nresidual capabilities", color="#B0710E",
+            style="rounded,dashed"];
+  }
+
+  reconcile [label="Deterministic\nreconciliation", color="#B0710E",
+             style="rounded,dashed"];
+  profile [label="Evidence-backed\nsite profile", color="#0E7C86"];
+  preflight [label="Deterministic\nworkflow preflight", color="#B0710E",
+             style="rounded,dashed"];
+
+  result [shape=record, label="{Preflight result|Execution plan|Unknown + next evidence|Early failure + remediation}",
+          color="#B0710E", style="rounded,dashed"];
+
+  site -> measure;
+  measure -> discover [label="site identity"];
+  discover -> retrieve [label="official pages"];
+  retrieve -> extract [label="bounded context"];
+  extract -> validate [label="typed candidates"];
+  validate -> pilots [label="unresolved fields", style=dashed];
+
+  measure -> reconcile [label="measured", style=dashed];
+  validate -> reconcile [label="documented", style=dashed];
+  pilots -> reconcile [label="demonstrated", style=dashed];
+  reconcile -> profile [style=dashed];
+
+  profile -> preflight [style=dashed];
+  workflow -> preflight [style=dashed];
+  preflight -> result [style=dashed];
+}

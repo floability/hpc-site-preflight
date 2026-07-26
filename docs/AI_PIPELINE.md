@@ -29,7 +29,7 @@ login measurements ----------------> initial measurement-backed profile
               v
     bounded discovery agent
       | search + fetch tools
-      ` one model selection
+      ` bounded model decisions
               |
               v
   selected target-site pages
@@ -105,12 +105,16 @@ Live search uses DuckDuckGo through the `ddgs` package.
 
 Source scope is classified by deterministic code as `target_site`, `organization_general`,
 `sibling_site`, or `out_of_scope`. The agent gives the model compact metadata, headings, and short
-excerpts from fetched target-site candidates. One schema-constrained `DiscoverySelection` response
-chooses the source URLs and lists unanswered topics. The model cannot request a new URL or promote
-sibling-site documentation into target policy.
+excerpts from fetched target-site candidates. A schema-constrained `DiscoverySelection` chooses
+source URLs, lists unanswered topics, and decides whether discovery is complete. If it requests
+another step, at most three model-proposed search queries run through the same bounded search,
+domain, and scope checks. The default is two discovery steps; setting
+`--max-discovery-steps 1` keeps the original single-decision behavior. The model cannot request a
+new URL or promote sibling-site documentation into target policy.
 
-An invalid selection permits one correction call. If selection fails, deterministic discovery
-returns the target-site pages already fetched, so useful partial work is preserved.
+An invalid selection permits one correction call across the complete discovery run. If selection
+fails, discovery returns the target-site pages already fetched, so useful partial work is
+preserved.
 
 ## 3. Build the local corpus
 

@@ -23,6 +23,7 @@ def test_parser_accepts_profile_build() -> None:
     assert args.site_mode == "simulate"
     assert args.model_mode == "live"
     assert args.web_mode == "live"
+    assert args.max_discovery_steps == 2
 
 
 def test_parser_accepts_documentation_discovery_hints() -> None:
@@ -44,6 +45,21 @@ def test_parser_accepts_documentation_discovery_hints() -> None:
     assert args.site_name == "Purdue Anvil"
     assert args.discovery_note == "Use the RCAC user guide."
     assert args.discovery_keyword == ["RCAC", "queues"]
+
+
+def test_parser_accepts_discovery_step_limit() -> None:
+    args = build_parser().parse_args(
+        ["profile", "build", "--max-discovery-steps", "1"]
+    )
+
+    assert args.max_discovery_steps == 1
+
+
+def test_parser_rejects_zero_discovery_steps() -> None:
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(
+            ["profile", "build", "--max-discovery-steps", "0"]
+        )
 
 
 @pytest.mark.parametrize("option", ["--mode", "--provider"])

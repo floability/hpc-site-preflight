@@ -178,6 +178,7 @@ def _build_documentation(
         discovery_site_name=args.site_name,
         discovery_note=args.discovery_note,
         discovery_keywords=args.discovery_keyword,
+        max_discovery_steps=args.max_discovery_steps,
     )
 
     return pipeline.build(tracker, context_mode=cast(ContextMode, args.context_mode))
