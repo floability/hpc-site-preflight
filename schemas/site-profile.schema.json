@@ -18,30 +18,19 @@
     "evidence_report"
   ],
   "properties": {
-    "schema_version": {"const": "0.2"},
+    "schema_version": {"const": "0.3"},
     "site_id": {"type": "string"},
     "site_name": {"type": "string"},
     "aliases": {"type": "array", "items": {"type": "string"}},
     "profile_state": {"enum": ["complete", "partial"]},
     "generated_at": {"type": "string", "format": "date-time"},
     "scheduler_type": {"enum": ["slurm", "htcondor"]},
-    "submit_command": {"type": ["string", "null"]},
     "scheduler_version": {"type": ["string", "null"]},
-    "submission_options": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/submission_option"}
+    "slurm": {
+      "anyOf": [{"$ref": "#/$defs/slurm_profile"}, {"type": "null"}]
     },
-    "partitions": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/partition"}
-    },
-    "resource_groups": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/resource_group"}
-    },
-    "resource_shapes": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/resource_shape"}
+    "htcondor": {
+      "anyOf": [{"$ref": "#/$defs/htcondor_profile"}, {"type": "null"}]
     },
     "storage": {
       "type": "array",
@@ -71,6 +60,40 @@
     }
   },
   "$defs": {
+    "slurm_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "submit_command": {"type": ["string", "null"]},
+        "options": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/submission_option"}
+        },
+        "partitions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/partition"}
+        },
+        "resource_shapes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/resource_shape"}
+        }
+      }
+    },
+    "htcondor_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "submit_command": {"type": ["string", "null"]},
+        "submit_attributes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/submission_option"}
+        },
+        "resource_groups": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/resource_group"}
+        }
+      }
+    },
     "submission_option": {
       "type": "object",
       "additionalProperties": false,

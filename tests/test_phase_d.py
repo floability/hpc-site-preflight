@@ -1043,7 +1043,8 @@ def test_end_to_end_documentation_profile_is_reproducible(
         )
         assert "doc-anvil-jobs:c2" in {hit.chunk_id for hit in walltime.hits}
         assert any(hit.cited for hit in walltime.hits)
-        shared = next(item for item in profile.partitions if item.name == "shared")
+        assert profile.slurm is not None
+        shared = next(item for item in profile.slurm.partitions if item.name == "shared")
         assert shared.maximum_walltime_seconds == 345600
         assert profile.accounting.charging_model == "ACCESS service units"
         documentation_paths = {
@@ -1054,16 +1055,16 @@ def test_end_to_end_documentation_profile_is_reproducible(
         assert documentation_paths == {
             "/accounting/allocation_required",
             "/accounting/charging_model",
-            "/partitions/shared/maximum_walltime_seconds",
-            "/partitions/wholenode/maximum_walltime_seconds",
+            "/slurm/partitions/shared/maximum_walltime_seconds",
+            "/slurm/partitions/wholenode/maximum_walltime_seconds",
             "/storage/scratch/purge_after_days",
-            "/submission_options/account/required",
-            "/submission_options/partition/required",
+            "/slurm/options/account/required",
+            "/slurm/options/partition/required",
         }
         assert documentation_paths <= {item.field for item in profile.field_evidence}
-        account = next(item for item in profile.submission_options if item.name == "account")
+        account = next(item for item in profile.slurm.options if item.name == "account")
         partition = next(
-            item for item in profile.submission_options if item.name == "partition"
+            item for item in profile.slurm.options if item.name == "partition"
         )
         assert account.required is True
         assert partition.required is True

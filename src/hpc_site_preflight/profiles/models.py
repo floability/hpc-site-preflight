@@ -1,11 +1,11 @@
 """Compact operational site-profile contracts."""
 
 from datetime import datetime
-from typing import Literal, TypeAlias
+from typing import Literal, Self, TypeAlias
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-SchemaVersion = Literal["0.2"]
+SchemaVersion = Literal["0.3"]
 ProfileScalar: TypeAlias = str | int | float | bool
 ProfileValue: TypeAlias = ProfileScalar | list[ProfileScalar]
 ValidationState = Literal[
@@ -77,6 +77,27 @@ class ResourceShapeProfile(BaseModel):
     gpu_count: int | None = None
     gpu_models: list[str] = Field(default_factory=list)
     features: list[str] = Field(default_factory=list)
+
+
+class SlurmProfile(BaseModel):
+    """Slurm-specific submission and partition information."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    submit_command: str | None = None
+    options: list[SubmissionOption] = Field(default_factory=list)
+    partitions: list[PartitionProfile] = Field(default_factory=list)
+    resource_shapes: list[ResourceShapeProfile] = Field(default_factory=list)
+
+
+class HTCondorProfile(BaseModel):
+    """HTCondor-specific submission and resource-group information."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    submit_command: str | None = None
+    submit_attributes: list[SubmissionOption] = Field(default_factory=list)
+    resource_groups: list[ResourceGroupProfile] = Field(default_factory=list)
 
 
 class StorageProfile(BaseModel):
@@ -211,12 +232,9 @@ class SiteProfile(BaseModel):
     profile_state: Literal["complete", "partial"]
     generated_at: datetime
     scheduler_type: Literal["slurm", "htcondor"]
-    submit_command: str | None = None
     scheduler_version: str | None = None
-    submission_options: list[SubmissionOption] = Field(default_factory=list)
-    partitions: list[PartitionProfile] = Field(default_factory=list)
-    resource_groups: list[ResourceGroupProfile] = Field(default_factory=list)
-    resource_shapes: list[ResourceShapeProfile] = Field(default_factory=list)
+    slurm: SlurmProfile | None = None
+    htcondor: HTCondorProfile | None = None
     storage: list[StorageProfile] = Field(default_factory=list)
     network: NetworkProfile
     accounting: AccountingProfile
@@ -226,3 +244,14 @@ class SiteProfile(BaseModel):
     conflicts: list[ProfileConflict] = Field(default_factory=list)
     evidence_report: str
     field_evidence: list[FieldEvidenceLink] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_scheduler_profile(self) -> Self:
+        """Require only the scheduler-specific section selected by scheduler_type."""
+
+        if self.scheduler_type == "slurm":
+            if self.slurm is None or self.htcondor is not None:
+                raise ValueError("Slurm profiles require slurm and forbid htcondor.")
+        elif self.htcondor is None or self.slurm is not None:
+            raise ValueError("HTCondor profiles require htcondor and forbid slurm.")
+        return self

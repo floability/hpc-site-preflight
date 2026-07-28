@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2",
+  "schema_version": "0.3",
   "example": true,
   "note": "Design target based on official Anvil documentation; live measurements and pilot-only facts remain unresolved.",
   "site_id": "purdue-anvil",
@@ -11,9 +11,10 @@
   "generated_at": "2026-07-23T12:00:00Z",
   "scheduler_type": "slurm",
   "scheduler_version": null,
+  "slurm": {
   "submit_command": "sbatch",
   "default_partition": "shared",
-  "submission_options": [
+  "options": [
     {
       "name": "account",
       "syntax": ["-A {account}", "--account={account}"],
@@ -273,7 +274,9 @@
       "gpu_model": "NVIDIA H100 80GB",
       "charging_factor": 1
     }
-  ],
+  ]
+  },
+  "htcondor": null,
   "storage": [
     {
       "name": "home",
@@ -397,19 +400,19 @@
       "action_id": "slurm_version"
     },
     {
-      "field": "/submission_options/account/value",
+      "field": "/slurm/options/account/value",
       "reason": "The allocation account is specific to the current user.",
       "next_action": "user_input",
       "action_id": "select_visible_account"
     },
     {
-      "field": "/partitions/*/available",
+      "field": "/slurm/partitions/*/available",
       "reason": "Current partition availability must be observed from Slurm.",
       "next_action": "login_measurement",
       "action_id": "slurm_partitions"
     },
     {
-      "field": "/partitions/*/node_count",
+      "field": "/slurm/partitions/*/node_count",
       "reason": "Current partition membership must be observed because partitions may overlap and change.",
       "next_action": "login_measurement",
       "action_id": "slurm_partitions"
@@ -447,7 +450,7 @@
   ],
   "conflicts": [
     {
-      "field": "/partitions/shared/maximum_walltime_seconds",
+      "field": "/slurm/partitions/shared/maximum_walltime_seconds",
       "selected_value": 345600,
       "selected_evidence": "documentation:anvil-job-partitions",
       "other_evidence": ["measurement:shared-visible-infinite"],
@@ -455,7 +458,7 @@
       "note": "Slurm may display an infinite configured limit while Anvil policy limits shared jobs to 96 hours."
     },
     {
-      "field": "/partitions/wholenode/maximum_walltime_seconds",
+      "field": "/slurm/partitions/wholenode/maximum_walltime_seconds",
       "selected_value": 345600,
       "selected_evidence": "documentation:anvil-job-partitions",
       "other_evidence": ["measurement:wholenode-visible-infinite"],
@@ -466,12 +469,12 @@
   "evidence_report": "evidence-report.json",
   "field_evidence": [
     {"field": "/scheduler_type", "evidence_ids": ["measurement:scheduler-type"]},
-    {"field": "/submit_command", "evidence_ids": ["measurement:submit-command"]},
-    {"field": "/default_partition", "evidence_ids": ["measurement:default-partition"]},
-    {"field": "/submission_options/account/required", "evidence_ids": ["documentation:anvil-faq"]},
-    {"field": "/submission_options/partition/required", "evidence_ids": ["documentation:anvil-faq"]},
-    {"field": "/partitions", "evidence_ids": ["measurement:slurm-partitions"]},
-    {"field": "/partitions/*/node_resources", "evidence_ids": ["documentation:anvil-architecture"]},
+    {"field": "/slurm/submit_command", "evidence_ids": ["measurement:submit-command"]},
+    {"field": "/slurm/default_partition", "evidence_ids": ["measurement:default-partition"]},
+    {"field": "/slurm/options/account/required", "evidence_ids": ["documentation:anvil-faq"]},
+    {"field": "/slurm/options/partition/required", "evidence_ids": ["documentation:anvil-faq"]},
+    {"field": "/slurm/partitions", "evidence_ids": ["measurement:slurm-partitions"]},
+    {"field": "/slurm/partitions/*/node_resources", "evidence_ids": ["documentation:anvil-architecture"]},
     {"field": "/storage/home/path_pattern", "evidence_ids": ["measurement:home-path"]},
     {"field": "/storage/project/path_pattern", "evidence_ids": ["measurement:project-path"]},
     {"field": "/storage/scratch/path_pattern", "evidence_ids": ["measurement:scratch-path"]},

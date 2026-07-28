@@ -23,6 +23,7 @@ from hpc_site_preflight.measurements.base import (
 from hpc_site_preflight.profiles.models import (
     AccountingProfile,
     FieldEvidenceLink,
+    HTCondorProfile,
     NetworkConnectionProfile,
     NetworkProfile,
     NodeNetworkProfile,
@@ -31,6 +32,7 @@ from hpc_site_preflight.profiles.models import (
     ResourceShapeProfile,
     SectionValidation,
     SiteProfile,
+    SlurmProfile,
     SoftwareProfile,
     StorageProfile,
     SubmissionOption,
@@ -92,7 +94,10 @@ def compile_profile(
     submit_command = None
     if submit_available is True:
         submit_command = "sbatch" if measurements.scheduler_type == "slurm" else "condor_submit"
-        link("/submit_command", "/facts/scheduler/submit_command_available")
+        link(
+            f"/{measurements.scheduler_type}/submit_command",
+            "/facts/scheduler/submit_command_available",
+        )
 
     partitions = _build_partitions(by_path, link)
     resource_groups = _build_resource_groups(by_path, link)
@@ -128,19 +133,33 @@ def compile_profile(
     ]
 
     profile = SiteProfile(
-        schema_version="0.2",
+        schema_version="0.3",
         site_id=site.site_id,
         site_name=site.site_name,
         aliases=site.aliases,
         profile_state="partial",
         generated_at=measurements.collected_at,
         scheduler_type=measurements.scheduler_type,
-        submit_command=submit_command,
         scheduler_version=scheduler_version,
-        submission_options=submission_options,
-        partitions=partitions,
-        resource_groups=resource_groups,
-        resource_shapes=resource_shapes,
+        slurm=(
+            SlurmProfile(
+                submit_command=submit_command,
+                options=submission_options,
+                partitions=partitions,
+                resource_shapes=resource_shapes,
+            )
+            if measurements.scheduler_type == "slurm"
+            else None
+        ),
+        htcondor=(
+            HTCondorProfile(
+                submit_command=submit_command,
+                submit_attributes=submission_options,
+                resource_groups=resource_groups,
+            )
+            if measurements.scheduler_type == "htcondor"
+            else None
+        ),
         storage=storage,
         network=network,
         accounting=AccountingProfile(visible_accounts=visible_accounts),
@@ -361,9 +380,9 @@ def _build_partitions(
                 node_count=_integer(observations, f"{prefix}/node_count"),
             )
         )
-        link(f"/partitions/{name}/available", f"{prefix}/available")
-        link(f"/partitions/{name}/visible_walltime_seconds", visible_path)
-    link("/partitions", "/facts/scheduler/partitions")
+        link(f"/slurm/partitions/{name}/available", f"{prefix}/available")
+        link(f"/slurm/partitions/{name}/visible_walltime_seconds", visible_path)
+    link("/slurm/partitions", "/facts/scheduler/partitions")
     return result
 
 
@@ -386,8 +405,8 @@ def _build_resource_shapes(
             )
         )
         for field in ("cpus", "memory_mib", "temporary_disk_mib", "gpu_count", "gpu_models"):
-            link(f"/resource_shapes/{name}/{field}", f"{prefix}/{field}")
-    link("/resource_shapes", "/facts/scheduler/node_shapes")
+            link(f"/slurm/resource_shapes/{name}/{field}", f"{prefix}/{field}")
+    link("/slurm/resource_shapes", "/facts/scheduler/node_shapes")
     return result
 
 
@@ -406,8 +425,8 @@ def _build_resource_groups(
             )
         )
         for field in ("key", "machine_count", "slot_count"):
-            link(f"/resource_groups/{name}/{field}", f"{prefix}/{field}")
-    link("/resource_groups", "/facts/scheduler/resource_groups")
+            link(f"/htcondor/resource_groups/{name}/{field}", f"{prefix}/{field}")
+    link("/htcondor/resource_groups", "/facts/scheduler/resource_groups")
     return result
 
 
@@ -593,7 +612,7 @@ def _unresolved_items(
     if submit_command is None:
         items.append(
             UnresolvedWorkItem(
-                field="/submit_command",
+                field=f"/{scheduler}/submit_command",
                 reason="The submit executable was not observed as available.",
                 next_action="user_input",
                 action_id="submit_command_input",
@@ -603,7 +622,7 @@ def _unresolved_items(
         for partition in partitions:
             items.append(
                 UnresolvedWorkItem(
-                    field=f"/partitions/{partition.name}/maximum_walltime_seconds",
+                    field=f"/slurm/partitions/{partition.name}/maximum_walltime_seconds",
                     reason="Visible scheduler configuration does not establish enforced policy.",
                     next_action="additional_documentation",
                     action_id="partition_policy_search",
@@ -613,7 +632,11 @@ def _unresolved_items(
         if option.required is None:
             items.append(
                 UnresolvedWorkItem(
-                    field=f"/submission_options/{option.name}/required",
+                    field=(
+                        f"/slurm/options/{option.name}/required"
+                        if scheduler == "slurm"
+                        else f"/htcondor/submit_attributes/{option.name}/required"
+                    ),
                     reason="Login measurements do not establish whether this option is required.",
                     next_action="additional_documentation",
                     action_id="submission_policy_search",

@@ -48,7 +48,7 @@ RULES = (
     ),
     FieldRule(
         rule_id="slurm_visible_partition",
-        field_pattern="/partitions/*/visible_walltime_seconds",
+        field_pattern="/slurm/partitions/*/visible_walltime_seconds",
         allowed_sources=["measurement"],
         precedence=["measurement"],
         conflict_behavior="none",
@@ -58,7 +58,7 @@ RULES = (
     ),
     FieldRule(
         rule_id="documented_submission_requirement",
-        field_pattern="/submission_options/*/required",
+        field_pattern="/slurm/options/*/required",
         allowed_sources=["documentation", "user"],
         precedence=["documentation", "user"],
         conflict_behavior="retain_note",
@@ -66,8 +66,18 @@ RULES = (
         action_id="submission_policy_search",
     ),
     FieldRule(
+        rule_id="documented_htcondor_submission_requirement",
+        field_pattern="/htcondor/submit_attributes/*/required",
+        allowed_sources=["documentation", "user"],
+        precedence=["documentation", "user"],
+        conflict_behavior="retain_note",
+        unresolved_action="additional_documentation",
+        action_id="submission_policy_search",
+        not_applicable_for=["slurm"],
+    ),
+    FieldRule(
         rule_id="documented_limit_over_visible_configuration",
-        field_pattern="/partitions/*/maximum_walltime_seconds",
+        field_pattern="/slurm/partitions/*/maximum_walltime_seconds",
         allowed_sources=["documentation", "pilot", "measurement"],
         precedence=["documentation", "pilot", "measurement"],
         conflict_behavior="retain_note",
@@ -77,7 +87,7 @@ RULES = (
     ),
     FieldRule(
         rule_id="measured_resource_group",
-        field_pattern="/resource_groups/*",
+        field_pattern="/htcondor/resource_groups/*",
         allowed_sources=["measurement", "documentation"],
         precedence=["measurement", "documentation"],
         conflict_behavior="retain_note",
@@ -87,7 +97,7 @@ RULES = (
     ),
     FieldRule(
         rule_id="measured_resource_shape",
-        field_pattern="/resource_shapes/*",
+        field_pattern="/slurm/resource_shapes/*",
         allowed_sources=["measurement", "documentation"],
         precedence=["measurement", "documentation"],
         conflict_behavior="retain_note",

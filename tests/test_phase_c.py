@@ -81,7 +81,7 @@ def test_detailed_evidence_supports_documentation_provenance() -> None:
     ("field", "expected_rule", "preferred"),
     [
         (
-            "/partitions/shared/maximum_walltime_seconds",
+            "/slurm/partitions/shared/maximum_walltime_seconds",
             "documented_limit_over_visible_configuration",
             "documentation",
         ),
@@ -102,7 +102,7 @@ def test_rule_table_selects_expected_source(
 
 
 def test_slurm_partition_rules_are_not_applicable_to_htcondor() -> None:
-    rule = get_rule("/partitions/shared/maximum_walltime_seconds")
+    rule = get_rule("/slurm/partitions/shared/maximum_walltime_seconds")
     assert rule is not None
     assert is_not_applicable(rule, "htcondor") is True
     assert is_not_applicable(rule, "slurm") is False
@@ -125,7 +125,9 @@ def test_measurement_only_builder_supports_all_sites(
 
     assert profile.profile_state == "partial"
     assert profile.scheduler_type == scheduler
-    assert profile.submit_command == submit_command
+    scheduler_profile = profile.slurm or profile.htcondor
+    assert scheduler_profile is not None
+    assert scheduler_profile.submit_command == submit_command
     assert profile.unresolved
     assert profile.conflicts == []
     assert report.site_id == profile.site_id
@@ -142,7 +144,8 @@ def test_measurement_only_builder_supports_all_sites(
 
 def test_anvil_missing_visible_walltime_is_not_promoted_to_policy() -> None:
     profile, _ = _compile("anvil")
-    shared = next(item for item in profile.partitions if item.name == "shared")
+    assert profile.slurm is not None
+    shared = next(item for item in profile.slurm.partitions if item.name == "shared")
     assert shared.visible_walltime_seconds is None
     assert shared.maximum_walltime_seconds is None
 
@@ -177,16 +180,18 @@ def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
 
 def test_stampede_visible_duration_is_normalized() -> None:
     profile, _ = _compile("stampede3")
-    spr = next(item for item in profile.partitions if item.name == "spr")
+    assert profile.slurm is not None
+    spr = next(item for item in profile.slurm.partitions if item.name == "spr")
     assert spr.visible_walltime_seconds == 172800
     assert spr.maximum_walltime_seconds is None
 
 
 def test_htcondor_profile_has_resource_groups_not_partitions() -> None:
     profile, _ = _compile("notre-dame-crc")
-    assert profile.partitions == []
-    assert {item.key for item in profile.resource_groups}
-    assert not any("/partitions/" in item.field for item in profile.unresolved)
+    assert profile.slurm is None
+    assert profile.htcondor is not None
+    assert {item.key for item in profile.htcondor.resource_groups}
+    assert not any("/slurm/partitions/" in item.field for item in profile.unresolved)
 
 
 def test_measurement_build_is_deterministic() -> None:

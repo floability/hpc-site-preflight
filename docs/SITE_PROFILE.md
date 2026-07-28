@@ -17,9 +17,9 @@ The implemented contract is defined by:
 
 ## Design
 
-The JSON is intentionally compact. Top-level metadata is followed by records for submission
-options, scheduler resources, storage, validation, unresolved work, conflicts, and evidence links.
-Network facts are grouped under login, compute, login-compute, and compute-compute sections.
+The JSON is intentionally compact. Top-level metadata is followed by one scheduler-specific
+section, then storage, validation, unresolved work, conflicts, and evidence links. Network facts
+are grouped under login, compute, login-compute, and compute-compute sections.
 
 Serialized profiles preserve this schema order instead of sorting keys alphabetically. The
 evidence-report reference and field-evidence links are kept at the end so the actionable policy is
@@ -37,9 +37,10 @@ required unknown also produces an unresolved work item with one bounded next act
 
 ## Scheduler organization
 
-Slurm profiles populate `partitions` and may populate `resource_shapes`. HTCondor profiles populate
-`resource_groups`; those groups are deterministic summaries of selected ClassAd attributes and are
-never called partitions.
+Slurm profiles populate `slurm.options`, `slurm.partitions`, and optionally
+`slurm.resource_shapes`. HTCondor profiles populate `htcondor.submit_attributes` and
+`htcondor.resource_groups`; those groups are deterministic summaries of selected ClassAd
+attributes and are never called partitions. The unused scheduler section is `null`.
 
 One semantic submission option may have several valid forms. `syntax` is therefore an ordered
 array. The first item is the preferred form:
@@ -73,46 +74,48 @@ common storage roles. Its values are illustrative, not current site policy.
 
 ```json
 {
-  "schema_version": "0.2",
+  "schema_version": "0.3",
   "site_id": "purdue-anvil",
   "site_name": "Purdue Anvil",
   "aliases": ["Anvil"],
   "profile_state": "partial",
   "generated_at": "2026-07-19T12:00:00Z",
   "scheduler_type": "slurm",
-  "submit_command": "sbatch",
   "scheduler_version": "24.05.2",
-  "submission_options": [
-    {
-      "name": "partition",
-      "syntax": ["-p {partition}", "--partition={partition}"],
-      "required": true,
-      "value": null,
-      "example": "shared",
-      "allowed_values": ["shared", "wholenode", "gpu"]
-    }
-  ],
-  "partitions": [
-    {
-      "name": "shared",
-      "available": true,
-      "visible_walltime_seconds": null,
-      "maximum_walltime_seconds": null,
-      "node_count": null
-    }
-  ],
-  "resource_groups": [],
-  "resource_shapes": [
-    {
-      "key": "cpu",
-      "cpus": 128,
-      "memory_mib": 256000,
-      "temporary_disk_mib": null,
-      "gpu_count": null,
-      "gpu_models": [],
-      "features": []
-    }
-  ],
+  "slurm": {
+    "submit_command": "sbatch",
+    "options": [
+      {
+        "name": "partition",
+        "syntax": ["-p {partition}", "--partition={partition}"],
+        "required": true,
+        "value": null,
+        "example": "shared",
+        "allowed_values": ["shared", "wholenode", "gpu"]
+      }
+    ],
+    "partitions": [
+      {
+        "name": "shared",
+        "available": true,
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": null,
+        "node_count": null
+      }
+    ],
+    "resource_shapes": [
+      {
+        "key": "cpu",
+        "cpus": 128,
+        "memory_mib": 256000,
+        "temporary_disk_mib": null,
+        "gpu_count": null,
+        "gpu_models": [],
+        "features": []
+      }
+    ]
+  },
+  "htcondor": null,
   "storage": [
     {
       "name": "scratch",
@@ -174,7 +177,7 @@ common storage roles. Its values are illustrative, not current site policy.
   ],
   "unresolved": [
     {
-      "field": "/partitions/shared/maximum_walltime_seconds",
+      "field": "/slurm/partitions/shared/maximum_walltime_seconds",
       "reason": "Visible scheduler configuration does not establish enforced policy.",
       "next_action": "additional_documentation",
       "action_id": "partition_policy_search"
@@ -193,9 +196,11 @@ common storage roles. Its values are illustrative, not current site policy.
 
 ## Current builder boundary
 
-The Phase D builder consumes validated `0.2` login measurements and accepted documentation
+The builder consumes validated login measurements and accepted documentation
 findings. Measurements populate storage path patterns, login access, login networking, scheduler,
-and resource fields. Documentation sets Boolean submission requirements and may add limits,
+and scheduler-specific resource fields. Slurm options and partitions live under `slurm`;
+HTCondor submit attributes and resource groups live under `htcondor`. Documentation sets Boolean
+submission requirements and may add limits,
 retention, accounting, and compute-network policy through reviewed mappings. Missing policy and
 compute-node behavior remain null and become work items. Pilot evidence is planned for Phase E.
 

@@ -65,26 +65,36 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
         profile.accounting.charging_model = finding.charging_model
         return ["/accounting/charging_model"]
     if isinstance(finding, PartitionFinding):
+        if profile.slurm is None:
+            return []
         partition = next(
-            (item for item in profile.partitions if item.name == finding.name),
+            (item for item in profile.slurm.partitions if item.name == finding.name),
             None,
         )
         if partition is not None:
             partition.maximum_walltime_seconds = finding.maximum_walltime_seconds
-            return [f"/partitions/{partition.name}/maximum_walltime_seconds"]
+            return [f"/slurm/partitions/{partition.name}/maximum_walltime_seconds"]
     if isinstance(finding, StoragePolicyFinding):
         storage = next((item for item in profile.storage if item.name == finding.name), None)
         if storage is not None:
             storage.purge_after_days = finding.purge_after_days
             return [f"/storage/{storage.name}/purge_after_days"]
     if isinstance(finding, SubmissionOptionFinding):
+        options = (
+            profile.slurm.options
+            if profile.slurm is not None
+            else profile.htcondor.submit_attributes
+            if profile.htcondor is not None
+            else []
+        )
         option = next(
-            (item for item in profile.submission_options if item.name == finding.name),
+            (item for item in options if item.name == finding.name),
             None,
         )
         if option is not None:
             option.required = finding.requirement == "required"
-            return [f"/submission_options/{option.name}/required"]
+            prefix = "slurm/options" if profile.slurm is not None else "htcondor/submit_attributes"
+            return [f"/{prefix}/{option.name}/required"]
     if isinstance(finding, NetworkFinding):
         if finding.name == "manager_worker":
             profile.network.login_compute.tcp_connect = finding.available
@@ -149,14 +159,24 @@ def _finding_value(finding: DocumentationFinding) -> bool | int | str:
 
 def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:
     section_states = {item.section: item for item in profile.validation}
-    if any(path.startswith("/partitions/") for path in resolved_paths):
+    if any(path.startswith("/slurm/partitions/") for path in resolved_paths):
         section_states["resources"].state = "documented"
     if any(path.startswith("/accounting/") for path in resolved_paths):
         section_states["accounting"].state = "documented"
-    if any(path.startswith("/submission_options/") for path in resolved_paths):
+    if any(
+        path.startswith(("/slurm/options/", "/htcondor/submit_attributes/"))
+        for path in resolved_paths
+    ):
+        options = (
+            profile.slurm.options
+            if profile.slurm is not None
+            else profile.htcondor.submit_attributes
+            if profile.htcondor is not None
+            else []
+        )
         section_states["submission"].state = (
             "documented"
-            if all(option.required is not None for option in profile.submission_options)
+            if all(option.required is not None for option in options)
             else "partial"
         )
     if any(path.startswith("/storage/") for path in resolved_paths):
