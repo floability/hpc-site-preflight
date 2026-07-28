@@ -21,6 +21,10 @@ _FIELD_QUERIES: dict[str, tuple[str, ...]] = {
     "required_submission_options": (
         "required batch submission options account partition",
         "job script account partition time nodes memory",
+        "mandatory sbatch fields",
+        "must at minimum specify",
+        "account -A --account allocation account",
+        "partition -p showpartitions",
     ),
     "maximum_walltime_seconds": (
         "partition maximum walltime time limit",

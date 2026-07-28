@@ -103,6 +103,7 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         "CANONICAL SUBMISSION OPTIONS: " + ", ".join(sorted(options)),
         "Put recognized requirements in submission_options using only those exact names.",
         examples,
+        "When mandatory wording and an option label are split across spans, cite both spans.",
         "Put every explicitly documented requirement that does not map to those names in "
         "unmapped_options with its exact documented name and syntax. Do not discard it.",
     ]

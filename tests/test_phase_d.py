@@ -29,6 +29,7 @@ from hpc_site_preflight.documentation.models import (
     RecordedPage,
     SearchResult,
     SubmissionExtractionResult,
+    SubmissionOptionFinding,
     UnmappedSubmissionOptionFinding,
 )
 from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
@@ -535,6 +536,96 @@ def test_frozen_corpus_rejects_wrong_site() -> None:
             SIMULATE_ROOT / "anvil" / "corpus",
             expected_site_id="stampede3",
         )
+
+
+def test_bm25_recovers_explicit_mandatory_slurm_options(tmp_path: Path) -> None:
+    measurements = _inputs("anvil")
+    _, _, chunks = load_corpus(
+        SIMULATE_ROOT / "anvil" / "corpus",
+        expected_site_id="anvil",
+    )
+    responses = [
+        RecordedModelResponse(
+            output_name="extract_submission",
+            response_id="mandatory-options",
+            data={
+                "allocation_required": None,
+                "submission_options": [
+                    {
+                        "name": "account",
+                        "requirement": "required",
+                        "evidence_span_ids": [
+                            "doc-anvil-jobs:c42:s1",
+                            "doc-anvil-jobs:c43:s1",
+                        ],
+                        "note": "The mandatory list identifies account.",
+                    },
+                    {
+                        "name": "partition",
+                        "requirement": "required",
+                        "evidence_span_ids": [
+                            "doc-anvil-jobs:c42:s1",
+                            "doc-anvil-jobs:c44:s1",
+                        ],
+                        "note": "The mandatory list identifies partition.",
+                    },
+                ],
+                "unmapped_options": [],
+                "partitions": [],
+            },
+        ),
+        RecordedModelResponse(
+            output_name="extract_network",
+            response_id="empty-network",
+            data={"network": []},
+        ),
+        RecordedModelResponse(
+            output_name="extract_operational",
+            response_id="empty-operational",
+            data={"charging_model": None, "storage": []},
+        ),
+    ]
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="Mandatory option regression",
+            responses=responses,
+        )
+    )
+
+    result = extract_documentation(
+        site_id="anvil",
+        site_name="Anvil",
+        scheduler="slurm",
+        partition_names=measurements.partition_names,
+        storage_names=measurements.storage_names,
+        chunks=chunks,
+        context_mode="bm25",
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="live",
+        provider=provider,
+        tracker=_tracker(tmp_path, "mandatory-options"),
+    )
+
+    options = {
+        finding.name: finding
+        for finding in result.findings
+        if isinstance(finding, SubmissionOptionFinding)
+    }
+    assert set(options) == {"account", "partition"}
+    assert all(option.requirement == "required" for option in options.values())
+    retrieval = next(
+        item for item in result.retrieval if item.field == "required_submission_options"
+    )
+    assert [hit.chunk_id for hit in retrieval.hits] == [
+        "doc-anvil-jobs:c43",
+        "doc-anvil-jobs:c42",
+        "doc-anvil-jobs:c41",
+        "doc-anvil-jobs:c44",
+    ]
+    assert "required_submission_options" not in result.unresolved
 
 
 @pytest.mark.parametrize("mode", ["full-corpus", "bm25", "llm-expanded-bm25"])
