@@ -7,7 +7,11 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from hpc_site_preflight.documentation.corpus import build_corpus
+from hpc_site_preflight.documentation.corpus import (
+    build_corpus,
+    load_corpus,
+    write_corpus,
+)
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
@@ -506,6 +510,31 @@ def test_corpus_is_deterministic_and_preserves_tables() -> None:
     assert first[0].fingerprint
     assert any(chunk.block_kind == "table" for chunk in first[2])
     assert len({chunk.chunk_id for chunk in first[2]}) == len(first[2])
+
+
+def test_frozen_corpus_round_trip(tmp_path: Path) -> None:
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
+    backend = RecordedWebBackend.from_path(
+        SIMULATE_ROOT / "anvil" / "documentation-web.json"
+    )
+    tools = DocumentationTools(identity, backend)
+    pages = [
+        tools.fetch_page("https://docs.rcac.purdue.edu/anvil/jobs"),
+        tools.fetch_page("https://docs.rcac.purdue.edu/anvil/policies"),
+    ]
+    expected = build_corpus(measurements.site_id, pages)
+    write_corpus(tmp_path, *expected)
+
+    assert load_corpus(tmp_path, expected_site_id="anvil") == expected
+
+
+def test_frozen_corpus_rejects_wrong_site() -> None:
+    with pytest.raises(DocumentationError, match="does not match"):
+        load_corpus(
+            SIMULATE_ROOT / "anvil" / "corpus",
+            expected_site_id="stampede3",
+        )
 
 
 @pytest.mark.parametrize("mode", ["full-corpus", "bm25", "llm-expanded-bm25"])

@@ -148,6 +148,12 @@ def test_anvil_missing_visible_walltime_is_not_promoted_to_policy() -> None:
     shared = next(item for item in profile.slurm.partitions if item.name == "shared")
     assert shared.visible_walltime_seconds is None
     assert shared.maximum_walltime_seconds is None
+    assert shared.cpus_per_node == 128
+    assert shared.memory_mib_per_node == 257400
+    assert "resource_shapes" not in profile.slurm.model_dump()
+
+    gpu = next(item for item in profile.slurm.partitions if item.name == "gpu")
+    assert gpu.gpu_count_per_node == 4
 
 
 def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
@@ -176,6 +182,7 @@ def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
     links = {item.field: item.evidence_ids for item in profile.field_evidence}
     assert len(links["/storage/scratch/path_pattern"]) == 2
     assert len(links["/storage/project/path_pattern"]) == 2
+    assert "/slurm/partitions/shared/cpus_per_node" in links
 
 
 def test_stampede_visible_duration_is_normalized() -> None:

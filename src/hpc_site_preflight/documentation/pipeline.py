@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from hpc_site_preflight.documentation.corpus import build_corpus, write_corpus
+from hpc_site_preflight.documentation.corpus import build_corpus, load_corpus, write_corpus
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import extract_documentation
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
@@ -19,6 +19,7 @@ from hpc_site_preflight.documentation.tools import (
     DocumentationTools,
     WebBackend,
 )
+from hpc_site_preflight.exceptions import DocumentationError
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.reporting.tracker import RunTracker
@@ -32,7 +33,7 @@ class DocumentationPipeline:
         *,
         measurements: MeasurementBundle,
         model_provider: ModelProvider,
-        web_backend: WebBackend,
+        web_backend: WebBackend | None,
         corpus_directory: Path,
         model_mode: RuntimeMode,
         model_provider_name: ModelProviderName,
@@ -42,6 +43,7 @@ class DocumentationPipeline:
         discovery_note: str | None = None,
         discovery_keywords: list[str] | None = None,
         max_discovery_steps: int = 2,
+        corpus_input: Path | None = None,
     ) -> None:
         self.measurements = measurements
         self.model_provider = model_provider
@@ -55,6 +57,7 @@ class DocumentationPipeline:
         self.discovery_note = discovery_note
         self.discovery_keywords = discovery_keywords or []
         self.max_discovery_steps = max_discovery_steps
+        self.corpus_input = corpus_input
 
     def build(
         self,
@@ -62,45 +65,68 @@ class DocumentationPipeline:
         *,
         context_mode: ContextMode,
     ) -> DocumentationEvidence:
-        with tracker.stage("documentation_identity"):
-            identity = build_site_identity(
-                self.measurements,
-                discovery_site_name=self.discovery_site_name,
-                discovery_note=self.discovery_note,
-                discovery_keywords=self.discovery_keywords,
+        site = self.measurements.site_facts
+        if self.corpus_input is not None:
+            tracker.progress(f"Loading frozen corpus from {self.corpus_input}")
+            with tracker.stage("documentation_corpus_load", display=False):
+                manifest, documents, chunks = load_corpus(
+                    self.corpus_input,
+                    expected_site_id=site.site_id,
+                )
+                tracker.progress(
+                    f"Frozen corpus {manifest.fingerprint[:12]} contains "
+                    f"{len(documents)} document(s) and {len(chunks)} chunk(s)"
+                )
+                for name in ("manifest.json", "documents.jsonl", "chunks.jsonl"):
+                    tracker.add_artifact(
+                        kind="documentation_corpus_input",
+                        path=self.corpus_input / name,
+                    )
+        else:
+            if self.web_backend is None:
+                raise DocumentationError(
+                    "A web backend is required when corpus_input is absent."
+                )
+            with tracker.stage("documentation_identity"):
+                identity = build_site_identity(
+                    self.measurements,
+                    discovery_site_name=self.discovery_site_name,
+                    discovery_note=self.discovery_note,
+                    discovery_keywords=self.discovery_keywords,
+                )
+                query_plan = build_query_plan(identity)
+
+            follow_up_steps = self.max_discovery_steps - 1
+            tools = DocumentationTools(
+                identity,
+                self.web_backend,
+                search_budget=DEFAULT_SEARCH_BUDGET
+                + FOLLOW_UP_SEARCH_BUDGET * follow_up_steps,
+                page_budget=DEFAULT_PAGE_BUDGET + FOLLOW_UP_PAGE_BUDGET * follow_up_steps,
             )
-            query_plan = build_query_plan(identity)
+            discovery = DiscoveryAgent(
+                self.model_provider,
+                max_steps=self.max_discovery_steps,
+            ).run(
+                identity,
+                query_plan,
+                tools,
+                tracker,
+            )
 
-        follow_up_steps = self.max_discovery_steps - 1
-        tools = DocumentationTools(
-            identity,
-            self.web_backend,
-            search_budget=DEFAULT_SEARCH_BUDGET
-            + FOLLOW_UP_SEARCH_BUDGET * follow_up_steps,
-            page_budget=DEFAULT_PAGE_BUDGET + FOLLOW_UP_PAGE_BUDGET * follow_up_steps,
-        )
-        discovery = DiscoveryAgent(
-            self.model_provider,
-            max_steps=self.max_discovery_steps,
-        ).run(
-            identity,
-            query_plan,
-            tools,
-            tracker,
-        )
-
-        tracker.progress(
-            f"Building corpus from {len(discovery.selected_pages)} selected page(s)"
-        )
-        with tracker.stage("documentation_corpus", display=False):
-            site = self.measurements.site_facts
-            manifest, documents, chunks = build_corpus(site.site_id, discovery.selected_pages)
             tracker.progress(
-                f"Corpus contains {len(documents)} document(s) and {len(chunks)} chunk(s)"
+                f"Building corpus from {len(discovery.selected_pages)} selected page(s)"
             )
-            paths = write_corpus(self.corpus_directory, manifest, documents, chunks)
-            for path in paths:
-                tracker.add_artifact(kind="documentation_corpus", path=path)
+            with tracker.stage("documentation_corpus", display=False):
+                manifest, documents, chunks = build_corpus(
+                    site.site_id, discovery.selected_pages
+                )
+                tracker.progress(
+                    f"Corpus contains {len(documents)} document(s) and {len(chunks)} chunk(s)"
+                )
+                paths = write_corpus(self.corpus_directory, manifest, documents, chunks)
+                for path in paths:
+                    tracker.add_artifact(kind="documentation_corpus", path=path)
 
         return extract_documentation(
             site_id=site.site_id,
@@ -116,4 +142,5 @@ class DocumentationPipeline:
             web_mode=self.web_mode,
             provider=self.model_provider,
             tracker=tracker,
+            corpus_fingerprint=manifest.fingerprint,
         )

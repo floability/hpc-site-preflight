@@ -185,6 +185,17 @@ hpc-site-preflight profile build \
   --pilot-results pilot-result.json
 ```
 
+To compare retrieval modes against one real, frozen corpus, supply a directory containing
+`manifest.json`, `documents.jsonl`, and `chunks.jsonl`. This skips discovery and web access:
+
+```bash
+hpc-site-preflight profile build \
+  --measurements examples/simulate/anvil/login-measurements.json \
+  --model gpt-5-mini \
+  --corpus-input examples/simulate/anvil/corpus \
+  --context-mode bm25
+```
+
 The separate pilot command requires the site inputs normally derived from login measurements:
 
 ```bash

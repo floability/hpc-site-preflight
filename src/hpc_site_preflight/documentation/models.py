@@ -326,6 +326,7 @@ class DocumentationEvidence(StrictModel):
     model: str | None
     web_mode: RuntimeMode
     context_mode: ContextMode
+    corpus_fingerprint: str | None = None
     findings: list[DocumentationFinding]
     rejected: list[str]
     unresolved: list[str]

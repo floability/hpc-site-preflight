@@ -151,6 +151,7 @@ def extract_documentation(
     web_mode: RuntimeMode,
     provider: ModelProvider,
     tracker: RunTracker,
+    corpus_fingerprint: str | None = None,
 ) -> DocumentationEvidence:
     """Extract evidence-backed policy findings from normalized documentation chunks.
 
@@ -321,6 +322,7 @@ def extract_documentation(
         model=model,
         web_mode=web_mode,
         context_mode=context_mode,
+        corpus_fingerprint=corpus_fingerprint,
         findings=accepted_findings,
         rejected=rejected,
         unresolved=unresolved,

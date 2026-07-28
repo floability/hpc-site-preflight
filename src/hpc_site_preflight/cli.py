@@ -67,4 +67,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 def _mode_summary(args: argparse.Namespace) -> str | None:
     if not hasattr(args, "site_mode"):
         return None
-    return f"site={args.site_mode}, model={args.model_mode}, web={args.web_mode}"
+    summary = f"site={args.site_mode}, model={args.model_mode}, web={args.web_mode}"
+    if getattr(args, "corpus_input", None) is not None:
+        summary += ", corpus=frozen"
+    return summary

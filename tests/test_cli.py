@@ -92,6 +92,19 @@ def test_parser_accepts_discovery_step_limit() -> None:
     assert args.max_discovery_steps == 1
 
 
+def test_parser_accepts_frozen_corpus_input() -> None:
+    args = build_parser().parse_args(
+        [
+            "profile",
+            "build",
+            "--corpus-input",
+            "examples/simulate/anvil/corpus",
+        ]
+    )
+
+    assert args.corpus_input == Path("examples/simulate/anvil/corpus")
+
+
 def test_parser_rejects_zero_discovery_steps() -> None:
     with pytest.raises(SystemExit):
         build_parser().parse_args(
@@ -293,6 +306,54 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
     trace = trace_path.read_text(encoding="utf-8")
     assert "Anvil jobs are submitted" not in trace
     assert "content_hash" in trace
+
+
+def test_profile_build_loads_frozen_corpus_without_web(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def fail_if_called(*args: object, **kwargs: object) -> None:
+        raise AssertionError("web backend should not be created for a frozen corpus")
+
+    monkeypatch.setattr("hpc_site_preflight.operations._web_backend", fail_if_called)
+    output_dir = tmp_path / "output"
+    run_dir = tmp_path / "runs"
+
+    exit_code = main(
+        [
+            "profile",
+            "build",
+            "--measurements",
+            "examples/simulate/anvil/login-measurements.json",
+            "--model-mode",
+            "simulate",
+            "--corpus-input",
+            "examples/simulate/anvil/corpus",
+            "--context-mode",
+            "bm25",
+            "--output-dir",
+            str(output_dir),
+            "--run-dir",
+            str(run_dir),
+            "--quiet",
+        ]
+    )
+
+    assert exit_code == 0
+    documentation = json.loads(
+        (output_dir / "documentation-evidence.json").read_text(encoding="utf-8")
+    )
+    assert documentation["corpus_fingerprint"] == (
+        "92e269282edacb5fb32b139ae6d55bc539ef886e1edcbb2d3e04085eeadb7b0f"
+    )
+    report = json.loads(
+        next(run_dir.glob("*/performance.json")).read_text(encoding="utf-8")
+    )
+    stage_names = [stage["name"] for stage in report["steps"]]
+    assert "documentation_corpus_load" in stage_names
+    assert "documentation_identity" not in stage_names
+    assert "documentation_corpus" not in stage_names
+    assert report["mode"].endswith("corpus=frozen")
 
 
 def test_profile_build_prints_concise_discovery_progress(

@@ -29,7 +29,6 @@ from hpc_site_preflight.profiles.models import (
     NodeNetworkProfile,
     PartitionProfile,
     ResourceGroupProfile,
-    ResourceShapeProfile,
     SectionValidation,
     SiteProfile,
     SlurmProfile,
@@ -101,7 +100,6 @@ def compile_profile(
 
     partitions = _build_partitions(by_path, link)
     resource_groups = _build_resource_groups(by_path, link)
-    resource_shapes = _build_resource_shapes(by_path, link)
     visible_accounts = _strings(by_path, "/facts/scheduler/visible_accounts") or []
     storage = _build_storage(by_path, visible_accounts, link)
     if visible_accounts:
@@ -146,7 +144,6 @@ def compile_profile(
                 submit_command=submit_command,
                 options=submission_options,
                 partitions=partitions,
-                resource_shapes=resource_shapes,
             )
             if measurements.scheduler_type == "slurm"
             else None
@@ -165,7 +162,7 @@ def compile_profile(
         accounting=AccountingProfile(visible_accounts=visible_accounts),
         software=software,
         validation=_validation_states(
-            resources=bool(partitions or resource_groups or resource_shapes),
+            resources=bool(partitions or resource_groups),
             storage=bool(storage),
         ),
         unresolved=unresolved,
@@ -369,6 +366,7 @@ def _build_partitions(
     result: list[PartitionProfile] = []
     for name in names:
         prefix = f"/facts/scheduler/partitions/{name}"
+        shape = f"/facts/scheduler/node_shapes/{name}"
         visible_path = f"{prefix}/visible_walltime_limit"
         visible_seconds = _duration_seconds(_string(observations, visible_path))
         result.append(
@@ -378,35 +376,33 @@ def _build_partitions(
                 visible_walltime_seconds=visible_seconds,
                 maximum_walltime_seconds=None,
                 node_count=_integer(observations, f"{prefix}/node_count"),
+                cpus_per_node=_integer(observations, f"{shape}/cpus"),
+                memory_mib_per_node=_integer(observations, f"{shape}/memory_mib"),
+                temporary_disk_mib_per_node=_integer(
+                    observations,
+                    f"{shape}/temporary_disk_mib",
+                ),
+                gpu_count_per_node=_integer(observations, f"{shape}/gpu_count"),
+                gpu_models=_strings(observations, f"{shape}/gpu_models") or [],
+                features=_strings(observations, f"{shape}/features") or [],
             )
         )
         link(f"/slurm/partitions/{name}/available", f"{prefix}/available")
         link(f"/slurm/partitions/{name}/visible_walltime_seconds", visible_path)
-    link("/slurm/partitions", "/facts/scheduler/partitions")
-    return result
-
-
-def _build_resource_shapes(
-    observations: dict[str, MeasurementObservation], link: Callable[[str, str], None]
-) -> list[ResourceShapeProfile]:
-    names = _strings(observations, "/facts/scheduler/node_shapes") or []
-    result: list[ResourceShapeProfile] = []
-    for name in names:
-        prefix = f"/facts/scheduler/node_shapes/{name}"
-        result.append(
-            ResourceShapeProfile(
-                key=name,
-                cpus=_integer(observations, f"{prefix}/cpus"),
-                memory_mib=_integer(observations, f"{prefix}/memory_mib"),
-                temporary_disk_mib=_integer(observations, f"{prefix}/temporary_disk_mib"),
-                gpu_count=_integer(observations, f"{prefix}/gpu_count"),
-                gpu_models=_strings(observations, f"{prefix}/gpu_models") or [],
-                features=_strings(observations, f"{prefix}/features") or [],
+        link(f"/slurm/partitions/{name}/node_count", f"{prefix}/node_count")
+        for field, observation_field in (
+            ("cpus_per_node", "cpus"),
+            ("memory_mib_per_node", "memory_mib"),
+            ("temporary_disk_mib_per_node", "temporary_disk_mib"),
+            ("gpu_count_per_node", "gpu_count"),
+            ("gpu_models", "gpu_models"),
+            ("features", "features"),
+        ):
+            link(
+                f"/slurm/partitions/{name}/{field}",
+                f"{shape}/{observation_field}",
             )
-        )
-        for field in ("cpus", "memory_mib", "temporary_disk_mib", "gpu_count", "gpu_models"):
-            link(f"/slurm/resource_shapes/{name}/{field}", f"{prefix}/{field}")
-    link("/slurm/resource_shapes", "/facts/scheduler/node_shapes")
+    link("/slurm/partitions", "/facts/scheduler/partitions")
     return result
 
 

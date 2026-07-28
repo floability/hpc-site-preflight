@@ -1,9 +1,13 @@
 """Heading-aware corpus construction and persistent JSONL storage."""
 
 import hashlib
+import json
 import re
 from pathlib import Path
+from typing import TypeVar
 from urllib.parse import urlparse
+
+from pydantic import ValidationError
 
 from hpc_site_preflight.documentation.models import (
     CorpusChunk,
@@ -11,6 +15,9 @@ from hpc_site_preflight.documentation.models import (
     CorpusManifest,
     FetchedPage,
 )
+from hpc_site_preflight.exceptions import DocumentationError
+
+_CorpusRecord = TypeVar("_CorpusRecord", CorpusDocument, CorpusChunk)
 
 
 def build_corpus(
@@ -93,6 +100,91 @@ def write_corpus(
     )
     _atomic_write(chunks_path, "".join(chunk.model_dump_json() + "\n" for chunk in chunks))
     return [manifest_path, documents_path, chunks_path]
+
+
+def load_corpus(
+    directory: Path,
+    *,
+    expected_site_id: str,
+) -> tuple[CorpusManifest, list[CorpusDocument], list[CorpusChunk]]:
+    """Load and validate one frozen corpus directory for a known site."""
+
+    manifest_path = directory / "manifest.json"
+    documents_path = directory / "documents.jsonl"
+    chunks_path = directory / "chunks.jsonl"
+    try:
+        manifest = CorpusManifest.model_validate_json(
+            manifest_path.read_text(encoding="utf-8")
+        )
+        documents = _read_jsonl(documents_path, CorpusDocument)
+        chunks = _read_jsonl(chunks_path, CorpusChunk)
+    except OSError as exc:
+        raise DocumentationError(f"Could not read frozen corpus: {exc.filename}") from exc
+    except (json.JSONDecodeError, ValidationError) as exc:
+        raise DocumentationError(f"Frozen corpus validation failed: {exc}") from exc
+
+    if manifest.site_id != expected_site_id:
+        raise DocumentationError(
+            f"Frozen corpus site_id '{manifest.site_id}' does not match "
+            f"'{expected_site_id}'."
+        )
+    if manifest.document_count != len(documents):
+        raise DocumentationError("Frozen corpus document count does not match its manifest.")
+    if manifest.chunk_count != len(chunks):
+        raise DocumentationError("Frozen corpus chunk count does not match its manifest.")
+
+    document_ids = [item.document_id for item in documents]
+    chunk_ids = [item.chunk_id for item in chunks]
+    if len(document_ids) != len(set(document_ids)):
+        raise DocumentationError("Frozen corpus contains duplicate document IDs.")
+    if len(chunk_ids) != len(set(chunk_ids)):
+        raise DocumentationError("Frozen corpus contains duplicate chunk IDs.")
+
+    by_document_id = {item.document_id: item for item in documents}
+    for chunk in chunks:
+        document = by_document_id.get(chunk.document_id)
+        if document is None:
+            raise DocumentationError(
+                f"Frozen chunk '{chunk.chunk_id}' references an unknown document."
+            )
+        if (
+            chunk.source_url != document.source_url
+            or chunk.title != document.title
+            or chunk.scope != document.scope
+        ):
+            raise DocumentationError(
+                f"Frozen chunk '{chunk.chunk_id}' disagrees with its document metadata."
+            )
+        if chunk.content_hash != _hash(chunk.text):
+            raise DocumentationError(
+                f"Frozen chunk '{chunk.chunk_id}' has an invalid content hash."
+            )
+
+    fingerprint_source = "\n".join(
+        f"{document.source_url}:{document.content_hash}" for document in documents
+    )
+    if manifest.fingerprint != _hash(fingerprint_source):
+        raise DocumentationError("Frozen corpus fingerprint does not match its documents.")
+    return manifest, documents, chunks
+
+
+def _read_jsonl(
+    path: Path,
+    model_type: type[_CorpusRecord],
+) -> list[_CorpusRecord]:
+    """Parse non-empty JSONL lines through the requested corpus model."""
+
+    records = []
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            records.append(model_type.model_validate_json(line))
+        except (json.JSONDecodeError, ValidationError) as exc:
+            raise DocumentationError(
+                f"Invalid frozen corpus record in {path.name} at line {line_number}: {exc}"
+            ) from exc
+    return records
 
 
 def _unique_document_id(url: str, used: set[str]) -> str:

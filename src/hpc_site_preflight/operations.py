@@ -222,10 +222,14 @@ def _build_documentation(
         f"Model provider: {model_provider_name}; model: {model_name or 'recorded responses'}"
     )
     try:
-        web_backend = _web_backend(
-            web_mode,
-            web_path,
-            measurements.site_facts.documentation_domains,
+        web_backend = (
+            None
+            if args.corpus_input is not None
+            else _web_backend(
+                web_mode,
+                web_path,
+                measurements.site_facts.documentation_domains,
+            )
         )
         model_provider = _model_provider(model_mode, model_name, model_path)
     except (DocumentationError, ModelProviderError) as exc:
@@ -254,6 +258,7 @@ def _build_documentation(
         discovery_note=args.discovery_note,
         discovery_keywords=args.discovery_keyword,
         max_discovery_steps=args.max_discovery_steps,
+        corpus_input=args.corpus_input,
     )
 
     return pipeline.build(tracker, context_mode=cast(ContextMode, args.context_mode))

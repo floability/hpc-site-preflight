@@ -76,10 +76,6 @@
         "partitions": {
           "type": "array",
           "items": {"$ref": "#/$defs/partition"}
-        },
-        "resource_shapes": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/resource_shape"}
         }
       }
     },
@@ -143,7 +139,13 @@
         "available": {"type": ["boolean", "null"]},
         "visible_walltime_seconds": {"type": ["integer", "null"]},
         "maximum_walltime_seconds": {"type": ["integer", "null"]},
-        "node_count": {"type": ["integer", "null"]}
+        "node_count": {"type": ["integer", "null"]},
+        "cpus_per_node": {"type": ["integer", "null"]},
+        "memory_mib_per_node": {"type": ["integer", "null"]},
+        "temporary_disk_mib_per_node": {"type": ["integer", "null"]},
+        "gpu_count_per_node": {"type": ["integer", "null"]},
+        "gpu_models": {"type": "array", "items": {"type": "string"}},
+        "features": {"type": "array", "items": {"type": "string"}}
       }
     },
     "resource_group": {
@@ -158,20 +160,6 @@
         "memory_mib": {"type": ["integer", "null"]},
         "disk_kib": {"type": ["integer", "null"]},
         "gpu_count": {"type": ["integer", "null"]}
-      }
-    },
-    "resource_shape": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["key"],
-      "properties": {
-        "key": {"type": "string"},
-        "cpus": {"type": ["integer", "null"]},
-        "memory_mib": {"type": ["integer", "null"]},
-        "temporary_disk_mib": {"type": ["integer", "null"]},
-        "gpu_count": {"type": ["integer", "null"]},
-        "gpu_models": {"type": "array", "items": {"type": "string"}},
-        "features": {"type": "array", "items": {"type": "string"}}
       }
     },
     "storage": {

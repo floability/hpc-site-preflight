@@ -60,6 +60,12 @@ class PartitionProfile(BaseModel):
     visible_walltime_seconds: int | None = None
     maximum_walltime_seconds: int | None = None
     node_count: int | None = None
+    cpus_per_node: int | None = None
+    memory_mib_per_node: int | None = None
+    temporary_disk_mib_per_node: int | None = None
+    gpu_count_per_node: int | None = None
+    gpu_models: list[str] = Field(default_factory=list)
+    features: list[str] = Field(default_factory=list)
 
 
 class ResourceGroupProfile(BaseModel):
@@ -76,20 +82,6 @@ class ResourceGroupProfile(BaseModel):
     gpu_count: int | None = None
 
 
-class ResourceShapeProfile(BaseModel):
-    """One scheduler-visible resource shape."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    key: str
-    cpus: int | None = None
-    memory_mib: int | None = None
-    temporary_disk_mib: int | None = None
-    gpu_count: int | None = None
-    gpu_models: list[str] = Field(default_factory=list)
-    features: list[str] = Field(default_factory=list)
-
-
 class SlurmProfile(BaseModel):
     """Slurm-specific submission and partition information."""
 
@@ -99,7 +91,6 @@ class SlurmProfile(BaseModel):
     options: list[SubmissionOption] = Field(default_factory=list)
     unmapped_options: list[UnmappedSubmissionOption] = Field(default_factory=list)
     partitions: list[PartitionProfile] = Field(default_factory=list)
-    resource_shapes: list[ResourceShapeProfile] = Field(default_factory=list)
 
 
 class HTCondorProfile(BaseModel):

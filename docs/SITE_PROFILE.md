@@ -37,10 +37,11 @@ required unknown also produces an unresolved work item with one bounded next act
 
 ## Scheduler organization
 
-Slurm profiles populate `slurm.options`, `slurm.partitions`, and optionally
-`slurm.resource_shapes`. HTCondor profiles populate `htcondor.submit_attributes` and
-`htcondor.resource_groups`; those groups are deterministic summaries of selected ClassAd
-attributes and are never called partitions. The unused scheduler section is `null`.
+Slurm profiles populate `slurm.options` and `slurm.partitions`. Each partition carries its visible
+node count and per-node CPU, memory, temporary disk, and GPU shape. HTCondor profiles populate
+`htcondor.submit_attributes` and `htcondor.resource_groups`; those groups are deterministic
+summaries of selected ClassAd attributes and are never called partitions. The unused scheduler
+section is `null`.
 
 An explicitly documented requirement without a reviewed canonical mapping is retained under
 `slurm.unmapped_options` or `htcondor.unmapped_submit_attributes`. It carries evidence and a
@@ -105,16 +106,11 @@ common storage roles. Its values are illustrative, not current site policy.
         "available": true,
         "visible_walltime_seconds": null,
         "maximum_walltime_seconds": null,
-        "node_count": null
-      }
-    ],
-    "resource_shapes": [
-      {
-        "key": "cpu",
-        "cpus": 128,
-        "memory_mib": 256000,
-        "temporary_disk_mib": null,
-        "gpu_count": null,
+        "node_count": null,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 256000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
         "gpu_models": [],
         "features": []
       }

@@ -116,13 +116,14 @@ RULES = (
         not_applicable_for=["slurm"],
     ),
     FieldRule(
-        rule_id="measured_resource_shape",
-        field_pattern="/slurm/resource_shapes/*",
+        rule_id="measured_slurm_partition_resource",
+        field_pattern="/slurm/partitions/*/*",
         allowed_sources=["measurement", "documentation"],
         precedence=["measurement", "documentation"],
         conflict_behavior="retain_note",
         unresolved_action="additional_documentation",
-        action_id="resource_shape_search",
+        action_id="partition_resource_search",
+        not_applicable_for=["htcondor"],
     ),
     FieldRule(
         rule_id="storage_login_observation",

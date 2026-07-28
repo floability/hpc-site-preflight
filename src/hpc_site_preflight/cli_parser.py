@@ -42,6 +42,11 @@ def _set_operation(
 
 def _add_documentation_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--context-mode", choices=_CONTEXT_MODES, default="bm25")
+    parser.add_argument(
+        "--corpus-input",
+        type=Path,
+        help="Load manifest.json, documents.jsonl, and chunks.jsonl from a frozen corpus.",
+    )
     parser.add_argument("--model")
     parser.add_argument("--web-recording", type=Path)
     parser.add_argument("--model-recording", type=Path)

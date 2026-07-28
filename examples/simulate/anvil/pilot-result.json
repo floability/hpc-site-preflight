@@ -1,0 +1,121 @@
+{
+  "schema_version": "0.1",
+  "site_id": "anvil",
+  "scheduler": "slurm",
+  "evidence_source": "measured",
+  "pilot_id": "7a1036ad15d941149f86297aa2b5379a",
+  "collected_at": "2026-07-28T06:50:47.339379Z",
+  "status": "completed",
+  "storage_results": [
+    {
+      "name": "home",
+      "path": "/home/x-mislam11",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    },
+    {
+      "name": "scratch",
+      "path": "/anvil/scratch/x-mislam11",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    },
+    {
+      "name": "project",
+      "path": "/anvil/projects/x-cis250350",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    }
+  ],
+  "primary_node": "a245",
+  "peer_node": "a246",
+  "distinct_nodes": true,
+  "errors": [],
+  "source_reference": "/home/x-mislam11/pilot-job/pilot-runs/7a1036ad15d941149f86297aa2b5379a/pilot-run-details.json",
+  "login_compute_attempts": [
+    {
+      "port": 30000,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 30801,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 31545,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 31820,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 32180,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 32906,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 33443,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 33697,
+      "status": "passed",
+      "error": null
+    }
+  ],
+  "compute_compute_attempts": [
+    {
+      "port": 30000,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 30965,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 31246,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 31643,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 32122,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 32507,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 33213,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 33393,
+      "status": "passed",
+      "error": null
+    }
+  ]
+}
