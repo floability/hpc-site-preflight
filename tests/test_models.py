@@ -50,8 +50,9 @@ def test_example_pilot_results_validate() -> None:
         {
             "schema_version": "0.1",
             "site_id": "anvil",
+            "scheduler": "slurm",
             "evidence_source": "simulated",
-            "results": {},
+            "pilot_id": "pilot-test",
         }
     )
     assert model.site_id == "anvil"
@@ -72,8 +73,9 @@ def test_pilot_evidence_source_is_simulated_or_measured() -> None:
     payload = {
         "schema_version": "0.1",
         "site_id": "anvil",
+        "scheduler": "slurm",
         "evidence_source": "simulated",
-        "results": {},
+        "pilot_id": "pilot-test",
     }
     payload["evidence_source"] = "measured"
     assert PilotResultBundle.model_validate(payload).evidence_source == "measured"

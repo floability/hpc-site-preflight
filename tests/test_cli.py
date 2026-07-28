@@ -26,6 +26,43 @@ def test_parser_accepts_profile_build() -> None:
     assert args.max_discovery_steps == 2
 
 
+def test_parser_requires_explicit_live_pilot_flag() -> None:
+    args = build_parser().parse_args(
+        [
+            "profile",
+            "build",
+            "--site-mode",
+            "live",
+            "--run-pilots",
+            "--pilot-start-port",
+            "30000",
+        ]
+    )
+
+    assert args.run_pilots is True
+    assert args.pilot_start_port == 30000
+
+
+def test_separate_pilot_command_requires_approval() -> None:
+    with pytest.raises(SystemExit):
+        build_parser().parse_args(
+            [
+                "evidence",
+                "run-pilots",
+                "--site-id",
+                "anvil",
+                "--login-host",
+                "login.example.edu",
+                "--storage",
+                "home=/home/example",
+                "--output",
+                "pilot.json",
+                "--scheduler",
+                "slurm",
+            ]
+        )
+
+
 def test_parser_accepts_documentation_discovery_hints() -> None:
     args = build_parser().parse_args(
         [
@@ -97,12 +134,17 @@ def test_parser_rejects_retired_mode_options(option: str) -> None:
             [
                 "evidence",
                 "run-pilots",
-                "--measurements",
-                "measurements.json",
+                "--site-id",
+                "anvil",
+                "--login-host",
+                "login.example.edu",
+                "--storage",
+                "home=/home/example",
                 "--output",
                 "pilots.json",
                 "--scheduler",
                 "slurm",
+                "--approve",
             ],
             "evidence run-pilots",
         ),

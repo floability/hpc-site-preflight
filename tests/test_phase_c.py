@@ -164,7 +164,8 @@ def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
     assert profile.network.login.outbound_https is None
     assert profile.network.compute.outbound_https is None
     assert profile.network.login_compute.tcp_connect is None
-    assert profile.network.compute_compute.verified_tcp_port_range is None
+    assert profile.network.compute_compute.verified_ports is None
+    assert profile.network.compute_compute.suggested_port_range is None
 
     evidence_paths = {item.field_path for item in report.evidence}
     assert "/facts/storage/filesystems/scratch/path" in evidence_paths

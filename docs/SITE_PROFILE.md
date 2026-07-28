@@ -144,11 +144,13 @@ common storage roles. Its values are illustrative, not current site policy.
     },
     "login_compute": {
       "tcp_connect": null,
-      "verified_tcp_port_range": null
+      "verified_ports": null,
+      "suggested_port_range": null
     },
     "compute_compute": {
       "tcp_connect": null,
-      "verified_tcp_port_range": null
+      "verified_ports": null,
+      "suggested_port_range": null
     }
   },
   "accounting": {

@@ -24,8 +24,14 @@ from hpc_site_preflight.exceptions import (
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.measurements.live import LiveMeasurementProvider
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
+from hpc_site_preflight.probes.base import PilotInputs, PilotResultBundle
+from hpc_site_preflight.probes.htcondor import HTCondorPilot
+from hpc_site_preflight.probes.live import LivePilotProvider
+from hpc_site_preflight.probes.simulated import SimulatedPilotProvider
+from hpc_site_preflight.probes.slurm import SlurmPilot
 from hpc_site_preflight.profiles.compiler import compile_profile
 from hpc_site_preflight.profiles.documentation import apply_documentation
+from hpc_site_preflight.profiles.pilots import apply_pilot_results
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
 from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.providers.registry import create_live_model_provider, provider_for_model
@@ -67,20 +73,89 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
     with tracker.stage("documentation_profile_apply"):
         profile, report = apply_documentation(profile, report, documentation)
 
+    pilots = _resolve_pilots(args, measurements, tracker)
+    if pilots is not None:
+        with tracker.stage("pilot_profile_apply"):
+            profile, report = apply_pilot_results(profile, report, pilots)
+
     profile_path = args.output_dir / "site-profile.json"
     report_path = args.output_dir / "evidence-report.json"
     documentation_path = args.output_dir / "documentation-evidence.json"
+    pilot_path = args.output_dir / "pilot-evidence.json"
     with tracker.stage("profile_artifact_write"):
         write_json(profile_path, profile.model_dump(mode="json"))
         write_json(report_path, report.model_dump(mode="json"))
         write_json(documentation_path, documentation.model_dump(mode="json"))
+        if pilots is not None:
+            write_json(pilot_path, pilots.model_dump(mode="json"))
         tracker.add_artifact(kind="site_profile", path=profile_path)
         tracker.add_artifact(kind="evidence_report", path=report_path)
         tracker.add_artifact(kind="documentation_evidence", path=documentation_path)
+        if pilots is not None:
+            tracker.add_artifact(kind="pilot_evidence", path=pilot_path)
 
     if not args.quiet:
         print(f"Profile:  {profile_path}")
         print(f"Evidence: {report_path}")
+
+
+def _resolve_pilots(
+    args: argparse.Namespace,
+    measurements: MeasurementBundle,
+    tracker: RunTracker,
+) -> PilotResultBundle | None:
+    """Load recorded pilot evidence or run the approved live Slurm pilot."""
+
+    if not args.run_pilots:
+        if args.pilot_results is not None:
+            raise ConfigurationError("--pilot-results requires --run-pilots.")
+        return None
+    if args.site_mode == "simulate":
+        if args.pilot_results is None:
+            raise ConfigurationError(
+                "Simulated site mode requires --pilot-results with --run-pilots."
+            )
+        return SimulatedPilotProvider(args.pilot_results).collect(measurements, tracker)
+    if args.pilot_results is not None:
+        raise ConfigurationError("Live site mode cannot use --pilot-results.")
+    provider = LivePilotProvider(
+        args.output_dir / "pilot-evidence.json",
+        args.output_dir / "pilot-runs",
+        start_port=args.pilot_start_port,
+        coordination_timeout=args.pilot_coordination_timeout,
+    )
+    return provider.collect(measurements, tracker)
+
+
+def run_pilots(args: argparse.Namespace, tracker: RunTracker) -> None:
+    """Run one explicitly approved scheduler pilot from direct CLI inputs."""
+
+    storage: dict[str, str] = {}
+    for value in args.storage:
+        name, separator, raw_path = value.partition("=")
+        path = Path(raw_path).expanduser()
+        if not separator or not name or not path.is_absolute():
+            raise ConfigurationError("--storage must use NAME=/absolute/path.")
+        storage[name] = str(path)
+    inputs = PilotInputs(
+        site_id=args.site_id,
+        scheduler=args.scheduler,
+        login_host=args.login_host,
+        storage=storage,
+        output=args.output,
+        runs_dir=args.pilot_runs_dir,
+        start_port=args.start_port,
+        coordination_timeout=args.coordination_timeout,
+        partition=args.slurm_partition,
+        account=args.slurm_account,
+    )
+    runner = SlurmPilot() if args.scheduler == "slurm" else HTCondorPilot()
+    with tracker.stage("approved_pilot"):
+        result = runner.run(inputs)
+        tracker.add_artifact(kind="pilot_result", path=args.output)
+    if not args.quiet:
+        print(f"Pilot result: {args.output}")
+        print(f"Pilot status: {result.status}")
 
 
 def capture_login_measurements(args: argparse.Namespace, tracker: RunTracker) -> None:

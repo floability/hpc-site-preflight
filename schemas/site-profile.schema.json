@@ -171,7 +171,11 @@
       "additionalProperties": false,
       "properties": {
         "tcp_connect": {"type": ["boolean", "null"]},
-        "verified_tcp_port_range": {"type": ["string", "null"]}
+        "verified_ports": {
+          "type": ["array", "null"],
+          "items": {"type": "integer", "minimum": 1024, "maximum": 65535}
+        },
+        "suggested_port_range": {"type": ["string", "null"]}
       }
     },
     "accounting": {

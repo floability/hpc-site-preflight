@@ -132,9 +132,8 @@ hpc-site-preflight preflight --help
 ```
 
 `evidence capture-login` writes the structured site input without running documentation or profile
-construction. `profile build` constructs measurement and documentation-backed partial profiles.
-`evaluate documentation` runs the documentation subsystem alone. Other unfinished commands create
-run reports and fail explicitly.
+construction. `profile build` can combine measurement, documentation, and explicitly approved
+pilot evidence. `evaluate documentation` runs the documentation subsystem alone.
 
 Generated profile JSON follows the `SiteProfile` schema order instead of alphabetical key order.
 The evidence-report reference and field-evidence links are the final top-level fields.
@@ -171,7 +170,31 @@ hpc-site-preflight profile build \
   --site-mode live \
   --short-site-name Anvil \
   --model gpt-5-mini \
+  --run-pilots \
   --output-dir artifacts/anvil-live
+```
+
+For a simulated site, `--run-pilots` loads a flat partial result rather than submitting:
+
+```bash
+hpc-site-preflight profile build \
+  --measurements examples/simulate/anvil/login-measurements.json \
+  --model-mode simulate \
+  --web-mode simulate \
+  --run-pilots \
+  --pilot-results pilot-result.json
+```
+
+The separate pilot command requires the site inputs normally derived from login measurements:
+
+```bash
+hpc-site-preflight evidence run-pilots \
+  --scheduler slurm \
+  --site-id anvil \
+  --login-host login01.anvil.rcac.purdue.edu \
+  --storage home=/home/user \
+  --output pilot-result.json \
+  --approve
 ```
 
 ## Performance reporting

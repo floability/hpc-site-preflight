@@ -117,25 +117,25 @@ Finish safe login-node collection for both scheduler families.
 
 ### Milestone 9 — Approved pilot evidence
 
-**Status: Incomplete**
+**Status: Partially completed**
 
 Measure unresolved compute-node behavior with predefined, explicitly approved jobs.
 
-- Add simulated and live pilot contracts for networking and compute-visible storage.
-- Preserve approval, queue time, result status, and exact pilot provenance.
-- Never generate arbitrary commands or submit automatically.
+- Slurm now supports explicit live submission and flat simulated results.
+- Storage and bounded two-job TCP checks preserve partial results and artifacts.
+- HTCondor integration and live-site validation still need work.
 
 **Test:** Replay every pilot and prove that live submission cannot occur without authorization.
 
 ### Milestone 10 — Deterministic reconciliation
 
-**Status: Incomplete**
+**Status: Partially completed**
 
 Combine measurement, documentation, and pilots without silent conflict resolution.
 
-- Apply field-specific authority and freshness rules.
-- Preserve conflicts, abstentions, selected evidence, and next actions.
-- Validate the final profile and evidence report together.
+- Pilot storage and network evidence now fills typed profile fields.
+- Network disagreements abstain and remain visible as conflicts.
+- Full field-family reconciliation and freshness rules still need work.
 
 **Test:** Cover agreement, conflict, stale evidence, silence, and missing evidence.
 

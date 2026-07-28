@@ -643,7 +643,7 @@ def _unresolved_items(
             )
         )
     for section in ("login_compute", "compute_compute"):
-        for field in ("tcp_connect", "verified_tcp_port_range"):
+        for field in ("tcp_connect", "verified_ports", "suggested_port_range"):
             items.append(
                 UnresolvedWorkItem(
                     field=f"/network/{section}/{field}",

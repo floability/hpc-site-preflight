@@ -15,6 +15,7 @@ from hpc_site_preflight.operations import (
     build_profile,
     capture_login_measurements,
     evaluate_documentation,
+    run_pilots,
     run_unimplemented,
 )
 from hpc_site_preflight.reporting.tracker import RunTracker
@@ -42,6 +43,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             capture_login_measurements(args, tracker)
         elif args.operation == "evaluate_documentation":
             evaluate_documentation(args, tracker)
+        elif args.operation == "run_pilots":
+            run_pilots(args, tracker)
         else:
             run_unimplemented(args, tracker)
 

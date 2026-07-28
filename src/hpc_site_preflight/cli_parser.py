@@ -17,6 +17,15 @@ def _positive_int(value: str) -> int:
     return parsed
 
 
+def _positive_float(value: str) -> float:
+    """Parse a command-line number that must be positive."""
+
+    parsed = float(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("must be positive")
+    return parsed
+
+
 def _add_runtime_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--run-dir", type=Path, default=Path("runs"))
     parser.add_argument("--quiet", action="store_true")
@@ -99,6 +108,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     profile_build.add_argument("--measurements", type=Path)
     profile_build.add_argument("--pilot-results", type=Path)
+    profile_build.add_argument(
+        "--run-pilots",
+        action="store_true",
+        help="Explicitly approve and submit the predefined pilot during a live Slurm run.",
+    )
+    profile_build.add_argument("--pilot-start-port", type=int, default=9000)
+    profile_build.add_argument(
+        "--pilot-coordination-timeout",
+        type=_positive_float,
+        default=3600.0,
+    )
     profile_build.add_argument("--profile", type=Path)
     profile_build.add_argument("--profile-url")
     profile_build.add_argument("--output-dir", type=Path, default=Path("artifacts"))
@@ -138,10 +158,36 @@ def build_parser() -> argparse.ArgumentParser:
     _set_operation(capture_login, "evidence capture-login", "capture_login")
 
     run_pilots = evidence_sub.add_parser("run-pilots", help="Run predefined bounded pilot jobs.")
-    run_pilots.add_argument("--measurements", type=Path, required=True)
+    run_pilots.add_argument("--site-id", required=True)
+    run_pilots.add_argument("--login-host", required=True)
+    run_pilots.add_argument(
+        "--storage",
+        action="append",
+        required=True,
+        metavar="NAME=/PATH",
+    )
     run_pilots.add_argument("--output", type=Path, required=True)
     run_pilots.add_argument("--scheduler", choices=("slurm", "htcondor"), required=True)
-    _set_operation(run_pilots, "evidence run-pilots")
+    run_pilots.add_argument("--start-port", type=int, default=9000)
+    run_pilots.add_argument(
+        "--coordination-timeout",
+        type=_positive_float,
+        default=3600.0,
+    )
+    run_pilots.add_argument("--slurm-partition")
+    run_pilots.add_argument("--slurm-account")
+    run_pilots.add_argument(
+        "--approve",
+        action="store_true",
+        required=True,
+        help="Confirm that the predefined jobs may be submitted.",
+    )
+    run_pilots.add_argument(
+        "--pilot-runs-dir",
+        type=Path,
+        default=Path("pilot-runs"),
+    )
+    _set_operation(run_pilots, "evidence run-pilots", "run_pilots")
 
     evaluate = subcommands.add_parser("evaluate", help="Run isolated evaluation workflows.")
     evaluate_sub = evaluate.add_subparsers(dest="evaluate_command", required=True)

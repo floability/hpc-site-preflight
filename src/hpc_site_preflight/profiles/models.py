@@ -114,7 +114,8 @@ class NetworkConnectionProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     tcp_connect: bool | None = None
-    verified_tcp_port_range: str | None = None
+    verified_ports: list[int] | None = None
+    suggested_port_range: str | None = None
 
 
 class NetworkProfile(BaseModel):
