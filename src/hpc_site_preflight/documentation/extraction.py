@@ -27,6 +27,8 @@ from hpc_site_preflight.documentation.models import (
     StoragePolicyFinding,
     SubmissionExtractionResult,
     SubmissionOptionFinding,
+    SubmissionOptionName,
+    UnmappedSubmissionOptionFinding,
 )
 from hpc_site_preflight.documentation.query_expansion import expand_queries
 from hpc_site_preflight.documentation.retrieval import batch_full_corpus, select_context
@@ -66,6 +68,17 @@ _NETWORK_RETRIEVAL = {
 }
 _SLURM_OPTIONS = {"account", "partition", "nodes", "cpus-per-task", "time"}
 _HTCONDOR_OPTIONS = {"request_cpus", "request_memory", "request_gpus"}
+_OPTION_FLAGS = {
+    "-A": "account",
+    "--account": "account",
+    "-p": "partition",
+    "--partition": "partition",
+    "-N": "nodes",
+    "--nodes": "nodes",
+    "--cpus-per-task": "cpus-per-task",
+    "-t": "time",
+    "--time": "time",
+}
 _ExtractionResult: TypeAlias = (
     SubmissionExtractionResult | NetworkExtractionResult | OperationalExtractionResult
 )
@@ -74,6 +87,45 @@ _RESULT_TYPES: dict[ExtractionGroupName, type[BaseModel]] = {
     "network": NetworkExtractionResult,
     "operational": OperationalExtractionResult,
 }
+
+
+def _submission_option_instructions(scheduler: str) -> list[str]:
+    """Return the scheduler-specific canonical and unmapped option instructions."""
+
+    options = _SLURM_OPTIONS if scheduler == "slurm" else _HTCONDOR_OPTIONS
+    examples = (
+        'Map "Account (-A or --account)" to name "account" and '
+        '"Partition (-p)" to name "partition".'
+        if scheduler == "slurm"
+        else 'Map "request_cpus" to canonical name "request_cpus".'
+    )
+    return [
+        "CANONICAL SUBMISSION OPTIONS: " + ", ".join(sorted(options)),
+        "Put recognized requirements in submission_options using only those exact names.",
+        examples,
+        "Put every explicitly documented requirement that does not map to those names in "
+        "unmapped_options with its exact documented name and syntax. Do not discard it.",
+    ]
+
+
+def _canonical_option_name(
+    documented_name: str,
+    documented_syntax: list[str],
+    allowed_options: set[str],
+) -> SubmissionOptionName | None:
+    """Map only reviewed canonical names and exact scheduler flags."""
+
+    normalized_name = documented_name.strip().casefold()
+    by_name = {name.casefold(): name for name in allowed_options}
+    if normalized_name in by_name:
+        return cast(SubmissionOptionName, by_name[normalized_name])
+
+    text = " ".join([documented_name, *documented_syntax])
+    for flag in re.findall(r"(?<![A-Za-z0-9_-])--?[A-Za-z][A-Za-z0-9-]*", text):
+        name = _OPTION_FLAGS.get(flag)
+        if name in allowed_options:
+            return cast(SubmissionOptionName, name)
+    return None
 
 
 @dataclass(frozen=True)
@@ -150,7 +202,13 @@ def extract_documentation(
                 expanded_queries_by_field=expanded_queries,
             )
             spans = build_evidence_spans(selection)
-            prompt = build_extraction_prompt(site_name, group, selection, spans)
+            prompt = build_extraction_prompt(
+                site_name,
+                scheduler,
+                group,
+                selection,
+                spans,
+            )
             tracker.progress(
                 f"{group} retrieval selected {len(selection.chunks)} unique chunk(s) "
                 f"for {len(selection.retrievals)} field(s)"
@@ -250,7 +308,11 @@ def extract_documentation(
         retrievals.extend(full_retrievals)
 
     accepted_findings = _deduplicate_findings(findings)
-    found_fields = {_retrieval_field(finding) for finding in accepted_findings}
+    found_fields = {
+        _retrieval_field(finding)
+        for finding in accepted_findings
+        if not isinstance(finding, UnmappedSubmissionOptionFinding)
+    }
     unresolved = sorted(_expected_fields(scheduler, storage_names) - found_fields)
     return DocumentationEvidence(
         site_id=site_id,
@@ -321,6 +383,7 @@ def _extract_full_corpus_batches(
         spans = build_evidence_spans(batch_selections["submission"])
         prompt = build_full_corpus_prompt(
             site_name,
+            scheduler,
             batch_number,
             batch_count,
             batch_selections,
@@ -478,6 +541,7 @@ def build_evidence_spans(selection: ContextSelection) -> list[EvidenceSpan]:
 
 def build_extraction_prompt(
     site_name: str,
+    scheduler: str,
     group: ExtractionGroupName,
     selection: ContextSelection,
     spans: list[EvidenceSpan],
@@ -495,6 +559,8 @@ def build_extraction_prompt(
         + ", ".join(retrieval.field for retrieval in selection.retrievals),
         "FIELD RETRIEVAL:",
     ]
+    if group == "submission":
+        lines.extend(_submission_option_instructions(scheduler))
     for retrieval in selection.retrievals:
         queries = " | ".join(retrieval.queries) or "full corpus; no ranking query"
         chunk_ids = ", ".join(hit.chunk_id for hit in retrieval.hits) or "none"
@@ -522,6 +588,7 @@ def build_extraction_prompt(
 
 def build_full_corpus_prompt(
     site_name: str,
+    scheduler: str,
     batch_number: int,
     batch_count: int,
     selections: dict[ExtractionGroupName, ContextSelection],
@@ -535,6 +602,7 @@ def build_full_corpus_prompt(
         f"FULL-CORPUS BATCH: {batch_number}/{batch_count}",
         "TARGET FIELDS:",
     ]
+    lines.extend(_submission_option_instructions(scheduler))
     for group in _GROUPS:
         fields = ", ".join(item.field for item in selections[group].retrievals)
         lines.append(f"{group}: {fields}")
@@ -652,6 +720,43 @@ def _validate_group(
                 findings.append(
                     SubmissionOptionFinding(
                         name=option.name,
+                        requirement=option.requirement,
+                        note=option.note,
+                        citations=citations,
+                    )
+                )
+
+        for option in result.unmapped_options:
+            citations, error = _citations(
+                "required_submission_options",
+                option.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(
+                    f"unmapped_options/{option.documented_name}: {error}"
+                )
+                continue
+            canonical_name = _canonical_option_name(
+                option.documented_name,
+                option.documented_syntax,
+                allowed_options,
+            )
+            if canonical_name is not None:
+                findings.append(
+                    SubmissionOptionFinding(
+                        name=canonical_name,
+                        requirement=option.requirement,
+                        note=option.note,
+                        citations=citations,
+                    )
+                )
+            else:
+                findings.append(
+                    UnmappedSubmissionOptionFinding(
+                        documented_name=option.documented_name,
+                        documented_syntax=option.documented_syntax,
                         requirement=option.requirement,
                         note=option.note,
                         citations=citations,
@@ -814,6 +919,8 @@ def _finding_key(finding: DocumentationFinding) -> tuple[str, str | None]:
         return "allocation_required", None
     if isinstance(finding, SubmissionOptionFinding):
         return "required_submission_options", finding.name
+    if isinstance(finding, UnmappedSubmissionOptionFinding):
+        return "required_submission_options", finding.documented_name
     if isinstance(finding, PartitionFinding):
         return "maximum_walltime_seconds", finding.name
     if isinstance(finding, NetworkFinding):

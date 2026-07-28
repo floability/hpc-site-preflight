@@ -56,6 +56,7 @@
               "note": "The partition is mandatory."
             }
           ],
+          "unmapped_options": [],
           "partitions": [
             {
               "name": "shared",
@@ -114,6 +115,7 @@
             "note": "The partition is mandatory."
           }
         ],
+        "unmapped_options": [],
         "partitions": [
           {
             "name": "shared",

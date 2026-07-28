@@ -59,6 +59,7 @@
               "note": "Walltime is required."
             }
           ],
+          "unmapped_options": [],
           "partitions": [
             {
               "name": "spr",
@@ -105,6 +106,7 @@
           {"name": "nodes", "requirement": "required", "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"], "note": "The node count is required."},
           {"name": "time", "requirement": "required", "evidence_span_ids": ["doc-stampede3-jobs:c1:s2"], "note": "Walltime is required."}
         ],
+        "unmapped_options": [],
         "partitions": [
           {"name": "spr", "maximum_walltime_seconds": 172800, "evidence_span_ids": ["doc-stampede3-jobs:c2:s2"], "note": "The SPR maximum is two days."},
           {"name": "skx", "maximum_walltime_seconds": 172800, "evidence_span_ids": ["doc-stampede3-jobs:c2:s3"], "note": "The SKX maximum is two days."}

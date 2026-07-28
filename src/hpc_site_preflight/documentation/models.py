@@ -16,6 +16,16 @@ ExtractionGroupName = Literal["submission", "network", "operational"]
 BlockKind = Literal["text", "table"]
 SubmissionRequirement = Literal["required", "recommended", "optional", "conditional"]
 NetworkCapabilityName = Literal["manager_worker", "worker_worker", "outbound_compute"]
+SubmissionOptionName = Literal[
+    "account",
+    "partition",
+    "nodes",
+    "cpus-per-task",
+    "time",
+    "request_cpus",
+    "request_memory",
+    "request_gpus",
+]
 
 
 class StrictModel(BaseModel):
@@ -184,7 +194,15 @@ class ExtractedString(StrictModel):
 
 
 class ExtractedSubmissionOption(StrictModel):
-    name: str = Field(strict=True)
+    name: SubmissionOptionName
+    requirement: SubmissionRequirement
+    evidence_span_ids: list[str] = Field(min_length=1)
+    note: str
+
+
+class ExtractedUnmappedSubmissionOption(StrictModel):
+    documented_name: str = Field(min_length=1, strict=True)
+    documented_syntax: list[str]
     requirement: SubmissionRequirement
     evidence_span_ids: list[str] = Field(min_length=1)
     note: str
@@ -200,6 +218,7 @@ class ExtractedPartition(StrictModel):
 class SubmissionExtractionResult(StrictModel):
     allocation_required: ExtractedBoolean | None
     submission_options: list[ExtractedSubmissionOption]
+    unmapped_options: list[ExtractedUnmappedSubmissionOption]
     partitions: list[ExtractedPartition]
 
 
@@ -248,7 +267,15 @@ class AllocationRequiredFinding(StrictModel):
 
 
 class SubmissionOptionFinding(StrictModel):
-    name: str
+    name: SubmissionOptionName
+    requirement: SubmissionRequirement
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
+class UnmappedSubmissionOptionFinding(StrictModel):
+    documented_name: str
+    documented_syntax: list[str]
     requirement: SubmissionRequirement
     note: str
     citations: list[DocumentationCitation] = Field(min_length=1)
@@ -284,6 +311,7 @@ class StoragePolicyFinding(StrictModel):
 DocumentationFinding: TypeAlias = (
     AllocationRequiredFinding
     | SubmissionOptionFinding
+    | UnmappedSubmissionOptionFinding
     | PartitionFinding
     | NetworkFinding
     | ChargingModelFinding

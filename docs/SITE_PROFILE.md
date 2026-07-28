@@ -42,6 +42,10 @@ Slurm profiles populate `slurm.options`, `slurm.partitions`, and optionally
 `htcondor.resource_groups`; those groups are deterministic summaries of selected ClassAd
 attributes and are never called partitions. The unused scheduler section is `null`.
 
+An explicitly documented requirement without a reviewed canonical mapping is retained under
+`slurm.unmapped_options` or `htcondor.unmapped_submit_attributes`. It carries evidence and a
+`needs_mapping` status, but preflight must not render it into a job automatically.
+
 One semantic submission option may have several valid forms. `syntax` is therefore an ordered
 array. The first item is the preferred form:
 
@@ -94,6 +98,7 @@ common storage roles. Its values are illustrative, not current site policy.
         "allowed_values": ["shared", "wholenode", "gpu"]
       }
     ],
+    "unmapped_options": [],
     "partitions": [
       {
         "name": "shared",

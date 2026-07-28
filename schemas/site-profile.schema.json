@@ -69,6 +69,10 @@
           "type": "array",
           "items": {"$ref": "#/$defs/submission_option"}
         },
+        "unmapped_options": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/unmapped_submission_option"}
+        },
         "partitions": {
           "type": "array",
           "items": {"$ref": "#/$defs/partition"}
@@ -87,6 +91,10 @@
         "submit_attributes": {
           "type": "array",
           "items": {"$ref": "#/$defs/submission_option"}
+        },
+        "unmapped_submit_attributes": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/unmapped_submission_option"}
         },
         "resource_groups": {
           "type": "array",
@@ -108,6 +116,22 @@
           "type": ["array", "null"],
           "items": {"type": "string"}
         }
+      }
+    },
+    "unmapped_submission_option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["documented_name", "requirement"],
+      "properties": {
+        "documented_name": {"type": "string"},
+        "documented_syntax": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "requirement": {
+          "enum": ["required", "recommended", "optional", "conditional"]
+        },
+        "status": {"const": "needs_mapping"}
       }
     },
     "partition": {

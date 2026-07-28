@@ -45,6 +45,7 @@
               "note": "A memory request is required."
             }
           ],
+          "unmapped_options": [],
           "partitions": []
         },
         "network": {
@@ -69,6 +70,7 @@
           {"name": "request_cpus", "requirement": "required", "evidence_span_ids": ["doc-crc-condor:c1:s2"], "note": "A CPU request is required."},
           {"name": "request_memory", "requirement": "required", "evidence_span_ids": ["doc-crc-condor:c1:s2"], "note": "A memory request is required."}
         ],
+        "unmapped_options": [],
         "partitions": []
       }
     },

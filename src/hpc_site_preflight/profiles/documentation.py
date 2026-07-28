@@ -10,12 +10,22 @@ from hpc_site_preflight.documentation.models import (
     RuntimeMode,
     StoragePolicyFinding,
     SubmissionOptionFinding,
+    UnmappedSubmissionOptionFinding,
 )
 from hpc_site_preflight.evidence.bundle import EvidenceReport
-from hpc_site_preflight.evidence.models import EvidenceLink, EvidenceRecord
+from hpc_site_preflight.evidence.models import (
+    EvidenceLink,
+    EvidenceRecord,
+    UnresolvedAction,
+)
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.evidence.reconciliation import get_rule
-from hpc_site_preflight.profiles.models import FieldEvidenceLink, SiteProfile
+from hpc_site_preflight.profiles.models import (
+    FieldEvidenceLink,
+    SiteProfile,
+    UnmappedSubmissionOption,
+    UnresolvedWorkItem,
+)
 
 
 def apply_documentation(
@@ -29,6 +39,7 @@ def apply_documentation(
         return profile, report
 
     resolved_paths: set[str] = set()
+    mapping_work: list[tuple[str, str]] = []
     for finding in documentation.findings:
         paths = _apply_finding(profile, finding)
         for path in paths:
@@ -43,16 +54,17 @@ def apply_documentation(
                 documentation.web_mode,
             )
             if evidence_ids:
-                profile.field_evidence.append(
-                    FieldEvidenceLink(field=path, evidence_ids=evidence_ids)
-                )
-                report.links.append(EvidenceLink(profile_field=path, evidence_ids=evidence_ids))
+                _link_evidence(profile, report, path, evidence_ids)
                 resolved_paths.add(path)
+                if isinstance(finding, UnmappedSubmissionOptionFinding):
+                    mapping_work.append((path, finding.documented_name))
 
     profile.unresolved = [item for item in profile.unresolved if item.field not in resolved_paths]
     report.unresolved = [
         item for item in report.unresolved if item.field_path not in resolved_paths
     ]
+    for path, documented_name in mapping_work:
+        _add_mapping_work(profile, report, path, documented_name)
     _update_validation(profile, resolved_paths)
     return profile, report
 
@@ -95,6 +107,26 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             option.required = finding.requirement == "required"
             prefix = "slurm/options" if profile.slurm is not None else "htcondor/submit_attributes"
             return [f"/{prefix}/{option.name}/required"]
+    if isinstance(finding, UnmappedSubmissionOptionFinding):
+        if profile.slurm is not None:
+            options = profile.slurm.unmapped_options
+            path = "/slurm/unmapped_options"
+        elif profile.htcondor is not None:
+            options = profile.htcondor.unmapped_submit_attributes
+            path = "/htcondor/unmapped_submit_attributes"
+        else:
+            return []
+        if not any(
+            item.documented_name == finding.documented_name for item in options
+        ):
+            options.append(
+                UnmappedSubmissionOption(
+                    documented_name=finding.documented_name,
+                    documented_syntax=finding.documented_syntax,
+                    requirement=finding.requirement,
+                )
+            )
+        return [path]
     if isinstance(finding, NetworkFinding):
         if finding.name == "manager_worker":
             profile.network.login_compute.tcp_connect = finding.available
@@ -148,6 +180,8 @@ def _finding_value(finding: DocumentationFinding) -> bool | int | str:
         return finding.allocation_required
     if isinstance(finding, SubmissionOptionFinding):
         return finding.requirement == "required"
+    if isinstance(finding, UnmappedSubmissionOptionFinding):
+        return finding.documented_name
     if isinstance(finding, PartitionFinding):
         return finding.maximum_walltime_seconds
     if isinstance(finding, NetworkFinding):
@@ -155,6 +189,70 @@ def _finding_value(finding: DocumentationFinding) -> bool | int | str:
     if isinstance(finding, ChargingModelFinding):
         return finding.charging_model
     return finding.purge_after_days
+
+
+def _link_evidence(
+    profile: SiteProfile,
+    report: EvidenceReport,
+    path: str,
+    evidence_ids: list[str],
+) -> None:
+    """Merge documentation evidence IDs into one link per profile field."""
+
+    profile_link = next(
+        (item for item in profile.field_evidence if item.field == path),
+        None,
+    )
+    if profile_link is None:
+        profile.field_evidence.append(
+            FieldEvidenceLink(field=path, evidence_ids=evidence_ids)
+        )
+    else:
+        profile_link.evidence_ids.extend(
+            item for item in evidence_ids if item not in profile_link.evidence_ids
+        )
+
+    report_link = next(
+        (item for item in report.links if item.profile_field == path),
+        None,
+    )
+    if report_link is None:
+        report.links.append(
+            EvidenceLink(profile_field=path, evidence_ids=evidence_ids)
+        )
+    else:
+        report_link.evidence_ids.extend(
+            item for item in evidence_ids if item not in report_link.evidence_ids
+        )
+
+
+def _add_mapping_work(
+    profile: SiteProfile,
+    report: EvidenceReport,
+    path: str,
+    documented_name: str,
+) -> None:
+    """Keep an accepted unknown option unresolved until a reviewed mapping exists."""
+
+    reason = f"Documented submission option {documented_name!r} needs a reviewed mapping."
+    if not any(item.field == path for item in profile.unresolved):
+        profile.unresolved.append(
+            UnresolvedWorkItem(
+                field=path,
+                reason=reason,
+                next_action="admin_confirmation",
+                action_id="submission_option_mapping",
+            )
+        )
+    if not any(item.field_path == path for item in report.unresolved):
+        report.unresolved.append(
+            UnresolvedAction(
+                field_path=path,
+                action="admin_confirmation",
+                action_id="submission_option_mapping",
+                reason=reason,
+            )
+        )
 
 
 def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:

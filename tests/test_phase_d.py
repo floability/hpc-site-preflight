@@ -9,7 +9,10 @@ from pydantic import ValidationError
 
 from hpc_site_preflight.documentation.corpus import build_corpus
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
-from hpc_site_preflight.documentation.extraction import extract_documentation
+from hpc_site_preflight.documentation.extraction import (
+    _canonical_option_name,
+    extract_documentation,
+)
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
 from hpc_site_preflight.documentation.models import (
     AllocationRequiredFinding,
@@ -22,6 +25,7 @@ from hpc_site_preflight.documentation.models import (
     RecordedPage,
     SearchResult,
     SubmissionExtractionResult,
+    UnmappedSubmissionOptionFinding,
 )
 from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
 from hpc_site_preflight.documentation.query_expansion import expand_queries
@@ -750,6 +754,7 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
                         "note": "bad",
                     },
                     "submission_options": [],
+                    "unmapped_options": [],
                     "partitions": [],
                 },
                 "network": {"network": []},
@@ -766,6 +771,7 @@ def test_invalid_span_gets_one_correction(tmp_path: Path) -> None:
                         "note": "corrected",
                     },
                     "submission_options": [],
+                    "unmapped_options": [],
                     "partitions": [],
                 },
                 "network": {"network": []},
@@ -844,6 +850,7 @@ def test_full_corpus_extracts_multiple_bounded_batches(tmp_path: Path) -> None:
                     "note": "Allocation required.",
                 },
                 "submission_options": [],
+                "unmapped_options": [],
                 "partitions": [],
             },
             "network": {"network": []},
@@ -853,6 +860,7 @@ def test_full_corpus_extracts_multiple_bounded_batches(tmp_path: Path) -> None:
             "submission": {
                 "allocation_required": None,
                 "submission_options": [],
+                "unmapped_options": [],
                 "partitions": [],
             },
             "network": {"network": []},
@@ -939,12 +947,18 @@ def test_finding_must_cite_context_retrieved_for_its_field(tmp_path: Path) -> No
                     "note": "Wrong field context.",
                 },
                 "submission_options": [],
+                "unmapped_options": [],
                 "partitions": [],
             },
         ),
         (
             "extract_submission",
-            {"allocation_required": None, "submission_options": [], "partitions": []},
+                {
+                    "allocation_required": None,
+                    "submission_options": [],
+                    "unmapped_options": [],
+                    "partitions": [],
+                },
         ),
         ("extract_network", {"network": []}),
         ("extract_operational", {"charging_model": None, "storage": []}),
@@ -1077,7 +1091,12 @@ def test_end_to_end_documentation_profile_is_reproducible(
 
 def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
     silent = SubmissionExtractionResult.model_validate(
-        {"allocation_required": None, "submission_options": [], "partitions": []}
+        {
+            "allocation_required": None,
+            "submission_options": [],
+            "unmapped_options": [],
+            "partitions": [],
+        }
     )
 
     assert silent.allocation_required is None
@@ -1090,14 +1109,93 @@ def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
                     "note": "Invalid boolean.",
                 },
                 "submission_options": [],
+                "unmapped_options": [],
                 "partitions": [],
             }
         )
+    with pytest.raises(ValidationError):
+        SubmissionExtractionResult.model_validate(
+            {
+                "allocation_required": None,
+                "submission_options": [
+                    {
+                        "name": "Account (-A or --account)",
+                        "requirement": "required",
+                        "evidence_span_ids": ["span"],
+                        "note": "Display labels are not canonical names.",
+                    }
+                ],
+                "unmapped_options": [],
+                "partitions": [],
+            }
+        )
+
+    assert (
+        _canonical_option_name(
+            "Account (-A or --account)",
+            ["-A {account}", "--account={account}"],
+            {"account", "partition"},
+        )
+        == "account"
+    )
 
     schema = SubmissionExtractionResult.model_json_schema()
     assert set(schema["required"]) == set(schema["properties"])
     for definition in schema["$defs"].values():
         assert set(definition["required"]) == set(definition["properties"])
+
+
+def test_unmapped_submission_option_is_preserved_for_review() -> None:
+    measurements = _inputs("anvil")
+    citation = DocumentationCitation(
+        span_id="submission:c1:s1",
+        chunk_id="submission:c1",
+        url="https://docs.rcac.purdue.edu/anvil/jobs",
+        title="Submission policy",
+        heading="Mandatory fields",
+        quote="Every licensed job must specify --site-license.",
+    )
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        context_mode="bm25",
+        findings=[
+            UnmappedSubmissionOptionFinding(
+                documented_name="Site license",
+                documented_syntax=["--site-license={license}"],
+                requirement="required",
+                note="No reviewed profile mapping exists.",
+                citations=[citation],
+            )
+        ],
+        rejected=[],
+        unresolved=["required_submission_options"],
+        selected_chunk_ids=["submission:c1"],
+        retrieval=[],
+    )
+
+    profile, report = compile_profile(measurements)
+    profile, report = apply_documentation(profile, report, documentation)
+
+    assert profile.slurm is not None
+    assert profile.slurm.unmapped_options[0].documented_name == "Site license"
+    assert profile.slurm.unmapped_options[0].status == "needs_mapping"
+    assert any(
+        item.field == "/slurm/unmapped_options"
+        and item.action_id == "submission_option_mapping"
+        for item in profile.unresolved
+    )
+    assert any(
+        link.field == "/slurm/unmapped_options"
+        for link in profile.field_evidence
+    )
+    assert any(
+        item.field_path == "/slurm/unmapped_options"
+        for item in report.evidence
+    )
 
 
 def test_documented_network_findings_fill_structured_profile() -> None:

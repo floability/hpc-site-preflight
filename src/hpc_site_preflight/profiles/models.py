@@ -39,6 +39,17 @@ class SubmissionOption(BaseModel):
     allowed_values: list[str] | None = None
 
 
+class UnmappedSubmissionOption(BaseModel):
+    """One documented scheduler requirement awaiting a reviewed mapping."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    documented_name: str
+    documented_syntax: list[str] = Field(default_factory=list)
+    requirement: Literal["required", "recommended", "optional", "conditional"]
+    status: Literal["needs_mapping"] = "needs_mapping"
+
+
 class PartitionProfile(BaseModel):
     """One visible Slurm partition and known normalized limits."""
 
@@ -86,6 +97,7 @@ class SlurmProfile(BaseModel):
 
     submit_command: str | None = None
     options: list[SubmissionOption] = Field(default_factory=list)
+    unmapped_options: list[UnmappedSubmissionOption] = Field(default_factory=list)
     partitions: list[PartitionProfile] = Field(default_factory=list)
     resource_shapes: list[ResourceShapeProfile] = Field(default_factory=list)
 
@@ -97,6 +109,9 @@ class HTCondorProfile(BaseModel):
 
     submit_command: str | None = None
     submit_attributes: list[SubmissionOption] = Field(default_factory=list)
+    unmapped_submit_attributes: list[UnmappedSubmissionOption] = Field(
+        default_factory=list
+    )
     resource_groups: list[ResourceGroupProfile] = Field(default_factory=list)
 
 
