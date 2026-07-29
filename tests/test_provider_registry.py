@@ -3,6 +3,7 @@
 import pytest
 
 from hpc_site_preflight.exceptions import ConfigurationError, FeatureNotImplementedError
+from hpc_site_preflight.providers.gemini import GeminiProvider
 from hpc_site_preflight.providers.registry import (
     create_live_model_provider,
     provider_for_model,
@@ -27,7 +28,17 @@ def test_unknown_model_fails_explicitly() -> None:
         provider_for_model("mystery-model")
 
 
-@pytest.mark.parametrize("model", ["claude-sonnet-4", "gemini-2.5-pro"])
-def test_future_provider_adapter_fails_explicitly(model: str) -> None:
+def test_gemini_provider_is_constructed_from_model(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+
+    provider = create_live_model_provider("gemini-3.5-flash")
+
+    assert isinstance(provider, GeminiProvider)
+    assert provider.model == "gemini-3.5-flash"
+
+
+def test_future_anthropic_adapter_fails_explicitly() -> None:
     with pytest.raises(FeatureNotImplementedError, match="not implemented"):
-        create_live_model_provider(model)
+        create_live_model_provider("claude-sonnet-4")

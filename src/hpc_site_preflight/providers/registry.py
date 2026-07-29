@@ -2,6 +2,7 @@
 
 from hpc_site_preflight.exceptions import ConfigurationError, FeatureNotImplementedError
 from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
+from hpc_site_preflight.providers.gemini import GeminiProvider
 from hpc_site_preflight.providers.openai import OpenAIProvider
 
 MODEL_PROVIDER_PREFIXES: tuple[tuple[str, ModelProviderName], ...] = (
@@ -34,6 +35,8 @@ def create_live_model_provider(model: str) -> ModelProvider:
     provider = provider_for_model(model)
     if provider == "openai":
         return OpenAIProvider(model=model)
+    if provider == "gemini":
+        return GeminiProvider(model=model)
     raise FeatureNotImplementedError(
         f"The {provider} adapter for model '{model}' is not implemented yet."
     )

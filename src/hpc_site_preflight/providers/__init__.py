@@ -5,6 +5,7 @@ from hpc_site_preflight.providers.base import (
     ModelProviderName,
     StructuredModelRequest,
 )
+from hpc_site_preflight.providers.gemini import GeminiProvider
 from hpc_site_preflight.providers.openai import OpenAIProvider
 from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.providers.registry import (
@@ -15,6 +16,7 @@ from hpc_site_preflight.providers.registry import (
 __all__ = [
     "ModelProvider",
     "ModelProviderName",
+    "GeminiProvider",
     "OpenAIProvider",
     "RecordedModelProvider",
     "StructuredModelRequest",
