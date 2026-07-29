@@ -16,7 +16,7 @@ SITE_IDS = {
     "stampede3": ("tacc-stampede3", "slurm"),
     "notre-dame-crc": ("notre-dame-crc", "htcondor"),
 }
-MEASURED_FIXTURES = {"anvil", "notre-dame-crc"}
+MEASURED_FIXTURES = {"anvil", "stampede3", "notre-dame-crc"}
 
 
 def _load(path: Path) -> dict[str, Any]:

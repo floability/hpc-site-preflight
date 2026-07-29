@@ -194,7 +194,7 @@ def test_stampede_measured_walltime_is_preserved() -> None:
     profile, _ = _compile("stampede3")
     assert profile.slurm is not None
     spr = next(item for item in profile.slurm.partitions if item.name == "spr")
-    assert spr.maximum_walltime_seconds == 172800
+    assert spr.maximum_walltime_seconds == -1
 
 
 def test_htcondor_profile_has_resource_groups_not_partitions() -> None:

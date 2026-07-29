@@ -7,6 +7,7 @@ from typing import TypeAlias, cast
 from pydantic import BaseModel
 
 from hpc_site_preflight.documentation.models import (
+    AccountingPolicyFinding,
     AllocationRequiredFinding,
     ChargingModelFinding,
     ContextMode,
@@ -16,6 +17,8 @@ from hpc_site_preflight.documentation.models import (
     DocumentationEvidence,
     DocumentationFinding,
     EvidenceSpan,
+    ExtractedPartitionValue,
+    ExtractedStorageValue,
     ExtractionGroupName,
     FieldRetrieval,
     FullCorpusExtractionResult,
@@ -24,8 +27,10 @@ from hpc_site_preflight.documentation.models import (
     NetworkFinding,
     OperationalExtractionResult,
     PartitionFinding,
+    PartitionPolicyName,
     RuntimeMode,
     StoragePolicyFinding,
+    StoragePolicyName,
     SubmissionExtractionResult,
     SubmissionOptionFinding,
     SubmissionOptionName,
@@ -44,7 +49,10 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 _SYSTEM_PROMPT = """Extract only documented HPC site policy from the supplied exact spans.
 Return values using the provided typed schema and canonical resource names.
 Every returned value requires at least one supporting span ID.
-Do not infer connectivity from network architecture.
+Each populated partition or storage field has its own evidence object; cite only spans that
+support that exact field.
+Treat an explicit statement that compute nodes are fully connected as worker-to-worker
+connectivity; do not infer connectivity from topology names alone.
 Return false for a network capability only when the cited text explicitly denies it.
 Do not invent port ranges, limits, charging rules, or purge periods.
 Use null or an empty list when the documentation does not state a value."""
@@ -56,21 +64,73 @@ _GROUP_FIELDS = {
         "preemptible",
         "required_submission_options",
         "maximum_walltime_seconds",
+        "maximum_nodes_per_job",
+        "shared_nodes",
+        "gpu_count_per_node",
+        "gpu_models",
+        "features",
     ),
     "network": (
         "manager_worker_connectivity",
         "worker_worker_connectivity",
         "outbound_compute",
     ),
-    "operational": ("charging_model", "purge_after_days"),
+    "operational": (
+        "charging_unit",
+        "charging_model",
+        "filesystem_storage_charged",
+        "storage_compute_visible",
+        "storage_compute_readable",
+        "storage_compute_writable",
+        "storage_shared_across_compute_nodes",
+        "storage_backup_policy",
+        "purge_after_days",
+        "storage_purge_condition",
+    ),
 }
 _GROUPS: tuple[ExtractionGroupName, ...] = ("submission", "network", "operational")
+_PARTITION_FIELDS = (
+    "maximum_walltime_seconds",
+    "maximum_nodes_per_job",
+    "shared_nodes",
+    "gpu_count_per_node",
+    "gpu_models",
+    "features",
+)
 _NETWORK_RETRIEVAL = {
     "manager_worker": "manager_worker_connectivity",
     "worker_worker": "worker_worker_connectivity",
     "outbound_compute": "outbound_compute",
 }
-_SLURM_OPTIONS = {"account", "partition", "nodes", "cpus-per-task", "time"}
+_STORAGE_RETRIEVAL = {
+    "compute_visible": "storage_compute_visible",
+    "compute_readable": "storage_compute_readable",
+    "compute_writable": "storage_compute_writable",
+    "shared_across_compute_nodes": "storage_shared_across_compute_nodes",
+    "backup_policy": "storage_backup_policy",
+    "purge_after_days": "purge_after_days",
+    "purge_condition": "storage_purge_condition",
+}
+_SLURM_OPTIONS = {
+    "account",
+    "array",
+    "dependency",
+    "error",
+    "export",
+    "gpus-per-task",
+    "gres",
+    "job-name",
+    "mail-type",
+    "mail-user",
+    "mem",
+    "nodes",
+    "ntasks",
+    "ntasks-per-node",
+    "output",
+    "partition",
+    "cpus-per-task",
+    "time",
+}
 _HTCONDOR_OPTIONS = {
     "executable",
     "request_cpus",
@@ -85,8 +145,28 @@ _OPTION_FLAGS = {
     "--account": "account",
     "-p": "partition",
     "--partition": "partition",
+    "-a": "array",
+    "--array": "array",
+    "-d": "dependency",
+    "--dependency": "dependency",
+    "-e": "error",
+    "--error": "error",
+    "--export": "export",
+    "--gpus-per-task": "gpus-per-task",
+    "--gres": "gres",
+    "-J": "job-name",
+    "--job-name": "job-name",
+    "--mail-type": "mail-type",
+    "--mail-user": "mail-user",
+    "--mem": "mem",
     "-N": "nodes",
     "--nodes": "nodes",
+    "-n": "ntasks",
+    "--ntasks": "ntasks",
+    "--ntasks-per-node": "ntasks-per-node",
+    "--tasks-per-node": "ntasks-per-node",
+    "-o": "output",
+    "--output": "output",
     "--cpus-per-task": "cpus-per-task",
     "-t": "time",
     "--time": "time",
@@ -116,11 +196,14 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
     )
     instructions = [
         "CANONICAL SUBMISSION OPTIONS: " + ", ".join(sorted(options)),
-        "Put recognized requirements in submission_options using only those exact names.",
+        "Put every documented scheduler option in submission_options. Use a canonical name "
+        "when listed; otherwise propose a short semantic name and preserve exact syntax.",
+        "Classify support as supported, unsupported, discouraged, or unknown.",
+        "Use condition for documented conditional requirements; otherwise return null.",
         examples,
         "When mandatory wording and an option label are split across spans, cite both spans.",
-        "The canonical list is not exhaustive. Preserve any explicitly required scheduler "
-        "directive outside it in unmapped_options instead of discarding it.",
+        "The canonical list is not exhaustive. Deterministic validation will retain unfamiliar "
+        "literal directives for review instead of discarding them.",
         "Use unmapped_options only for an explicit scheduler directive or submit attribute "
         "whose literal syntax appears in the cited spans.",
         "Do not classify allocation procedures, storage setup, module commands, URLs, or "
@@ -150,13 +233,13 @@ def _canonical_option_name(
     normalized_name = documented_name.strip().casefold()
     by_name = {name.casefold(): name for name in allowed_options}
     if normalized_name in by_name:
-        return cast(SubmissionOptionName, by_name[normalized_name])
+        return by_name[normalized_name]
 
     text = " ".join([documented_name, *documented_syntax])
     for flag in re.findall(r"(?<![A-Za-z0-9_-])--?[A-Za-z][A-Za-z0-9-]*", text):
         name = _OPTION_FLAGS.get(flag)
         if name in allowed_options:
-            return cast(SubmissionOptionName, name)
+            return name
     return None
 
 
@@ -216,8 +299,8 @@ def extract_documentation(
     """
 
     resources_by_field = {
-        "maximum_walltime_seconds": partition_names,
-        "purge_after_days": storage_names,
+        **{field: partition_names for field in _PARTITION_FIELDS},
+        **{field: storage_names for field in _STORAGE_RETRIEVAL.values()},
     }
     requested_query_fields = tuple(
         dict.fromkeys(
@@ -807,12 +890,6 @@ def _validate_group(
 
         allowed_options = _SLURM_OPTIONS if scheduler == "slurm" else _HTCONDOR_OPTIONS
         for option in result.submission_options:
-            if option.name not in allowed_options:
-                rejected.append(
-                    f"submission_options/{option.name}: option is not in the reviewed "
-                    f"{scheduler} profile contract"
-                )
-                continue
             citations, error = _citations(
                 "required_submission_options",
                 option.evidence_span_ids,
@@ -821,59 +898,90 @@ def _validate_group(
             )
             if error:
                 rejected.append(f"submission_options/{option.name}: {error}")
-            else:
-                findings.append(
-                    SubmissionOptionFinding(
-                        name=option.name,
-                        requirement=option.requirement,
-                        note=option.note,
-                        citations=citations,
-                    )
-                )
-
-        for option in result.unmapped_options:
-            citations, error = _citations(
-                "required_submission_options",
-                option.evidence_span_ids,
-                span_map,
-                retrieved_chunks,
-            )
-            if error:
-                rejected.append(
-                    f"unmapped_options/{option.documented_name}: {error}"
-                )
-                continue
-            if not _valid_unmapped_syntax(
-                scheduler,
-                option.documented_name,
-                option.documented_syntax,
-            ):
-                rejected.append(
-                    f"unmapped_options/{option.documented_name}: no literal "
-                    f"{scheduler} submission syntax"
-                )
                 continue
             canonical_name = _canonical_option_name(
-                option.documented_name,
-                option.documented_syntax,
+                option.name,
+                option.syntax,
                 allowed_options,
             )
             if canonical_name is not None:
                 findings.append(
                     SubmissionOptionFinding(
                         name=canonical_name,
+                        syntax=option.syntax,
                         requirement=option.requirement,
+                        support=option.support,
+                        condition=option.condition,
                         note=option.note,
+                        citations=citations,
+                    )
+                )
+            elif _valid_unmapped_syntax(scheduler, option.name, option.syntax):
+                findings.append(
+                    UnmappedSubmissionOptionFinding(
+                        documented_name=option.name,
+                        documented_syntax=option.syntax,
+                        requirement=option.requirement,
+                        support=option.support,
+                        condition=option.condition,
+                        note=option.note,
+                        citations=citations,
+                    )
+                )
+            else:
+                rejected.append(
+                    f"submission_options/{option.name}: no literal "
+                    f"{scheduler} submission syntax"
+                )
+
+        for unmapped_option in result.unmapped_options:
+            citations, error = _citations(
+                "required_submission_options",
+                unmapped_option.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(
+                    f"unmapped_options/{unmapped_option.documented_name}: {error}"
+                )
+                continue
+            if not _valid_unmapped_syntax(
+                scheduler,
+                unmapped_option.documented_name,
+                unmapped_option.documented_syntax,
+            ):
+                rejected.append(
+                    f"unmapped_options/{unmapped_option.documented_name}: no literal "
+                    f"{scheduler} submission syntax"
+                )
+                continue
+            canonical_name = _canonical_option_name(
+                unmapped_option.documented_name,
+                unmapped_option.documented_syntax,
+                allowed_options,
+            )
+            if canonical_name is not None:
+                findings.append(
+                    SubmissionOptionFinding(
+                        name=canonical_name,
+                        syntax=unmapped_option.documented_syntax,
+                        requirement=unmapped_option.requirement,
+                        support=unmapped_option.support,
+                        condition=unmapped_option.condition,
+                        note=unmapped_option.note,
                         citations=citations,
                     )
                 )
             else:
                 findings.append(
                     UnmappedSubmissionOptionFinding(
-                        documented_name=option.documented_name,
-                        documented_syntax=option.documented_syntax,
-                        requirement=option.requirement,
-                        note=option.note,
+                        documented_name=unmapped_option.documented_name,
+                        documented_syntax=unmapped_option.documented_syntax,
+                        requirement=unmapped_option.requirement,
+                        support=unmapped_option.support,
+                        condition=unmapped_option.condition,
+                        note=unmapped_option.note,
                         citations=citations,
                     )
                 )
@@ -885,20 +993,44 @@ def _validate_group(
                     "in measured site resources"
                 )
                 continue
-            citations, error = _citations(
-                "maximum_walltime_seconds",
-                partition.evidence_span_ids,
-                span_map,
-                retrieved_chunks,
-            )
-            if error:
-                rejected.append(f"partitions/{partition.name}: {error}")
-            else:
+            partition_proposals: dict[
+                PartitionPolicyName, ExtractedPartitionValue | None
+            ] = {
+                "maximum_walltime_seconds": partition.maximum_walltime_seconds,
+                "maximum_nodes_per_job": partition.maximum_nodes_per_job,
+                "shared_nodes": partition.shared_nodes,
+                "gpu_count_per_node": partition.gpu_count_per_node,
+                "gpu_models": partition.gpu_models,
+                "features": partition.features,
+            }
+            if not any(
+                partition_proposal is not None
+                for partition_proposal in partition_proposals.values()
+            ):
+                rejected.append(
+                    f"partitions/{partition.name}: no documented field was proposed"
+                )
+                continue
+            for partition_field, partition_proposal in partition_proposals.items():
+                if partition_proposal is None:
+                    continue
+                citations, error = _citations(
+                    partition_field,
+                    partition_proposal.evidence_span_ids,
+                    span_map,
+                    retrieved_chunks,
+                )
+                if error:
+                    rejected.append(
+                        f"partitions/{partition.name}/{partition_field}: {error}"
+                    )
+                    continue
                 findings.append(
                     PartitionFinding(
                         name=partition.name,
-                        maximum_walltime_seconds=partition.maximum_walltime_seconds,
-                        note=partition.note,
+                        field=partition_field,
+                        value=partition_proposal.value,
+                        note=partition_proposal.note,
                         citations=citations,
                     )
                 )
@@ -914,8 +1046,12 @@ def _validate_group(
             )
             if error:
                 rejected.append(f"network/{capability.name}: {error}")
-            elif not capability.available and not _explicit_negative_network_evidence(
-                citations
+            elif (
+                not capability.available
+                and (
+                    _explicit_positive_network_evidence(citations)
+                    or not _explicit_negative_network_evidence(citations)
+                )
             ):
                 rejected.append(
                     f"network/{capability.name}: false requires explicit negative "
@@ -932,6 +1068,25 @@ def _validate_group(
                 )
 
     elif isinstance(result, OperationalExtractionResult):
+        if result.charging_unit is not None:
+            citations, error = _citations(
+                "charging_unit",
+                result.charging_unit.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"charging_unit: {error}")
+            else:
+                findings.append(
+                    AccountingPolicyFinding(
+                        name="charging_unit",
+                        value=result.charging_unit.value,
+                        note=result.charging_unit.note,
+                        citations=citations,
+                    )
+                )
+
         if result.charging_model is not None:
             citations, error = _citations(
                 "charging_model",
@@ -950,32 +1105,86 @@ def _validate_group(
                     )
                 )
 
+        if result.filesystem_storage_charged is not None:
+            citations, error = _citations(
+                "filesystem_storage_charged",
+                result.filesystem_storage_charged.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"filesystem_storage_charged: {error}")
+            else:
+                findings.append(
+                    AccountingPolicyFinding(
+                        name="filesystem_storage_charged",
+                        value=result.filesystem_storage_charged.value,
+                        note=result.filesystem_storage_charged.note,
+                        citations=citations,
+                    )
+                )
+
         for storage in result.storage:
-            if storage.name not in storage_names:
+            storage_name = _canonical_storage_name(storage.name, storage_names)
+            if storage_name is None:
                 rejected.append(
                     f"storage/{storage.name}: storage resource is not present "
                     "in measured site resources"
                 )
                 continue
-            citations, error = _citations(
-                "purge_after_days",
-                storage.evidence_span_ids,
-                span_map,
-                retrieved_chunks,
-            )
-            if error:
-                rejected.append(f"storage/{storage.name}: {error}")
-            else:
+            storage_proposals: dict[
+                StoragePolicyName, ExtractedStorageValue | None
+            ] = {
+                "compute_visible": storage.compute_visible,
+                "compute_readable": storage.compute_readable,
+                "compute_writable": storage.compute_writable,
+                "shared_across_compute_nodes": storage.shared_across_compute_nodes,
+                "backup_policy": storage.backup_policy,
+                "purge_after_days": storage.purge_after_days,
+                "purge_condition": storage.purge_condition,
+            }
+            if not any(
+                storage_proposal is not None
+                for storage_proposal in storage_proposals.values()
+            ):
+                rejected.append(f"storage/{storage.name}: no documented field was proposed")
+                continue
+            for storage_field, storage_proposal in storage_proposals.items():
+                if storage_proposal is None:
+                    continue
+                retrieval_field = _STORAGE_RETRIEVAL[storage_field]
+                citations, error = _citations(
+                    retrieval_field,
+                    storage_proposal.evidence_span_ids,
+                    span_map,
+                    retrieved_chunks,
+                )
+                if error:
+                    rejected.append(
+                        f"storage/{storage.name}/{storage_field}: {error}"
+                    )
+                    continue
                 findings.append(
                     StoragePolicyFinding(
-                        name=storage.name,
-                        purge_after_days=storage.purge_after_days,
-                        note=storage.note,
+                        name=storage_name,
+                        field=storage_field,
+                        value=storage_proposal.value,
+                        note=storage_proposal.note,
                         citations=citations,
                     )
                 )
 
     return _ValidatedGroup(findings=findings, rejected=rejected)
+
+
+def _canonical_storage_name(name: str, storage_names: set[str]) -> str | None:
+    """Map documented environment-variable forms such as $SCRATCH to measured IDs."""
+
+    normalized = name.strip().strip("{}").lstrip("$").casefold()
+    return next(
+        (item for item in storage_names if item.casefold() == normalized),
+        None,
+    )
 
 
 def _supports_htcondor_runtime_policy(
@@ -1014,6 +1223,15 @@ def _explicit_negative_network_evidence(
     )
     padded = f" {text} "
     return any(marker in padded for marker in negative_markers)
+
+
+def _explicit_positive_network_evidence(
+    citations: list[DocumentationCitation],
+) -> bool:
+    """Return whether cited text explicitly affirms node connectivity."""
+
+    text = " ".join(citation.quote for citation in citations).casefold()
+    return "fully connected" in text or "can connect" in text
 
 
 def _correctable_errors(errors: list[str]) -> list[str]:
@@ -1100,14 +1318,16 @@ def _finding_key(finding: DocumentationFinding) -> tuple[str, str | None]:
     if isinstance(finding, UnmappedSubmissionOptionFinding):
         return "required_submission_options", finding.documented_name
     if isinstance(finding, PartitionFinding):
-        return "maximum_walltime_seconds", finding.name
+        return finding.field, finding.name
     if isinstance(finding, HTCondorPolicyFinding):
         return finding.name, None
     if isinstance(finding, NetworkFinding):
         return _NETWORK_RETRIEVAL[finding.name], None
     if isinstance(finding, ChargingModelFinding):
         return "charging_model", None
-    return "purge_after_days", finding.name
+    if isinstance(finding, AccountingPolicyFinding):
+        return finding.name, None
+    return _STORAGE_RETRIEVAL[finding.field], finding.name
 
 
 def _retrieval_field(finding: DocumentationFinding) -> str:
@@ -1163,9 +1383,9 @@ def _expected_fields(scheduler: str, storage_names: set[str]) -> set[str]:
         fields.discard("guaranteed_runtime")
         fields.discard("preemptible")
     else:
-        fields.discard("maximum_walltime_seconds")
+        fields.difference_update(_PARTITION_FIELDS)
     if not storage_names:
-        fields.discard("purge_after_days")
+        fields.difference_update(_STORAGE_RETRIEVAL.values())
     return fields
 
 
@@ -1181,8 +1401,8 @@ def _requested_fields(
         for field in ("guaranteed_runtime", "preemptible"):
             if field in fields:
                 fields.remove(field)
-    elif "maximum_walltime_seconds" in fields:
-        fields.remove("maximum_walltime_seconds")
-    if not storage_names and "purge_after_days" in fields:
-        fields.remove("purge_after_days")
+    else:
+        fields = [field for field in fields if field not in _PARTITION_FIELDS]
+    if not storage_names:
+        fields = [field for field in fields if field not in _STORAGE_RETRIEVAL.values()]
     return tuple(fields)

@@ -34,6 +34,8 @@ class SubmissionOption(BaseModel):
     name: str
     syntax: list[str] = Field(min_length=1)
     required: bool | None = None
+    support: Literal["supported", "unsupported", "discouraged", "unknown"] = "unknown"
+    condition: str | None = None
     example: str | None = None
     allowed_values: list[str] | None = None
 
@@ -46,6 +48,8 @@ class UnmappedSubmissionOption(BaseModel):
     documented_name: str
     documented_syntax: list[str] = Field(default_factory=list)
     requirement: Literal["required", "recommended", "optional", "conditional"]
+    support: Literal["supported", "unsupported", "discouraged", "unknown"] = "unknown"
+    condition: str | None = None
     status: Literal["needs_mapping"] = "needs_mapping"
 
 

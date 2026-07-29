@@ -1061,6 +1061,29 @@
           "default": null,
           "title": "Required"
         },
+        "support": {
+          "default": "unknown",
+          "enum": [
+            "supported",
+            "unsupported",
+            "discouraged",
+            "unknown"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Condition"
+        },
         "example": {
           "anyOf": [
             {
@@ -1120,6 +1143,29 @@
           ],
           "title": "Requirement",
           "type": "string"
+        },
+        "support": {
+          "default": "unknown",
+          "enum": [
+            "supported",
+            "unsupported",
+            "discouraged",
+            "unknown"
+          ],
+          "title": "Support",
+          "type": "string"
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Condition"
         },
         "status": {
           "const": "needs_mapping",

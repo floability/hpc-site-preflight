@@ -1,6 +1,9 @@
 """Deterministically apply validated documentation findings to a profile."""
 
+from typing import cast
+
 from hpc_site_preflight.documentation.models import (
+    AccountingPolicyFinding,
     AllocationRequiredFinding,
     ChargingModelFinding,
     DocumentationEvidence,
@@ -25,7 +28,9 @@ from hpc_site_preflight.evidence.reconciliation import get_rule
 from hpc_site_preflight.profiles.models import (
     ConflictEvidenceValue,
     ProfileConflict,
+    ProfileValue,
     SiteProfile,
+    SubmissionOption,
     UnmappedSubmissionOption,
     UnresolvedWorkItem,
 )
@@ -58,12 +63,25 @@ def apply_documentation(
             )
             if evidence_ids:
                 _link_evidence(report, path, evidence_ids)
-                if isinstance(finding, PartitionFinding):
+                if (
+                    isinstance(finding, PartitionFinding)
+                    and finding.field == "maximum_walltime_seconds"
+                    and isinstance(finding.value, int)
+                    and not isinstance(finding.value, bool)
+                ):
                     _retain_walltime_conflict(
                         profile,
                         report,
                         path,
-                        finding.maximum_walltime_seconds,
+                        finding.value,
+                        evidence_ids,
+                    )
+                elif isinstance(finding, PartitionFinding):
+                    _retain_measured_partition_conflict(
+                        profile,
+                        report,
+                        path,
+                        finding.value,
                         evidence_ids,
                     )
                 resolved_paths.add(path)
@@ -87,6 +105,9 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
     if isinstance(finding, ChargingModelFinding):
         profile.accounting.charging_model = finding.charging_model
         return ["/accounting/charging_model"]
+    if isinstance(finding, AccountingPolicyFinding):
+        setattr(profile.accounting, finding.name, finding.value)
+        return [f"/accounting/{finding.name}"]
     if isinstance(finding, HTCondorPolicyFinding):
         if profile.htcondor is None:
             return []
@@ -103,8 +124,14 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             None,
         )
         if partition is not None:
-            partition.maximum_walltime_seconds = finding.maximum_walltime_seconds
-            return [f"/slurm/partitions/{partition.name}/maximum_walltime_seconds"]
+            current = getattr(partition, finding.field)
+            if (
+                finding.field == "maximum_walltime_seconds"
+                or current is None
+                or current == []
+            ):
+                setattr(partition, finding.field, finding.value)
+            return [f"/slurm/partitions/{partition.name}/{finding.field}"]
     if isinstance(finding, StoragePolicyFinding):
         normalized = finding.name.casefold()
         storage = next(
@@ -116,11 +143,9 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             None,
         )
         if storage is not None:
-            storage.purge_after_days = finding.purge_after_days
-            return [f"/storage/{storage.id}/purge_after_days"]
+            setattr(storage, finding.field, finding.value)
+            return [f"/storage/{storage.id}/{finding.field}"]
     if isinstance(finding, SubmissionOptionFinding):
-        if finding.requirement not in {"required", "optional"}:
-            return []
         options = (
             profile.slurm.options
             if profile.slurm is not None
@@ -132,27 +157,56 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             (item for item in options if item.name == finding.name),
             None,
         )
+        if option is None and finding.syntax:
+            option = SubmissionOption(name=finding.name, syntax=finding.syntax)
+            options.append(option)
         if option is not None:
-            option.required = finding.requirement == "required"
-            prefix = "slurm/options" if profile.slurm is not None else "htcondor/submit_attributes"
-            return [f"/{prefix}/{option.name}/required"]
+            if finding.syntax:
+                option.syntax = finding.syntax
+            option.required = (
+                True
+                if finding.requirement == "required"
+                else False
+                if finding.requirement in {"recommended", "optional"}
+                else None
+            )
+            option.support = finding.support
+            option.condition = finding.condition
+            prefix = (
+                "slurm/options"
+                if profile.slurm is not None
+                else "htcondor/submit_attributes"
+            )
+            paths = []
+            if finding.syntax:
+                paths.append(f"/{prefix}/{option.name}/syntax")
+            if finding.support != "unknown":
+                paths.append(f"/{prefix}/{option.name}/support")
+            if finding.requirement != "conditional":
+                paths.append(f"/{prefix}/{option.name}/required")
+            if option.condition is not None:
+                paths.append(f"/{prefix}/{option.name}/condition")
+            return paths
     if isinstance(finding, UnmappedSubmissionOptionFinding):
         if profile.slurm is not None:
-            options = profile.slurm.unmapped_options
+            unmapped_options = profile.slurm.unmapped_options
             path = "/slurm/unmapped_options"
         elif profile.htcondor is not None:
-            options = profile.htcondor.unmapped_submit_attributes
+            unmapped_options = profile.htcondor.unmapped_submit_attributes
             path = "/htcondor/unmapped_submit_attributes"
         else:
             return []
         if not any(
-            item.documented_name == finding.documented_name for item in options
+            item.documented_name == finding.documented_name
+            for item in unmapped_options
         ):
-            options.append(
+            unmapped_options.append(
                 UnmappedSubmissionOption(
                     documented_name=finding.documented_name,
                     documented_syntax=finding.documented_syntax,
                     requirement=finding.requirement,
+                    support=finding.support,
+                    condition=finding.condition,
                 )
             )
         return [path]
@@ -191,7 +245,7 @@ def _append_evidence(
                 scope="target_site",
                 trust="official" if web_mode == "live" else "illustrative",
                 disposition="accepted",
-                value=_finding_value(finding),
+                value=_finding_value(finding, field_path),
                 freshness="site_change",
                 source_reference=citation.url,
                 documentation_url=citation.url,
@@ -204,22 +258,39 @@ def _append_evidence(
     return evidence_ids
 
 
-def _finding_value(finding: DocumentationFinding) -> bool | int | str:
+def _finding_value(
+    finding: DocumentationFinding,
+    field_path: str,
+) -> bool | int | str | list[str] | None:
     if isinstance(finding, AllocationRequiredFinding):
         return finding.allocation_required
     if isinstance(finding, SubmissionOptionFinding):
-        return finding.requirement == "required"
+        if field_path.endswith("/syntax"):
+            return finding.syntax
+        if field_path.endswith("/support"):
+            return finding.support
+        if field_path.endswith("/condition"):
+            return finding.condition
+        return (
+            True
+            if finding.requirement == "required"
+            else False
+            if finding.requirement in {"recommended", "optional"}
+            else None
+        )
     if isinstance(finding, UnmappedSubmissionOptionFinding):
         return finding.documented_name
     if isinstance(finding, PartitionFinding):
-        return finding.maximum_walltime_seconds
+        return finding.value
     if isinstance(finding, NetworkFinding):
         return finding.available
     if isinstance(finding, ChargingModelFinding):
         return finding.charging_model
+    if isinstance(finding, AccountingPolicyFinding):
+        return finding.value
     if isinstance(finding, HTCondorPolicyFinding):
         return finding.value
-    return finding.purge_after_days
+    return finding.value
 
 
 def _link_evidence(
@@ -305,6 +376,73 @@ def _retain_walltime_conflict(
                 ConflictEvidenceValue(
                     source="documentation",
                     value=documented_value,
+                    evidence_ids=documentation_evidence_ids,
+                ),
+            ],
+            selection_rule=selection_rule,
+            note=note,
+        )
+    )
+
+
+def _retain_measured_partition_conflict(
+    profile: SiteProfile,
+    report: EvidenceReport,
+    path: str,
+    documented_value: bool | int | list[str],
+    documentation_evidence_ids: list[str],
+) -> None:
+    """Keep an affirmative measured resource value and record documentation disagreement."""
+
+    link = next((item for item in report.links if item.profile_field == path), None)
+    linked_ids = set(link.evidence_ids if link else [])
+    measured = [
+        item
+        for item in report.evidence
+        if item.evidence_id in linked_ids
+        and item.source_type == "measurement"
+        and item.disposition == "accepted"
+        and item.value not in (None, [])
+    ]
+    if not measured or all(item.value == documented_value for item in measured):
+        return
+    if any(item.field == path for item in profile.conflicts):
+        return
+
+    selected = measured[0]
+    selected_value = cast(ProfileValue, selected.value)
+    if not isinstance(selected_value, (bool, int, list)):
+        return
+    measurement_ids = [item.evidence_id for item in measured]
+    selection_rule = "measurement_over_documentation_for_observable_resource"
+    note = (
+        f"Measurement reported {selected_value}; documentation reported "
+        f"{documented_value}. The measured resource value is retained."
+    )
+    report.conflicts.append(
+        ConflictRecord(
+            field_path=path,
+            selected_evidence_id=selected.evidence_id,
+            other_evidence_ids=documentation_evidence_ids,
+            selection_rule=selection_rule,
+            note=note,
+        )
+    )
+    profile.conflicts.append(
+        ProfileConflict(
+            field=path,
+            selected_value=selected_value,
+            selected_evidence=selected.evidence_id,
+            other_evidence=documentation_evidence_ids,
+            evidence_values=[
+                ConflictEvidenceValue(
+                    source="measurement",
+                    value=selected_value,
+                    evidence_ids=measurement_ids,
+                ),
+                ConflictEvidenceValue(
+                    source="documentation",
+                    value=cast(ProfileValue, documented_value),
                     evidence_ids=documentation_evidence_ids,
                 ),
             ],

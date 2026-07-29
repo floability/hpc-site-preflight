@@ -189,7 +189,7 @@ class DocumentationTools:
         search_budget: int = DEFAULT_SEARCH_BUDGET,
         page_budget: int = DEFAULT_PAGE_BUDGET,
         search_result_limit: int = 8,
-        maximum_page_chars: int = 20_000,
+        maximum_page_chars: int = 500_000,
         timeout_seconds: float = 20.0,
     ) -> None:
         self.identity = identity

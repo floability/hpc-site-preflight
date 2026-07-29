@@ -362,7 +362,7 @@ def _measurement_observations(
                 getattr(bundle.htcondor.pool_totals, field),
                 "htcondor_machine_ads",
             )
-        for index, group in enumerate(bundle.htcondor.cpu_groups):
+        for index, cpu_group in enumerate(bundle.htcondor.cpu_groups):
             prefix = f"/facts/scheduler/htcondor/cpu_groups/{index}"
             for field in (
                 "cpu_cores_per_machine",
@@ -372,10 +372,10 @@ def _measurement_observations(
             ):
                 add(
                     f"{prefix}/{field}",
-                    getattr(group, field),
+                    getattr(cpu_group, field),
                     "htcondor_machine_ads",
                 )
-        for index, group in enumerate(bundle.htcondor.gpu_groups):
+        for index, gpu_group in enumerate(bundle.htcondor.gpu_groups):
             prefix = f"/facts/scheduler/htcondor/gpu_groups/{index}"
             for field in (
                 "gpu_count_per_machine",
@@ -386,7 +386,7 @@ def _measurement_observations(
             ):
                 add(
                     f"{prefix}/{field}",
-                    getattr(group, field),
+                    getattr(gpu_group, field),
                     "htcondor_machine_ads",
                 )
     return observations
@@ -762,6 +762,9 @@ def _unresolved_items(
                 "maximum_walltime_seconds",
                 "maximum_nodes_per_job",
                 "shared_nodes",
+                "gpu_count_per_node",
+                "gpu_models",
+                "features",
             ):
                 items.append(
                     UnresolvedWorkItem(
@@ -798,6 +801,18 @@ def _unresolved_items(
                     action_id="submission_policy_search",
                 )
             )
+        items.append(
+            UnresolvedWorkItem(
+                field=(
+                    f"/slurm/options/{option.name}/support"
+                    if scheduler == "slurm"
+                    else f"/htcondor/submit_attributes/{option.name}/support"
+                ),
+                reason="Login measurements do not establish site support for this option.",
+                next_action="additional_documentation",
+                action_id="submission_policy_search",
+            )
+        )
     for field in (
         "dns_resolution",
         "outbound_https",
@@ -835,10 +850,10 @@ def _unresolved_items(
         if item.path_pattern is None:
             items.append(
                 UnresolvedWorkItem(
-                    field=f"/storage/{item.name}/path_pattern",
+                    field=f"/storage/{item.id}/path_pattern",
                     reason="The storage role was not observed from the login node.",
                     next_action="login_measurement",
-                    action_id=f"{item.name}_path",
+                    action_id=f"{item.id}_path",
                 )
             )
         for field in (
@@ -849,20 +864,35 @@ def _unresolved_items(
         ):
             items.append(
                 UnresolvedWorkItem(
-                    field=f"/storage/{item.name}/{field}",
+                    field=f"/storage/{item.id}/{field}",
                     reason="Login-node access does not establish compute-node access.",
                     next_action="run_pilot",
-                    action_id=f"{item.name}_{field}",
+                    action_id=f"{item.id}_{field}",
                 )
             )
-    items.append(
-        UnresolvedWorkItem(
-            field="/accounting/charging_model",
-            reason="Charging policy cannot be measured from the login node.",
-            next_action="additional_documentation",
-            action_id="accounting_policy_search",
+        for field in ("backup_policy", "purge_after_days", "purge_condition"):
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/storage/{item.id}/{field}",
+                    reason="Storage policy requires authoritative documentation.",
+                    next_action="additional_documentation",
+                    action_id="storage_policy_search",
+                )
+            )
+    for field in (
+        "allocation_required",
+        "charging_unit",
+        "charging_model",
+        "filesystem_storage_charged",
+    ):
+        items.append(
+            UnresolvedWorkItem(
+                field=f"/accounting/{field}",
+                reason="Accounting policy cannot be established by login measurement.",
+                next_action="additional_documentation",
+                action_id="accounting_policy_search",
+            )
         )
-    )
     return items
 
 

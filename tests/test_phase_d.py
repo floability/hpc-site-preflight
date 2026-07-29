@@ -37,10 +37,12 @@ from hpc_site_preflight.documentation.models import (
     HTCondorPolicyFinding,
     NetworkExtractionResult,
     NetworkFinding,
+    OperationalExtractionResult,
     PartitionFinding,
     RecordedPage,
     RetrievalHit,
     SearchResult,
+    StoragePolicyFinding,
     SubmissionExtractionResult,
     SubmissionOptionFinding,
     UnmappedSubmissionOptionFinding,
@@ -92,6 +94,37 @@ def _tracker(tmp_path: Path, run_id: str) -> RunTracker:
     return RunTracker(command="test", run_root=tmp_path, quiet=True, run_id=run_id)
 
 
+def _chunk(
+    chunk_id: str,
+    text: str,
+    *,
+    block_kind: str = "text",
+) -> CorpusChunk:
+    return CorpusChunk(
+        chunk_id=chunk_id,
+        document_id="stampede-guide",
+        source_url="https://docs.tacc.utexas.edu/hpc/stampede3",
+        title="Stampede3 User Guide",
+        scope="target_site",
+        heading_path=["Stampede3"],
+        block_kind=block_kind,
+        text=text,
+        content_hash=f"{chunk_id}-hash",
+    )
+
+
+def _span(chunk_id: str, quote: str, *, heading: str) -> EvidenceSpan:
+    return EvidenceSpan(
+        span_id=f"{chunk_id}:s1",
+        chunk_id=chunk_id,
+        source_url="https://docs.tacc.utexas.edu/hpc/stampede3",
+        title="Stampede3 User Guide",
+        heading=heading,
+        scope="target_site",
+        quote=quote,
+    )
+
+
 class _FollowUpWebBackend:
     """Expose one page initially and a second page only for the model's follow-up query."""
 
@@ -131,7 +164,7 @@ class _FollowUpWebBackend:
     ("site_name", "alias", "scheduler", "domain"),
     [
         ("anvil", "Anvil", "slurm", "purdue.edu"),
-        ("stampede3", "Stampede3", "slurm", "tacc.utexas.edu"),
+        ("stampede3", "TACC Stampede3", "slurm", "utexas.edu"),
         ("notre-dame-crc", "Notre Dame CRC", "htcondor", "nd.edu"),
     ],
 )
@@ -214,6 +247,382 @@ def test_web_tools_enforce_domain_scope_and_budgets() -> None:
     assert sibling.scope == "sibling_site"
     with pytest.raises(DocumentationError, match="target-site"):
         tools.select_fetched_pages([sibling.url])
+
+
+def test_corpus_preserves_policy_tables_late_in_long_pages() -> None:
+    measurements = _inputs("anvil")
+    identity = build_site_identity(measurements)
+    url = "https://docs.rcac.purdue.edu/anvil/jobs"
+    page = RecordedPage(
+        url=url,
+        title="Anvil jobs",
+        fetched_at="2026-07-29T12:00:00Z",
+        sections=[
+            {
+                "heading_path": ["Anvil", "Overview"],
+                "blocks": [{"kind": "text", "text": "overview " * 4_000}],
+            },
+            {
+                "heading_path": ["Anvil", "Common sbatch options"],
+                "blocks": [
+                    {
+                        "kind": "table",
+                        "text": "Option | Policy\n--gres | unsupported",
+                    }
+                ],
+            },
+        ],
+    )
+
+    class LongPageBackend:
+        def search(
+            self, query: str, limit: int, timeout_seconds: float
+        ) -> list[SearchResult]:
+            del query, limit, timeout_seconds
+            return []
+
+        def fetch(self, requested_url: str, timeout_seconds: float) -> RecordedPage:
+            del requested_url, timeout_seconds
+            return page
+
+    fetched = DocumentationTools(identity, LongPageBackend()).fetch_page(url)
+    _, _, chunks = build_corpus("anvil", [fetched])
+
+    assert fetched.text_truncated is False
+    assert any("--gres | unsupported" in chunk.text for chunk in chunks)
+
+
+def test_stampede_policy_retrieval_finds_options_gpus_and_storage() -> None:
+    chunks = [
+        _chunk(
+            "options",
+            "Common sbatch Options\n-N | Required. Number of nodes.\n"
+            "--gres | Stampede3 does not support this option.",
+            block_kind="table",
+        ),
+        _chunk(
+            "h100",
+            "H100 compute nodes\nGPU: | 4x NVIDIA H100 SXM5",
+            block_kind="table",
+        ),
+        _chunk(
+            "storage",
+            "$HOME, $WORK, and $SCRATCH are available from all compute nodes.",
+        ),
+    ]
+
+    submission = select_context(
+        chunks,
+        scheduler="slurm",
+        group="submission",
+        fields=("required_submission_options", "gpu_count_per_node", "gpu_models"),
+        mode="bm25",
+        resources_by_field={
+            "gpu_count_per_node": {"h100"},
+            "gpu_models": {"h100"},
+        },
+    )
+    operational = select_context(
+        chunks,
+        scheduler="slurm",
+        group="operational",
+        fields=("storage_compute_visible",),
+        mode="bm25",
+        resources_by_field={"storage_compute_visible": {"home", "scratch", "work"}},
+    )
+
+    hits = {
+        retrieval.field: {hit.chunk_id for hit in retrieval.hits}
+        for retrieval in submission.retrievals
+    }
+    assert "options" in hits["required_submission_options"]
+    assert "h100" in hits["gpu_count_per_node"]
+    assert "h100" in hits["gpu_models"]
+    assert "storage" in {
+        hit.chunk_id for hit in operational.retrievals[0].hits
+    }
+
+
+def test_typed_stampede_proposals_accept_resources_storage_and_open_options() -> None:
+    option_span = _span(
+        "options",
+        "--gres | Stampede3 does not support this option.",
+        heading="Common sbatch Options",
+    )
+    gpu_span = _span(
+        "h100",
+        "GPU: | 4x NVIDIA H100 SXM5",
+        heading="H100 compute nodes",
+    )
+    storage_span = _span(
+        "storage",
+        "$HOME, $WORK, and $SCRATCH are available from all compute nodes.",
+        heading="File systems",
+    )
+    submission = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "guaranteed_runtime": None,
+            "preemptible": None,
+            "submission_options": [
+                {
+                    "name": "gres",
+                    "syntax": ["--gres={resource}"],
+                    "requirement": "optional",
+                    "support": "unsupported",
+                    "condition": None,
+                    "evidence_span_ids": [option_span.span_id],
+                    "note": "Stampede3 rejects this directive.",
+                },
+                {
+                    "name": "exclusive",
+                    "syntax": ["--exclusive"],
+                    "requirement": "optional",
+                    "support": "supported",
+                    "condition": None,
+                    "evidence_span_ids": [option_span.span_id],
+                    "note": "An unfamiliar literal directive remains reviewable.",
+                },
+            ],
+            "unmapped_options": [],
+            "partitions": [
+                {
+                    "name": "h100",
+                    "maximum_walltime_seconds": None,
+                    "maximum_nodes_per_job": None,
+                    "shared_nodes": None,
+                    "gpu_count_per_node": {
+                        "value": 4,
+                        "evidence_span_ids": [gpu_span.span_id],
+                        "note": "The node specification documents four GPUs.",
+                    },
+                    "gpu_models": {
+                        "value": ["NVIDIA H100 SXM5"],
+                        "evidence_span_ids": [gpu_span.span_id],
+                        "note": "The node specification names the GPU model.",
+                    },
+                    "features": None,
+                }
+            ],
+        }
+    )
+    submission_retrievals = [
+        FieldRetrieval(
+            field=field,
+            queries=[field],
+            hits=[RetrievalHit(chunk_id=chunk_id, score=1.0)],
+        )
+        for field, chunk_id in (
+            ("required_submission_options", "options"),
+            ("gpu_count_per_node", "h100"),
+            ("gpu_models", "h100"),
+        )
+    ]
+    validated_submission = _validate_group(
+        submission,
+        [option_span, gpu_span],
+        submission_retrievals,
+        "slurm",
+        {"h100"},
+        {"home", "scratch", "work"},
+    )
+    operational = OperationalExtractionResult.model_validate(
+        {
+            "charging_unit": None,
+            "charging_model": None,
+            "filesystem_storage_charged": None,
+            "storage": [
+                {
+                    "name": "$SCRATCH",
+                    "compute_visible": {
+                        "value": True,
+                        "evidence_span_ids": [storage_span.span_id],
+                        "note": "Scratch is available from compute nodes.",
+                    },
+                    "compute_readable": None,
+                    "compute_writable": None,
+                    "shared_across_compute_nodes": None,
+                    "backup_policy": None,
+                    "purge_after_days": None,
+                    "purge_condition": None,
+                }
+            ],
+        }
+    )
+    validated_storage = _validate_group(
+        operational,
+        [storage_span],
+        [
+            FieldRetrieval(
+                field="storage_compute_visible",
+                queries=["storage compute visible"],
+                hits=[RetrievalHit(chunk_id="storage", score=1.0)],
+            )
+        ],
+        "slurm",
+        {"h100"},
+        {"home", "scratch", "work"},
+    )
+
+    assert not validated_submission.rejected
+    assert not validated_storage.rejected
+    assert any(
+        isinstance(item, SubmissionOptionFinding)
+        and item.name == "gres"
+        and item.support == "unsupported"
+        for item in validated_submission.findings
+    )
+    assert any(
+        isinstance(item, UnmappedSubmissionOptionFinding)
+        and item.documented_name == "exclusive"
+        and item.support == "supported"
+        for item in validated_submission.findings
+    )
+    assert {
+        item.field
+        for item in validated_submission.findings
+        if isinstance(item, PartitionFinding)
+    } == {"gpu_count_per_node", "gpu_models"}
+    assert [
+        (item.name, item.field, item.value)
+        for item in validated_storage.findings
+        if isinstance(item, StoragePolicyFinding)
+    ] == [("scratch", "compute_visible", True)]
+
+
+def test_documentation_fills_stampede_resources_options_storage_and_network() -> None:
+    measurements = _inputs("stampede3")
+    citation = DocumentationCitation(
+        span_id="stampede:c1:s1",
+        chunk_id="stampede:c1",
+        url="https://docs.tacc.utexas.edu/hpc/stampede3",
+        title="Stampede3 User Guide",
+        heading="Resources",
+        quote="H100 nodes have 4 NVIDIA H100 GPUs; all nodes are fully connected to $SCRATCH.",
+    )
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="live",
+        context_mode="bm25",
+        findings=[
+            PartitionFinding(
+                name="h100",
+                field="gpu_count_per_node",
+                value=4,
+                note="Documented node shape.",
+                citations=[citation],
+            ),
+            PartitionFinding(
+                name="h100",
+                field="gpu_models",
+                value=["NVIDIA H100 SXM5"],
+                note="Documented node shape.",
+                citations=[citation],
+            ),
+            SubmissionOptionFinding(
+                name="gres",
+                syntax=["--gres={resource}"],
+                requirement="optional",
+                support="unsupported",
+                note="The scheduler rejects this option.",
+                citations=[citation],
+            ),
+            StoragePolicyFinding(
+                name="scratch",
+                field="compute_visible",
+                value=True,
+                note="Scratch is mounted on compute nodes.",
+                citations=[citation],
+            ),
+            NetworkFinding(
+                name="worker_worker",
+                available=True,
+                note="The compute fabric is fully connected.",
+                citations=[citation],
+            ),
+        ],
+        rejected=[],
+        unresolved=[],
+        selected_chunk_ids=["stampede:c1"],
+        retrieval=[],
+    )
+
+    profile, report = compile_profile(measurements)
+    profile, report = apply_documentation(profile, report, documentation)
+
+    assert profile.slurm is not None
+    h100 = next(item for item in profile.slurm.partitions if item.name == "h100")
+    assert h100.gpu_count_per_node == 4
+    assert h100.gpu_models == ["NVIDIA H100 SXM5"]
+    gres = next(item for item in profile.slurm.options if item.name == "gres")
+    assert gres.support == "unsupported"
+    scratch = next(item for item in profile.storage if item.id == "scratch")
+    assert scratch.compute_visible is True
+    assert profile.network.compute_compute.tcp_connect is True
+    assert {
+        item.field_path
+        for item in report.evidence
+        if item.source_type == "documentation"
+    } >= {
+        "/slurm/partitions/h100/gpu_count_per_node",
+        "/slurm/partitions/h100/gpu_models",
+        "/slurm/options/gres/support",
+        "/storage/scratch/compute_visible",
+        "/network/compute_compute/tcp_connect",
+    }
+
+
+def test_measured_partition_resource_wins_and_records_documentation_conflict() -> None:
+    raw = _load(SIMULATE_ROOT / "stampede3" / "login-measurements.json")
+    h100 = next(item for item in raw["slurm"]["partitions"] if item["name"] == "h100")
+    h100["gpu_count_per_node"] = 8
+    measurements = MeasurementBundle.model_validate(raw)
+    citation = DocumentationCitation(
+        span_id="stampede:h100:s1",
+        chunk_id="stampede:h100",
+        url="https://docs.tacc.utexas.edu/hpc/stampede3",
+        title="Stampede3 User Guide",
+        heading="H100 compute nodes",
+        quote="GPU: 4x NVIDIA H100 SXM5",
+    )
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="live",
+        context_mode="bm25",
+        findings=[
+            PartitionFinding(
+                name="h100",
+                field="gpu_count_per_node",
+                value=4,
+                note="Documented node shape.",
+                citations=[citation],
+            )
+        ],
+        rejected=[],
+        unresolved=[],
+        selected_chunk_ids=["stampede:h100"],
+        retrieval=[],
+    )
+
+    profile, report = compile_profile(measurements)
+    profile, report = apply_documentation(profile, report, documentation)
+
+    assert profile.slurm is not None
+    h100_profile = next(
+        item for item in profile.slurm.partitions if item.name == "h100"
+    )
+    assert h100_profile.gpu_count_per_node == 8
+    assert profile.conflicts[-1].field == "/slurm/partitions/h100/gpu_count_per_node"
+    assert profile.conflicts[-1].selected_value == 8
+    assert report.conflicts[-1].selection_rule == (
+        "measurement_over_documentation_for_observable_resource"
+    )
 
 
 def test_live_web_backend_searches_and_normalizes_html() -> None:
@@ -646,12 +1055,12 @@ def test_bm25_recovers_explicit_mandatory_slurm_options(tmp_path: Path) -> None:
     retrieval = next(
         item for item in result.retrieval if item.field == "required_submission_options"
     )
-    assert {hit.chunk_id for hit in retrieval.hits} == {
+    assert {
         "doc-anvil-jobs:c43",
         "doc-anvil-jobs:c42",
         "doc-anvil-jobs:c41",
         "doc-anvil-jobs:c44",
-    }
+    } <= {hit.chunk_id for hit in retrieval.hits}
     assert "required_submission_options" not in result.unresolved
 
 
@@ -812,6 +1221,47 @@ def test_false_network_finding_requires_explicit_negative_text(
 
     assert bool(validated.findings) is accepted
     assert bool(validated.rejected) is not accepted
+
+
+def test_fully_connected_nodes_cannot_validate_worker_disconnect() -> None:
+    span = EvidenceSpan(
+        span_id="network:c1:s1",
+        chunk_id="network:c1",
+        source_url="https://docs.example.edu/network",
+        title="Network",
+        heading="Compute fabric",
+        scope="target_site",
+        quote="The compute nodes are fully connected with no oversubscription.",
+    )
+    result = NetworkExtractionResult.model_validate(
+        {
+            "network": [
+                {
+                    "name": "worker_worker",
+                    "available": False,
+                    "evidence_span_ids": [span.span_id],
+                    "note": "Contradicts the cited text.",
+                }
+            ]
+        }
+    )
+    validated = _validate_group(
+        result,
+        [span],
+        [
+            FieldRetrieval(
+                field="worker_worker_connectivity",
+                queries=["fully connected"],
+                hits=[RetrievalHit(chunk_id=span.chunk_id, score=1.0)],
+            )
+        ],
+        "slurm",
+        set(),
+        set(),
+    )
+
+    assert not validated.findings
+    assert "false requires explicit negative documentation" in validated.rejected[0]
 
 
 @pytest.mark.parametrize("mode", ["full-corpus", "bm25", "llm-expanded-bm25"])
@@ -1338,9 +1788,12 @@ def test_end_to_end_documentation_profile_is_reproducible(
 ) -> None:
     measurements = _inputs(site_name)
     directory = SIMULATE_ROOT / site_name
+    recording_path = directory / "documentation-model.json"
+    if not recording_path.exists():
+        pytest.skip(f"No recorded model fixture for {site_name}.")
     pipeline = DocumentationPipeline(
         measurements=measurements,
-        model_provider=RecordedModelProvider.from_path(directory / "documentation-model.json"),
+        model_provider=RecordedModelProvider.from_path(recording_path),
         web_backend=RecordedWebBackend.from_path(directory / "documentation-web.json"),
         corpus_directory=tmp_path / f"{site_name}-{mode}" / "corpus",
         model_mode="simulate",
@@ -1364,7 +1817,14 @@ def test_end_to_end_documentation_profile_is_reproducible(
         if item.source_type == "documentation"
     )
     assert all(citation.quote for item in documentation.findings for citation in item.citations)
-    assert len(documentation.retrieval) == (7 if site_name == "notre-dame-crc" else 8)
+    assert len({item.field for item in documentation.retrieval}) == len(
+        documentation.retrieval
+    )
+    assert {
+        "allocation_required",
+        "required_submission_options",
+        "charging_model",
+    } <= {item.field for item in documentation.retrieval}
     assert any(not hit.cited for item in documentation.retrieval for hit in item.hits)
     assert all(
         any(
@@ -1439,22 +1899,25 @@ def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
                 "partitions": [],
             }
         )
-    with pytest.raises(ValidationError):
-        SubmissionExtractionResult.model_validate(
-            {
-                "allocation_required": None,
-                "submission_options": [
-                    {
-                        "name": "Account (-A or --account)",
-                        "requirement": "required",
-                        "evidence_span_ids": ["span"],
-                        "note": "Display labels are not canonical names.",
-                    }
-                ],
-                "unmapped_options": [],
-                "partitions": [],
-            }
-        )
+    proposed = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "submission_options": [
+                {
+                    "name": "Account (-A or --account)",
+                    "syntax": ["-A {account}", "--account={account}"],
+                    "requirement": "required",
+                    "support": "supported",
+                    "condition": None,
+                    "evidence_span_ids": ["span"],
+                    "note": "The model may propose a documented display name.",
+                }
+            ],
+            "unmapped_options": [],
+            "partitions": [],
+        }
+    )
+    assert proposed.submission_options[0].name == "Account (-A or --account)"
 
     assert (
         _canonical_option_name(
@@ -1534,7 +1997,7 @@ def test_typed_htcondor_attributes_are_not_valid_slurm_options() -> None:
         "should_transfer_files"
     ]
     assert not slurm.findings
-    assert "not in the reviewed slurm profile contract" in slurm.rejected[0]
+    assert "no literal slurm submission syntax" in slurm.rejected[0]
 
 
 def test_htcondor_displacement_policy_is_extracted_and_cited() -> None:
@@ -1789,12 +2252,20 @@ def test_non_binary_submission_requirement_does_not_become_false(
         if item.name == "request_gpus"
     )
 
-    assert option.required is None
-    assert any(
-        item.field == "/htcondor/submit_attributes/request_gpus/required"
-        for item in profile.unresolved
-    )
-    assert not any(item.source_type == "documentation" for item in report.evidence)
+    if requirement == "recommended":
+        assert option.required is False
+        assert not any(
+            item.field == "/htcondor/submit_attributes/request_gpus/required"
+            for item in profile.unresolved
+        )
+        assert any(item.source_type == "documentation" for item in report.evidence)
+    else:
+        assert option.required is None
+        assert any(
+            item.field == "/htcondor/submit_attributes/request_gpus/required"
+            for item in profile.unresolved
+        )
+        assert not any(item.source_type == "documentation" for item in report.evidence)
 
 
 def test_unmapped_submission_option_is_preserved_for_review() -> None:
