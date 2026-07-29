@@ -42,10 +42,12 @@ _COMMON_FIELD_QUERIES: dict[str, tuple[str, ...]] = {
         "partition shared nodes whole node",
         "node sharing policy",
         "node-sharing complete node dedicated one user",
+        "all GPU nodes are shared shared queues node-exclusive",
     ),
     "gpu_count_per_node": (
         "GPU count per node partition queue",
         "GPUs per compute node specifications",
+        "each GPU node has GPUs",
     ),
     "gpu_models": (
         "GPU model partition queue specifications",

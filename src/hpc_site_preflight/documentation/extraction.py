@@ -202,6 +202,8 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         "Use condition for documented conditional requirements; otherwise return null.",
         examples,
         "When mandatory wording and an option label are split across spans, cite both spans.",
+        "A sample job script establishes syntax, not that every directive in the sample is "
+        "required. A generic mandatory heading needs a separate option-specific policy span.",
         "The canonical list is not exhaustive. Deterministic validation will retain unfamiliar "
         "literal directives for review instead of discarding them.",
         "Use unmapped_options only for an explicit scheduler directive or submit attribute "
@@ -899,6 +901,16 @@ def _validate_group(
             if error:
                 rejected.append(f"submission_options/{option.name}: {error}")
                 continue
+            if option.requirement == "required" and not _supports_required_option(
+                option.name,
+                option.syntax,
+                citations,
+            ):
+                rejected.append(
+                    f"submission_options/{option.name}: required status is supported only "
+                    "by a multi-directive example script"
+                )
+                continue
             canonical_name = _canonical_option_name(
                 option.name,
                 option.syntax,
@@ -954,6 +966,19 @@ def _validate_group(
                 rejected.append(
                     f"unmapped_options/{unmapped_option.documented_name}: no literal "
                     f"{scheduler} submission syntax"
+                )
+                continue
+            if (
+                unmapped_option.requirement == "required"
+                and not _supports_required_option(
+                    unmapped_option.documented_name,
+                    unmapped_option.documented_syntax,
+                    citations,
+                )
+            ):
+                rejected.append(
+                    f"unmapped_options/{unmapped_option.documented_name}: required status "
+                    "is supported only by a multi-directive example script"
                 )
                 continue
             canonical_name = _canonical_option_name(
@@ -1199,6 +1224,48 @@ def _supports_htcondor_runtime_policy(
     if name == "guaranteed_runtime":
         return displacement and value is False
     return displacement and value is True
+
+
+def _supports_required_option(
+    name: str,
+    syntax: list[str],
+    citations: list[DocumentationCitation],
+) -> bool:
+    """Reject required claims that bind a generic heading to a full example script."""
+
+    requirement_markers = (
+        "mandatory",
+        "required",
+        "must at a minimum",
+        "must specify",
+        "must request",
+    )
+    quotes = [citation.quote.casefold() for citation in citations]
+    if not any(marker in quote for marker in requirement_markers for quote in quotes):
+        return False
+
+    flags = {
+        flag.casefold()
+        for value in syntax
+        for flag in re.findall(
+            r"(?<![A-Za-z0-9_-])--?[A-Za-z][A-Za-z0-9-]*",
+            value,
+        )
+    }
+    aliases = {
+        "nodes": {"node count"},
+        "ntasks": {"task count", "total tasks"},
+        "cpus-per-task": {"cpus per task", "cores per task"},
+        "time": {"walltime", "wall clock time"},
+        "mem": {"memory"},
+        "job-name": {"job name"},
+    }
+    terms = {name.casefold(), *flags, *aliases.get(name.casefold(), set())}
+    return any(
+        quote.count("#sbatch") + quote.count("request_") <= 2
+        and any(term in quote for term in terms)
+        for quote in quotes
+    )
 
 
 def _explicit_negative_network_evidence(

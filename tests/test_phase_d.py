@@ -16,6 +16,7 @@ from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
     _correctable_errors,
+    _supports_required_option,
     _valid_unmapped_syntax,
     _validate_group,
     extract_documentation,
@@ -1062,6 +1063,54 @@ def test_bm25_recovers_explicit_mandatory_slurm_options(tmp_path: Path) -> None:
         "doc-anvil-jobs:c44",
     } <= {hit.chunk_id for hit in retrieval.hits}
     assert "required_submission_options" not in result.unresolved
+
+
+def test_required_option_rejects_full_example_but_accepts_specific_policy() -> None:
+    header = DocumentationCitation(
+        span_id="mandatory:s1",
+        chunk_id="mandatory",
+        url="https://docs.example.edu/jobs",
+        title="Jobs",
+        heading="Mandatory fields",
+        quote="You must at a minimum specify:",
+    )
+    example = header.model_copy(
+        update={
+            "span_id": "example:s1",
+            "chunk_id": "example",
+            "quote": (
+                "#SBATCH -A account #SBATCH -p shared #SBATCH --nodes=1 "
+                "#SBATCH --ntasks=1 #SBATCH --cpus-per-task=2 #SBATCH --mem=1G "
+                "#SBATCH --job-name=test #SBATCH -t 01:00:00"
+            ),
+        }
+    )
+    account = header.model_copy(
+        update={
+            "span_id": "account:s1",
+            "chunk_id": "account",
+            "quote": "Account (-A or --account): this is your allocation account.",
+        }
+    )
+    nodes = header.model_copy(
+        update={
+            "span_id": "nodes:s1",
+            "chunk_id": "nodes",
+            "quote": "-N | total_nodes | Required. Specify the number of nodes.",
+        }
+    )
+
+    assert not _supports_required_option(
+        "nodes",
+        ["--nodes={count}", "-N {count}"],
+        [header, example],
+    )
+    assert _supports_required_option(
+        "account",
+        ["-A {account}", "--account={account}"],
+        [header, account, example],
+    )
+    assert _supports_required_option("nodes", ["-N {count}"], [nodes])
 
 
 def test_bm25_preserves_unknown_required_slurm_directive(tmp_path: Path) -> None:
