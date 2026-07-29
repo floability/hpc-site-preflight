@@ -1,0 +1,144 @@
+{
+  "schema_version": "0.6",
+  "collected_at": "2026-07-29T05:53:35.153772+00:00",
+  "evidence_source": "measured",
+  "storage": {
+    "locations": [
+      {
+        "role": "home",
+        "path": "/users/mislam5",
+        "path_pattern": "/users/{username}",
+        "group_name": null,
+        "discovered_by": [
+          "environment",
+          "password_database"
+        ],
+        "environment_variables": [
+          "HOME"
+        ],
+        "filesystem_type": "nfs4",
+        "mount_target": "/users",
+        "writable": true,
+        "filesystem_available_bytes": 37651611648
+      },
+      {
+        "role": "project",
+        "path": "/groups/dthain",
+        "path_pattern": "/groups/{group}",
+        "group_name": "dthain-1",
+        "discovered_by": [
+          "bounded_root_scan",
+          "group_path_probe"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "nfs4",
+        "mount_target": "/groups",
+        "writable": true,
+        "filesystem_available_bytes": 1914102284288
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXX4c4233",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXXaMOdeu",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXXaz9xIr",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXXdDtUZe",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXXhCclsv",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXXsxhnhX",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      },
+      {
+        "role": "storage",
+        "path": "/tmp/ssh-XXXXwIuL3q",
+        "path_pattern": "/tmp/{group}",
+        "group_name": "mislam5",
+        "discovered_by": [
+          "bounded_root_scan"
+        ],
+        "environment_variables": [],
+        "filesystem_type": "xfs",
+        "mount_target": "/",
+        "writable": true,
+        "filesystem_available_bytes": 1928452272128
+      }
+    ],
+    "available_quota_tools": [
+      "pan_quota",
+      "quota"
+    ],
+    "quota_commands_used_for_discovery": []
+  }
+}

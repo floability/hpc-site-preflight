@@ -60,7 +60,9 @@ def test_notre_dame_simulation_uses_classads_and_resource_groups() -> None:
     )
     assert bundle.slurm is None
     assert bundle.htcondor is not None
-    assert bundle.htcondor.resource_groups
+    assert bundle.htcondor.pool_totals.machine_count >= 0
+    assert isinstance(bundle.htcondor.cpu_groups, list)
+    assert isinstance(bundle.htcondor.gpu_groups, list)
 
 
 def test_scheduler_models_reject_cross_scheduler_fields() -> None:

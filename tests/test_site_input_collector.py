@@ -81,7 +81,7 @@ def test_output_has_addressable_site_storage_and_slurm_fields(
         executable_lookup=lookup,
     )
 
-    assert result["schema_version"] == "0.6"
+    assert result["schema_version"] == "0.7"
     assert result["detected_schedulers"] == ["slurm"]
     assert result["site_facts"]["site_id"] == "example-cluster"
     assert result["site_facts"]["fqdn"] == "login01.cluster.example.edu"
@@ -94,15 +94,16 @@ def test_output_has_addressable_site_storage_and_slurm_fields(
     assert result["site_facts"]["available_memory_bytes"] == 1048576
     assert "software" not in result["site_facts"]
 
-    assert list(result["storage"]) == ["home", "tmp", "scratch", "project"]
-    assert result["storage"]["home"]["observed_path"] == str(home)
-    assert result["storage"]["home"]["path_pattern"].endswith("/home/{username}")
-    assert result["storage"]["scratch"]["path_pattern"].endswith(
+    storage = {item["id"]: item for item in result["storage"]["locations"]}
+    assert list(storage) == ["home", "project", "scratch"]
+    assert storage["home"]["observed_path"] == str(home)
+    assert storage["home"]["path_pattern"].endswith("/home/{username}")
+    assert storage["scratch"]["path_pattern"].endswith(
         "/scratch/{username}"
     )
-    assert result["storage"]["project"]["path_pattern"].endswith("/project/{group}")
-    assert result["storage"]["scratch"]["filesystem_type"] == "lustre"
-    assert isinstance(result["storage"]["scratch"]["permissions"], str)
+    assert storage["project"]["path_pattern"].endswith("/project/{group}")
+    assert storage["scratch"]["filesystem_type"] == "lustre"
+    assert isinstance(storage["scratch"]["permissions"], str)
 
     assert result["htcondor"] is None
     assert result["slurm"]["version"] == "24.05.2"
@@ -137,9 +138,9 @@ def test_missing_storage_and_slurm_remain_null(tmp_path: Path, monkeypatch) -> N
     assert result["detected_schedulers"] == []
     assert result["slurm"] is None
     assert result["htcondor"] is None
-    assert result["storage"]["scratch"]["observed_path"] is None
-    assert result["storage"]["scratch"]["path_pattern"] is None
-    assert result["storage"]["scratch"]["permissions"] is None
+    assert not any(
+        item["role"] == "scratch" for item in result["storage"]["locations"]
+    )
 
 
 def test_htcondor_object_is_selected_when_commands_exist(tmp_path: Path) -> None:
@@ -173,9 +174,13 @@ def test_cli_requires_only_short_site_name() -> None:
 
 
 def test_real_anvil_output_matches_current_standalone_shape() -> None:
-    payload = json.loads(ANVIL_OUTPUT.read_text(encoding="utf-8"))
+    from hpc_site_preflight.measurements.base import MeasurementBundle
 
-    assert payload["schema_version"] == "0.6"
+    payload = MeasurementBundle.model_validate_json(
+        ANVIL_OUTPUT.read_text(encoding="utf-8")
+    ).model_dump(mode="json")
+
+    assert payload["schema_version"] == "0.7"
     assert payload["site_facts"]["site_name"] == "Anvil"
     assert payload["site_facts"]["os_id"] == "rocky"
     assert payload["site_facts"]["cpu_count"] == 32

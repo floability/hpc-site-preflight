@@ -268,11 +268,13 @@ def test_simulated_profile_build_writes_phase_d_artifacts(tmp_path: Path) -> Non
 
     assert exit_code == 0
     profile = json.loads((output_dir / "site-profile.json").read_text(encoding="utf-8"))
-    evidence = json.loads((output_dir / "evidence-report.json").read_text(encoding="utf-8"))
+    evidence_path = next(output_dir.glob("evidence-*.json"))
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
     assert profile["site_id"] == evidence["site_id"] == "anvil"
     assert profile["profile_state"] == "partial"
     assert list(profile)[:4] == ["schema_version", "site_id", "site_name", "aliases"]
-    assert list(profile)[-2:] == ["evidence_report", "field_evidence"]
+    assert list(profile)[-1] == "evidence_id"
+    assert evidence_path.name == f"evidence-{profile['evidence_id']}.json"
     documentation = json.loads(
         (output_dir / "documentation-evidence.json").read_text(encoding="utf-8")
     )
@@ -482,7 +484,7 @@ def test_capture_login_writes_structured_measurements(
 
     assert exit_code == 0
     result = json.loads(output.read_text(encoding="utf-8"))
-    assert result["schema_version"] == "0.6"
+    assert result["schema_version"] == "0.7"
     assert result["site_facts"]["site_name"] == "Anvil"
     assert isinstance(result["slurm"]["partitions"], list)
 

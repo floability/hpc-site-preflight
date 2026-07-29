@@ -13,7 +13,6 @@ from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.probes.base import PilotResultBundle
 from hpc_site_preflight.probes.slurm import SlurmPilot
 from hpc_site_preflight.profiles.compiler import compile_profile
-from hpc_site_preflight.profiles.models import FieldEvidenceLink
 from hpc_site_preflight.profiles.pilots import (
     apply_pilot_results,
     suggested_port_range,
@@ -112,7 +111,7 @@ def test_pilot_results_fill_storage_network_and_evidence() -> None:
 
     profile, report = apply_pilot_results(profile, report, pilot_bundle())
 
-    storage = {item.name: item for item in profile.storage}
+    storage = {item.id: item for item in profile.storage}
     assert storage["home"].compute_visible is True
     assert storage["scratch"].compute_readable is True
     assert profile.network.login_compute.verified_ports == [9200, 10100]
@@ -134,12 +133,6 @@ def test_pilot_disagreement_remains_visible() -> None:
     )
     profile, report = compile_profile(measurements)
     profile.network.login_compute.tcp_connect = False
-    profile.field_evidence.append(
-        FieldEvidenceLink(
-            field="/network/login_compute/tcp_connect",
-            evidence_ids=["documentation-network"],
-        )
-    )
     report.evidence.append(
         EvidenceRecord(
             evidence_id="documentation-network",
@@ -247,7 +240,7 @@ def test_failed_recorded_pilot_still_writes_partial_profile(tmp_path: Path) -> N
     profile = json.loads((output_dir / "site-profile.json").read_text())
     assert profile["profile_state"] == "partial"
     assert profile["network"]["login_compute"]["tcp_connect"] is None
-    evidence = json.loads((output_dir / "evidence-report.json").read_text())
+    evidence = json.loads(next(output_dir.glob("evidence-*.json")).read_text())
     assert any(
         item["source_type"] == "pilot"
         and item["disposition"] == "invalid"

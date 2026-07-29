@@ -21,7 +21,6 @@ from hpc_site_preflight.evidence.models import (
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.evidence.reconciliation import get_rule
 from hpc_site_preflight.profiles.models import (
-    FieldEvidenceLink,
     SiteProfile,
     UnmappedSubmissionOption,
     UnresolvedWorkItem,
@@ -54,7 +53,7 @@ def apply_documentation(
                 documentation.web_mode,
             )
             if evidence_ids:
-                _link_evidence(profile, report, path, evidence_ids)
+                _link_evidence(report, path, evidence_ids)
                 resolved_paths.add(path)
                 if isinstance(finding, UnmappedSubmissionOptionFinding):
                     mapping_work.append((path, finding.documented_name))
@@ -87,10 +86,18 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             partition.maximum_walltime_seconds = finding.maximum_walltime_seconds
             return [f"/slurm/partitions/{partition.name}/maximum_walltime_seconds"]
     if isinstance(finding, StoragePolicyFinding):
-        storage = next((item for item in profile.storage if item.name == finding.name), None)
+        normalized = finding.name.casefold()
+        storage = next(
+            (
+                item
+                for item in profile.storage
+                if normalized in {item.id.casefold(), item.name.casefold(), item.role.casefold()}
+            ),
+            None,
+        )
         if storage is not None:
             storage.purge_after_days = finding.purge_after_days
-            return [f"/storage/{storage.name}/purge_after_days"]
+            return [f"/storage/{storage.id}/purge_after_days"]
     if isinstance(finding, SubmissionOptionFinding):
         options = (
             profile.slurm.options
@@ -192,25 +199,11 @@ def _finding_value(finding: DocumentationFinding) -> bool | int | str:
 
 
 def _link_evidence(
-    profile: SiteProfile,
     report: EvidenceReport,
     path: str,
     evidence_ids: list[str],
 ) -> None:
     """Merge documentation evidence IDs into one link per profile field."""
-
-    profile_link = next(
-        (item for item in profile.field_evidence if item.field == path),
-        None,
-    )
-    if profile_link is None:
-        profile.field_evidence.append(
-            FieldEvidenceLink(field=path, evidence_ids=evidence_ids)
-        )
-    else:
-        profile_link.evidence_ids.extend(
-            item for item in evidence_ids if item not in profile_link.evidence_ids
-        )
 
     report_link = next(
         (item for item in report.links if item.profile_field == path),
@@ -256,11 +249,10 @@ def _add_mapping_work(
 
 
 def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:
-    section_states = {item.section: item for item in profile.validation}
     if any(path.startswith("/slurm/partitions/") for path in resolved_paths):
-        section_states["resources"].state = "documented"
+        profile.section_status.resources = "documented"
     if any(path.startswith("/accounting/") for path in resolved_paths):
-        section_states["accounting"].state = "documented"
+        profile.section_status.accounting = "documented"
     if any(
         path.startswith(("/slurm/options/", "/htcondor/submit_attributes/"))
         for path in resolved_paths
@@ -272,12 +264,12 @@ def _update_validation(profile: SiteProfile, resolved_paths: set[str]) -> None:
             if profile.htcondor is not None
             else []
         )
-        section_states["submission"].state = (
+        profile.section_status.submission = (
             "documented"
             if all(option.required is not None for option in options)
             else "partial"
         )
     if any(path.startswith("/storage/") for path in resolved_paths):
-        section_states["storage"].state = "partial"
+        profile.section_status.storage = "partial"
     if any(path.startswith("/network/") for path in resolved_paths):
-        section_states["network"].state = "partial"
+        profile.section_status.network = "partial"

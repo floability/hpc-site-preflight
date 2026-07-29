@@ -48,6 +48,14 @@ def test_checked_site_profile_schema_matches_model_envelope() -> None:
     assert set(checked["required"]) == set(generated["required"])
 
 
+def test_anvil_ideal_reference_matches_current_profile_contract() -> None:
+    profile = SiteProfile.model_validate(
+        _load(ROOT / "examples" / "reference" / "anvil" / "site-profile-ideal.json")
+    )
+    assert profile.schema_version == "0.4"
+    assert profile.evidence_id == "report-anvil-ideal"
+
+
 def test_submission_option_preserves_syntax_order() -> None:
     option = SubmissionOption(
         name="account",
@@ -86,7 +94,6 @@ def test_detailed_evidence_supports_documentation_provenance() -> None:
             "documentation",
         ),
         ("/network/login_compute/tcp_connect", "compute_network_behavior", "pilot"),
-        ("/accounting/visible_accounts", "visible_accounts", "measurement"),
         ("/accounting/allocation_required", "allocation_requirement", "documentation"),
     ],
 )
@@ -135,8 +142,9 @@ def test_measurement_only_builder_supports_all_sites(
     assert _object_depth(profile_payload) <= 3
     assert _object_depth(report_payload) <= 2
 
+    assert profile.evidence_id == report.report_id
     evidence_ids = {item.evidence_id for item in report.evidence}
-    assert all(set(link.evidence_ids) <= evidence_ids for link in profile.field_evidence)
+    assert all(set(link.evidence_ids) <= evidence_ids for link in report.links)
 
     with pytest.raises(ValidationError):
         SiteProfile.model_validate({**profile_payload, "unexpected": True})
@@ -158,18 +166,16 @@ def test_anvil_missing_visible_walltime_is_not_promoted_to_policy() -> None:
 
 def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
     profile, report = _compile("anvil")
-    storage = {item.name: item for item in profile.storage}
+    storage = {item.id: item for item in profile.storage}
 
-    assert list(storage) == ["home", "project", "data", "scratch", "tmp"]
+    assert list(storage) == ["home", "project", "scratch"]
     assert storage["home"].path_pattern == "/home/{username}"
     assert storage["project"].path_pattern == "/anvil/projects/{group}"
-    assert storage["data"].path_pattern is None
     assert storage["scratch"].path_pattern == "/anvil/scratch/{username}"
     assert storage["scratch"].login_readable is True
     assert storage["scratch"].login_writable is True
     assert storage["scratch"].compute_visible is None
     assert profile.network.login.hostname_patterns == ["*.anvil.rcac.purdue.edu"]
-    assert storage["tmp"].path_pattern == "/tmp"
     assert profile.network.login.outbound_https is None
     assert profile.network.compute.outbound_https is None
     assert profile.network.login_compute.tcp_connect is None
@@ -179,7 +185,7 @@ def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
     evidence_paths = {item.field_path for item in report.evidence}
     assert "/facts/storage/filesystems/scratch/path" in evidence_paths
     assert "/facts/networking/local_tcp_bind" not in evidence_paths
-    links = {item.field: item.evidence_ids for item in profile.field_evidence}
+    links = {item.profile_field: item.evidence_ids for item in report.links}
     assert len(links["/storage/scratch/path_pattern"]) == 2
     assert len(links["/storage/project/path_pattern"]) == 2
     assert "/slurm/partitions/shared/cpus_per_node" in links
@@ -197,7 +203,9 @@ def test_htcondor_profile_has_resource_groups_not_partitions() -> None:
     profile, _ = _compile("notre-dame-crc")
     assert profile.slurm is None
     assert profile.htcondor is not None
-    assert {item.key for item in profile.htcondor.resource_groups}
+    assert profile.htcondor.pool_totals.machine_count == 0
+    assert isinstance(profile.htcondor.cpu_groups, list)
+    assert isinstance(profile.htcondor.gpu_groups, list)
     assert not any("/slurm/partitions/" in item.field for item in profile.unresolved)
 
 

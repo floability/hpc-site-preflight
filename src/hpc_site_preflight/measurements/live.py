@@ -19,10 +19,16 @@ class LiveMeasurementProvider(MeasurementProvider):
         *,
         keywords: Sequence[str] = (),
         documentation_domains: Sequence[str] = (),
+        condor_pool: str | None = None,
+        storage_paths: Sequence[str] = (),
+        storage_roots: Sequence[str] = (),
     ) -> None:
         self.site_name = site_name
         self.keywords = list(keywords)
         self.documentation_domains = list(documentation_domains)
+        self.condor_pool = condor_pool
+        self.storage_paths = list(storage_paths)
+        self.storage_roots = list(storage_roots)
 
     def collect(self, tracker: RunTracker) -> MeasurementBundle:
         with tracker.stage("login_measurement_collect"):
@@ -30,6 +36,9 @@ class LiveMeasurementProvider(MeasurementProvider):
                 site_name=self.site_name,
                 keywords=self.keywords,
                 domain_overrides=self.documentation_domains,
+                condor_pool=self.condor_pool,
+                storage_paths=self.storage_paths,
+                storage_roots=self.storage_roots,
             )
         with tracker.stage("login_measurement_validate"):
             try:

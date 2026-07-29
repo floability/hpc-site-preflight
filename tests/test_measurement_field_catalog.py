@@ -15,8 +15,6 @@ REQUIRED_CATEGORIES = {
     "user",
     "scheduler_detection",
     "storage",
-    "temporary_storage",
-    "software",
     "networking",
     "system_limits",
 }

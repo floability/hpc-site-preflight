@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Literal, Self, TypeAlias
+from typing import Any, Literal, Self, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -91,9 +91,11 @@ class SiteFacts(StrictModel):
 
 
 class StorageLocation(StrictModel):
-    """One fixed common storage role."""
+    """One reviewed storage location visible from the login node."""
 
-    source_environment_variable: str | None = None
+    id: str
+    role: str
+    environment_variables: list[str] = Field(default_factory=list)
     observed_path: str | None = None
     path_pattern: str | None = None
     exists: bool | None = None
@@ -102,24 +104,15 @@ class StorageLocation(StrictModel):
     executable: bool | None = None
     permissions: str | None = None
     filesystem_type: str | None = None
-    available_bytes: int | None = None
 
 
 class StorageFacts(StrictModel):
-    """The four storage roles deliberately searched by the collector."""
+    """Bounded storage locations deliberately checked by the collector."""
 
-    home: StorageLocation
-    tmp: StorageLocation
-    scratch: StorageLocation
-    project: StorageLocation
+    locations: list[StorageLocation] = Field(default_factory=list)
 
     def items(self) -> list[tuple[str, StorageLocation]]:
-        return [
-            ("home", self.home),
-            ("tmp", self.tmp),
-            ("scratch", self.scratch),
-            ("project", self.project),
-        ]
+        return [(location.id, location) for location in self.locations]
 
 
 class SlurmPartition(StrictModel):
@@ -149,26 +142,49 @@ class SlurmFacts(StrictModel):
     visible_qos: list[str] = Field(default_factory=list)
 
 
-class HTCondorResourceGroup(StrictModel):
-    """One observable HTCondor resource group."""
+class HTCondorPoolTotals(StrictModel):
+    """Resources advertised by the visible HTCondor pool snapshot."""
 
-    key: str
-    machine_count: int | None = None
-    slot_count: int | None = None
-    cpus: int | None = None
-    memory_mib: int | None = None
-    disk_kib: int | None = None
-    gpu_count: int | None = None
+    machine_count: int = 0
+    cpu_cores: int = 0
+    memory_mib: int = 0
+    advertised_gpus: int = 0
+
+
+class HTCondorCPUGroup(StrictModel):
+    """Visible machines grouped by advertised CPU cores."""
+
+    cpu_cores_per_machine: int
+    machine_count: int
+    memory_mib_min: int | None = None
+    memory_mib_max: int | None = None
+    example_machines: list[str] = Field(default_factory=list, max_length=3)
+
+
+class HTCondorGPUGroup(StrictModel):
+    """Visible GPU machines grouped by GPU count and CPU cores."""
+
+    gpu_count_per_machine: int
+    cpu_cores_per_machine: int
+    machine_count: int
+    memory_mib_min: int | None = None
+    memory_mib_max: int | None = None
+    example_machines: list[str] = Field(default_factory=list, max_length=3)
 
 
 class HTCondorFacts(StrictModel):
-    """Structured login-visible HTCondor facts implemented so far."""
+    """Structured resources advertised to the current HTCondor client."""
 
     available_commands: list[str] = Field(default_factory=list)
     submit_command_available: bool
     version: str | None = None
     collector_host: str | None = None
-    resource_groups: list[HTCondorResourceGroup] = Field(default_factory=list)
+    file_transfer_supported: bool | None = None
+    pool_totals: HTCondorPoolTotals = Field(default_factory=HTCondorPoolTotals)
+    cpu_groups: list[HTCondorCPUGroup] = Field(default_factory=list)
+    gpu_groups: list[HTCondorGPUGroup] = Field(default_factory=list)
+    unclassified_machine_count: int = 0
+    unclassified_example_machines: list[str] = Field(default_factory=list, max_length=3)
 
 
 class LoginNetworking(StrictModel):
@@ -183,7 +199,7 @@ class LoginNetworking(StrictModel):
 class MeasurementBundle(StrictModel):
     """The single external site identity and login-measurement document."""
 
-    schema_version: Literal["0.6"]
+    schema_version: Literal["0.7"]
     collected_at: datetime
     evidence_source: EvidenceSource
     collector_version: str
@@ -193,6 +209,70 @@ class MeasurementBundle(StrictModel):
     slurm: SlurmFacts | None
     htcondor: HTCondorFacts | None
     networking: LoginNetworking | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_previous_shape(cls, value: Any) -> Any:
+        """Load version 0.6 fixtures while emitting only the 0.7 contract."""
+
+        if not isinstance(value, dict) or value.get("schema_version") != "0.6":
+            return value
+        migrated = dict(value)
+        migrated["schema_version"] = "0.7"
+        old_storage = migrated.get("storage")
+        locations: list[dict[str, Any]] = []
+        if isinstance(old_storage, dict):
+            for role, item in old_storage.items():
+                if role == "tmp" or not isinstance(item, dict):
+                    continue
+                observed_path = item.get("observed_path")
+                if observed_path is None:
+                    continue
+                environment_variable = item.get("source_environment_variable")
+                locations.append(
+                    {
+                        "id": role,
+                        "role": role,
+                        "environment_variables": (
+                            [environment_variable] if environment_variable else []
+                        ),
+                        "observed_path": observed_path,
+                        "path_pattern": item.get("path_pattern"),
+                        "exists": item.get("exists"),
+                        "readable": item.get("readable"),
+                        "writable": item.get("writable"),
+                        "executable": item.get("executable"),
+                        "permissions": item.get("permissions"),
+                        "filesystem_type": item.get("filesystem_type"),
+                    }
+                )
+        migrated["storage"] = {"locations": locations}
+
+        old_condor = migrated.get("htcondor")
+        if isinstance(old_condor, dict) and "pool_totals" not in old_condor:
+            condor = {
+                "version": old_condor.get("version"),
+                "available_commands": old_condor.get("available_commands", []),
+                "submit_command_available": old_condor.get(
+                    "submit_command_available", False
+                ),
+                "collector_host": old_condor.get("collector_host"),
+                "file_transfer_supported": old_condor.get(
+                    "file_transfer_supported"
+                ),
+                "pool_totals": {
+                    "machine_count": 0,
+                    "cpu_cores": 0,
+                    "memory_mib": 0,
+                    "advertised_gpus": 0,
+                },
+                "cpu_groups": [],
+                "gpu_groups": [],
+                "unclassified_machine_count": 0,
+                "unclassified_example_machines": [],
+            }
+            migrated["htcondor"] = condor
+        return migrated
 
     @model_validator(mode="after")
     def validate_schedulers(self) -> Self:

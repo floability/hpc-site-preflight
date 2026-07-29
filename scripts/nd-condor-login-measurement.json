@@ -1,0 +1,1628 @@
+{
+  "schema_version": "0.6",
+  "collected_at": "2026-07-29T05:51:42.889829Z",
+  "evidence_source": "measured",
+  "collector_version": "0.5.0",
+  "detected_schedulers": [
+    "htcondor"
+  ],
+  "site_facts": {
+    "site_id": "notre-dame-crc",
+    "site_name": "Notre Dame CRC",
+    "aliases": [],
+    "hostname": "condorfe.crc.nd.edu",
+    "fqdn": "condorfe.crc.nd.edu",
+    "dns_suffix": "crc.nd.edu",
+    "hostname_patterns": [
+      "*.crc.nd.edu"
+    ],
+    "documentation_domains": [
+      "nd.edu"
+    ],
+    "preferred_path_tokens": [
+      "condor"
+    ],
+    "username": "mislam5",
+    "uid": 241628,
+    "groups": [
+      "campus",
+      "ccl-1",
+      "dthain-1",
+      "mislam5"
+    ],
+    "home_directory": "/users/mislam5",
+    "working_directory": "/users/mislam5/condor_test",
+    "os_id": "rhel",
+    "os_version": "9.8",
+    "kernel_release": "5.14.0-687.26.1.el9_8.x86_64",
+    "architecture": "x86_64",
+    "cpu_count": 48,
+    "available_memory_bytes": 110538240000
+  },
+  "storage": {},
+  "slurm": null,
+  "htcondor": {
+    "version": "23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167",
+    "available_commands": [
+      "condor_status",
+      "condor_submit",
+      "condor_q",
+      "condor_history"
+    ],
+    "submit_command_available": true,
+    "file_transfer_supported": true,
+    "observed_machine_count": 362,
+    "classified_machine_count": 362,
+    "unclassified_machine_count": 0,
+    "unclassified_example_machines": [],
+    "resource_group_count": 51,
+    "resource_groups": [
+      {
+        "name": "cpu-24_memory-256715-mib_gpu-0",
+        "machine_count": 127,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 256715,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 892877,
+          "maximum": 1800439
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas112.crc.nd.edu",
+          "d12chas114.crc.nd.edu",
+          "d12chas115.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 256715)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-64_memory-256883-mib_gpu-0",
+        "machine_count": 45,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 256883,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 372960,
+          "maximum": 896193
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d32cepyc073.crc.nd.edu",
+          "d32cepyc084.crc.nd.edu",
+          "d32cepyc092.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 256883)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-24_memory-63435-mib_gpu-0",
+        "machine_count": 44,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 63435,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 932185,
+          "maximum": 1879308
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas022.crc.nd.edu",
+          "d12chas023.crc.nd.edu",
+          "d12chas026.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 63435)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-64_memory-256874-mib_gpu-0",
+        "machine_count": 16,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 256874,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 439867,
+          "maximum": 440839
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d32cepyc001.crc.nd.edu",
+          "d32cepyc003.crc.nd.edu",
+          "d32cepyc005.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 256874)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-24_memory-128268-mib_gpu-4",
+        "machine_count": 13,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 128268,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA TITAN X (Pascal)",
+          "NVIDIA TITAN Xp",
+          "Tesla P100-PCIE-16GB"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 928474,
+          "maximum": 932102
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-p100-001.crc.nd.edu",
+          "qa-p100-002.crc.nd.edu",
+          "qa-p100-005.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 128268) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-24_memory-63786-mib_gpu-0",
+        "machine_count": 11,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 63786,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 933616,
+          "maximum": 934049
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas003.crc.nd.edu",
+          "d12chas005.crc.nd.edu",
+          "d12chas006.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 63786)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-32_memory-256868-mib_gpu-4",
+        "machine_count": 10,
+        "cpus_per_machine": 32,
+        "memory_mib_per_machine": 256868,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA A10",
+          "NVIDIA A40"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 1759206,
+          "maximum": 1803066
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-a10-011.crc.nd.edu",
+          "qa-a10-012.crc.nd.edu",
+          "qa-a10-013.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 32) && (TotalMemory == 256868) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-64_memory-2051122-mib_gpu-0",
+        "machine_count": 7,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 2051122,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 894167,
+          "maximum": 895954
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d32cepyc248.crc.nd.edu",
+          "d32cepyc249.crc.nd.edu",
+          "d32cepyc250.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 2051122)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-24_memory-192579-mib_gpu-4",
+        "machine_count": 7,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 192579,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "Quadro RTX 6000",
+          "Tesla V100-PCIE-32GB"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 436357,
+          "maximum": 439643
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-rtx6k-001.crc.nd.edu",
+          "qa-rtx6k-006.crc.nd.edu",
+          "qa-rtx6k-040.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 192579) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-64_memory-257131-mib_gpu-0",
+        "machine_count": 6,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 257131,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 399720,
+          "maximum": 441880
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d32cepyc055.crc.nd.edu",
+          "d32cepyc056.crc.nd.edu",
+          "d32cepyc057.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 257131)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-32_memory-95783-mib_gpu-4",
+        "machine_count": 6,
+        "cpus_per_machine": 32,
+        "memory_mib_per_machine": 95783,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA TITAN Xp",
+          "Tesla V100-PCIE-32GB"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 908787,
+          "maximum": 932222
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-v100-002.crc.nd.edu",
+          "qa-xp-015.crc.nd.edu",
+          "qa-xp-016.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 32) && (TotalMemory == 95783) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-24_memory-192578-mib_gpu-4",
+        "machine_count": 5,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 192578,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "Quadro RTX 6000"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 303740,
+          "maximum": 438836
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-rtx6k-014.crc.nd.edu",
+          "qa-rtx6k-015.crc.nd.edu",
+          "qa-rtx6k-018.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 192578) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"Quadro RTX 6000\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-31591-mib_gpu-1",
+        "machine_count": 5,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 31591,
+        "gpu_count_per_machine": 1,
+        "gpu_models": [
+          "NVIDIA RTX A2000 12GB"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 91039,
+          "maximum": 97339
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat8",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "cclws22.cse.nd.edu",
+          "cclws23.cse.nd.edu",
+          "cclws25.cse.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 31591) && (TotalGPUs >= 1)",
+          "request_gpus": 1,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX A2000 12GB\""
+        }
+      },
+      {
+        "name": "cpu-80_memory-257056-mib_gpu-6",
+        "machine_count": 4,
+        "cpus_per_machine": 80,
+        "memory_mib_per_machine": 257056,
+        "gpu_count_per_machine": 6,
+        "gpu_models": [
+          "NVIDIA RTX 6000 Ada Generation"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 892609,
+          "maximum": 893227
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "sa-rtx6ka-001.crc.nd.edu",
+          "sa-rtx6ka-002.crc.nd.edu",
+          "sa-rtx6ka-005.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 80) && (TotalMemory == 257056) && (TotalGPUs >= 6)",
+          "request_gpus": 6,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX 6000 Ada Generation\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-71243-mib_gpu-0",
+        "machine_count": 4,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 71243,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 932690,
+          "maximum": 932922
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas055.crc.nd.edu",
+          "d12chas072.crc.nd.edu",
+          "d12chas092.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 71243)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-128_memory-514914-mib_gpu-0",
+        "machine_count": 3,
+        "cpus_per_machine": 128,
+        "memory_mib_per_machine": 514914,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 438342,
+          "maximum": 440414
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d64cepyc012.crc.nd.edu",
+          "d64cepyc013.crc.nd.edu",
+          "d64cepyc014.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 128) && (TotalMemory == 514914)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-32_memory-256869-mib_gpu-4",
+        "machine_count": 3,
+        "cpus_per_machine": 32,
+        "memory_mib_per_machine": 256869,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA A10"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 396605,
+          "maximum": 439039
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-a10-001.crc.nd.edu",
+          "qa-a10-002.crc.nd.edu",
+          "qa-a10-006.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 32) && (TotalMemory == 256869) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA A10\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-128298-mib_gpu-0",
+        "machine_count": 3,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 128298,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 891044,
+          "maximum": 933989
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas103.crc.nd.edu",
+          "d12chas104.crc.nd.edu",
+          "d12chas110.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 128298)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-16_memory-95780-mib_gpu-4",
+        "machine_count": 3,
+        "cpus_per_machine": 16,
+        "memory_mib_per_machine": 95780,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA GeForce RTX 2080 Ti"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 920607,
+          "maximum": 3730623
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-2080ti-002.crc.nd.edu",
+          "qa-2080ti-003.crc.nd.edu",
+          "qa-2080ti-004.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 16) && (TotalMemory == 95780) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA GeForce RTX 2080 Ti\""
+        }
+      },
+      {
+        "name": "cpu-64_memory-1031274-mib_gpu-0",
+        "machine_count": 2,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 1031274,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 439978,
+          "maximum": 440565
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d32cepyc054.crc.nd.edu",
+          "d32cepyc063.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 1031274)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-48_memory-94777-mib_gpu-4",
+        "machine_count": 2,
+        "cpus_per_machine": 48,
+        "memory_mib_per_machine": 94777,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA GeForce RTX 2080 Ti"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 395941,
+          "maximum": 397217
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-2080ti-006.crc.nd.edu",
+          "qa-2080ti-007.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 48) && (TotalMemory == 94777) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA GeForce RTX 2080 Ti\""
+        }
+      },
+      {
+        "name": "cpu-32_memory-256485-mib_gpu-4",
+        "machine_count": 2,
+        "cpus_per_machine": 32,
+        "memory_mib_per_machine": 256485,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA A10"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 437312,
+          "maximum": 437606
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-a10-003.crc.nd.edu",
+          "qa-a10-004.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 32) && (TotalMemory == 256485) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA A10\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-192580-mib_gpu-4",
+        "machine_count": 2,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 192580,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "Quadro RTX 6000"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 435761,
+          "maximum": 438170
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-rtx6k-049.crc.nd.edu",
+          "qa-rtx6k-051.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 192580) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"Quadro RTX 6000\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-192579-mib_gpu-3",
+        "machine_count": 2,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 192579,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "Quadro RTX 6000",
+          "Tesla V100-PCIE-32GB"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 437427,
+          "maximum": 437710
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-rtx6k-041.crc.nd.edu",
+          "qa-v100-006.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 192579) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-24_memory-128029-mib_gpu-3",
+        "machine_count": 2,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 128029,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "NVIDIA RTX A6000"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 911969,
+          "maximum": 913021
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "ta-a6k-004.crc.nd.edu",
+          "ta-a6k-005.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 128029) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX A6000\""
+        }
+      },
+      {
+        "name": "cpu-16_memory-64010-mib_gpu-4",
+        "machine_count": 2,
+        "cpus_per_machine": 16,
+        "memory_mib_per_machine": 64010,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA GeForce RTX 2080 Ti"
+        ],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 932145,
+          "maximum": 932155
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-2080ti-005.crc.nd.edu",
+          "qa-2080ti-008.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 16) && (TotalMemory == 64010) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA GeForce RTX 2080 Ti\""
+        }
+      },
+      {
+        "name": "cpu-16_memory-63916-mib_gpu-0",
+        "machine_count": 2,
+        "cpus_per_machine": 16,
+        "memory_mib_per_machine": 63916,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": null,
+        "disk_mib_per_machine_range": {
+          "minimum": 458706,
+          "maximum": 459545
+        },
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas018.crc.nd.edu",
+          "d12chas019.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 16) && (TotalMemory == 63916)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-128_memory-773052-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 128,
+        "memory_mib_per_machine": 773052,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 1803432,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d64cepyc030.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 128) && (TotalMemory == 773052)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-128_memory-515260-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 128,
+        "memory_mib_per_machine": 515260,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 894051,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d64cepyc002.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 128) && (TotalMemory == 515260)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-128_memory-515028-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 128,
+        "memory_mib_per_machine": 515028,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 213448,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d64cepyc010.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 128) && (TotalMemory == 515028)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-80_memory-240928-mib_gpu-6",
+        "machine_count": 1,
+        "cpus_per_machine": 80,
+        "memory_mib_per_machine": 240928,
+        "gpu_count_per_machine": 6,
+        "gpu_models": [
+          "NVIDIA RTX 6000 Ada Generation"
+        ],
+        "disk_mib_per_machine": 893052,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "sa-rtx6ka-004.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 80) && (TotalMemory == 240928) && (TotalGPUs >= 6)",
+          "request_gpus": 6,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX 6000 Ada Generation\""
+        }
+      },
+      {
+        "name": "cpu-64_memory-515220-mib_gpu-4",
+        "machine_count": 1,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 515220,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA L40S"
+        ],
+        "disk_mib_per_machine": 1798989,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-l40s-001.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 515220) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA L40S\""
+        }
+      },
+      {
+        "name": "cpu-64_memory-515175-mib_gpu-4",
+        "machine_count": 1,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 515175,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA H100 80GB HBM3"
+        ],
+        "disk_mib_per_machine": 1800209,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-h100-004.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 515175) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA H100 80GB HBM3\""
+        }
+      },
+      {
+        "name": "cpu-64_memory-515174-mib_gpu-4",
+        "machine_count": 1,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 515174,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA L40S"
+        ],
+        "disk_mib_per_machine": 1800263,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-l40s-003.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 515174) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA L40S\""
+        }
+      },
+      {
+        "name": "cpu-64_memory-256882-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 256882,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 894327,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d32cepyc095.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 256882)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-64_memory-256859-mib_gpu-4",
+        "machine_count": 1,
+        "cpus_per_machine": 64,
+        "memory_mib_per_machine": 256859,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "NVIDIA A40"
+        ],
+        "disk_mib_per_machine": 425615,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-a40-011.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 64) && (TotalMemory == 256859) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"NVIDIA A40\""
+        }
+      },
+      {
+        "name": "cpu-48_memory-128205-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 48,
+        "memory_mib_per_machine": 128205,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 1876739,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d24cepyc148.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 48) && (TotalMemory == 128205)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-48_memory-63429-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 48,
+        "memory_mib_per_machine": 63429,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 932946,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas040.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 48) && (TotalMemory == 63429)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-40_memory-257067-mib_gpu-6",
+        "machine_count": 1,
+        "cpus_per_machine": 40,
+        "memory_mib_per_machine": 257067,
+        "gpu_count_per_machine": 6,
+        "gpu_models": [
+          "NVIDIA RTX 6000 Ada Generation"
+        ],
+        "disk_mib_per_machine": 893160,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "sa-rtx6ka-003.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 40) && (TotalMemory == 257067) && (TotalGPUs >= 6)",
+          "request_gpus": 6,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX 6000 Ada Generation\""
+        }
+      },
+      {
+        "name": "cpu-32_memory-192551-mib_gpu-4",
+        "machine_count": 1,
+        "cpus_per_machine": 32,
+        "memory_mib_per_machine": 192551,
+        "gpu_count_per_machine": 4,
+        "gpu_models": [
+          "Tesla V100-PCIE-32GB"
+        ],
+        "disk_mib_per_machine": 906602,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-v100-001.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 32) && (TotalMemory == 192551) && (TotalGPUs >= 4)",
+          "request_gpus": 4,
+          "require_gpus": "DeviceName =?= \"Tesla V100-PCIE-32GB\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-128268-mib_gpu-3",
+        "machine_count": 1,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 128268,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "Tesla P100-PCIE-16GB"
+        ],
+        "disk_mib_per_machine": 930881,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-p100-003.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 128268) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": "DeviceName =?= \"Tesla P100-PCIE-16GB\""
+        }
+      },
+      {
+        "name": "cpu-24_memory-111563-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 24,
+        "memory_mib_per_machine": 111563,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 933004,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "d12chas090.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 24) && (TotalMemory == 111563)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-20_memory-191526-mib_gpu-3",
+        "machine_count": 1,
+        "cpus_per_machine": 20,
+        "memory_mib_per_machine": 191526,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "NVIDIA RTX A6000"
+        ],
+        "disk_mib_per_machine": 948656,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "ta-a6k-003.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 20) && (TotalMemory == 191526) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX A6000\""
+        }
+      },
+      {
+        "name": "cpu-20_memory-191512-mib_gpu-3",
+        "machine_count": 1,
+        "cpus_per_machine": 20,
+        "memory_mib_per_machine": 191512,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "NVIDIA RTX A6000"
+        ],
+        "disk_mib_per_machine": 903815,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "ta-a6k-002.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 20) && (TotalMemory == 191512) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX A6000\""
+        }
+      },
+      {
+        "name": "cpu-16_memory-95782-mib_gpu-3",
+        "machine_count": 1,
+        "cpus_per_machine": 16,
+        "memory_mib_per_machine": 95782,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "NVIDIA GeForce RTX 2080 Ti"
+        ],
+        "disk_mib_per_machine": 931130,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-2080ti-001.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 16) && (TotalMemory == 95782) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": "DeviceName =?= \"NVIDIA GeForce RTX 2080 Ti\""
+        }
+      },
+      {
+        "name": "cpu-16_memory-64010-mib_gpu-3",
+        "machine_count": 1,
+        "cpus_per_machine": 16,
+        "memory_mib_per_machine": 64010,
+        "gpu_count_per_machine": 3,
+        "gpu_models": [
+          "NVIDIA GeForce RTX 2080 Ti"
+        ],
+        "disk_mib_per_machine": 932155,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "qa-2080ti-009.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 16) && (TotalMemory == 64010) && (TotalGPUs >= 3)",
+          "request_gpus": 3,
+          "require_gpus": "DeviceName =?= \"NVIDIA GeForce RTX 2080 Ti\""
+        }
+      },
+      {
+        "name": "cpu-4_memory-31764-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 4,
+        "memory_mib_per_machine": 31764,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 335903,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat8",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "cclws17.cse.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 4) && (TotalMemory == 31764)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-4_memory-31763-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 4,
+        "memory_mib_per_machine": 31763,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 335907,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat8",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "cclws18.cse.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 4) && (TotalMemory == 31763)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-4_memory-31675-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 4,
+        "memory_mib_per_machine": 31675,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 781516,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat8",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "cclws21.cse.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 4) && (TotalMemory == 31675)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      },
+      {
+        "name": "cpu-4_memory-15719-mib_gpu-1",
+        "machine_count": 1,
+        "cpus_per_machine": 4,
+        "memory_mib_per_machine": 15719,
+        "gpu_count_per_machine": 1,
+        "gpu_models": [
+          "NVIDIA RTX A2000"
+        ],
+        "disk_mib_per_machine": 335936,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat8",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "cclws15.cse.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 4) && (TotalMemory == 15719) && (TotalGPUs >= 1)",
+          "request_gpus": 1,
+          "require_gpus": "DeviceName =?= \"NVIDIA RTX A2000\""
+        }
+      },
+      {
+        "name": "cpu-2_memory-3655-mib_gpu-0",
+        "machine_count": 1,
+        "cpus_per_machine": 2,
+        "memory_mib_per_machine": 3655,
+        "gpu_count_per_machine": 0,
+        "gpu_models": [],
+        "disk_mib_per_machine": 80214,
+        "disk_mib_per_machine_range": null,
+        "architecture": "X86_64",
+        "operating_system": "RedHat9",
+        "filesystem_domain": "nd.edu",
+        "uid_domain": "nd.edu",
+        "partitionable_slot": true,
+        "slot_type": "partitionable",
+        "non_dynamic_slot_count_per_machine": 1,
+        "non_dynamic_slot_count_per_machine_range": null,
+        "execute_condor_version": "$CondorVersion: 23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167 $",
+        "example_machines": [
+          "cclvm02.virtual.crc.nd.edu"
+        ],
+        "requirements_hint": {
+          "requirements": "(TotalCpus == 2) && (TotalMemory == 3655)",
+          "request_gpus": null,
+          "require_gpus": null
+        }
+      }
+    ]
+  }
+}

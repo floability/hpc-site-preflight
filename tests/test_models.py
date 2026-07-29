@@ -34,8 +34,8 @@ def test_example_measurements_validate() -> None:
         "gpu-debug",
         "profiling",
     }
-    assert model.schema_version == "0.6"
-    assert model.storage_names == {"home", "tmp", "project", "scratch"}
+    assert model.schema_version == "0.7"
+    assert model.storage_names == {"home", "project", "scratch"}
 
 
 def test_measurement_bundle_supports_both_scheduler_types() -> None:

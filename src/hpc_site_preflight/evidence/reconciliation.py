@@ -106,8 +106,8 @@ RULES = (
         not_applicable_for=["htcondor"],
     ),
     FieldRule(
-        rule_id="measured_resource_group",
-        field_pattern="/htcondor/resource_groups/*",
+        rule_id="measured_htcondor_resources",
+        field_pattern="/htcondor/*",
         allowed_sources=["measurement", "documentation"],
         precedence=["measurement", "documentation"],
         conflict_behavior="retain_note",
@@ -153,6 +153,15 @@ RULES = (
         action_id="shared_storage_visibility",
     ),
     FieldRule(
+        rule_id="shared_storage_behavior",
+        field_pattern="/storage/*/shared_across_compute_nodes",
+        allowed_sources=["pilot", "documentation"],
+        precedence=["pilot", "documentation"],
+        conflict_behavior="retain_note",
+        unresolved_action="run_pilot",
+        action_id="shared_storage_visibility",
+    ),
+    FieldRule(
         rule_id="storage_retention_policy",
         field_pattern="/storage/*/purge_after_days",
         allowed_sources=["documentation", "user"],
@@ -180,15 +189,6 @@ RULES = (
         action_id="compute_network_check",
     ),
     FieldRule(
-        rule_id="visible_accounts",
-        field_pattern="/accounting/visible_accounts",
-        allowed_sources=["measurement", "documentation", "user"],
-        precedence=["measurement", "documentation", "user"],
-        conflict_behavior="retain_note",
-        unresolved_action="user_input",
-        action_id="account_input",
-    ),
-    FieldRule(
         rule_id="allocation_requirement",
         field_pattern="/accounting/allocation_required",
         allowed_sources=["documentation", "user"],
@@ -205,15 +205,6 @@ RULES = (
         conflict_behavior="retain_note",
         unresolved_action="additional_documentation",
         action_id="accounting_policy_search",
-    ),
-    FieldRule(
-        rule_id="software_visibility",
-        field_pattern="/software/*",
-        allowed_sources=["measurement", "documentation"],
-        precedence=["measurement", "documentation"],
-        conflict_behavior="retain_note",
-        unresolved_action="additional_documentation",
-        action_id="software_search",
     ),
 )
 

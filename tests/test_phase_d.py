@@ -15,6 +15,7 @@ from hpc_site_preflight.documentation.corpus import (
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
+    _valid_unmapped_syntax,
     extract_documentation,
 )
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
@@ -1195,7 +1196,7 @@ def test_end_to_end_documentation_profile_is_reproducible(
             "/slurm/options/account/required",
             "/slurm/options/partition/required",
         }
-        assert documentation_paths <= {item.field for item in profile.field_evidence}
+        assert documentation_paths <= {item.profile_field for item in report.links}
         account = next(item for item in profile.slurm.options if item.name == "account")
         partition = next(
             item for item in profile.slurm.options if item.name == "partition"
@@ -1203,7 +1204,7 @@ def test_end_to_end_documentation_profile_is_reproducible(
         assert account.required is True
         assert partition.required is True
     elif site_name == "stampede3":
-        scratch = next(item for item in profile.storage if item.name == "scratch")
+        scratch = next(item for item in profile.storage if item.id == "scratch")
         assert scratch.purge_after_days == 10
     else:
         assert profile.accounting.allocation_required is False
@@ -1265,6 +1266,29 @@ def test_submission_extraction_schema_is_typed_and_allows_silence() -> None:
         assert set(definition["required"]) == set(definition["properties"])
 
 
+def test_unmapped_options_require_literal_scheduler_syntax() -> None:
+    assert _valid_unmapped_syntax(
+        "slurm",
+        "Dependency",
+        ["#SBATCH --dependency=afterok:{job_id}"],
+    )
+    assert not _valid_unmapped_syntax(
+        "slurm",
+        "Load rclone",
+        ["module load rclone"],
+    )
+    assert _valid_unmapped_syntax(
+        "htcondor",
+        "Project name",
+        ['+ProjectName = "example"'],
+    )
+    assert not _valid_unmapped_syntax(
+        "htcondor",
+        "Create an allocation",
+        ["Visit the allocation portal before submitting jobs."],
+    )
+
+
 def test_unmapped_submission_option_is_preserved_for_review() -> None:
     measurements = _inputs("anvil")
     citation = DocumentationCitation(
@@ -1309,8 +1333,8 @@ def test_unmapped_submission_option_is_preserved_for_review() -> None:
         for item in profile.unresolved
     )
     assert any(
-        link.field == "/slurm/unmapped_options"
-        for link in profile.field_evidence
+        link.profile_field == "/slurm/unmapped_options"
+        for link in report.links
     )
     assert any(
         item.field_path == "/slurm/unmapped_options"
@@ -1354,6 +1378,6 @@ def test_documented_network_findings_fill_structured_profile() -> None:
 
     assert profile.network.login_compute.tcp_connect is True
     assert any(
-        link.field == "/network/login_compute/tcp_connect"
-        for link in profile.field_evidence
+        link.profile_field == "/network/login_compute/tcp_connect"
+        for link in report.links
     )

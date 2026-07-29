@@ -62,7 +62,10 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
 
     measurements, measurement_path = _resolve_measurements(args, tracker)
     with tracker.stage("measurement_profile_build"):
-        profile, report = compile_profile(measurements)
+        profile, report = compile_profile(
+            measurements,
+            evidence_id=f"report-{tracker.run_id}",
+        )
 
     documentation = _build_documentation(
         args,
@@ -79,7 +82,7 @@ def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:
             profile, report = apply_pilot_results(profile, report, pilots)
 
     profile_path = args.output_dir / "site-profile.json"
-    report_path = args.output_dir / "evidence-report.json"
+    report_path = args.output_dir / f"evidence-{profile.evidence_id}.json"
     documentation_path = args.output_dir / "documentation-evidence.json"
     pilot_path = args.output_dir / "pilot-evidence.json"
     with tracker.stage("profile_artifact_write"):
@@ -165,6 +168,9 @@ def capture_login_measurements(args: argparse.Namespace, tracker: RunTracker) ->
         args.site_name,
         keywords=args.keyword,
         documentation_domains=args.documentation_domain,
+        condor_pool=args.condor_pool,
+        storage_paths=args.storage_path,
+        storage_roots=args.storage_root,
     )
     measurements = provider.collect(tracker)
     with tracker.stage("login_measurement_write"):
@@ -283,6 +289,9 @@ def _resolve_measurements(
         args.site_name,
         keywords=args.discovery_keyword,
         documentation_domains=args.documentation_domain,
+        condor_pool=args.condor_pool,
+        storage_paths=args.storage_path,
+        storage_roots=args.storage_root,
     )
     measurements = provider.collect(tracker)
     path = args.output_dir / "login-measurements.json"

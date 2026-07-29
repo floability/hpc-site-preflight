@@ -5,7 +5,7 @@ from typing import Literal, Self, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-SchemaVersion = Literal["0.3"]
+SchemaVersion = Literal["0.4"]
 ProfileScalar: TypeAlias = str | int | float | bool
 ProfileValue: TypeAlias = ProfileScalar | list[ProfileScalar]
 ValidationState = Literal[
@@ -34,7 +34,6 @@ class SubmissionOption(BaseModel):
     name: str
     syntax: list[str] = Field(min_length=1)
     required: bool | None = None
-    value: ProfileScalar | None = None
     example: str | None = None
     allowed_values: list[str] | None = None
 
@@ -56,9 +55,10 @@ class PartitionProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str
-    available: bool | None = None
     visible_walltime_seconds: int | None = None
     maximum_walltime_seconds: int | None = None
+    maximum_nodes_per_job: int | None = None
+    shared_nodes: bool | None = None
     node_count: int | None = None
     cpus_per_node: int | None = None
     memory_mib_per_node: int | None = None
@@ -68,18 +68,38 @@ class PartitionProfile(BaseModel):
     features: list[str] = Field(default_factory=list)
 
 
-class ResourceGroupProfile(BaseModel):
-    """One derived HTCondor resource group."""
+class HTCondorPoolTotalsProfile(BaseModel):
+    """One timestamped snapshot of resources visible to HTCondor."""
 
     model_config = ConfigDict(extra="forbid")
 
-    key: str
-    machine_count: int | None = None
-    slot_count: int | None = None
-    cpus: int | None = None
-    memory_mib: int | None = None
-    disk_kib: int | None = None
-    gpu_count: int | None = None
+    machine_count: int = 0
+    cpu_cores: int = 0
+    memory_mib: int = 0
+    advertised_gpus: int = 0
+
+
+class HTCondorCPUGroupProfile(BaseModel):
+    """Visible machines grouped by advertised CPU cores."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    cpu_cores_per_machine: int
+    machine_count: int
+    memory_mib_min: int | None = None
+    memory_mib_max: int | None = None
+
+
+class HTCondorGPUGroupProfile(BaseModel):
+    """Visible GPU machines grouped by GPU count and CPU cores."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    gpu_count_per_machine: int
+    cpu_cores_per_machine: int
+    machine_count: int
+    memory_mib_min: int | None = None
+    memory_mib_max: int | None = None
 
 
 class SlurmProfile(BaseModel):
@@ -87,7 +107,9 @@ class SlurmProfile(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    version: str | None = None
     submit_command: str | None = None
+    default_partition: str | None = None
     options: list[SubmissionOption] = Field(default_factory=list)
     unmapped_options: list[UnmappedSubmissionOption] = Field(default_factory=list)
     partitions: list[PartitionProfile] = Field(default_factory=list)
@@ -98,12 +120,19 @@ class HTCondorProfile(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    version: str | None = None
     submit_command: str | None = None
+    collector_host: str | None = None
+    file_transfer_supported: bool | None = None
     submit_attributes: list[SubmissionOption] = Field(default_factory=list)
     unmapped_submit_attributes: list[UnmappedSubmissionOption] = Field(
         default_factory=list
     )
-    resource_groups: list[ResourceGroupProfile] = Field(default_factory=list)
+    pool_totals: HTCondorPoolTotalsProfile = Field(
+        default_factory=HTCondorPoolTotalsProfile
+    )
+    cpu_groups: list[HTCondorCPUGroupProfile] = Field(default_factory=list)
+    gpu_groups: list[HTCondorGPUGroupProfile] = Field(default_factory=list)
 
 
 class StorageProfile(BaseModel):
@@ -111,7 +140,10 @@ class StorageProfile(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    id: str
     name: str
+    role: str
+    environment_variables: list[str] = Field(default_factory=list)
     path_pattern: str | None = None
     filesystem_type: str | None = None
     login_readable: bool | None = None
@@ -119,8 +151,10 @@ class StorageProfile(BaseModel):
     compute_visible: bool | None = None
     compute_readable: bool | None = None
     compute_writable: bool | None = None
-    available_bytes: int | None = None
+    shared_across_compute_nodes: bool | None = None
+    backup_policy: str | None = None
     purge_after_days: int | None = None
+    purge_condition: str | None = None
 
 
 class NodeNetworkProfile(BaseModel):
@@ -162,35 +196,22 @@ class AccountingProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     allocation_required: bool | None = None
-    visible_accounts: list[str] = Field(default_factory=list)
+    charging_unit: str | None = None
     charging_model: str | None = None
+    filesystem_storage_charged: bool | None = None
 
 
-class SoftwareProfile(BaseModel):
-    """Login-visible software summary."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    module_system: str | None = None
-    workflow_tools: list[str] = Field(default_factory=list)
-    container_runtimes: list[str] = Field(default_factory=list)
-
-
-class SectionValidation(BaseModel):
-    """Validation state for one compact profile section."""
+class SectionStatus(BaseModel):
+    """Compact validation state for each actionable profile section."""
 
     model_config = ConfigDict(extra="forbid")
 
-    section: Literal[
-        "scheduler",
-        "submission",
-        "resources",
-        "network",
-        "storage",
-        "accounting",
-        "software",
-    ]
-    state: ValidationState
+    scheduler: ValidationState
+    submission: ValidationState
+    resources: ValidationState
+    network: ValidationState
+    storage: ValidationState
+    accounting: ValidationState
 
 
 class UnresolvedWorkItem(BaseModel):
@@ -217,15 +238,6 @@ class ProfileConflict(BaseModel):
     note: str
 
 
-class FieldEvidenceLink(BaseModel):
-    """Compact links from one profile field to detailed evidence."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    field: str
-    evidence_ids: list[str] = Field(min_length=1)
-
-
 class SiteProfile(BaseModel):
     """Compact actionable profile consumed by deterministic preflight."""
 
@@ -238,18 +250,15 @@ class SiteProfile(BaseModel):
     profile_state: Literal["complete", "partial"]
     generated_at: datetime
     scheduler_type: Literal["slurm", "htcondor"]
-    scheduler_version: str | None = None
     slurm: SlurmProfile | None = None
     htcondor: HTCondorProfile | None = None
     storage: list[StorageProfile] = Field(default_factory=list)
     network: NetworkProfile
     accounting: AccountingProfile
-    software: SoftwareProfile
-    validation: list[SectionValidation]
+    section_status: SectionStatus
     unresolved: list[UnresolvedWorkItem] = Field(default_factory=list)
     conflicts: list[ProfileConflict] = Field(default_factory=list)
-    evidence_report: str
-    field_evidence: list[FieldEvidenceLink] = Field(default_factory=list)
+    evidence_id: str
 
     @model_validator(mode="after")
     def validate_scheduler_profile(self) -> Self:

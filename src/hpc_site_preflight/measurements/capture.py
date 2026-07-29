@@ -14,25 +14,22 @@ import os
 import re
 import shutil
 import socket
-import stat
 import subprocess
-import tempfile
 from collections.abc import Callable, Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-COLLECTOR_VERSION = "0.5.0"
-COMMAND_TIMEOUT_SECONDS = 15
+from hpc_site_preflight.measurements.htcondor import (
+    collect_htcondor as collect_htcondor_facts,
+)
+from hpc_site_preflight.measurements.storage import collect_storage
+
+COLLECTOR_VERSION = "0.7.0"
+COMMAND_TIMEOUT_SECONDS = 60
 
 SLURM_COMMANDS = ("sinfo", "sbatch", "squeue", "sacct")
-HTCONDOR_COMMANDS = ("condor_status", "condor_submit", "condor_q")
-STORAGE_ENVIRONMENT_VARIABLES = {
-    "home": ("HOME",),
-    "tmp": ("TMPDIR", "TEMP", "TMP"),
-    "scratch": ("SCRATCH", "SCRATCH_DIR", "SCRATCHDIR"),
-    "project": ("PROJECT", "PROJECT_DIR", "PROJECTDIR"),
-}
+HTCONDOR_COMMANDS = ("condor_status", "condor_submit", "condor_q", "condor_history")
 
 CommandRunner = Callable[[Sequence[str]], str | None]
 ExecutableLookup = Callable[[str], str | None]
@@ -86,22 +83,6 @@ def hostname_pattern(fqdn: str | None) -> str | None:
         return None
     _, separator, suffix = fqdn.lower().rstrip(".").partition(".")
     return f"*.{suffix}" if separator else fqdn
-
-
-def path_pattern(
-    path: str | None,
-    username: str,
-    groups: Sequence[str],
-) -> str | None:
-    """Generalize exact username and group path components."""
-
-    if not path:
-        return None
-    replacements = {group: "{group}" for group in groups}
-    replacements[username] = "{username}"
-    return "/".join(
-        replacements.get(component, component) for component in path.split("/")
-    )
 
 
 def parse_number(value: str) -> int | None:
@@ -203,74 +184,6 @@ def parse_available_memory(text: str | None) -> int | None:
     return int(match.group(1)) * 1024 if match else None
 
 
-def first_environment_path(
-    environment: Mapping[str, str],
-    variable_names: Sequence[str],
-) -> tuple[str | None, str | None]:
-    """Return the first absolute path from reviewed environment variables."""
-
-    for variable_name in variable_names:
-        value = environment.get(variable_name)
-        if value and Path(value).is_absolute():
-            return variable_name, str(Path(value).expanduser())
-    return None, None
-
-
-def storage_value(
-    *,
-    role: str,
-    username: str,
-    groups: Sequence[str],
-    environment: Mapping[str, str],
-    runner: CommandRunner,
-) -> dict[str, Any]:
-    """Return one fixed-shape storage record."""
-
-    variable_name, observed_path = first_environment_path(
-        environment,
-        STORAGE_ENVIRONMENT_VARIABLES[role],
-    )
-    if role == "home" and not observed_path:
-        observed_path = str(Path.home())
-    elif role == "tmp" and not observed_path:
-        observed_path = tempfile.gettempdir()
-
-    result: dict[str, Any] = {
-        "source_environment_variable": variable_name,
-        "observed_path": observed_path,
-        "path_pattern": path_pattern(observed_path, username, groups),
-        "exists": None,
-        "readable": None,
-        "writable": None,
-        "executable": None,
-        "permissions": None,
-        "filesystem_type": None,
-        "available_bytes": None,
-    }
-    if not observed_path:
-        return result
-
-    path = Path(observed_path)
-    exists = path.exists()
-    result["exists"] = exists
-    result["readable"] = os.access(path, os.R_OK) if exists else False
-    result["writable"] = os.access(path, os.W_OK) if exists else False
-    result["executable"] = os.access(path, os.X_OK) if exists else False
-    if not exists:
-        return result
-
-    try:
-        result["permissions"] = stat.filemode(path.stat().st_mode)
-    except OSError:
-        pass
-    result["filesystem_type"] = runner(["stat", "-f", "-c", "%T", observed_path])
-    try:
-        result["available_bytes"] = shutil.disk_usage(path).free
-    except OSError:
-        pass
-    return result
-
-
 def detect_schedulers(
     executable_lookup: ExecutableLookup,
 ) -> tuple[list[str], list[str], list[str]]:
@@ -310,15 +223,6 @@ def collect_slurm(runner: CommandRunner, commands: Sequence[str]) -> dict[str, A
     }
 
 
-def collect_htcondor(commands: Sequence[str]) -> dict[str, Any]:
-    """Return the small HTCondor detection result implemented so far."""
-
-    return {
-        "available_commands": list(commands),
-        "submit_command_available": "condor_submit" in commands,
-    }
-
-
 def collect_measurements(
     *,
     site_name: str,
@@ -327,6 +231,9 @@ def collect_measurements(
     environment: Mapping[str, str] | None = None,
     runner: CommandRunner = run_fixed_command,
     executable_lookup: ExecutableLookup = shutil.which,
+    condor_pool: str | None = None,
+    storage_paths: Sequence[str] = (),
+    storage_roots: Sequence[str] = (),
 ) -> dict[str, Any]:
     """Discover identity, storage, and scheduler facts into one JSON object."""
 
@@ -371,20 +278,18 @@ def collect_measurements(
             runner(["cat", "/proc/meminfo"])
         ),
     }
-    storage = {
-        role: storage_value(
-            role=role,
-            username=username,
-            groups=groups,
-            environment=environment,
-            runner=runner,
-        )
-        for role in ("home", "tmp", "scratch", "project")
-    }
+    storage = collect_storage(
+        username=username,
+        groups=groups,
+        environment=environment,
+        runner=runner,
+        extra_paths=storage_paths,
+        extra_roots=storage_roots,
+    )
 
     detected, slurm_commands, htcondor_commands = detect_schedulers(executable_lookup)
     return {
-        "schema_version": "0.6",
+        "schema_version": "0.7",
         "collected_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
         "evidence_source": "measured",
         "collector_version": COLLECTOR_VERSION,
@@ -397,7 +302,7 @@ def collect_measurements(
             else None
         ),
         "htcondor": (
-            collect_htcondor(htcondor_commands)
+            collect_htcondor_facts(runner, htcondor_commands, pool=condor_pool)
             if "htcondor" in detected
             else None
         ),
@@ -429,6 +334,20 @@ def parse_args(arguments: Sequence[str] | None = None) -> argparse.Namespace:
         default=[],
         help="Optional documentation domain when it differs from the login domain.",
     )
+    parser.add_argument("--condor-pool", help="Optional HTCondor collector hostname.")
+    parser.add_argument(
+        "--storage-path",
+        action="append",
+        default=[],
+        metavar="ROLE=/ABSOLUTE/PATH",
+        help="Exact additional storage path; repeat as needed.",
+    )
+    parser.add_argument(
+        "--storage-root",
+        action="append",
+        default=[],
+        help="Root under which exact username and group paths are checked.",
+    )
     parser.add_argument(
         "--output",
         type=Path,
@@ -447,6 +366,9 @@ def main(arguments: Sequence[str] | None = None) -> int:
         site_name=args.site_name,
         keywords=args.keyword,
         domain_overrides=args.documentation_domain,
+        condor_pool=args.condor_pool,
+        storage_paths=args.storage_path,
+        storage_roots=args.storage_root,
     )
     scheduler_text = ", ".join(result["detected_schedulers"]) or "none"
     print(f"[2/3] Scheduler detected: {scheduler_text}")

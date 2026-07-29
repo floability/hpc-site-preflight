@@ -1,9 +1,1185 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://hpc-site-preflight.dev/schemas/site-profile.schema.json",
-  "title": "HPC Site Profile",
-  "type": "object",
+  "$defs": {
+    "AccountingProfile": {
+      "additionalProperties": false,
+      "description": "Known accounting inputs and unresolved policy.",
+      "properties": {
+        "allocation_required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Allocation Required"
+        },
+        "charging_unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Charging Unit"
+        },
+        "charging_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Charging Model"
+        },
+        "filesystem_storage_charged": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Filesystem Storage Charged"
+        }
+      },
+      "title": "AccountingProfile",
+      "type": "object"
+    },
+    "HTCondorCPUGroupProfile": {
+      "additionalProperties": false,
+      "description": "Visible machines grouped by advertised CPU cores.",
+      "properties": {
+        "cpu_cores_per_machine": {
+          "title": "Cpu Cores Per Machine",
+          "type": "integer"
+        },
+        "machine_count": {
+          "title": "Machine Count",
+          "type": "integer"
+        },
+        "memory_mib_min": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib Min"
+        },
+        "memory_mib_max": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib Max"
+        }
+      },
+      "required": [
+        "cpu_cores_per_machine",
+        "machine_count"
+      ],
+      "title": "HTCondorCPUGroupProfile",
+      "type": "object"
+    },
+    "HTCondorGPUGroupProfile": {
+      "additionalProperties": false,
+      "description": "Visible GPU machines grouped by GPU count and CPU cores.",
+      "properties": {
+        "gpu_count_per_machine": {
+          "title": "Gpu Count Per Machine",
+          "type": "integer"
+        },
+        "cpu_cores_per_machine": {
+          "title": "Cpu Cores Per Machine",
+          "type": "integer"
+        },
+        "machine_count": {
+          "title": "Machine Count",
+          "type": "integer"
+        },
+        "memory_mib_min": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib Min"
+        },
+        "memory_mib_max": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib Max"
+        }
+      },
+      "required": [
+        "gpu_count_per_machine",
+        "cpu_cores_per_machine",
+        "machine_count"
+      ],
+      "title": "HTCondorGPUGroupProfile",
+      "type": "object"
+    },
+    "HTCondorPoolTotalsProfile": {
+      "additionalProperties": false,
+      "description": "One timestamped snapshot of resources visible to HTCondor.",
+      "properties": {
+        "machine_count": {
+          "default": 0,
+          "title": "Machine Count",
+          "type": "integer"
+        },
+        "cpu_cores": {
+          "default": 0,
+          "title": "Cpu Cores",
+          "type": "integer"
+        },
+        "memory_mib": {
+          "default": 0,
+          "title": "Memory Mib",
+          "type": "integer"
+        },
+        "advertised_gpus": {
+          "default": 0,
+          "title": "Advertised Gpus",
+          "type": "integer"
+        }
+      },
+      "title": "HTCondorPoolTotalsProfile",
+      "type": "object"
+    },
+    "HTCondorProfile": {
+      "additionalProperties": false,
+      "description": "HTCondor-specific submission and resource-group information.",
+      "properties": {
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "submit_command": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submit Command"
+        },
+        "collector_host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Collector Host"
+        },
+        "file_transfer_supported": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File Transfer Supported"
+        },
+        "submit_attributes": {
+          "items": {
+            "$ref": "#/$defs/SubmissionOption"
+          },
+          "title": "Submit Attributes",
+          "type": "array"
+        },
+        "unmapped_submit_attributes": {
+          "items": {
+            "$ref": "#/$defs/UnmappedSubmissionOption"
+          },
+          "title": "Unmapped Submit Attributes",
+          "type": "array"
+        },
+        "pool_totals": {
+          "$ref": "#/$defs/HTCondorPoolTotalsProfile"
+        },
+        "cpu_groups": {
+          "items": {
+            "$ref": "#/$defs/HTCondorCPUGroupProfile"
+          },
+          "title": "Cpu Groups",
+          "type": "array"
+        },
+        "gpu_groups": {
+          "items": {
+            "$ref": "#/$defs/HTCondorGPUGroupProfile"
+          },
+          "title": "Gpu Groups",
+          "type": "array"
+        }
+      },
+      "title": "HTCondorProfile",
+      "type": "object"
+    },
+    "NetworkConnectionProfile": {
+      "additionalProperties": false,
+      "description": "TCP behavior between two node classes.",
+      "properties": {
+        "tcp_connect": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tcp Connect"
+        },
+        "verified_ports": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified Ports"
+        },
+        "suggested_port_range": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Port Range"
+        }
+      },
+      "title": "NetworkConnectionProfile",
+      "type": "object"
+    },
+    "NetworkProfile": {
+      "additionalProperties": false,
+      "description": "Login, compute, and cross-node networking.",
+      "properties": {
+        "login": {
+          "$ref": "#/$defs/NodeNetworkProfile"
+        },
+        "compute": {
+          "$ref": "#/$defs/NodeNetworkProfile"
+        },
+        "login_compute": {
+          "$ref": "#/$defs/NetworkConnectionProfile"
+        },
+        "compute_compute": {
+          "$ref": "#/$defs/NetworkConnectionProfile"
+        }
+      },
+      "required": [
+        "login",
+        "compute",
+        "login_compute",
+        "compute_compute"
+      ],
+      "title": "NetworkProfile",
+      "type": "object"
+    },
+    "NodeNetworkProfile": {
+      "additionalProperties": false,
+      "description": "Networking facts for one node class.",
+      "properties": {
+        "hostname_patterns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Hostname Patterns",
+          "type": "array"
+        },
+        "dns_resolution": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dns Resolution"
+        },
+        "outbound_https": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outbound Https"
+        },
+        "local_tcp_bind": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Local Tcp Bind"
+        },
+        "local_tcp_loopback": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Local Tcp Loopback"
+        }
+      },
+      "title": "NodeNetworkProfile",
+      "type": "object"
+    },
+    "PartitionProfile": {
+      "additionalProperties": false,
+      "description": "One visible Slurm partition and known normalized limits.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "visible_walltime_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visible Walltime Seconds"
+        },
+        "maximum_walltime_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Walltime Seconds"
+        },
+        "maximum_nodes_per_job": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Nodes Per Job"
+        },
+        "shared_nodes": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shared Nodes"
+        },
+        "node_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Count"
+        },
+        "cpus_per_node": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpus Per Node"
+        },
+        "memory_mib_per_node": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib Per Node"
+        },
+        "temporary_disk_mib_per_node": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Temporary Disk Mib Per Node"
+        },
+        "gpu_count_per_node": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gpu Count Per Node"
+        },
+        "gpu_models": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gpu Models",
+          "type": "array"
+        },
+        "features": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Features",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "PartitionProfile",
+      "type": "object"
+    },
+    "ProfileConflict": {
+      "additionalProperties": false,
+      "description": "Compact note retaining a deterministic evidence conflict.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "selected_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Value"
+        },
+        "selected_evidence": {
+          "title": "Selected Evidence",
+          "type": "string"
+        },
+        "other_evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Other Evidence",
+          "type": "array"
+        },
+        "selection_rule": {
+          "title": "Selection Rule",
+          "type": "string"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "selected_evidence",
+        "selection_rule",
+        "note"
+      ],
+      "title": "ProfileConflict",
+      "type": "object"
+    },
+    "SectionStatus": {
+      "additionalProperties": false,
+      "description": "Compact validation state for each actionable profile section.",
+      "properties": {
+        "scheduler": {
+          "enum": [
+            "measured",
+            "documented",
+            "pilot_validated",
+            "partial",
+            "requires_pilot",
+            "conflicting",
+            "not_applicable"
+          ],
+          "title": "Scheduler",
+          "type": "string"
+        },
+        "submission": {
+          "enum": [
+            "measured",
+            "documented",
+            "pilot_validated",
+            "partial",
+            "requires_pilot",
+            "conflicting",
+            "not_applicable"
+          ],
+          "title": "Submission",
+          "type": "string"
+        },
+        "resources": {
+          "enum": [
+            "measured",
+            "documented",
+            "pilot_validated",
+            "partial",
+            "requires_pilot",
+            "conflicting",
+            "not_applicable"
+          ],
+          "title": "Resources",
+          "type": "string"
+        },
+        "network": {
+          "enum": [
+            "measured",
+            "documented",
+            "pilot_validated",
+            "partial",
+            "requires_pilot",
+            "conflicting",
+            "not_applicable"
+          ],
+          "title": "Network",
+          "type": "string"
+        },
+        "storage": {
+          "enum": [
+            "measured",
+            "documented",
+            "pilot_validated",
+            "partial",
+            "requires_pilot",
+            "conflicting",
+            "not_applicable"
+          ],
+          "title": "Storage",
+          "type": "string"
+        },
+        "accounting": {
+          "enum": [
+            "measured",
+            "documented",
+            "pilot_validated",
+            "partial",
+            "requires_pilot",
+            "conflicting",
+            "not_applicable"
+          ],
+          "title": "Accounting",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scheduler",
+        "submission",
+        "resources",
+        "network",
+        "storage",
+        "accounting"
+      ],
+      "title": "SectionStatus",
+      "type": "object"
+    },
+    "SlurmProfile": {
+      "additionalProperties": false,
+      "description": "Slurm-specific submission and partition information.",
+      "properties": {
+        "version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Version"
+        },
+        "submit_command": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submit Command"
+        },
+        "default_partition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default Partition"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/SubmissionOption"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "unmapped_options": {
+          "items": {
+            "$ref": "#/$defs/UnmappedSubmissionOption"
+          },
+          "title": "Unmapped Options",
+          "type": "array"
+        },
+        "partitions": {
+          "items": {
+            "$ref": "#/$defs/PartitionProfile"
+          },
+          "title": "Partitions",
+          "type": "array"
+        }
+      },
+      "title": "SlurmProfile",
+      "type": "object"
+    },
+    "StorageProfile": {
+      "additionalProperties": false,
+      "description": "One known storage path and unresolved compute behavior.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "environment_variables": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Environment Variables",
+          "type": "array"
+        },
+        "path_pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path Pattern"
+        },
+        "filesystem_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Filesystem Type"
+        },
+        "login_readable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Login Readable"
+        },
+        "login_writable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Login Writable"
+        },
+        "compute_visible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compute Visible"
+        },
+        "compute_readable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compute Readable"
+        },
+        "compute_writable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compute Writable"
+        },
+        "shared_across_compute_nodes": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shared Across Compute Nodes"
+        },
+        "backup_policy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Backup Policy"
+        },
+        "purge_after_days": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purge After Days"
+        },
+        "purge_condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Purge Condition"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role"
+      ],
+      "title": "StorageProfile",
+      "type": "object"
+    },
+    "SubmissionOption": {
+      "additionalProperties": false,
+      "description": "One semantic scheduler option with ordered rendering forms.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "syntax": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Syntax",
+          "type": "array"
+        },
+        "required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Required"
+        },
+        "example": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Example"
+        },
+        "allowed_values": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Allowed Values"
+        }
+      },
+      "required": [
+        "name",
+        "syntax"
+      ],
+      "title": "SubmissionOption",
+      "type": "object"
+    },
+    "UnmappedSubmissionOption": {
+      "additionalProperties": false,
+      "description": "One documented scheduler requirement awaiting a reviewed mapping.",
+      "properties": {
+        "documented_name": {
+          "title": "Documented Name",
+          "type": "string"
+        },
+        "documented_syntax": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Documented Syntax",
+          "type": "array"
+        },
+        "requirement": {
+          "enum": [
+            "required",
+            "recommended",
+            "optional",
+            "conditional"
+          ],
+          "title": "Requirement",
+          "type": "string"
+        },
+        "status": {
+          "const": "needs_mapping",
+          "default": "needs_mapping",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "documented_name",
+        "requirement"
+      ],
+      "title": "UnmappedSubmissionOption",
+      "type": "object"
+    },
+    "UnresolvedWorkItem": {
+      "additionalProperties": false,
+      "description": "One deterministic next action for an unresolved profile field.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "next_action": {
+          "enum": [
+            "login_measurement",
+            "run_pilot",
+            "additional_documentation",
+            "user_input",
+            "admin_confirmation"
+          ],
+          "title": "Next Action",
+          "type": "string"
+        },
+        "action_id": {
+          "title": "Action Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "reason",
+        "next_action",
+        "action_id"
+      ],
+      "title": "UnresolvedWorkItem",
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
+  "description": "Compact actionable profile consumed by deterministic preflight.",
+  "properties": {
+    "schema_version": {
+      "const": "0.4",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "site_id": {
+      "title": "Site Id",
+      "type": "string"
+    },
+    "site_name": {
+      "title": "Site Name",
+      "type": "string"
+    },
+    "aliases": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Aliases",
+      "type": "array"
+    },
+    "profile_state": {
+      "enum": [
+        "complete",
+        "partial"
+      ],
+      "title": "Profile State",
+      "type": "string"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "scheduler_type": {
+      "enum": [
+        "slurm",
+        "htcondor"
+      ],
+      "title": "Scheduler Type",
+      "type": "string"
+    },
+    "slurm": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SlurmProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "htcondor": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HTCondorProfile"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "storage": {
+      "items": {
+        "$ref": "#/$defs/StorageProfile"
+      },
+      "title": "Storage",
+      "type": "array"
+    },
+    "network": {
+      "$ref": "#/$defs/NetworkProfile"
+    },
+    "accounting": {
+      "$ref": "#/$defs/AccountingProfile"
+    },
+    "section_status": {
+      "$ref": "#/$defs/SectionStatus"
+    },
+    "unresolved": {
+      "items": {
+        "$ref": "#/$defs/UnresolvedWorkItem"
+      },
+      "title": "Unresolved",
+      "type": "array"
+    },
+    "conflicts": {
+      "items": {
+        "$ref": "#/$defs/ProfileConflict"
+      },
+      "title": "Conflicts",
+      "type": "array"
+    },
+    "evidence_id": {
+      "title": "Evidence Id",
+      "type": "string"
+    }
+  },
   "required": [
     "schema_version",
     "site_id",
@@ -13,283 +1189,9 @@
     "scheduler_type",
     "network",
     "accounting",
-    "software",
-    "validation",
-    "evidence_report"
+    "section_status",
+    "evidence_id"
   ],
-  "properties": {
-    "schema_version": {"const": "0.3"},
-    "site_id": {"type": "string"},
-    "site_name": {"type": "string"},
-    "aliases": {"type": "array", "items": {"type": "string"}},
-    "profile_state": {"enum": ["complete", "partial"]},
-    "generated_at": {"type": "string", "format": "date-time"},
-    "scheduler_type": {"enum": ["slurm", "htcondor"]},
-    "scheduler_version": {"type": ["string", "null"]},
-    "slurm": {
-      "anyOf": [{"$ref": "#/$defs/slurm_profile"}, {"type": "null"}]
-    },
-    "htcondor": {
-      "anyOf": [{"$ref": "#/$defs/htcondor_profile"}, {"type": "null"}]
-    },
-    "storage": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/storage"}
-    },
-    "network": {
-      "$ref": "#/$defs/network"
-    },
-    "accounting": {"$ref": "#/$defs/accounting"},
-    "software": {"$ref": "#/$defs/software"},
-    "validation": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/validation"}
-    },
-    "unresolved": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/unresolved"}
-    },
-    "conflicts": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/conflict"}
-    },
-    "evidence_report": {"type": "string"},
-    "field_evidence": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/evidence_link"}
-    }
-  },
-  "$defs": {
-    "slurm_profile": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "submit_command": {"type": ["string", "null"]},
-        "options": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/submission_option"}
-        },
-        "unmapped_options": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/unmapped_submission_option"}
-        },
-        "partitions": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/partition"}
-        }
-      }
-    },
-    "htcondor_profile": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "submit_command": {"type": ["string", "null"]},
-        "submit_attributes": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/submission_option"}
-        },
-        "unmapped_submit_attributes": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/unmapped_submission_option"}
-        },
-        "resource_groups": {
-          "type": "array",
-          "items": {"$ref": "#/$defs/resource_group"}
-        }
-      }
-    },
-    "submission_option": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["name", "syntax"],
-      "properties": {
-        "name": {"type": "string"},
-        "syntax": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-        "required": {"type": ["boolean", "null"]},
-        "value": {"type": ["string", "integer", "number", "boolean", "null"]},
-        "example": {"type": ["string", "null"]},
-        "allowed_values": {
-          "type": ["array", "null"],
-          "items": {"type": "string"}
-        }
-      }
-    },
-    "unmapped_submission_option": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["documented_name", "requirement"],
-      "properties": {
-        "documented_name": {"type": "string"},
-        "documented_syntax": {
-          "type": "array",
-          "items": {"type": "string"}
-        },
-        "requirement": {
-          "enum": ["required", "recommended", "optional", "conditional"]
-        },
-        "status": {"const": "needs_mapping"}
-      }
-    },
-    "partition": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["name"],
-      "properties": {
-        "name": {"type": "string"},
-        "available": {"type": ["boolean", "null"]},
-        "visible_walltime_seconds": {"type": ["integer", "null"]},
-        "maximum_walltime_seconds": {"type": ["integer", "null"]},
-        "node_count": {"type": ["integer", "null"]},
-        "cpus_per_node": {"type": ["integer", "null"]},
-        "memory_mib_per_node": {"type": ["integer", "null"]},
-        "temporary_disk_mib_per_node": {"type": ["integer", "null"]},
-        "gpu_count_per_node": {"type": ["integer", "null"]},
-        "gpu_models": {"type": "array", "items": {"type": "string"}},
-        "features": {"type": "array", "items": {"type": "string"}}
-      }
-    },
-    "resource_group": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["key"],
-      "properties": {
-        "key": {"type": "string"},
-        "machine_count": {"type": ["integer", "null"]},
-        "slot_count": {"type": ["integer", "null"]},
-        "cpus": {"type": ["integer", "null"]},
-        "memory_mib": {"type": ["integer", "null"]},
-        "disk_kib": {"type": ["integer", "null"]},
-        "gpu_count": {"type": ["integer", "null"]}
-      }
-    },
-    "storage": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["name"],
-      "properties": {
-        "name": {"type": "string"},
-        "path_pattern": {"type": ["string", "null"]},
-        "filesystem_type": {"type": ["string", "null"]},
-        "login_readable": {"type": ["boolean", "null"]},
-        "login_writable": {"type": ["boolean", "null"]},
-        "compute_visible": {"type": ["boolean", "null"]},
-        "compute_readable": {"type": ["boolean", "null"]},
-        "compute_writable": {"type": ["boolean", "null"]},
-        "available_bytes": {"type": ["integer", "null"]},
-        "purge_after_days": {"type": ["integer", "null"]}
-      }
-    },
-    "network": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["login", "compute", "login_compute", "compute_compute"],
-      "properties": {
-        "login": {"$ref": "#/$defs/node_network"},
-        "compute": {"$ref": "#/$defs/node_network"},
-        "login_compute": {"$ref": "#/$defs/network_connection"},
-        "compute_compute": {"$ref": "#/$defs/network_connection"}
-      }
-    },
-    "node_network": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "hostname_patterns": {"type": "array", "items": {"type": "string"}},
-        "dns_resolution": {"type": ["boolean", "null"]},
-        "outbound_https": {"type": ["boolean", "null"]},
-        "local_tcp_bind": {"type": ["boolean", "null"]},
-        "local_tcp_loopback": {"type": ["boolean", "null"]}
-      }
-    },
-    "network_connection": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "tcp_connect": {"type": ["boolean", "null"]},
-        "verified_ports": {
-          "type": ["array", "null"],
-          "items": {"type": "integer", "minimum": 1024, "maximum": 65535}
-        },
-        "suggested_port_range": {"type": ["string", "null"]}
-      }
-    },
-    "accounting": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "allocation_required": {"type": ["boolean", "null"]},
-        "visible_accounts": {"type": "array", "items": {"type": "string"}},
-        "charging_model": {"type": ["string", "null"]}
-      }
-    },
-    "software": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "module_system": {"type": ["string", "null"]},
-        "workflow_tools": {"type": "array", "items": {"type": "string"}},
-        "container_runtimes": {"type": "array", "items": {"type": "string"}}
-      }
-    },
-    "validation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["section", "state"],
-      "properties": {
-        "section": {
-          "enum": ["scheduler", "submission", "resources", "network", "storage", "accounting", "software"]
-        },
-        "state": {
-          "enum": ["measured", "documented", "pilot_validated", "partial", "requires_pilot", "conflicting", "not_applicable"]
-        }
-      }
-    },
-    "unresolved": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["field", "reason", "next_action", "action_id"],
-      "properties": {
-        "field": {"type": "string"},
-        "reason": {"type": "string"},
-        "next_action": {"enum": ["login_measurement", "run_pilot", "additional_documentation", "user_input", "admin_confirmation"]},
-        "action_id": {"type": "string"}
-      }
-    },
-    "conflict": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["field", "selected_evidence", "selection_rule", "note"],
-      "properties": {
-        "field": {"type": "string"},
-        "selected_value": {
-          "anyOf": [
-            {"type": "string"},
-            {"type": "integer"},
-            {"type": "number"},
-            {"type": "boolean"},
-            {
-              "type": "array",
-              "items": {
-                "type": ["string", "integer", "number", "boolean"]
-              }
-            },
-            {"type": "null"}
-          ]
-        },
-        "selected_evidence": {"type": "string"},
-        "other_evidence": {"type": "array", "items": {"type": "string"}},
-        "selection_rule": {"type": "string"},
-        "note": {"type": "string"}
-      }
-    },
-    "evidence_link": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["field", "evidence_ids"],
-      "properties": {
-        "field": {"type": "string"},
-        "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}
-      }
-    }
-  }
+  "title": "SiteProfile",
+  "type": "object"
 }

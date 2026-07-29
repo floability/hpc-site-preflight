@@ -12,7 +12,6 @@ from hpc_site_preflight.evidence.models import (
 from hpc_site_preflight.evidence.provenance import build_evidence_id
 from hpc_site_preflight.probes.base import PilotResultBundle
 from hpc_site_preflight.profiles.models import (
-    FieldEvidenceLink,
     ProfileConflict,
     SiteProfile,
     UnresolvedWorkItem,
@@ -57,7 +56,12 @@ def apply_pilot_results(
         )
     for result in pilots.storage_results or []:
         storage = next(
-            (item for item in profile.storage if item.name == result.name),
+            (
+                item
+                for item in profile.storage
+                if result.name.casefold()
+                in {item.id.casefold(), item.name.casefold(), item.role.casefold()}
+            ),
             None,
         )
         if storage is None:
@@ -70,7 +74,7 @@ def apply_pilot_results(
         for field, value in values.items():
             if value is None:
                 continue
-            path = f"/storage/{storage.name}/{field}"
+            path = f"/storage/{storage.id}/{field}"
             setattr(storage, field, value)
             _append_evidence(profile, report, pilots, path, value)
             resolved.add(path)
@@ -171,25 +175,16 @@ def _append_evidence(
             result=value,
         )
     )
-    _link(profile, report, path, evidence_id)
+    _link(report, path, evidence_id)
     return evidence_id
 
 
 def _link(
-    profile: SiteProfile,
     report: EvidenceReport,
     path: str,
     evidence_id: str,
 ) -> None:
     """Add one evidence ID without duplicating field-link objects."""
-
-    profile_link = next((item for item in profile.field_evidence if item.field == path), None)
-    if profile_link is None:
-        profile.field_evidence.append(
-            FieldEvidenceLink(field=path, evidence_ids=[evidence_id])
-        )
-    elif evidence_id not in profile_link.evidence_ids:
-        profile_link.evidence_ids.append(evidence_id)
 
     report_link = next((item for item in report.links if item.profile_field == path), None)
     if report_link is None:
@@ -257,15 +252,14 @@ def _retain_conflict(
 def _update_validation(profile: SiteProfile) -> None:
     """Mark only completely evidenced sections as pilot validated."""
 
-    states = {item.section: item for item in profile.validation}
     connections = (profile.network.login_compute, profile.network.compute_compute)
     if all(item.tcp_connect is not None for item in connections):
-        states["network"].state = "pilot_validated"
+        profile.section_status.network = "pilot_validated"
 
     observed_storage = [
         item
         for item in profile.storage
-        if item.name in {"home", "scratch", "project"}
+        if item.role in {"home", "scratch", "project"}
         and item.path_pattern is not None
     ]
     if observed_storage and all(
@@ -274,4 +268,4 @@ def _update_validation(profile: SiteProfile) -> None:
         and item.compute_writable is not None
         for item in observed_storage
     ):
-        states["storage"].state = "pilot_validated"
+        profile.section_status.storage = "pilot_validated"

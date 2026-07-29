@@ -22,28 +22,29 @@ from hpc_site_preflight.measurements.base import (
 )
 from hpc_site_preflight.profiles.models import (
     AccountingProfile,
-    FieldEvidenceLink,
+    HTCondorCPUGroupProfile,
+    HTCondorGPUGroupProfile,
+    HTCondorPoolTotalsProfile,
     HTCondorProfile,
     NetworkConnectionProfile,
     NetworkProfile,
     NodeNetworkProfile,
     PartitionProfile,
-    ResourceGroupProfile,
-    SectionValidation,
+    SectionStatus,
     SiteProfile,
     SlurmProfile,
-    SoftwareProfile,
     StorageProfile,
     SubmissionOption,
     UnresolvedWorkItem,
 )
 
 _STORAGE_PATH = re.compile(r"^/facts/storage/filesystems/([^/]+)/path$")
-_STORAGE_ROLES = ("home", "project", "data", "scratch")
 
 
 def compile_profile(
     measurements: MeasurementBundle,
+    *,
+    evidence_id: str | None = None,
 ) -> tuple[SiteProfile, EvidenceReport]:
     """Build an initial partial profile from login measurements."""
 
@@ -55,24 +56,12 @@ def compile_profile(
     by_path = {item.path: item for item in observations}
     evidence = [_evidence_record(site.site_id, measurements, item) for item in observations]
     evidence_ids = {item.field_path: item.evidence_id for item in evidence}
-    profile_links: list[FieldEvidenceLink] = []
     report_links: list[EvidenceLink] = []
 
     def link(profile_field: str, observation_path: str) -> None:
         evidence_id = evidence_ids.get(observation_path)
         if evidence_id is None:
             return
-        profile_link = next(
-            (item for item in profile_links if item.field == profile_field),
-            None,
-        )
-        if profile_link is None:
-            profile_links.append(
-                FieldEvidenceLink(field=profile_field, evidence_ids=[evidence_id])
-            )
-        elif evidence_id not in profile_link.evidence_ids:
-            profile_link.evidence_ids.append(evidence_id)
-
         report_link = next(
             (item for item in report_links if item.profile_field == profile_field),
             None,
@@ -87,7 +76,25 @@ def compile_profile(
     scheduler_version = _string(by_path, "/facts/scheduler/version")
     link("/scheduler_type", "/facts/scheduler/detected_type")
     if scheduler_version is not None:
-        link("/scheduler_version", "/facts/scheduler/version")
+        link(
+            f"/{measurements.scheduler_type}/version",
+            "/facts/scheduler/version",
+        )
+    if measurements.slurm and measurements.slurm.default_partition is not None:
+        link("/slurm/default_partition", "/facts/scheduler/default_partition")
+    if measurements.htcondor and measurements.htcondor.collector_host is not None:
+        link(
+            "/htcondor/collector_host",
+            "/facts/scheduler/htcondor/collector_host",
+        )
+    if (
+        measurements.htcondor
+        and measurements.htcondor.file_transfer_supported is not None
+    ):
+        link(
+            "/htcondor/file_transfer_supported",
+            "/facts/scheduler/htcondor/file_transfer_supported",
+        )
 
     submit_available = _boolean(by_path, "/facts/scheduler/submit_command_available")
     submit_command = None
@@ -99,17 +106,8 @@ def compile_profile(
         )
 
     partitions = _build_partitions(by_path, link)
-    resource_groups = _build_resource_groups(by_path, link)
-    visible_accounts = _strings(by_path, "/facts/scheduler/visible_accounts") or []
-    storage = _build_storage(by_path, visible_accounts, link)
-    if visible_accounts:
-        link("/accounting/visible_accounts", "/facts/scheduler/visible_accounts")
-
-    software = SoftwareProfile(
-        module_system=_string(by_path, "/facts/software/module_system"),
-        workflow_tools=_strings(by_path, "/facts/software/workflow_tools") or [],
-        container_runtimes=_strings(by_path, "/facts/software/container_runtimes") or [],
-    )
+    pool_totals, cpu_groups, gpu_groups = _build_htcondor_resources(by_path, link)
+    storage = _build_storage(by_path, link)
     network = _build_network(site, by_path, link)
     submission_options = _submission_options(measurements.scheduler_type, partitions)
     unresolved = _unresolved_items(
@@ -130,18 +128,24 @@ def compile_profile(
         for item in unresolved
     ]
 
+    report_id = evidence_id or build_evidence_id(
+        "report", site.site_id, "/", measurements.collected_at.isoformat()
+    ).replace(":", "-")
     profile = SiteProfile(
-        schema_version="0.3",
+        schema_version="0.4",
         site_id=site.site_id,
         site_name=site.site_name,
         aliases=site.aliases,
         profile_state="partial",
         generated_at=measurements.collected_at,
         scheduler_type=measurements.scheduler_type,
-        scheduler_version=scheduler_version,
         slurm=(
             SlurmProfile(
+                version=scheduler_version,
                 submit_command=submit_command,
+                default_partition=(
+                    measurements.slurm.default_partition if measurements.slurm else None
+                ),
                 options=submission_options,
                 partitions=partitions,
             )
@@ -150,28 +154,34 @@ def compile_profile(
         ),
         htcondor=(
             HTCondorProfile(
+                version=scheduler_version,
                 submit_command=submit_command,
+                collector_host=(
+                    measurements.htcondor.collector_host if measurements.htcondor else None
+                ),
+                file_transfer_supported=(
+                    measurements.htcondor.file_transfer_supported
+                    if measurements.htcondor
+                    else None
+                ),
                 submit_attributes=submission_options,
-                resource_groups=resource_groups,
+                pool_totals=pool_totals,
+                cpu_groups=cpu_groups,
+                gpu_groups=gpu_groups,
             )
             if measurements.scheduler_type == "htcondor"
             else None
         ),
         storage=storage,
         network=network,
-        accounting=AccountingProfile(visible_accounts=visible_accounts),
-        software=software,
-        validation=_validation_states(
-            resources=bool(partitions or resource_groups),
+        accounting=AccountingProfile(),
+        section_status=_section_status(
+            resources=bool(partitions or cpu_groups),
             storage=bool(storage),
         ),
         unresolved=unresolved,
         conflicts=[],
-        evidence_report="evidence-report.json",
-        field_evidence=profile_links,
-    )
-    report_id = build_evidence_id(
-        "report", site.site_id, "/", measurements.collected_at.isoformat()
+        evidence_id=report_id,
     )
     report = EvidenceReport(
         schema_version="0.1",
@@ -259,12 +269,18 @@ def _measurement_observations(
 
     for name, location in bundle.storage.items():
         prefix = f"/facts/storage/filesystems/{name}"
+        add(f"{prefix}/id", location.id, "discover_storage")
+        add(f"{prefix}/role", location.role, "discover_storage")
+        add(
+            f"{prefix}/environment_variables",
+            location.environment_variables,
+            "discover_storage_environment",
+        )
         add(f"{prefix}/path", location.observed_path, "discover_storage_environment")
         add(f"{prefix}/path_pattern", location.path_pattern, "derive_storage_path_pattern")
         add(f"{prefix}/filesystem_type", location.filesystem_type, "filesystem_type")
         add(f"{prefix}/readable", location.readable, "path_readable")
         add(f"{prefix}/writable", location.writable, "path_writable")
-        add(f"{prefix}/available_bytes", location.available_bytes, "shutil_disk_usage")
 
     if bundle.networking:
         add(
@@ -300,14 +316,8 @@ def _measurement_observations(
             bundle.slurm.default_partition,
             "slurm_partition_resources",
         )
-        add(
-            "/facts/scheduler/visible_accounts",
-            bundle.slurm.visible_accounts,
-            "slurm_associations",
-        )
         for partition in bundle.slurm.partitions:
             prefix = f"/facts/scheduler/partitions/{partition.name}"
-            add(f"{prefix}/available", partition.available, "slurm_partition_resources")
             add(
                 f"{prefix}/visible_walltime_limit",
                 partition.visible_walltime_limit,
@@ -337,24 +347,47 @@ def _measurement_observations(
     if bundle.htcondor:
         add("/facts/scheduler/version", bundle.htcondor.version, "htcondor_version")
         add(
-            "/facts/scheduler/resource_groups",
-            [group.key for group in bundle.htcondor.resource_groups],
-            "htcondor_resource_groups",
+            "/facts/scheduler/htcondor/collector_host",
+            bundle.htcondor.collector_host,
+            "htcondor_collector_host",
         )
-        for group in bundle.htcondor.resource_groups:
-            prefix = f"/facts/scheduler/resource_groups/{group.key}"
+        add(
+            "/facts/scheduler/htcondor/file_transfer_supported",
+            bundle.htcondor.file_transfer_supported,
+            "htcondor_machine_ads",
+        )
+        for field in ("machine_count", "cpu_cores", "memory_mib", "advertised_gpus"):
+            add(
+                f"/facts/scheduler/htcondor/pool_totals/{field}",
+                getattr(bundle.htcondor.pool_totals, field),
+                "htcondor_machine_ads",
+            )
+        for index, group in enumerate(bundle.htcondor.cpu_groups):
+            prefix = f"/facts/scheduler/htcondor/cpu_groups/{index}"
             for field in (
+                "cpu_cores_per_machine",
                 "machine_count",
-                "slot_count",
-                "cpus",
-                "memory_mib",
-                "disk_kib",
-                "gpu_count",
+                "memory_mib_min",
+                "memory_mib_max",
             ):
                 add(
                     f"{prefix}/{field}",
                     getattr(group, field),
-                    "htcondor_resource_groups",
+                    "htcondor_machine_ads",
+                )
+        for index, group in enumerate(bundle.htcondor.gpu_groups):
+            prefix = f"/facts/scheduler/htcondor/gpu_groups/{index}"
+            for field in (
+                "gpu_count_per_machine",
+                "cpu_cores_per_machine",
+                "machine_count",
+                "memory_mib_min",
+                "memory_mib_max",
+            ):
+                add(
+                    f"{prefix}/{field}",
+                    getattr(group, field),
+                    "htcondor_machine_ads",
                 )
     return observations
 
@@ -372,9 +405,10 @@ def _build_partitions(
         result.append(
             PartitionProfile(
                 name=name,
-                available=_boolean(observations, f"{prefix}/available"),
                 visible_walltime_seconds=visible_seconds,
                 maximum_walltime_seconds=None,
+                maximum_nodes_per_job=None,
+                shared_nodes=None,
                 node_count=_integer(observations, f"{prefix}/node_count"),
                 cpus_per_node=_integer(observations, f"{shape}/cpus"),
                 memory_mib_per_node=_integer(observations, f"{shape}/memory_mib"),
@@ -387,7 +421,6 @@ def _build_partitions(
                 features=_strings(observations, f"{shape}/features") or [],
             )
         )
-        link(f"/slurm/partitions/{name}/available", f"{prefix}/available")
         link(f"/slurm/partitions/{name}/visible_walltime_seconds", visible_path)
         link(f"/slurm/partitions/{name}/node_count", f"{prefix}/node_count")
         for field, observation_field in (
@@ -406,29 +439,105 @@ def _build_partitions(
     return result
 
 
-def _build_resource_groups(
-    observations: dict[str, MeasurementObservation], link: Callable[[str, str], None]
-) -> list[ResourceGroupProfile]:
-    names = _strings(observations, "/facts/scheduler/resource_groups") or []
-    result: list[ResourceGroupProfile] = []
-    for name in names:
-        prefix = f"/facts/scheduler/resource_groups/{name}"
-        result.append(
-            ResourceGroupProfile(
-                key=_string(observations, f"{prefix}/key") or name,
-                machine_count=_integer(observations, f"{prefix}/machine_count"),
-                slot_count=_integer(observations, f"{prefix}/slot_count"),
+def _build_htcondor_resources(
+    observations: dict[str, MeasurementObservation],
+    link: Callable[[str, str], None],
+) -> tuple[
+    HTCondorPoolTotalsProfile,
+    list[HTCondorCPUGroupProfile],
+    list[HTCondorGPUGroupProfile],
+]:
+    """Build the pool snapshot and broad HTCondor resource groups."""
+
+    totals_prefix = "/facts/scheduler/htcondor/pool_totals"
+    totals = HTCondorPoolTotalsProfile(
+        machine_count=_integer(observations, f"{totals_prefix}/machine_count") or 0,
+        cpu_cores=_integer(observations, f"{totals_prefix}/cpu_cores") or 0,
+        memory_mib=_integer(observations, f"{totals_prefix}/memory_mib") or 0,
+        advertised_gpus=_integer(
+            observations, f"{totals_prefix}/advertised_gpus"
+        )
+        or 0,
+    )
+    for field in ("machine_count", "cpu_cores", "memory_mib", "advertised_gpus"):
+        link(
+            f"/htcondor/pool_totals/{field}",
+            f"{totals_prefix}/{field}",
+        )
+
+    cpu_indices = _group_indices(observations, "cpu_groups")
+    cpu_groups: list[HTCondorCPUGroupProfile] = []
+    for index in cpu_indices:
+        prefix = f"/facts/scheduler/htcondor/cpu_groups/{index}"
+        cpus = _integer(observations, f"{prefix}/cpu_cores_per_machine")
+        count = _integer(observations, f"{prefix}/machine_count")
+        if cpus is None or count is None:
+            continue
+        cpu_groups.append(
+            HTCondorCPUGroupProfile(
+                cpu_cores_per_machine=cpus,
+                machine_count=count,
+                memory_mib_min=_integer(observations, f"{prefix}/memory_mib_min"),
+                memory_mib_max=_integer(observations, f"{prefix}/memory_mib_max"),
             )
         )
-        for field in ("key", "machine_count", "slot_count"):
-            link(f"/htcondor/resource_groups/{name}/{field}", f"{prefix}/{field}")
-    link("/htcondor/resource_groups", "/facts/scheduler/resource_groups")
-    return result
+        for field in (
+            "cpu_cores_per_machine",
+            "machine_count",
+            "memory_mib_min",
+            "memory_mib_max",
+        ):
+            link(f"/htcondor/cpu_groups/{index}/{field}", f"{prefix}/{field}")
+
+    gpu_indices = _group_indices(observations, "gpu_groups")
+    gpu_groups: list[HTCondorGPUGroupProfile] = []
+    for index in gpu_indices:
+        prefix = f"/facts/scheduler/htcondor/gpu_groups/{index}"
+        gpus = _integer(observations, f"{prefix}/gpu_count_per_machine")
+        cpus = _integer(observations, f"{prefix}/cpu_cores_per_machine")
+        count = _integer(observations, f"{prefix}/machine_count")
+        if gpus is None or cpus is None or count is None:
+            continue
+        gpu_groups.append(
+            HTCondorGPUGroupProfile(
+                gpu_count_per_machine=gpus,
+                cpu_cores_per_machine=cpus,
+                machine_count=count,
+                memory_mib_min=_integer(observations, f"{prefix}/memory_mib_min"),
+                memory_mib_max=_integer(observations, f"{prefix}/memory_mib_max"),
+            )
+        )
+        for field in (
+            "gpu_count_per_machine",
+            "cpu_cores_per_machine",
+            "machine_count",
+            "memory_mib_min",
+            "memory_mib_max",
+        ):
+            link(f"/htcondor/gpu_groups/{index}/{field}", f"{prefix}/{field}")
+    return totals, cpu_groups, gpu_groups
+
+
+def _group_indices(
+    observations: dict[str, MeasurementObservation],
+    group_name: str,
+) -> list[int]:
+    """Return sorted group array indices represented in measurement evidence."""
+
+    pattern = re.compile(
+        rf"^/facts/scheduler/htcondor/{re.escape(group_name)}/(\d+)/"
+    )
+    return sorted(
+        {
+            int(match.group(1))
+            for path in observations
+            if (match := pattern.match(path)) is not None
+        }
+    )
 
 
 def _build_storage(
     observations: dict[str, MeasurementObservation],
-    visible_accounts: list[str],
     link: Callable[[str, str], None],
 ) -> list[StorageProfile]:
     """Build common storage roles and generalize only measured path components."""
@@ -438,12 +547,14 @@ def _build_storage(
         for path in observations
         if (match := _STORAGE_PATH.match(path)) is not None
     }
-    names = [*_STORAGE_ROLES, *sorted(observed_names - set(_STORAGE_ROLES))]
+    names = sorted(observed_names)
     username = _string(observations, "/facts/user/username")
     groups = _strings(observations, "/facts/user/groups") or []
     result: list[StorageProfile] = []
     for name in names:
         prefix = f"/facts/storage/filesystems/{name}"
+        location_id = _string(observations, f"{prefix}/id") or name
+        role = _string(observations, f"{prefix}/role") or "storage"
         path = f"{prefix}/path"
         measured_path = _string(observations, path)
         pattern_path = f"{prefix}/path_pattern"
@@ -451,19 +562,24 @@ def _build_storage(
         path_pattern = _path_pattern(
             measured_pattern or measured_path,
             username=username,
-            accounts=visible_accounts,
             groups=groups,
         )
         result.append(
             StorageProfile(
-                name=name,
+                id=location_id,
+                name=role.replace("_", " ").title(),
+                role=role,
+                environment_variables=(
+                    _strings(observations, f"{prefix}/environment_variables") or []
+                ),
                 path_pattern=path_pattern,
                 filesystem_type=_string(observations, f"{prefix}/filesystem_type"),
                 login_readable=_boolean(observations, f"{prefix}/readable"),
                 login_writable=_boolean(observations, f"{prefix}/writable"),
-                available_bytes=_integer(observations, f"{prefix}/available_bytes"),
             )
         )
+        for field in ("id", "role", "environment_variables"):
+            link(f"/storage/{name}/{field}", f"{prefix}/{field}")
         if path_pattern is not None:
             link(
                 f"/storage/{name}/path_pattern",
@@ -471,14 +587,9 @@ def _build_storage(
             )
             if path_pattern and "{username}" in path_pattern:
                 link(f"/storage/{name}/path_pattern", "/facts/user/username")
-            if path_pattern and "{account}" in path_pattern:
-                link(
-                    f"/storage/{name}/path_pattern",
-                    "/facts/scheduler/visible_accounts",
-                )
             if path_pattern and "{group}" in path_pattern:
                 link(f"/storage/{name}/path_pattern", "/facts/user/groups")
-        for field in ("filesystem_type", "readable", "writable", "available_bytes"):
+        for field in ("filesystem_type", "readable", "writable"):
             profile_field = {
                 "readable": "login_readable",
                 "writable": "login_writable",
@@ -523,7 +634,6 @@ def _path_pattern(
     path: str | None,
     *,
     username: str | None,
-    accounts: list[str],
     groups: list[str],
 ) -> str | None:
     """Replace exact measured path components with supported profile placeholders."""
@@ -531,7 +641,6 @@ def _path_pattern(
     if path is None:
         return None
     replacements = {group: "{group}" for group in groups}
-    replacements.update({account: "{account}" for account in accounts})
     if username:
         replacements[username] = "{username}"
     return "/".join(replacements.get(component, component) for component in path.split("/"))
@@ -605,6 +714,15 @@ def _unresolved_items(
     submit_command: str | None,
 ) -> list[UnresolvedWorkItem]:
     items: list[UnresolvedWorkItem] = []
+    if not storage:
+        items.append(
+            UnresolvedWorkItem(
+                field="/storage",
+                reason="No reviewed storage location was observed from the login node.",
+                next_action="login_measurement",
+                action_id="storage_path_input",
+            )
+        )
     if submit_command is None:
         items.append(
             UnresolvedWorkItem(
@@ -616,14 +734,22 @@ def _unresolved_items(
         )
     if scheduler == "slurm":
         for partition in partitions:
-            items.append(
-                UnresolvedWorkItem(
-                    field=f"/slurm/partitions/{partition.name}/maximum_walltime_seconds",
-                    reason="Visible scheduler configuration does not establish enforced policy.",
-                    next_action="additional_documentation",
-                    action_id="partition_policy_search",
+            for field in (
+                "maximum_walltime_seconds",
+                "maximum_nodes_per_job",
+                "shared_nodes",
+            ):
+                items.append(
+                    UnresolvedWorkItem(
+                        field=f"/slurm/partitions/{partition.name}/{field}",
+                        reason=(
+                            "Visible scheduler configuration does not establish "
+                            "enforced policy."
+                        ),
+                        next_action="additional_documentation",
+                        action_id="partition_policy_search",
+                    )
                 )
-            )
     for option in submission_options:
         if option.required is None:
             items.append(
@@ -681,7 +807,12 @@ def _unresolved_items(
                     action_id=f"{item.name}_path",
                 )
             )
-        for field in ("compute_visible", "compute_readable", "compute_writable"):
+        for field in (
+            "compute_visible",
+            "compute_readable",
+            "compute_writable",
+            "shared_across_compute_nodes",
+        ):
             items.append(
                 UnresolvedWorkItem(
                     field=f"/storage/{item.name}/{field}",
@@ -701,16 +832,17 @@ def _unresolved_items(
     return items
 
 
-def _validation_states(*, resources: bool, storage: bool) -> list[SectionValidation]:
-    return [
-        SectionValidation(section="scheduler", state="measured"),
-        SectionValidation(section="submission", state="partial"),
-        SectionValidation(section="resources", state="measured" if resources else "partial"),
-        SectionValidation(section="network", state="partial"),
-        SectionValidation(section="storage", state="partial" if storage else "requires_pilot"),
-        SectionValidation(section="accounting", state="partial"),
-        SectionValidation(section="software", state="partial"),
-    ]
+def _section_status(*, resources: bool, storage: bool) -> SectionStatus:
+    """Return one compact status map for actionable profile sections."""
+
+    return SectionStatus(
+        scheduler="measured",
+        submission="partial",
+        resources="measured" if resources else "partial",
+        network="partial",
+        storage="partial",
+        accounting="partial",
+    )
 
 
 def _observed(

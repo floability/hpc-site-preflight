@@ -78,6 +78,26 @@ def _add_documentation_options(parser: argparse.ArgumentParser) -> None:
         default=[],
         help="Official documentation domain when it differs from the login domain.",
     )
+    _add_live_measurement_hints(parser)
+
+
+def _add_live_measurement_hints(parser: argparse.ArgumentParser) -> None:
+    """Add optional exact hints used only when collecting a live measurement."""
+
+    parser.add_argument("--condor-pool", help="Optional HTCondor collector hostname.")
+    parser.add_argument(
+        "--storage-path",
+        action="append",
+        default=[],
+        metavar="ROLE=/ABSOLUTE/PATH",
+        help="Exact additional storage path; repeat as needed.",
+    )
+    parser.add_argument(
+        "--storage-root",
+        action="append",
+        default=[],
+        help="Root under which exact username and group paths are checked.",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -155,6 +175,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     capture_login.add_argument("--keyword", action="append", default=[])
     capture_login.add_argument("--documentation-domain", action="append", default=[])
+    _add_live_measurement_hints(capture_login)
     capture_login.add_argument(
         "--output",
         type=Path,

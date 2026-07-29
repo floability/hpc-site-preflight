@@ -104,8 +104,10 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         "Put recognized requirements in submission_options using only those exact names.",
         examples,
         "When mandatory wording and an option label are split across spans, cite both spans.",
-        "Put every explicitly documented requirement that does not map to those names in "
-        "unmapped_options with its exact documented name and syntax. Do not discard it.",
+        "Use unmapped_options only for an explicit scheduler directive or submit attribute "
+        "whose literal syntax appears in the cited spans.",
+        "Do not classify allocation procedures, storage setup, module commands, URLs, or "
+        "general policy prose as submission options.",
     ]
 
 
@@ -127,6 +129,29 @@ def _canonical_option_name(
         if name in allowed_options:
             return cast(SubmissionOptionName, name)
     return None
+
+
+def _valid_unmapped_syntax(
+    scheduler: str,
+    documented_name: str,
+    documented_syntax: list[str],
+) -> bool:
+    """Admit only literal scheduler syntax to the unmapped review queue."""
+
+    text = "\n".join([documented_name, *documented_syntax])
+    if scheduler == "slurm":
+        return bool(
+            re.search(
+                r"(?<![A-Za-z0-9_-])(?:#SBATCH\s+)?--?[A-Za-z][A-Za-z0-9-]*",
+                text,
+            )
+        )
+    return bool(
+        re.search(
+            r"(?m)^\s*[+]?[A-Za-z_][A-Za-z0-9_.]*\s*=",
+            "\n".join(documented_syntax),
+        )
+    )
 
 
 @dataclass(frozen=True)
@@ -739,6 +764,16 @@ def _validate_group(
             if error:
                 rejected.append(
                     f"unmapped_options/{option.documented_name}: {error}"
+                )
+                continue
+            if not _valid_unmapped_syntax(
+                scheduler,
+                option.documented_name,
+                option.documented_syntax,
+            ):
+                rejected.append(
+                    f"unmapped_options/{option.documented_name}: no literal "
+                    f"{scheduler} submission syntax"
                 )
                 continue
             canonical_name = _canonical_option_name(

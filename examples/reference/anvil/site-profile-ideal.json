@@ -1,7 +1,5 @@
 {
-  "schema_version": "0.3",
-  "example": true,
-  "note": "Design target based on official Anvil documentation; live measurements and pilot-only facts remain unresolved.",
+  "schema_version": "0.4",
   "site_id": "purdue-anvil",
   "site_name": "Purdue Anvil",
   "aliases": [
@@ -10,359 +8,296 @@
   "profile_state": "partial",
   "generated_at": "2026-07-23T12:00:00Z",
   "scheduler_type": "slurm",
-  "scheduler_version": null,
   "slurm": {
-  "submit_command": "sbatch",
-  "default_partition": "shared",
-  "options": [
-    {
-      "name": "account",
-      "syntax": ["-A {account}", "--account={account}"],
-      "required": true,
-      "value": null,
-      "example": "<allocation>",
-      "allowed_values": null
-    },
-    {
-      "name": "partition",
-      "syntax": ["-p {partition}", "--partition={partition}"],
-      "required": true,
-      "value": null,
-      "example": "shared",
-      "allowed_values": [
-        "debug",
-        "gpu-debug",
-        "wholenode",
-        "wide",
-        "shared",
-        "highmem",
-        "gpu",
-        "ai"
-      ]
-    },
-    {
-      "name": "nodes",
-      "syntax": ["--nodes={count}", "-N {count}"],
-      "required": false,
-      "value": null,
-      "example": "1",
-      "allowed_values": null
-    },
-    {
-      "name": "ntasks",
-      "syntax": ["--ntasks={count}", "-n {count}"],
-      "required": false,
-      "value": null,
-      "example": "1",
-      "allowed_values": null
-    },
-    {
-      "name": "cpus-per-task",
-      "syntax": ["--cpus-per-task={count}"],
-      "required": false,
-      "value": null,
-      "example": "1",
-      "allowed_values": null
-    },
-    {
-      "name": "memory",
-      "syntax": ["--mem={size}", "--mem-per-cpu={size}"],
-      "required": false,
-      "value": null,
-      "example": "4G",
-      "allowed_values": null
-    },
-    {
-      "name": "gpus-per-node",
-      "syntax": ["--gpus-per-node={count}"],
-      "required": false,
-      "value": null,
-      "example": "1",
-      "allowed_values": null
-    },
-    {
-      "name": "time",
-      "syntax": ["-t {time}", "--time={time}"],
-      "required": false,
-      "value": null,
-      "example": "01:00:00",
-      "allowed_values": null
-    },
-    {
-      "name": "job-name",
-      "syntax": ["-J {name}", "--job-name={name}"],
-      "required": false,
-      "value": null,
-      "example": "workflow-job",
-      "allowed_values": null
-    }
-  ],
-  "unmapped_options": [],
-  "partitions": [
-    {
-      "name": "debug",
-      "default": false,
-      "available": null,
-      "node_type": "regular",
-      "shared_nodes": null,
-      "maximum_walltime_seconds": 7200,
-      "maximum_nodes_per_job": 2,
-      "maximum_cores_per_job": 256,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": 1,
-      "maximum_queued_jobs_per_user": 2,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": null,
-      "maximum_gpus_per_allocation": null,
-      "node_count": null,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 262144,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": null,
-      "gpu_models": [],
-      "features": [],
-      "charging_factor": 1
-    },
-    {
-      "name": "gpu-debug",
-      "default": false,
-      "available": null,
-      "node_type": "gpu-a100",
-      "shared_nodes": true,
-      "maximum_walltime_seconds": 1800,
-      "maximum_nodes_per_job": 1,
-      "maximum_cores_per_job": null,
-      "maximum_gpus_per_job": 2,
-      "maximum_running_jobs_per_user": 1,
-      "maximum_queued_jobs_per_user": 2,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": 12,
-      "maximum_gpus_per_allocation": 32,
-      "node_count": 16,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 524288,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": 4,
-      "gpu_models": ["NVIDIA A100 40GB"],
-      "features": [],
-      "charging_factor": 1
-    },
-    {
-      "name": "wholenode",
-      "default": false,
-      "available": null,
-      "node_type": "regular",
-      "shared_nodes": false,
-      "maximum_walltime_seconds": 345600,
-      "maximum_nodes_per_job": 16,
-      "maximum_cores_per_job": 2048,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": 64,
-      "maximum_queued_jobs_per_user": 2500,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": null,
-      "maximum_gpus_per_allocation": null,
-      "node_count": null,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 262144,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": null,
-      "gpu_models": [],
-      "features": [],
-      "charging_factor": 1
-    },
-    {
-      "name": "wide",
-      "default": false,
-      "available": null,
-      "node_type": "regular",
-      "shared_nodes": false,
-      "maximum_walltime_seconds": 43200,
-      "maximum_nodes_per_job": 56,
-      "maximum_cores_per_job": 7168,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": 5,
-      "maximum_queued_jobs_per_user": 10,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": null,
-      "maximum_gpus_per_allocation": null,
-      "node_count": null,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 262144,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": null,
-      "gpu_models": [],
-      "features": [],
-      "charging_factor": 1
-    },
-    {
-      "name": "shared",
-      "default": true,
-      "available": null,
-      "node_type": "regular",
-      "shared_nodes": true,
-      "maximum_walltime_seconds": 345600,
-      "maximum_nodes_per_job": 1,
-      "maximum_cores_per_job": 128,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": null,
-      "maximum_queued_jobs_per_user": null,
-      "maximum_running_cores_per_user": 1280,
-      "maximum_gpus_per_user": null,
-      "maximum_gpus_per_allocation": null,
-      "node_count": null,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 262144,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": null,
-      "gpu_models": [],
-      "features": [],
-      "charging_factor": 1
-    },
-    {
-      "name": "highmem",
-      "default": false,
-      "available": null,
-      "node_type": "large-memory",
-      "shared_nodes": true,
-      "maximum_walltime_seconds": 172800,
-      "maximum_nodes_per_job": 1,
-      "maximum_cores_per_job": 128,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": 2,
-      "maximum_queued_jobs_per_user": 4,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": null,
-      "maximum_gpus_per_allocation": null,
-      "node_count": 32,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 1048576,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": null,
-      "gpu_models": [],
-      "features": [],
-      "charging_factor": 4
-    },
-    {
-      "name": "gpu",
-      "default": false,
-      "available": null,
-      "node_type": "gpu-a100",
-      "shared_nodes": true,
-      "maximum_walltime_seconds": 172800,
-      "maximum_nodes_per_job": null,
-      "maximum_cores_per_job": null,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": null,
-      "maximum_queued_jobs_per_user": null,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": 12,
-      "maximum_gpus_per_allocation": 32,
-      "node_count": 16,
-      "cpus_per_node": 128,
-      "memory_mib_per_node": 524288,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": 4,
-      "gpu_models": ["NVIDIA A100 40GB"],
-      "features": [],
-      "charging_factor": 1
-    },
-    {
-      "name": "ai",
-      "default": false,
-      "available": null,
-      "node_type": "ai-h100",
-      "shared_nodes": true,
-      "maximum_walltime_seconds": 172800,
-      "maximum_nodes_per_job": null,
-      "maximum_cores_per_job": null,
-      "maximum_gpus_per_job": null,
-      "maximum_running_jobs_per_user": null,
-      "maximum_queued_jobs_per_user": null,
-      "maximum_running_cores_per_user": null,
-      "maximum_gpus_per_user": 12,
-      "maximum_gpus_per_allocation": 32,
-      "node_count": 21,
-      "cpus_per_node": 96,
-      "memory_mib_per_node": 1048576,
-      "temporary_disk_mib_per_node": null,
-      "gpu_count_per_node": 4,
-      "gpu_models": ["NVIDIA H100 80GB"],
-      "features": [],
-      "charging_factor": 1
-    }
-  ]
+    "version": null,
+    "submit_command": "sbatch",
+    "default_partition": "shared",
+    "options": [
+      {
+        "name": "account",
+        "syntax": [
+          "-A {account}",
+          "--account={account}"
+        ],
+        "required": true,
+        "example": "<allocation>",
+        "allowed_values": null
+      },
+      {
+        "name": "partition",
+        "syntax": [
+          "-p {partition}",
+          "--partition={partition}"
+        ],
+        "required": true,
+        "example": "shared",
+        "allowed_values": [
+          "debug",
+          "gpu-debug",
+          "wholenode",
+          "wide",
+          "shared",
+          "highmem",
+          "gpu",
+          "ai"
+        ]
+      },
+      {
+        "name": "nodes",
+        "syntax": [
+          "--nodes={count}",
+          "-N {count}"
+        ],
+        "required": false,
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "ntasks",
+        "syntax": [
+          "--ntasks={count}",
+          "-n {count}"
+        ],
+        "required": false,
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "cpus-per-task",
+        "syntax": [
+          "--cpus-per-task={count}"
+        ],
+        "required": false,
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "memory",
+        "syntax": [
+          "--mem={size}",
+          "--mem-per-cpu={size}"
+        ],
+        "required": false,
+        "example": "4G",
+        "allowed_values": null
+      },
+      {
+        "name": "gpus-per-node",
+        "syntax": [
+          "--gpus-per-node={count}"
+        ],
+        "required": false,
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "time",
+        "syntax": [
+          "-t {time}",
+          "--time={time}"
+        ],
+        "required": false,
+        "example": "01:00:00",
+        "allowed_values": null
+      },
+      {
+        "name": "job-name",
+        "syntax": [
+          "-J {name}",
+          "--job-name={name}"
+        ],
+        "required": false,
+        "example": "workflow-job",
+        "allowed_values": null
+      }
+    ],
+    "unmapped_options": [],
+    "partitions": [
+      {
+        "name": "debug",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 7200,
+        "maximum_nodes_per_job": 2,
+        "shared_nodes": null,
+        "node_count": null,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 262144,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      },
+      {
+        "name": "gpu-debug",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 1800,
+        "maximum_nodes_per_job": 1,
+        "shared_nodes": true,
+        "node_count": 16,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 524288,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": 4,
+        "gpu_models": [
+          "NVIDIA A100 40GB"
+        ],
+        "features": []
+      },
+      {
+        "name": "wholenode",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 345600,
+        "maximum_nodes_per_job": 16,
+        "shared_nodes": false,
+        "node_count": null,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 262144,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      },
+      {
+        "name": "wide",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 43200,
+        "maximum_nodes_per_job": 56,
+        "shared_nodes": false,
+        "node_count": null,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 262144,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      },
+      {
+        "name": "shared",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 345600,
+        "maximum_nodes_per_job": 1,
+        "shared_nodes": true,
+        "node_count": null,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 262144,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      },
+      {
+        "name": "highmem",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 1,
+        "shared_nodes": true,
+        "node_count": 32,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 1048576,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      },
+      {
+        "name": "gpu",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": null,
+        "shared_nodes": true,
+        "node_count": 16,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 524288,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": 4,
+        "gpu_models": [
+          "NVIDIA A100 40GB"
+        ],
+        "features": []
+      },
+      {
+        "name": "ai",
+        "visible_walltime_seconds": null,
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": null,
+        "shared_nodes": true,
+        "node_count": 21,
+        "cpus_per_node": 96,
+        "memory_mib_per_node": 1048576,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": 4,
+        "gpu_models": [
+          "NVIDIA H100 80GB"
+        ],
+        "features": []
+      }
+    ]
   },
   "htcondor": null,
   "storage": [
     {
+      "id": "home",
       "name": "home",
-      "environment_variable": "HOME",
+      "role": "home",
+      "environment_variables": [
+        "HOME"
+      ],
       "path_pattern": "/home/{username}",
       "filesystem_type": "ZFS",
-      "quota_bytes": 25000000000,
-      "file_limit": null,
       "login_readable": true,
       "login_writable": true,
       "compute_visible": true,
       "compute_readable": true,
       "compute_writable": null,
-      "snapshots": "nightly for 7 days, weekly for 3 weeks, monthly for 2 months",
+      "shared_across_compute_nodes": null,
+      "backup_policy": "nightly for 7 days, weekly for 3 weeks, monthly for 2 months",
       "purge_after_days": null,
       "purge_condition": "not_purged"
     },
     {
+      "id": "project",
       "name": "project",
-      "environment_variable": "PROJECT",
+      "role": "project",
+      "environment_variables": [
+        "PROJECT"
+      ],
       "path_pattern": "/anvil/projects/{account}",
       "filesystem_type": "GPFS",
-      "quota_bytes": 5000000000000,
-      "file_limit": 1000000,
       "login_readable": true,
       "login_writable": true,
       "compute_visible": true,
       "compute_readable": true,
       "compute_writable": true,
-      "snapshots": "nightly for 7 days, weekly for 3 weeks, monthly for 2 months",
+      "shared_across_compute_nodes": null,
+      "backup_policy": "nightly for 7 days, weekly for 3 weeks, monthly for 2 months",
       "purge_after_days": 90,
       "purge_condition": "after allocation expiration"
     },
     {
-      "name": "data",
-      "environment_variable": null,
-      "path_pattern": null,
-      "filesystem_type": null,
-      "quota_bytes": null,
-      "file_limit": null,
-      "login_readable": null,
-      "login_writable": null,
-      "compute_visible": null,
-      "compute_readable": null,
-      "compute_writable": null,
-      "snapshots": null,
-      "purge_after_days": null,
-      "purge_condition": null
-    },
-    {
+      "id": "scratch",
       "name": "scratch",
-      "environment_variable": "SCRATCH",
+      "role": "scratch",
+      "environment_variables": [
+        "SCRATCH"
+      ],
       "path_pattern": "/anvil/scratch/{username}",
       "filesystem_type": "GPFS",
-      "quota_bytes": 100000000000000,
-      "file_limit": 1000000,
       "login_readable": true,
       "login_writable": true,
       "compute_visible": true,
       "compute_readable": true,
       "compute_writable": null,
-      "snapshots": "none",
+      "shared_across_compute_nodes": null,
+      "backup_policy": "none",
       "purge_after_days": 30,
       "purge_condition": "last access time or content modification time"
     }
   ],
   "network": {
     "login": {
-      "hostname_patterns": ["*.anvil.rcac.purdue.edu"],
+      "hostname_patterns": [
+        "*.anvil.rcac.purdue.edu"
+      ],
       "dns_resolution": true,
       "outbound_https": true,
       "local_tcp_bind": true,
@@ -388,52 +323,19 @@
   },
   "accounting": {
     "allocation_required": true,
-    "visible_accounts": [],
     "charging_unit": "service_unit",
     "charging_model": "CPU jobs are charged by requested cores or memory fraction, whichever is larger; node-exclusive jobs are charged for all 128 cores; GPU jobs are charged by GPU-hour.",
     "filesystem_storage_charged": false
   },
-  "software": {
-    "module_system": "Lmod",
-    "module_trees": ["modtree/cpu", "modtree/gpu"],
-    "python_environments": ["Python modules", "Conda"],
-    "workflow_tools": [],
-    "container_runtimes": ["Singularity"]
+  "section_status": {
+    "scheduler": "partial",
+    "submission": "documented",
+    "resources": "partial",
+    "network": "partial",
+    "storage": "partial",
+    "accounting": "documented"
   },
-  "validation": [
-    {"section": "scheduler", "state": "partial"},
-    {"section": "submission", "state": "documented"},
-    {"section": "resources", "state": "partial"},
-    {"section": "network", "state": "partial"},
-    {"section": "storage", "state": "partial"},
-    {"section": "accounting", "state": "documented"},
-    {"section": "software", "state": "documented"}
-  ],
   "unresolved": [
-    {
-      "field": "/scheduler_version",
-      "reason": "The installed Slurm client version must be observed on the target login node.",
-      "next_action": "login_measurement",
-      "action_id": "slurm_version"
-    },
-    {
-      "field": "/slurm/options/account/value",
-      "reason": "The allocation account is specific to the current user.",
-      "next_action": "user_input",
-      "action_id": "select_visible_account"
-    },
-    {
-      "field": "/slurm/partitions/*/available",
-      "reason": "Current partition availability must be observed from Slurm.",
-      "next_action": "login_measurement",
-      "action_id": "slurm_partitions"
-    },
-    {
-      "field": "/slurm/partitions/*/node_count",
-      "reason": "Current partition membership must be observed because partitions may overlap and change.",
-      "next_action": "login_measurement",
-      "action_id": "slurm_partitions"
-    },
     {
       "field": "/network/login_compute/tcp_connect",
       "reason": "Documentation does not establish arbitrary TCP connectivity from compute nodes to a workflow manager.",
@@ -470,7 +372,9 @@
       "field": "/slurm/partitions/shared/maximum_walltime_seconds",
       "selected_value": 345600,
       "selected_evidence": "documentation:anvil-job-partitions",
-      "other_evidence": ["measurement:shared-visible-infinite"],
+      "other_evidence": [
+        "measurement:shared-visible-infinite"
+      ],
       "selection_rule": "Official target-site policy overrides visible scheduler configuration for enforced limits.",
       "note": "Slurm may display an infinite configured limit while Anvil policy limits shared jobs to 96 hours."
     },
@@ -478,29 +382,12 @@
       "field": "/slurm/partitions/wholenode/maximum_walltime_seconds",
       "selected_value": 345600,
       "selected_evidence": "documentation:anvil-job-partitions",
-      "other_evidence": ["measurement:wholenode-visible-infinite"],
+      "other_evidence": [
+        "measurement:wholenode-visible-infinite"
+      ],
       "selection_rule": "Official target-site policy overrides visible scheduler configuration for enforced limits.",
       "note": "Slurm may display an infinite configured limit while Anvil policy limits wholenode jobs to 96 hours."
     }
   ],
-  "evidence_report": "evidence-report.json",
-  "field_evidence": [
-    {"field": "/scheduler_type", "evidence_ids": ["measurement:scheduler-type"]},
-    {"field": "/slurm/submit_command", "evidence_ids": ["measurement:submit-command"]},
-    {"field": "/slurm/default_partition", "evidence_ids": ["measurement:default-partition"]},
-    {"field": "/slurm/options/account/required", "evidence_ids": ["documentation:anvil-faq"]},
-    {"field": "/slurm/options/partition/required", "evidence_ids": ["documentation:anvil-faq"]},
-    {"field": "/slurm/partitions", "evidence_ids": ["measurement:slurm-partitions"]},
-    {"field": "/slurm/partitions/*/cpus_per_node", "evidence_ids": ["documentation:anvil-architecture"]},
-    {"field": "/slurm/partitions/*/memory_mib_per_node", "evidence_ids": ["documentation:anvil-architecture"]},
-    {"field": "/slurm/partitions/*/gpu_count_per_node", "evidence_ids": ["documentation:anvil-architecture"]},
-    {"field": "/slurm/partitions/*/gpu_models", "evidence_ids": ["documentation:anvil-architecture"]},
-    {"field": "/storage/home/path_pattern", "evidence_ids": ["measurement:home-path"]},
-    {"field": "/storage/project/path_pattern", "evidence_ids": ["measurement:project-path"]},
-    {"field": "/storage/scratch/path_pattern", "evidence_ids": ["measurement:scratch-path"]},
-    {"field": "/storage/scratch/purge_after_days", "evidence_ids": ["documentation:anvil-scratch-policy"]},
-    {"field": "/network/login", "evidence_ids": ["measurement:login-network"]},
-    {"field": "/accounting", "evidence_ids": ["documentation:anvil-job-accounting"]},
-    {"field": "/software", "evidence_ids": ["documentation:anvil-software", "documentation:anvil-faq"]}
-  ]
+  "evidence_id": "report-anvil-ideal"
 }
