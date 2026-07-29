@@ -119,9 +119,10 @@ def test_storage_is_addressable_and_excludes_temporary_paths(tmp_path: Path) -> 
     home = tmp_path / "home" / "user"
     scratch = tmp_path / "scratch" / "user"
     temporary = tmp_path / "tmp"
+    software = tmp_path / "apps" / "gcc"
     project_root = tmp_path / "groups"
     project = project_root / "dthain"
-    for path in (home, scratch, temporary, project):
+    for path in (home, scratch, temporary, software, project):
         path.mkdir(parents=True)
 
     result = collect_storage(
@@ -131,6 +132,7 @@ def test_storage_is_addressable_and_excludes_temporary_paths(tmp_path: Path) -> 
             "HOME": str(home),
             "SCRATCH": str(scratch),
             "TMPDIR": str(temporary),
+            "GCC_HOME": str(software),
         },
         runner=lambda arguments: "testfs",
         extra_roots=[str(project_root)],
@@ -141,3 +143,4 @@ def test_storage_is_addressable_and_excludes_temporary_paths(tmp_path: Path) -> 
     assert locations["scratch"]["path_pattern"].endswith("/scratch/{username}")
     assert locations["project"]["path_pattern"].endswith("/groups/{group}")
     assert all(item["observed_path"] != str(temporary) for item in locations.values())
+    assert all(item["observed_path"] != str(software) for item in locations.values())

@@ -13,7 +13,7 @@ from typing import Any
 CommandRunner = Callable[[Sequence[str]], str | None]
 
 STORAGE_ENVIRONMENT = re.compile(
-    r"(^|_)(HOME|SCRATCH|PSCRATCH|WORK|WORKDIR|MEMBERWORK|PROJECT|PROJECTS|"
+    r"(^|_)(SCRATCH|PSCRATCH|WORK|WORKDIR|MEMBERWORK|PROJECT|PROJECTS|"
     r"DATA|STORAGE|SHARED|ARCHIVE|NOBACKUP)(_|$)",
     re.IGNORECASE,
 )
