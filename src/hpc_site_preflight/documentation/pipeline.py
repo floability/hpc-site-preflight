@@ -4,7 +4,10 @@ from pathlib import Path
 
 from hpc_site_preflight.documentation.corpus import build_corpus, load_corpus, write_corpus
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
-from hpc_site_preflight.documentation.extraction import extract_documentation
+from hpc_site_preflight.documentation.extraction import (
+    empty_documentation,
+    extract_documentation,
+)
 from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
 from hpc_site_preflight.documentation.models import (
     ContextMode,
@@ -66,6 +69,7 @@ class DocumentationPipeline:
         context_mode: ContextMode,
     ) -> DocumentationEvidence:
         site = self.measurements.site_facts
+        empty_reason: str | None = None
         if self.corpus_input is not None:
             tracker.progress(f"Loading frozen corpus from {self.corpus_input}")
             with tracker.stage("documentation_corpus_load", display=False):
@@ -82,6 +86,8 @@ class DocumentationPipeline:
                         kind="documentation_corpus_input",
                         path=self.corpus_input / name,
                     )
+                if not chunks:
+                    empty_reason = "The frozen corpus contains no target-site chunks."
         else:
             if self.web_backend is None:
                 raise DocumentationError(
@@ -127,7 +133,22 @@ class DocumentationPipeline:
                 paths = write_corpus(self.corpus_directory, manifest, documents, chunks)
                 for path in paths:
                     tracker.add_artifact(kind="documentation_corpus", path=path)
+            if not chunks:
+                empty_reason = discovery.summary
 
+        if empty_reason is not None:
+            return empty_documentation(
+                site_id=site.site_id,
+                context_mode=context_mode,
+                model_mode=self.model_mode,
+                model_provider=self.model_provider_name,
+                model=self.model,
+                web_mode=self.web_mode,
+                scheduler=self.measurements.scheduler_type,
+                storage_names=self.measurements.storage_names,
+                reason=empty_reason,
+                corpus_fingerprint=manifest.fingerprint,
+            )
         return extract_documentation(
             site_id=site.site_id,
             site_name=site.site_name,

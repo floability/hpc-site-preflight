@@ -13,18 +13,14 @@ from hpc_site_preflight.documentation.models import (
     RetrievalHit,
 )
 
-_FIELD_QUERIES: dict[str, tuple[str, ...]] = {
+_COMMON_FIELD_QUERIES: dict[str, tuple[str, ...]] = {
     "allocation_required": (
-        "allocation account project required job submission",
-        "job submission requires allocation account",
+        "allocation project access required job submission",
+        "job submission authorization requirements",
     ),
     "required_submission_options": (
-        "required batch submission options account partition",
-        "job script account partition time nodes memory",
-        "mandatory sbatch fields",
-        "must at minimum specify",
-        "account -A --account allocation account",
-        "partition -p showpartitions",
+        "required scheduler submission directives job file",
+        "mandatory job submission fields options",
     ),
     "maximum_walltime_seconds": (
         "partition maximum walltime time limit",
@@ -52,6 +48,36 @@ _FIELD_QUERIES: dict[str, tuple[str, ...]] = {
     ),
 }
 
+_SCHEDULER_FIELD_QUERIES: dict[str, dict[str, tuple[str, ...]]] = {
+    "slurm": {
+        "allocation_required": (
+            "Slurm allocation account project required job submission",
+            "job submission requires allocation account",
+        ),
+        "required_submission_options": (
+            "required sbatch submission options account partition",
+            "job script account partition time nodes memory",
+            "mandatory SBATCH fields",
+            "must at minimum specify",
+            "account -A --account allocation account",
+            "partition -p showpartitions",
+        ),
+    },
+    "htcondor": {
+        "allocation_required": (
+            "HTCondor submit access permission project accounting group",
+            "Condor pool authorization requirements",
+        ),
+        "required_submission_options": (
+            "HTCondor submit file condor_submit required attributes",
+            "request_cpus request_memory request_gpus",
+            "multicore SMP request_cpus GPU request_gpus",
+            "universe executable should_transfer_files when_to_transfer_output",
+            "Condor submit description queue",
+        ),
+    },
+}
+
 _RESOURCE_QUERY = {
     "maximum_walltime_seconds": "partition queue maximum walltime",
     "purge_after_days": "storage scratch purge retention days",
@@ -63,6 +89,7 @@ FULL_CORPUS_BATCH_CHARS = 12_000
 def select_context(
     chunks: list[CorpusChunk],
     *,
+    scheduler: str,
     group: ExtractionGroupName,
     fields: tuple[str, ...],
     mode: ContextMode,
@@ -105,6 +132,7 @@ def select_context(
             field: _retrieve_field(
                 eligible,
                 field,
+                scheduler,
                 mode,
                 resources.get(field, set()),
                 expanded_queries.get(field, []),
@@ -133,6 +161,7 @@ def select_context(
                 field=field,
                 queries=_queries(
                     field,
+                    scheduler,
                     mode,
                     resources.get(field, set()),
                     expanded_queries.get(field, []),
@@ -186,12 +215,13 @@ def batch_full_corpus(
 def _retrieve_field(
     chunks: list[CorpusChunk],
     field: str,
+    scheduler: str,
     mode: ContextMode,
     resources: set[str],
     expanded_queries: list[str],
     limit: int,
 ) -> list[tuple[float, CorpusChunk]]:
-    queries = _queries(field, mode, resources, expanded_queries)
+    queries = _queries(field, scheduler, mode, resources, expanded_queries)
     variant_scores = [_bm25(query, chunks) for query in queries]
     ranked: list[tuple[float, CorpusChunk]] = []
     for index, chunk in enumerate(chunks):
@@ -203,22 +233,24 @@ def _retrieve_field(
     return ranked[:limit]
 
 
-def base_queries(field: str, resources: set[str]) -> list[str]:
+def base_queries(field: str, scheduler: str, resources: set[str]) -> list[str]:
     """Return reviewed BM25 query variants for one profile field."""
 
-    queries = list(_FIELD_QUERIES[field])
+    queries = list(_COMMON_FIELD_QUERIES[field])
+    queries.extend(_SCHEDULER_FIELD_QUERIES.get(scheduler, {}).get(field, ()))
     if resources and field in _RESOURCE_QUERY:
         queries.append(f"{' '.join(sorted(resources))} {_RESOURCE_QUERY[field]}")
-    return queries
+    return list(dict.fromkeys(queries))
 
 
 def _queries(
     field: str,
+    scheduler: str,
     mode: ContextMode,
     resources: set[str],
     expanded_queries: list[str],
 ) -> list[str]:
-    reviewed = base_queries(field, resources)
+    reviewed = base_queries(field, scheduler, resources)
     if mode != "llm-expanded-bm25":
         return reviewed
     return list(dict.fromkeys([*reviewed, *expanded_queries]))

@@ -84,7 +84,8 @@ def _prompt(
                 f"FIELD: {field}",
                 f"MEANING: {_FIELD_DESCRIPTIONS[field]}",
                 f"KNOWN RESOURCES: {resources}",
-                f"BASE QUERIES: {' | '.join(base_queries(field, field_resources))}",
+                f"BASE QUERIES: "
+                f"{' | '.join(base_queries(field, scheduler, field_resources))}",
             ]
         )
     return "\n".join(lines)

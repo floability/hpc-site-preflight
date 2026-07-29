@@ -685,6 +685,18 @@ def _submission_options(
         ]
     return [
         SubmissionOption(
+            name="universe",
+            syntax=["universe = {universe}"],
+            required=None,
+            example="vanilla",
+        ),
+        SubmissionOption(
+            name="executable",
+            syntax=["executable = {path}"],
+            required=None,
+            example="<executable>",
+        ),
+        SubmissionOption(
             name="request_cpus",
             syntax=["request_cpus = {count}"],
             required=None,
@@ -701,6 +713,20 @@ def _submission_options(
             syntax=["request_gpus = {count}"],
             required=None,
             example="1",
+        ),
+        SubmissionOption(
+            name="should_transfer_files",
+            syntax=["should_transfer_files = {mode}"],
+            required=None,
+            example="yes",
+            allowed_values=["yes", "no", "if_needed"],
+        ),
+        SubmissionOption(
+            name="when_to_transfer_output",
+            syntax=["when_to_transfer_output = {mode}"],
+            required=None,
+            example="on_exit",
+            allowed_values=["on_exit", "on_exit_or_evict"],
         ),
     ]
 

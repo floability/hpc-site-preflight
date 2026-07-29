@@ -25,6 +25,10 @@ SubmissionOptionName = Literal[
     "request_cpus",
     "request_memory",
     "request_gpus",
+    "universe",
+    "executable",
+    "should_transfer_files",
+    "when_to_transfer_output",
 ]
 
 

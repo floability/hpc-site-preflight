@@ -74,6 +74,23 @@ def test_tracker_marks_missing_provider_usage_unavailable(
     assert "Total tokens:  unavailable" in output
 
 
+def test_tracker_displays_successful_usage_as_partial_after_missing_usage(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    tracker = RunTracker(command="test", run_root=tmp_path, quiet=False, run_id="partial")
+    with tracker.stage("successful_call"):
+        tracker.record_model_usage(input_tokens=10, output_tokens=2)
+    with tracker.stage("failed_call"):
+        tracker.record_model_usage(requests=1, usage_available=False)
+    tracker.finalize(status="completed")
+
+    captured = capsys.readouterr()
+    assert "Input tokens:  10 (partial)" in captured.out
+    assert "Output tokens: 2 (partial)" in captured.out
+    assert "Total tokens:  12 (partial)" in captured.out
+
+
 def test_tracker_rejects_second_finalization(tmp_path: Path) -> None:
     tracker = RunTracker(command="test", run_root=tmp_path, quiet=True, run_id="once")
     tracker.finalize(status="completed")

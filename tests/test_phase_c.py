@@ -203,9 +203,20 @@ def test_htcondor_profile_has_resource_groups_not_partitions() -> None:
     profile, _ = _compile("notre-dame-crc")
     assert profile.slurm is None
     assert profile.htcondor is not None
-    assert profile.htcondor.pool_totals.machine_count == 0
-    assert isinstance(profile.htcondor.cpu_groups, list)
-    assert isinstance(profile.htcondor.gpu_groups, list)
+    assert profile.htcondor.pool_totals.machine_count == 390
+    assert profile.htcondor.pool_totals.cpu_cores == 14242
+    assert profile.htcondor.pool_totals.advertised_gpus == 310
+    assert len(profile.htcondor.cpu_groups) == 11
+    assert len(profile.htcondor.gpu_groups) == 12
+    assert [item.name for item in profile.htcondor.submit_attributes] == [
+        "universe",
+        "executable",
+        "request_cpus",
+        "request_memory",
+        "request_gpus",
+        "should_transfer_files",
+        "when_to_transfer_output",
+    ]
     assert not any("/slurm/partitions/" in item.field for item in profile.unresolved)
 
 

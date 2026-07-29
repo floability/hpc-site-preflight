@@ -44,6 +44,7 @@ _SYSTEM_PROMPT = """Extract only documented HPC site policy from the supplied ex
 Return values using the provided typed schema and canonical resource names.
 Every returned value requires at least one supporting span ID.
 Do not infer connectivity from network architecture.
+Return false for a network capability only when the cited text explicitly denies it.
 Do not invent port ranges, limits, charging rules, or purge periods.
 Use null or an empty list when the documentation does not state a value."""
 
@@ -67,7 +68,15 @@ _NETWORK_RETRIEVAL = {
     "outbound_compute": "outbound_compute",
 }
 _SLURM_OPTIONS = {"account", "partition", "nodes", "cpus-per-task", "time"}
-_HTCONDOR_OPTIONS = {"request_cpus", "request_memory", "request_gpus"}
+_HTCONDOR_OPTIONS = {
+    "executable",
+    "request_cpus",
+    "request_gpus",
+    "request_memory",
+    "should_transfer_files",
+    "universe",
+    "when_to_transfer_output",
+}
 _OPTION_FLAGS = {
     "-A": "account",
     "--account": "account",
@@ -97,9 +106,12 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         'Map "Account (-A or --account)" to name "account" and '
         '"Partition (-p)" to name "partition".'
         if scheduler == "slurm"
-        else 'Map "request_cpus" to canonical name "request_cpus".'
+        else (
+            'Map "request_cpus", "request_gpus", and file-transfer attributes '
+            "to their exact canonical names."
+        )
     )
-    return [
+    instructions = [
         "CANONICAL SUBMISSION OPTIONS: " + ", ".join(sorted(options)),
         "Put recognized requirements in submission_options using only those exact names.",
         examples,
@@ -109,6 +121,13 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         "Do not classify allocation procedures, storage setup, module commands, URLs, or "
         "general policy prose as submission options.",
     ]
+    if scheduler == "htcondor":
+        instructions.append(
+            "A resource-specific Condor example may establish a conditional attribute only "
+            "when its heading or prose explicitly states that resource condition; an example "
+            "alone does not establish a site-wide requirement."
+        )
+    return instructions
 
 
 def _canonical_option_name(
@@ -222,6 +241,7 @@ def extract_documentation(
         with tracker.stage("documentation_context_selection", display=False):
             selection = select_context(
                 chunks,
+                scheduler=scheduler,
                 group=group,
                 fields=requested_fields,
                 mode=context_mode,
@@ -242,6 +262,11 @@ def extract_documentation(
             )
         selected_chunk_ids.extend(selection.selected_chunk_ids)
         retrievals.extend(selection.retrievals)
+        if not spans:
+            tracker.progress(
+                f"Skipping {group} model call because no evidence spans were retrieved"
+            )
+            continue
 
         result_type = _RESULT_TYPES[group]
         tracker.progress(f"Requesting {group} policy findings")
@@ -279,13 +304,14 @@ def extract_documentation(
             f"{len(validated.rejected)} rejected"
         )
 
-        if validated.rejected:
+        correction_errors = _correctable_errors(validated.rejected)
+        if correction_errors:
             tracker.progress(f"Requesting one correction for {group} policy findings")
             correction_prompt = (
                 prompt
                 + "\n\nCORRECTION: Return only corrected values for these local errors. "
                 "Use null or empty lists for all other schema fields:\n- "
-                + "\n- ".join(validated.rejected)
+                + "\n- ".join(correction_errors)
             )
             try:
                 corrected_result = cast(
@@ -379,6 +405,7 @@ def _extract_full_corpus_batches(
         selections = {
             group: select_context(
                 chunks,
+                scheduler=scheduler,
                 group=group,
                 fields=_requested_fields(group, scheduler, storage_names),
                 mode="full-corpus",
@@ -461,7 +488,8 @@ def _extract_full_corpus_batches(
             f"{len(validated.rejected)} rejected"
         )
 
-        if not validated.rejected:
+        correction_errors = _correctable_errors(validated.rejected)
+        if not correction_errors:
             continue
         tracker.progress(
             f"Requesting one correction for full-corpus batch "
@@ -471,7 +499,7 @@ def _extract_full_corpus_batches(
             prompt
             + "\n\nCORRECTION: Return only corrected values for these local errors. "
             "Use null or empty lists for all other schema fields:\n- "
-            + "\n- ".join(validated.rejected)
+            + "\n- ".join(correction_errors)
         )
         try:
             corrected_result = provider.generate_structured(
@@ -521,6 +549,7 @@ def empty_documentation(
     scheduler: str,
     storage_names: set[str],
     reason: str,
+    corpus_fingerprint: str | None = None,
 ) -> DocumentationEvidence:
     """Build documentation evidence with no findings when provider inputs are unavailable.
 
@@ -535,6 +564,7 @@ def empty_documentation(
         model=model,
         web_mode=web_mode,
         context_mode=context_mode,
+        corpus_fingerprint=corpus_fingerprint,
         findings=[],
         rejected=[reason],
         unresolved=sorted(_expected_fields(scheduler, storage_names)),
@@ -582,7 +612,11 @@ def build_extraction_prompt(
 
     lines = [
         f"SITE: {site_name}",
+        f"SCHEDULER: {scheduler}",
         f"GROUP: {group}",
+        "Extract scheduler directives only for the named scheduler. Site-wide storage, "
+        "network, and accounting facts remain eligible only when the text explicitly applies "
+        "to this site or scheduler.",
         "RETRIEVAL TARGETS: "
         + ", ".join(retrieval.field for retrieval in selection.retrievals),
         "FIELD RETRIEVAL:",
@@ -627,7 +661,11 @@ def build_full_corpus_prompt(
     chunks = selections["submission"].chunks
     lines = [
         f"SITE: {site_name}",
+        f"SCHEDULER: {scheduler}",
         f"FULL-CORPUS BATCH: {batch_number}/{batch_count}",
+        "Extract scheduler directives only for the named scheduler. Site-wide storage, "
+        "network, and accounting facts remain eligible only when the text explicitly applies "
+        "to this site or scheduler.",
         "TARGET FIELDS:",
     ]
     lines.extend(_submission_option_instructions(scheduler))
@@ -837,6 +875,13 @@ def _validate_group(
             )
             if error:
                 rejected.append(f"network/{capability.name}: {error}")
+            elif not capability.available and not _explicit_negative_network_evidence(
+                citations
+            ):
+                rejected.append(
+                    f"network/{capability.name}: false requires explicit negative "
+                    "documentation, not documentation silence"
+                )
             else:
                 findings.append(
                     NetworkFinding(
@@ -894,6 +939,40 @@ def _validate_group(
     return _ValidatedGroup(findings=findings, rejected=rejected)
 
 
+def _explicit_negative_network_evidence(
+    citations: list[DocumentationCitation],
+) -> bool:
+    """Return whether cited text explicitly denies a network capability."""
+
+    text = " ".join(citation.quote for citation in citations).casefold()
+    negative_markers = (
+        " cannot ",
+        " can't ",
+        " does not ",
+        " do not ",
+        " is not ",
+        " are not ",
+        " no ",
+        " blocked",
+        " disabled",
+        " forbidden",
+        " prohibited",
+        " unavailable",
+    )
+    padded = f" {text} "
+    return any(marker in padded for marker in negative_markers)
+
+
+def _correctable_errors(errors: list[str]) -> list[str]:
+    """Return validation errors for which one bounded model correction may help."""
+
+    return [
+        error
+        for error in errors
+        if "false requires explicit negative documentation" not in error
+    ]
+
+
 def _citations(
     field: str,
     span_ids: list[str],
@@ -902,8 +981,8 @@ def _citations(
 ) -> tuple[list[DocumentationCitation], str | None]:
     """Resolve model-provided span IDs into citations for one requested field.
 
-    Returns citations and no error when every span exists, came from that field's retrieval, and is
-    target-site scoped; otherwise returns an empty list and a rejection reason.
+    Returns citations when every span exists, is target-site scoped, and either came from that
+    field's retrieval or shares its exact source and heading context.
     """
 
     if field not in retrieved_chunks:
@@ -911,10 +990,18 @@ def _citations(
     unknown = [span_id for span_id in span_ids if span_id not in spans]
     if unknown:
         return [], "unknown evidence span " + ", ".join(unknown)
+    field_chunks = retrieved_chunks[field]
+    field_contexts = {
+        (span.source_url, span.heading)
+        for span in spans.values()
+        if span.chunk_id in field_chunks
+    }
     wrong_field = [
         span_id
         for span_id in span_ids
-        if spans[span_id].chunk_id not in retrieved_chunks[field]
+        if spans[span_id].chunk_id not in field_chunks
+        and (spans[span_id].source_url, spans[span_id].heading)
+        not in field_contexts
     ]
     if wrong_field:
         return [], "evidence was not retrieved for this field: " + ", ".join(wrong_field)

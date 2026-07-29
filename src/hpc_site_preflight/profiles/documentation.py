@@ -99,6 +99,8 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             storage.purge_after_days = finding.purge_after_days
             return [f"/storage/{storage.id}/purge_after_days"]
     if isinstance(finding, SubmissionOptionFinding):
+        if finding.requirement not in {"required", "optional"}:
+            return []
         options = (
             profile.slurm.options
             if profile.slurm is not None

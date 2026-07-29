@@ -15,10 +15,16 @@ from hpc_site_preflight.documentation.corpus import (
 from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
+    _correctable_errors,
+    _validate_group,
     _valid_unmapped_syntax,
     extract_documentation,
 )
-from hpc_site_preflight.documentation.identity import build_query_plan, build_site_identity
+from hpc_site_preflight.documentation.identity import (
+    build_query_plan,
+    build_site_identity,
+    classify_source,
+)
 from hpc_site_preflight.documentation.models import (
     AllocationRequiredFinding,
     ContextMode,
@@ -26,8 +32,12 @@ from hpc_site_preflight.documentation.models import (
     DiscoverySelection,
     DocumentationCitation,
     DocumentationEvidence,
+    EvidenceSpan,
+    FieldRetrieval,
+    NetworkExtractionResult,
     NetworkFinding,
     RecordedPage,
+    RetrievalHit,
     SearchResult,
     SubmissionExtractionResult,
     SubmissionOptionFinding,
@@ -36,6 +46,7 @@ from hpc_site_preflight.documentation.models import (
 from hpc_site_preflight.documentation.pipeline import DocumentationPipeline
 from hpc_site_preflight.documentation.query_expansion import expand_queries
 from hpc_site_preflight.documentation.retrieval import (
+    base_queries,
     batch_full_corpus,
     select_context,
 )
@@ -119,7 +130,7 @@ class _FollowUpWebBackend:
     [
         ("anvil", "Anvil", "slurm", "purdue.edu"),
         ("stampede3", "Stampede3", "slurm", "tacc.utexas.edu"),
-        ("notre-dame-crc", "ND CRC", "htcondor", "nd.edu"),
+        ("notre-dame-crc", "Notre Dame CRC", "htcondor", "nd.edu"),
     ],
 )
 def test_query_plan_is_stable(
@@ -166,6 +177,19 @@ def test_user_hints_extend_documentation_identity_and_queries() -> None:
     assert [query.topic for query in plan.queries[-2:]] == ["user", "user"]
     assert "RCAC" in plan.queries[-2].query
     assert "queues" in plan.queries[-1].query
+
+
+def test_preferred_filename_stem_establishes_target_site_scope() -> None:
+    identity = build_site_identity(_inputs("notre-dame-crc"))
+
+    scope = classify_source(
+        identity,
+        "https://docs.crc.nd.edu/resources/condor.html",
+        "HTCondor",
+        "Submit jobs to the CRC pool.",
+    )
+
+    assert scope == "target_site"
 
 
 def test_web_tools_enforce_domain_scope_and_budgets() -> None:
@@ -620,13 +644,95 @@ def test_bm25_recovers_explicit_mandatory_slurm_options(tmp_path: Path) -> None:
     retrieval = next(
         item for item in result.retrieval if item.field == "required_submission_options"
     )
-    assert [hit.chunk_id for hit in retrieval.hits] == [
+    assert {hit.chunk_id for hit in retrieval.hits} == {
         "doc-anvil-jobs:c43",
         "doc-anvil-jobs:c42",
         "doc-anvil-jobs:c41",
         "doc-anvil-jobs:c44",
-    ]
+    }
     assert "required_submission_options" not in result.unresolved
+
+
+def test_bm25_skips_model_calls_without_evidence(tmp_path: Path) -> None:
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="No responses should be consumed.",
+            responses=[],
+        )
+    )
+    tracker = _tracker(tmp_path, "empty-bm25")
+
+    result = extract_documentation(
+        site_id="notre-dame-crc",
+        site_name="Notre Dame CRC",
+        scheduler="htcondor",
+        partition_names=set(),
+        storage_names={"home"},
+        chunks=[],
+        context_mode="bm25",
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        provider=provider,
+        tracker=tracker,
+    )
+
+    assert result.findings == []
+    assert tracker.report.model_usage.requests == 0
+
+
+@pytest.mark.parametrize(
+    ("quote", "accepted"),
+    [
+        ("Submit jobs with condor_submit.", False),
+        ("Compute nodes cannot connect to login nodes.", True),
+    ],
+)
+def test_false_network_finding_requires_explicit_negative_text(
+    quote: str,
+    accepted: bool,
+) -> None:
+    span = EvidenceSpan(
+        span_id="network:c1:s1",
+        chunk_id="network:c1",
+        source_url="https://docs.example.edu/condor/network",
+        title="Network",
+        heading="Network",
+        scope="target_site",
+        quote=quote,
+    )
+    result = NetworkExtractionResult.model_validate(
+        {
+            "network": [
+                {
+                    "name": "manager_worker",
+                    "available": False,
+                    "evidence_span_ids": [span.span_id],
+                    "note": "Network policy.",
+                }
+            ]
+        }
+    )
+
+    validated = _validate_group(
+        result,
+        [span],
+        [
+            FieldRetrieval(
+                field="manager_worker_connectivity",
+                queries=["login compute connectivity"],
+                hits=[RetrievalHit(chunk_id=span.chunk_id, score=1.0)],
+            )
+        ],
+        "htcondor",
+        set(),
+        set(),
+    )
+
+    assert bool(validated.findings) is accepted
+    assert bool(validated.rejected) is not accepted
 
 
 @pytest.mark.parametrize("mode", ["full-corpus", "bm25", "llm-expanded-bm25"])
@@ -644,6 +750,7 @@ def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
     resources = {"maximum_walltime_seconds": {"shared", "wholenode", "gpu"}}
     first = select_context(
         chunks,
+        scheduler="slurm",
         group="submission",
         fields=SUBMISSION_FIELDS,
         mode=mode,
@@ -651,6 +758,7 @@ def test_context_modes_are_stable_and_target_scoped(mode: ContextMode) -> None:
     )
     second = select_context(
         chunks,
+        scheduler="slurm",
         group="submission",
         fields=SUBMISSION_FIELDS,
         mode=mode,
@@ -710,6 +818,7 @@ def test_llm_expanded_bm25_keeps_base_queries_and_adds_hits() -> None:
     resources = {"maximum_walltime_seconds": set()}
     bm25 = select_context(
         chunks,
+        scheduler="slurm",
         group="submission",
         fields=("maximum_walltime_seconds",),
         mode="bm25",
@@ -717,6 +826,7 @@ def test_llm_expanded_bm25_keeps_base_queries_and_adds_hits() -> None:
     )
     expanded = select_context(
         chunks,
+        scheduler="slurm",
         group="submission",
         fields=("maximum_walltime_seconds",),
         mode="llm-expanded-bm25",
@@ -736,6 +846,18 @@ def test_llm_expanded_bm25_keeps_base_queries_and_adds_hits() -> None:
     assert "expanded:c1" in expanded.selected_chunk_ids
 
 
+def test_submission_queries_are_scheduler_scoped() -> None:
+    slurm = base_queries("required_submission_options", "slurm", set())
+    htcondor = base_queries("required_submission_options", "htcondor", set())
+
+    assert "required scheduler submission directives job file" in slurm
+    assert "required scheduler submission directives job file" in htcondor
+    assert any("SBATCH" in query for query in slurm)
+    assert not any("request_cpus" in query for query in slurm)
+    assert any("request_cpus" in query for query in htcondor)
+    assert not any("SBATCH" in query for query in htcondor)
+
+
 def test_full_corpus_batches_cover_every_chunk_once() -> None:
     chunks = [
         CorpusChunk(
@@ -753,6 +875,7 @@ def test_full_corpus_batches_cover_every_chunk_once() -> None:
     ]
     selection = select_context(
         chunks,
+        scheduler="slurm",
         group="submission",
         fields=SUBMISSION_FIELDS,
         mode="full-corpus",
@@ -844,6 +967,7 @@ def test_retrieval_filters_scope_and_deduplicates_content() -> None:
 
     selection = select_context(
         [*chunks, duplicate],
+        scheduler="slurm",
         group="submission",
         fields=SUBMISSION_FIELDS,
         mode="bm25",
@@ -1287,6 +1411,219 @@ def test_unmapped_options_require_literal_scheduler_syntax() -> None:
         "Create an allocation",
         ["Visit the allocation portal before submitting jobs."],
     )
+
+
+def test_typed_htcondor_attributes_are_not_valid_slurm_options() -> None:
+    span = EvidenceSpan(
+        span_id="submission:c1:s1",
+        chunk_id="submission:c1",
+        source_url="https://docs.example.edu/condor",
+        title="HTCondor",
+        heading="Submit file",
+        scope="target_site",
+        quote="should_transfer_files = yes",
+    )
+    result = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "submission_options": [
+                {
+                    "name": "should_transfer_files",
+                    "requirement": "recommended",
+                    "evidence_span_ids": [span.span_id],
+                    "note": "The site template recommends file transfer.",
+                }
+            ],
+            "unmapped_options": [],
+            "partitions": [],
+        }
+    )
+    retrieval = [
+        FieldRetrieval(
+            field="required_submission_options",
+            queries=["HTCondor submit file"],
+            hits=[RetrievalHit(chunk_id=span.chunk_id, score=1.0)],
+        )
+    ]
+
+    htcondor = _validate_group(result, [span], retrieval, "htcondor", set(), set())
+    slurm = _validate_group(result, [span], retrieval, "slurm", set(), set())
+
+    assert [finding.name for finding in htcondor.findings] == [
+        "should_transfer_files"
+    ]
+    assert not slurm.findings
+    assert "not in the reviewed slurm profile contract" in slurm.rejected[0]
+
+
+def test_same_heading_context_can_support_one_field_citation() -> None:
+    heading = "HTCondor > Example of Submitting a GPU Job"
+    prose = EvidenceSpan(
+        span_id="condor:c48:s1",
+        chunk_id="condor:c48",
+        source_url="https://docs.example.edu/condor",
+        title="HTCondor",
+        heading=heading,
+        scope="target_site",
+        quote="This is a submission template for running a job with one GPU.",
+    )
+    code = EvidenceSpan(
+        span_id="condor:c49:s1",
+        chunk_id="condor:c49",
+        source_url=prose.source_url,
+        title=prose.title,
+        heading=heading,
+        scope="target_site",
+        quote="request_gpus = 1",
+    )
+    result = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "submission_options": [
+                {
+                    "name": "request_gpus",
+                    "requirement": "conditional",
+                    "evidence_span_ids": [prose.span_id, code.span_id],
+                    "note": "GPU jobs request one GPU.",
+                }
+            ],
+            "unmapped_options": [],
+            "partitions": [],
+        }
+    )
+    retrieval = [
+        FieldRetrieval(
+            field="required_submission_options",
+            queries=["request_gpus"],
+            hits=[RetrievalHit(chunk_id=code.chunk_id, score=1.0)],
+        )
+    ]
+
+    validated = _validate_group(
+        result,
+        [prose, code],
+        retrieval,
+        "htcondor",
+        set(),
+        set(),
+    )
+
+    assert len(validated.findings) == 1
+    assert not validated.rejected
+
+
+def test_same_document_but_different_heading_is_rejected() -> None:
+    retrieved = EvidenceSpan(
+        span_id="condor:c49:s1",
+        chunk_id="condor:c49",
+        source_url="https://docs.example.edu/condor",
+        title="HTCondor",
+        heading="GPU jobs",
+        scope="target_site",
+        quote="request_gpus = 1",
+    )
+    unrelated = retrieved.model_copy(
+        update={
+            "span_id": "condor:c20:s1",
+            "chunk_id": "condor:c20",
+            "heading": "UGE jobs",
+            "quote": "Submit to a GPU queue.",
+        }
+    )
+    result = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "submission_options": [
+                {
+                    "name": "request_gpus",
+                    "requirement": "conditional",
+                    "evidence_span_ids": [unrelated.span_id, retrieved.span_id],
+                    "note": "GPU request.",
+                }
+            ],
+            "unmapped_options": [],
+            "partitions": [],
+        }
+    )
+
+    validated = _validate_group(
+        result,
+        [unrelated, retrieved],
+        [
+            FieldRetrieval(
+                field="required_submission_options",
+                queries=["request_gpus"],
+                hits=[RetrievalHit(chunk_id=retrieved.chunk_id, score=1.0)],
+            )
+        ],
+        "htcondor",
+        set(),
+        set(),
+    )
+
+    assert not validated.findings
+    assert "evidence was not retrieved for this field" in validated.rejected[0]
+
+
+def test_false_from_silence_is_not_sent_for_model_correction() -> None:
+    errors = [
+        "network/outbound_compute: false requires explicit negative documentation, "
+        "not documentation silence",
+        "submission_options/account: unknown evidence span missing",
+    ]
+
+    assert _correctable_errors(errors) == [errors[1]]
+
+
+@pytest.mark.parametrize("requirement", ["recommended", "conditional"])
+def test_non_binary_submission_requirement_does_not_become_false(
+    requirement: str,
+) -> None:
+    measurements = _inputs("notre-dame-crc")
+    citation = DocumentationCitation(
+        span_id="submission:c1:s1",
+        chunk_id="submission:c1",
+        url="https://docs.crc.nd.edu/resources/condor.html",
+        title="HTCondor",
+        heading="GPU jobs",
+        quote="request_gpus = 1",
+    )
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        context_mode="bm25",
+        findings=[
+            SubmissionOptionFinding(
+                name="request_gpus",
+                requirement=requirement,
+                note="Applies to GPU jobs.",
+                citations=[citation],
+            )
+        ],
+        rejected=[],
+        unresolved=[],
+        selected_chunk_ids=["submission:c1"],
+        retrieval=[],
+    )
+
+    profile, report = compile_profile(measurements)
+    profile, report = apply_documentation(profile, report, documentation)
+    assert profile.htcondor is not None
+    option = next(
+        item
+        for item in profile.htcondor.submit_attributes
+        if item.name == "request_gpus"
+    )
+
+    assert option.required is None
+    assert any(
+        item.field == "/htcondor/submit_attributes/request_gpus/required"
+        for item in profile.unresolved
+    )
+    assert not any(item.source_type == "documentation" for item in report.evidence)
 
 
 def test_unmapped_submission_option_is_preserved_for_review() -> None:

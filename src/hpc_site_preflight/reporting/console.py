@@ -6,9 +6,11 @@ from hpc_site_preflight.reporting.models import ModelUsage, RunPerformance, Stag
 
 
 def _token_value(value: int, usage: ModelUsage) -> str:
-    """Render counts only when every provider supplied authoritative usage."""
+    """Render complete or explicitly partial provider-reported token counts."""
 
-    return str(value) if usage.usage_available else "unavailable"
+    if usage.usage_available:
+        return str(value)
+    return f"{value} (partial)" if value else "unavailable"
 
 
 def print_stage_summary(

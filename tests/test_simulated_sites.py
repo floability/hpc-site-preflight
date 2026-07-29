@@ -16,6 +16,7 @@ SITE_IDS = {
     "stampede3": ("tacc-stampede3", "slurm"),
     "notre-dame-crc": ("notre-dame-crc", "htcondor"),
 }
+MEASURED_FIXTURES = {"anvil", "notre-dame-crc"}
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -30,7 +31,9 @@ def test_site_simulation_validates(simulation_name: str) -> None:
 
     assert measurements.site_id == expected_site_id
     assert measurements.scheduler_type == expected_scheduler
-    expected_source = "measured" if simulation_name == "anvil" else "simulated"
+    expected_source = (
+        "measured" if simulation_name in MEASURED_FIXTURES else "simulated"
+    )
     assert measurements.evidence_source == expected_source
 
 
@@ -60,9 +63,17 @@ def test_notre_dame_simulation_uses_classads_and_resource_groups() -> None:
     )
     assert bundle.slurm is None
     assert bundle.htcondor is not None
-    assert bundle.htcondor.pool_totals.machine_count >= 0
-    assert isinstance(bundle.htcondor.cpu_groups, list)
-    assert isinstance(bundle.htcondor.gpu_groups, list)
+    assert bundle.htcondor.pool_totals.machine_count == sum(
+        item.machine_count for item in bundle.htcondor.cpu_groups
+    )
+    assert bundle.htcondor.pool_totals.cpu_cores == sum(
+        item.machine_count * item.cpu_cores_per_machine
+        for item in bundle.htcondor.cpu_groups
+    )
+    assert bundle.htcondor.pool_totals.advertised_gpus == sum(
+        item.machine_count * item.gpu_count_per_machine
+        for item in bundle.htcondor.gpu_groups
+    )
 
 
 def test_scheduler_models_reject_cross_scheduler_fields() -> None:

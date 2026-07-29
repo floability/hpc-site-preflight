@@ -29,8 +29,10 @@ Finish the HTCondor measurement and profile contracts without expanding the pref
 
 ## Milestone B — Notre Dame live profile
 
-4. **Review real Notre Dame measurement — Incomplete**
-   - Capture real output, compare it with the contract, and add only generally useful missing facts.
+4. **Review real Notre Dame measurement — Completed**
+   - Validated the real 0.7 capture and its HTCondor pool, CPU-group, and GPU-group totals.
+   - Retained uncollected optional networking as unknown and deferred the missed group storage
+     location.
 
 5. **Enable live HTCondor profile construction — Incomplete**
    - Verify scheduler-scoped discovery, retrieval, typed extraction, and reconciliation.
@@ -64,3 +66,34 @@ Finish the HTCondor measurement and profile contracts without expanding the pref
     - Use Stampede3 login measurements and pilot results without code changes.
 
 **Test:** Build a valid partial Stampede3 profile through the same pipeline.
+
+## Milestone F — Deferred measurement improvements
+
+11. **Recover automatically discoverable group storage — Incomplete**
+    - Report the missing Notre Dame group storage location as a measurement fact miss for now.
+    - Resolve login-node group IDs independently so one unresolved ID does not discard every group.
+    - If group-derived paths remain insufficient, consider a bounded one-level check of reviewed
+      shared-storage roots.
+
+**Test:** Collect Notre Dame measurements again and confirm accessible group storage is discovered
+without requiring a user-supplied path.
+
+12. **Verify documentation-discovered storage with pilots — Incomplete**
+    - Let target-site or explicitly site-wide documentation propose named storage locations that
+      login measurement missed, while keeping them unverified.
+    - Pass only those bounded candidates to the pilot stage and test compute visibility and access.
+    - Accept the storage location after supporting pilot evidence; otherwise retain it as unresolved
+      or rejected without guessing a path.
+
+**Test:** Discover Notre Dame group storage from CRC-wide documentation, then accept or reject it
+from a simulated pilot result.
+
+13. **Separate documented usage from mandatory options — Incomplete**
+    - Keep an option's `required` value unknown unless the documentation explicitly makes it
+      mandatory.
+    - Independently extract cited syntax, examples, recommended values, and conditional usage so
+      useful documentation does not disappear when it establishes guidance rather than policy.
+    - Preserve abstention for unsupported requirements and continue rejecting uncited candidates.
+
+**Test:** Rebuild the Notre Dame profile and confirm documented HTCondor examples are retained with
+valid citations while unsupported `required` values remain null.

@@ -139,7 +139,9 @@ def classify_source(identity: SiteIdentity, url: str, title: str, text: str) -> 
 
     path_segments = [segment.lower() for segment in parsed.path.split("/") if segment]
     preferred = {_normalize(token) for token in identity.preferred_path_tokens}
-    normalized_segments = {_normalize(segment) for segment in path_segments}
+    normalized_segments = {
+        _normalize(segment.split(".", 1)[0]) for segment in path_segments
+    }
     if preferred & normalized_segments:
         return "target_site"
 
