@@ -16,8 +16,8 @@ from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
     _correctable_errors,
-    _validate_group,
     _valid_unmapped_syntax,
+    _validate_group,
     extract_documentation,
 )
 from hpc_site_preflight.documentation.identity import (
@@ -36,6 +36,7 @@ from hpc_site_preflight.documentation.models import (
     FieldRetrieval,
     NetworkExtractionResult,
     NetworkFinding,
+    PartitionFinding,
     RecordedPage,
     RetrievalHit,
     SearchResult,
@@ -653,6 +654,83 @@ def test_bm25_recovers_explicit_mandatory_slurm_options(tmp_path: Path) -> None:
     assert "required_submission_options" not in result.unresolved
 
 
+def test_bm25_preserves_unknown_required_slurm_directive(tmp_path: Path) -> None:
+    measurements = _inputs("anvil")
+    chunks = [
+        CorpusChunk(
+            chunk_id="site-options:c1",
+            document_id="site-options",
+            source_url="https://docs.example.edu/jobs",
+            title="Site submission rules",
+            scope="target_site",
+            heading_path=["Required directives"],
+            block_kind="text",
+            text="Site-specific mandatory directive: #SBATCH --licenses=abaqus.",
+            content_hash="site-options-hash",
+        )
+    ]
+    provider = RecordedModelProvider(
+        ModelRecording(
+            schema_version="0.1",
+            note="Unknown required directive regression",
+            responses=[
+                RecordedModelResponse(
+                    output_name="extract_submission",
+                    response_id="unknown-required-directive",
+                    data={
+                        "allocation_required": None,
+                        "submission_options": [],
+                        "unmapped_options": [
+                            {
+                                "documented_name": "licenses",
+                                "documented_syntax": [
+                                    "#SBATCH --licenses=abaqus"
+                                ],
+                                "requirement": "required",
+                                "evidence_span_ids": ["site-options:c1:s1"],
+                                "note": "The site explicitly requires this directive.",
+                            }
+                        ],
+                        "partitions": [],
+                    },
+                )
+            ],
+        )
+    )
+    tracker = _tracker(tmp_path, "unknown-required-directive")
+
+    result = extract_documentation(
+        site_id="anvil",
+        site_name="Anvil",
+        scheduler="slurm",
+        partition_names=measurements.partition_names,
+        storage_names=set(),
+        chunks=chunks,
+        context_mode="bm25",
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="simulate",
+        provider=provider,
+        tracker=tracker,
+    )
+
+    findings = [
+        finding
+        for finding in result.findings
+        if isinstance(finding, UnmappedSubmissionOptionFinding)
+    ]
+    assert len(findings) == 1
+    assert findings[0].documented_name == "licenses"
+    assert findings[0].documented_syntax == ["#SBATCH --licenses=abaqus"]
+    assert tracker.report.model_usage.requests == 1
+
+    profile, report = compile_profile(measurements)
+    profile, _ = apply_documentation(profile, report, result)
+    assert profile.slurm is not None
+    assert profile.slurm.unmapped_options[0].documented_name == "licenses"
+
+
 def test_bm25_skips_model_calls_without_evidence(tmp_path: Path) -> None:
     provider = RecordedModelProvider(
         ModelRecording(
@@ -856,6 +934,8 @@ def test_submission_queries_are_scheduler_scoped() -> None:
     assert not any("request_cpus" in query for query in slurm)
     assert any("request_cpus" in query for query in htcondor)
     assert not any("SBATCH" in query for query in htcondor)
+    assert any("licenses" in query for query in slurm)
+    assert any("ClassAd" in query for query in htcondor)
 
 
 def test_full_corpus_batches_cover_every_chunk_once() -> None:
@@ -1676,6 +1756,83 @@ def test_unmapped_submission_option_is_preserved_for_review() -> None:
     assert any(
         item.field_path == "/slurm/unmapped_options"
         for item in report.evidence
+    )
+
+
+def test_anvil_walltime_reconciliation_records_eight_policy_conflicts() -> None:
+    measurements = _inputs("anvil")
+    documented_limits = {
+        "debug": 7200,
+        "gpu-debug": 1800,
+        "wholenode": 345600,
+        "wide": 43200,
+        "shared": 345600,
+        "highmem": 172800,
+        "gpu": 172800,
+        "ai": 172800,
+    }
+    findings = []
+    for name, seconds in documented_limits.items():
+        citation = DocumentationCitation(
+            span_id=f"limits:{name}:s1",
+            chunk_id=f"limits:{name}",
+            url="https://docs.rcac.purdue.edu/anvil/jobs",
+            title="Anvil partition limits",
+            heading=name,
+            quote=f"The {name} partition has a maximum walltime of {seconds} seconds.",
+        )
+        findings.append(
+            PartitionFinding(
+                name=name,
+                maximum_walltime_seconds=seconds,
+                note="Documented enforced partition policy.",
+                citations=[citation],
+            )
+        )
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="live",
+        context_mode="bm25",
+        findings=findings,
+        rejected=[],
+        unresolved=["maximum_walltime_seconds"],
+        selected_chunk_ids=[f"limits:{name}" for name in documented_limits],
+        retrieval=[],
+    )
+
+    profile, report = compile_profile(measurements)
+    assert profile.slurm is not None
+    assert len(profile.slurm.partitions) == 10
+    assert all(
+        partition.maximum_walltime_seconds == -1
+        for partition in profile.slurm.partitions
+    )
+
+    profile, report = apply_documentation(profile, report, documentation)
+    partitions = {item.name: item for item in profile.slurm.partitions}
+    assert {
+        name: partitions[name].maximum_walltime_seconds
+        for name in documented_limits
+    } == documented_limits
+    assert partitions["standard"].maximum_walltime_seconds == -1
+    assert partitions["profiling"].maximum_walltime_seconds == -1
+
+    assert len(profile.conflicts) == 8
+    assert len(report.conflicts) == 8
+    assert {item.field.split("/")[-2] for item in profile.conflicts} == set(
+        documented_limits
+    )
+    assert all(
+        [(item.source, item.value) for item in conflict.evidence_values]
+        == [("measurement", -1), ("documentation", conflict.selected_value)]
+        for conflict in profile.conflicts
+    )
+    assert not any(
+        "/standard/" in item.field or "/profiling/" in item.field
+        for item in profile.conflicts
     )
 
 

@@ -61,6 +61,8 @@ _SCHEDULER_FIELD_QUERIES: dict[str, dict[str, tuple[str, ...]]] = {
             "must at minimum specify",
             "account -A --account allocation account",
             "partition -p showpartitions",
+            "site-specific mandatory SBATCH directives licenses constraint reservation",
+            "additional required #SBATCH options",
         ),
     },
     "htcondor": {
@@ -74,6 +76,8 @@ _SCHEDULER_FIELD_QUERIES: dict[str, dict[str, tuple[str, ...]]] = {
             "multicore SMP request_cpus GPU request_gpus",
             "universe executable should_transfer_files when_to_transfer_output",
             "Condor submit description queue",
+            "site-specific mandatory HTCondor submit attributes",
+            "required ClassAd accounting_group requirements +ProjectName",
         ),
     },
 }

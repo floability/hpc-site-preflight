@@ -25,8 +25,9 @@ from hpc_site_preflight.measurements.htcondor import (
 )
 from hpc_site_preflight.measurements.storage import collect_storage
 
-COLLECTOR_VERSION = "0.7.0"
+COLLECTOR_VERSION = "0.7.1"
 COMMAND_TIMEOUT_SECONDS = 60
+UNLIMITED_WALLTIME_SECONDS = -1
 
 SLURM_COMMANDS = ("sinfo", "sbatch", "squeue", "sacct")
 HTCONDOR_COMMANDS = ("condor_status", "condor_submit", "condor_q", "condor_history")
@@ -118,6 +119,48 @@ def parse_gres(value: str) -> tuple[list[str], int | None, list[str]]:
         quantities = [int(part) for part in parts[1:] if part.isdigit()]
         gpu_count += quantities[-1] if quantities else 1
     return entries, (gpu_count if found_gpu else None), models
+
+
+def parse_slurm_time_limit(value: str) -> int | None:
+    """Normalize one Slurm time limit to seconds, using -1 for unlimited."""
+
+    normalized = value.strip().lower()
+    if normalized in {"infinite", "unlimited"}:
+        return UNLIMITED_WALLTIME_SECONDS
+    if normalized in {"", "n/a", "none", "(null)"}:
+        return None
+
+    day_parts = normalized.split("-", maxsplit=1)
+    days = int(day_parts[0]) if len(day_parts) == 2 and day_parts[0].isdigit() else 0
+    clock = day_parts[-1].split(":")
+    if not all(part.isdigit() for part in clock):
+        return None
+    if len(clock) == 3:
+        hours, minutes, seconds = (int(part) for part in clock)
+    elif len(clock) == 2:
+        hours = 0
+        minutes, seconds = (int(part) for part in clock)
+    elif len(clock) == 1:
+        hours, seconds = 0, 0
+        minutes = int(clock[0])
+    else:
+        return None
+    return days * 86400 + hours * 3600 + minutes * 60 + seconds
+
+
+def parse_sinfo_walltimes(text: str | None) -> dict[str, int]:
+    """Parse `sinfo -h -o "%P %l"` into normalized per-partition limits."""
+
+    limits: dict[str, int] = {}
+    for line in (text or "").splitlines():
+        columns = line.split()
+        if len(columns) != 2:
+            continue
+        name = columns[0].rstrip("*")
+        seconds = parse_slurm_time_limit(columns[1])
+        if name and seconds is not None:
+            limits[name] = seconds
+    return limits
 
 
 def parse_sinfo(text: str | None) -> tuple[str | None, list[dict[str, Any]]]:
@@ -213,7 +256,15 @@ def collect_slurm(runner: CommandRunner, commands: Sequence[str]) -> dict[str, A
         if "sinfo" in commands
         else None
     )
+    walltime_output = (
+        runner(["sinfo", "-h", "-o", "%P %l"])
+        if "sinfo" in commands
+        else None
+    )
     default_partition, partitions = parse_sinfo(partition_output)
+    walltimes = parse_sinfo_walltimes(walltime_output)
+    for partition in partitions:
+        partition["maximum_walltime_seconds"] = walltimes.get(partition["name"])
     return {
         "version": version,
         "available_commands": list(commands),

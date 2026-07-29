@@ -58,6 +58,74 @@
       "title": "AccountingProfile",
       "type": "object"
     },
+    "ConflictEvidenceValue": {
+      "additionalProperties": false,
+      "description": "One source and value participating in a profile conflict.",
+      "properties": {
+        "source": {
+          "enum": [
+            "measurement",
+            "documentation",
+            "pilot",
+            "user"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source"
+      ],
+      "title": "ConflictEvidenceValue",
+      "type": "object"
+    },
     "HTCondorCPUGroupProfile": {
       "additionalProperties": false,
       "description": "Visible machines grouped by advertised CPU cores.",
@@ -410,21 +478,10 @@
           "title": "Name",
           "type": "string"
         },
-        "visible_walltime_seconds": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Visible Walltime Seconds"
-        },
         "maximum_walltime_seconds": {
           "anyOf": [
             {
+              "minimum": -1,
               "type": "integer"
             },
             {
@@ -596,6 +653,13 @@
             "type": "string"
           },
           "title": "Other Evidence",
+          "type": "array"
+        },
+        "evidence_values": {
+          "items": {
+            "$ref": "#/$defs/ConflictEvidenceValue"
+          },
+          "title": "Evidence Values",
           "type": "array"
         },
         "selection_rule": {

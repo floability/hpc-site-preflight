@@ -99,6 +99,7 @@
     "partitions": [
       {
         "name": "wholenode",
+        "maximum_walltime_seconds": -1,
         "node_count": 750,
         "memory_mib_per_node": 257400,
         "cpus_per_node": 128,
@@ -108,6 +109,7 @@
       },
       {
         "name": "standard",
+        "maximum_walltime_seconds": -1,
         "node_count": 750,
         "memory_mib_per_node": 257400,
         "cpus_per_node": 128,
@@ -117,6 +119,7 @@
       },
       {
         "name": "shared",
+        "maximum_walltime_seconds": -1,
         "node_count": 250,
         "memory_mib_per_node": 257400,
         "cpus_per_node": 128,
@@ -126,6 +129,7 @@
       },
       {
         "name": "wide",
+        "maximum_walltime_seconds": -1,
         "node_count": 746,
         "memory_mib_per_node": 257400,
         "cpus_per_node": 128,
@@ -135,6 +139,7 @@
       },
       {
         "name": "highmem",
+        "maximum_walltime_seconds": -1,
         "node_count": 32,
         "memory_mib_per_node": 1031400,
         "cpus_per_node": 128,
@@ -144,6 +149,7 @@
       },
       {
         "name": "debug",
+        "maximum_walltime_seconds": -1,
         "node_count": 17,
         "memory_mib_per_node": 257400,
         "cpus_per_node": 128,
@@ -153,6 +159,7 @@
       },
       {
         "name": "gpu",
+        "maximum_walltime_seconds": -1,
         "node_count": 16,
         "memory_mib_per_node": 515400,
         "cpus_per_node": 128,
@@ -164,6 +171,7 @@
       },
       {
         "name": "ai",
+        "maximum_walltime_seconds": -1,
         "node_count": 21,
         "memory_mib_per_node": 1031000,
         "cpus_per_node": 96,
@@ -175,6 +183,7 @@
       },
       {
         "name": "gpu-debug",
+        "maximum_walltime_seconds": -1,
         "node_count": 16,
         "memory_mib_per_node": 515400,
         "cpus_per_node": 128,
@@ -186,6 +195,7 @@
       },
       {
         "name": "profiling",
+        "maximum_walltime_seconds": -1,
         "node_count": 4,
         "memory_mib_per_node": 257400,
         "cpus_per_node": 128,

@@ -150,12 +150,11 @@ def test_measurement_only_builder_supports_all_sites(
         SiteProfile.model_validate({**profile_payload, "unexpected": True})
 
 
-def test_anvil_missing_visible_walltime_is_not_promoted_to_policy() -> None:
+def test_anvil_unlimited_walltime_is_preserved_as_measurement() -> None:
     profile, _ = _compile("anvil")
     assert profile.slurm is not None
     shared = next(item for item in profile.slurm.partitions if item.name == "shared")
-    assert shared.visible_walltime_seconds is None
-    assert shared.maximum_walltime_seconds is None
+    assert shared.maximum_walltime_seconds == -1
     assert shared.cpus_per_node == 128
     assert shared.memory_mib_per_node == 257400
     assert "resource_shapes" not in profile.slurm.model_dump()
@@ -191,12 +190,11 @@ def test_anvil_measurements_build_storage_patterns_and_login_identity() -> None:
     assert "/slurm/partitions/shared/cpus_per_node" in links
 
 
-def test_stampede_visible_duration_is_normalized() -> None:
+def test_stampede_measured_walltime_is_preserved() -> None:
     profile, _ = _compile("stampede3")
     assert profile.slurm is not None
     spr = next(item for item in profile.slurm.partitions if item.name == "spr")
-    assert spr.visible_walltime_seconds == 172800
-    assert spr.maximum_walltime_seconds is None
+    assert spr.maximum_walltime_seconds == 172800
 
 
 def test_htcondor_profile_has_resource_groups_not_partitions() -> None:

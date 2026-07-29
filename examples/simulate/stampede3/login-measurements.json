@@ -103,7 +103,7 @@
         "gpu_count_per_node": null,
         "gpu_models": [],
         "available": true,
-        "visible_walltime_limit": "2-00:00:00",
+        "maximum_walltime_seconds": 172800,
         "node_states": []
       },
       {
@@ -115,7 +115,7 @@
         "gpu_count_per_node": null,
         "gpu_models": [],
         "available": null,
-        "visible_walltime_limit": "2-00:00:00",
+        "maximum_walltime_seconds": 172800,
         "node_states": []
       },
       {
@@ -127,7 +127,7 @@
         "gpu_count_per_node": null,
         "gpu_models": [],
         "available": null,
-        "visible_walltime_limit": "2-00:00:00",
+        "maximum_walltime_seconds": 172800,
         "node_states": []
       }
     ],

@@ -55,8 +55,7 @@ class PartitionProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str
-    visible_walltime_seconds: int | None = None
-    maximum_walltime_seconds: int | None = None
+    maximum_walltime_seconds: int | None = Field(default=None, ge=-1)
     maximum_nodes_per_job: int | None = None
     shared_nodes: bool | None = None
     node_count: int | None = None
@@ -225,6 +224,16 @@ class UnresolvedWorkItem(BaseModel):
     action_id: str
 
 
+class ConflictEvidenceValue(BaseModel):
+    """One source and value participating in a profile conflict."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: Literal["measurement", "documentation", "pilot", "user"]
+    value: ProfileValue | None = None
+    evidence_ids: list[str] = Field(default_factory=list)
+
+
 class ProfileConflict(BaseModel):
     """Compact note retaining a deterministic evidence conflict."""
 
@@ -234,6 +243,7 @@ class ProfileConflict(BaseModel):
     selected_value: ProfileValue | None = None
     selected_evidence: str
     other_evidence: list[str] = Field(default_factory=list)
+    evidence_values: list[ConflictEvidenceValue] = Field(default_factory=list)
     selection_rule: str
     note: str
 

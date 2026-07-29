@@ -116,6 +116,8 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         "Put recognized requirements in submission_options using only those exact names.",
         examples,
         "When mandatory wording and an option label are split across spans, cite both spans.",
+        "The canonical list is not exhaustive. Preserve any explicitly required scheduler "
+        "directive outside it in unmapped_options instead of discarding it.",
         "Use unmapped_options only for an explicit scheduler directive or submit attribute "
         "whose literal syntax appears in the cited spans.",
         "Do not classify allocation procedures, storage setup, module commands, URLs, or "

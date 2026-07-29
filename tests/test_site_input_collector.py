@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import sys
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
@@ -59,6 +58,12 @@ def test_output_has_addressable_site_storage_and_slurm_fields(
             "-o",
             "%P %D %m %c %G",
         ): "shared* 10 256000 128 (null)\ngpu 4 512000 128 gpu:a100:4",
+        (
+            "sinfo",
+            "-h",
+            "-o",
+            "%P %l",
+        ): "shared* infinite\ngpu 2-00:00:00",
     }
 
     def runner(arguments):
@@ -112,9 +117,20 @@ def test_output_has_addressable_site_storage_and_slurm_fields(
         partition["name"]: partition for partition in result["slurm"]["partitions"]
     }
     assert partitions["shared"]["node_count"] == 10
+    assert partitions["shared"]["maximum_walltime_seconds"] == -1
+    assert partitions["gpu"]["maximum_walltime_seconds"] == 172800
     assert partitions["shared"]["memory_mib_per_node"] == 256000
     assert partitions["gpu"]["gpu_count_per_node"] == 4
     assert partitions["gpu"]["gpu_models"] == ["a100"]
+
+
+def test_slurm_time_limit_parser_preserves_unlimited() -> None:
+    module = load_collector()
+
+    assert module.parse_slurm_time_limit("infinite") == -1
+    assert module.parse_slurm_time_limit("2-00:00:00") == 172800
+    assert module.parse_slurm_time_limit("01:30:00") == 5400
+    assert module.parse_slurm_time_limit("unknown") is None
 
 
 def test_missing_storage_and_slurm_remain_null(tmp_path: Path, monkeypatch) -> None:

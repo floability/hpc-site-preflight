@@ -72,13 +72,13 @@
       "optional": true
     },
     {
-      "path": "/facts/scheduler/partitions/*/visible_walltime_limit",
-      "type": "string",
-      "description": "Walltime displayed by Slurm as an observation, not enforced policy.",
-      "method": "derived",
-      "command_id": "slurm_partitions",
-      "command": null,
-      "output_concept": "Time limit field",
+      "path": "/facts/scheduler/partitions/*/maximum_walltime_seconds",
+      "type": "integer",
+      "description": "Walltime reported by Slurm in seconds, with -1 meaning unlimited.",
+      "method": "fixed_command",
+      "command_id": "slurm_partition_walltimes",
+      "command": ["sinfo", "-h", "-o", "%P %l"],
+      "output_concept": "Partition and normalized time limit",
       "requires_write": false,
       "optional": true
     },

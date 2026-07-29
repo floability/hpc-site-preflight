@@ -37,15 +37,15 @@ def test_site_simulation_validates(simulation_name: str) -> None:
     assert measurements.evidence_source == expected_source
 
 
-def test_anvil_measurement_leaves_uncollected_visible_walltime_empty() -> None:
+def test_anvil_measurement_preserves_reported_unlimited_walltime() -> None:
     bundle = MeasurementBundle.model_validate(
         _load(SIMULATE_ROOT / "anvil" / "login-measurements.json")
     )
     assert bundle.slurm is not None
     partitions = {item.name: item for item in bundle.slurm.partitions}
-    walltime = partitions["shared"].visible_walltime_limit
 
-    assert walltime is None
+    assert len(partitions) == 10
+    assert all(item.maximum_walltime_seconds == -1 for item in partitions.values())
 
 
 def test_stampede3_simulation_uses_the_slurm_structure() -> None:

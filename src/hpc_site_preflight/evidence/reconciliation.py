@@ -47,16 +47,6 @@ RULES = (
         action_id="scheduler_identity_search",
     ),
     FieldRule(
-        rule_id="slurm_visible_partition",
-        field_pattern="/slurm/partitions/*/visible_walltime_seconds",
-        allowed_sources=["measurement"],
-        precedence=["measurement"],
-        conflict_behavior="none",
-        unresolved_action="additional_documentation",
-        action_id="partition_visibility_search",
-        not_applicable_for=["htcondor"],
-    ),
-    FieldRule(
         rule_id="documented_submission_requirement",
         field_pattern="/slurm/options/*/required",
         allowed_sources=["documentation", "user"],

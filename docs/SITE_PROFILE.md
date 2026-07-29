@@ -21,6 +21,9 @@ The implemented contracts are:
 HTCondor uses submit attributes, a visible pool snapshot, CPU groups, and GPU groups. HTCondor
 groups summarize advertised resources; they are not administrative partitions.
 
+Slurm uses one `maximum_walltime_seconds` field. A measured value of `-1` means Slurm reported
+the partition as unlimited; documented policy may override that value while retaining a conflict.
+
 Submission syntax remains an ordered array because one semantic value can have several forms:
 
 ```json
@@ -65,7 +68,6 @@ that debugging artifact instead of enlarging the operational profile.
     "partitions": [
       {
         "name": "shared",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 345600,
         "maximum_nodes_per_job": 1,
         "shared_nodes": true,
@@ -140,7 +142,28 @@ that debugging artifact instead of enlarging the operational profile.
     "accounting": "documented"
   },
   "unresolved": [],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "field": "/slurm/partitions/shared/maximum_walltime_seconds",
+      "selected_value": 345600,
+      "selected_evidence": "documentation:shared-walltime",
+      "other_evidence": ["measurement:shared-walltime"],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": ["measurement:shared-walltime"]
+        },
+        {
+          "source": "documentation",
+          "value": 345600,
+          "evidence_ids": ["documentation:shared-walltime"]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Documentation overrides Slurm's reported unlimited configuration."
+    }
+  ],
   "evidence_id": "report-example"
 }
 ```

@@ -319,9 +319,9 @@ def _measurement_observations(
         for partition in bundle.slurm.partitions:
             prefix = f"/facts/scheduler/partitions/{partition.name}"
             add(
-                f"{prefix}/visible_walltime_limit",
-                partition.visible_walltime_limit,
-                "slurm_partition_resources",
+                f"{prefix}/maximum_walltime_seconds",
+                partition.maximum_walltime_seconds,
+                "slurm_partition_walltimes",
             )
             add(f"{prefix}/node_count", partition.node_count, "slurm_partition_resources")
             add(f"{prefix}/node_states", partition.node_states, "slurm_partition_resources")
@@ -400,13 +400,11 @@ def _build_partitions(
     for name in names:
         prefix = f"/facts/scheduler/partitions/{name}"
         shape = f"/facts/scheduler/node_shapes/{name}"
-        visible_path = f"{prefix}/visible_walltime_limit"
-        visible_seconds = _duration_seconds(_string(observations, visible_path))
+        walltime_path = f"{prefix}/maximum_walltime_seconds"
         result.append(
             PartitionProfile(
                 name=name,
-                visible_walltime_seconds=visible_seconds,
-                maximum_walltime_seconds=None,
+                maximum_walltime_seconds=_integer(observations, walltime_path),
                 maximum_nodes_per_job=None,
                 shared_nodes=None,
                 node_count=_integer(observations, f"{prefix}/node_count"),
@@ -421,7 +419,7 @@ def _build_partitions(
                 features=_strings(observations, f"{shape}/features") or [],
             )
         )
-        link(f"/slurm/partitions/{name}/visible_walltime_seconds", visible_path)
+        link(f"/slurm/partitions/{name}/maximum_walltime_seconds", walltime_path)
         link(f"/slurm/partitions/{name}/node_count", f"{prefix}/node_count")
         for field, observation_field in (
             ("cpus_per_node", "cpus"),
@@ -901,15 +899,3 @@ def _strings(
     if item is None or not isinstance(item.value, list):
         return None
     return [value for value in item.value if isinstance(value, str)]
-
-
-def _duration_seconds(value: str | None) -> int | None:
-    if value is None or value.lower() in {"infinite", "unlimited"}:
-        return None
-    day_parts = value.split("-", maxsplit=1)
-    days = int(day_parts[0]) if len(day_parts) == 2 and day_parts[0].isdigit() else 0
-    clock = day_parts[-1].split(":")
-    if len(clock) != 3 or not all(part.isdigit() for part in clock):
-        return None
-    hours, minutes, seconds = (int(part) for part in clock)
-    return days * 86400 + hours * 3600 + minutes * 60 + seconds

@@ -115,7 +115,6 @@
     "partitions": [
       {
         "name": "debug",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 7200,
         "maximum_nodes_per_job": 2,
         "shared_nodes": null,
@@ -129,7 +128,6 @@
       },
       {
         "name": "gpu-debug",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 1800,
         "maximum_nodes_per_job": 1,
         "shared_nodes": true,
@@ -145,7 +143,6 @@
       },
       {
         "name": "wholenode",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 345600,
         "maximum_nodes_per_job": 16,
         "shared_nodes": false,
@@ -159,7 +156,6 @@
       },
       {
         "name": "wide",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 43200,
         "maximum_nodes_per_job": 56,
         "shared_nodes": false,
@@ -173,7 +169,6 @@
       },
       {
         "name": "shared",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 345600,
         "maximum_nodes_per_job": 1,
         "shared_nodes": true,
@@ -187,7 +182,6 @@
       },
       {
         "name": "highmem",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 172800,
         "maximum_nodes_per_job": 1,
         "shared_nodes": true,
@@ -201,7 +195,6 @@
       },
       {
         "name": "gpu",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 172800,
         "maximum_nodes_per_job": null,
         "shared_nodes": true,
@@ -217,7 +210,6 @@
       },
       {
         "name": "ai",
-        "visible_walltime_seconds": null,
         "maximum_walltime_seconds": 172800,
         "maximum_nodes_per_job": null,
         "shared_nodes": true,

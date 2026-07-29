@@ -119,6 +119,7 @@ class SlurmPartition(StrictModel):
     """One scheduler-visible Slurm partition."""
 
     name: str
+    maximum_walltime_seconds: int | None = Field(default=None, ge=-1)
     node_count: int | None = None
     memory_mib_per_node: int | None = None
     cpus_per_node: int | None = None
@@ -126,7 +127,6 @@ class SlurmPartition(StrictModel):
     gpu_count_per_node: int | None = None
     gpu_models: list[str] = Field(default_factory=list)
     available: bool | None = None
-    visible_walltime_limit: str | None = None
     node_states: list[str] = Field(default_factory=list)
 
 

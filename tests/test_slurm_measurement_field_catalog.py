@@ -87,8 +87,9 @@ def test_slurm_catalog_preserves_visibility_and_policy_boundaries() -> None:
     fields = {field["path"]: field for field in catalog["fields"]}
     statuses = _load("common.json")["statuses"]
 
-    walltime = fields["/facts/scheduler/partitions/*/visible_walltime_limit"]
-    assert "observation, not enforced policy" in walltime["description"]
+    walltime = fields["/facts/scheduler/partitions/*/maximum_walltime_seconds"]
+    assert walltime["command"] == ["sinfo", "-h", "-o", "%P %l"]
+    assert "-1 meaning unlimited" in walltime["description"]
     assert "Users={username}" in fields["/facts/scheduler/visible_association_limits"]["command"]
     assert fields["/facts/scheduler/reservations"]["command"] == [
         "scontrol",
