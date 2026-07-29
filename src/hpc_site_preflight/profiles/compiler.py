@@ -774,6 +774,16 @@ def _unresolved_items(
                         action_id="partition_policy_search",
                     )
                 )
+    else:
+        for field in ("guaranteed_runtime", "preemptible"):
+            items.append(
+                UnresolvedWorkItem(
+                    field=f"/htcondor/{field}",
+                    reason="Login measurements do not establish HTCondor eviction policy.",
+                    next_action="additional_documentation",
+                    action_id="htcondor_runtime_policy_search",
+                )
+            )
     for option in submission_options:
         if option.required is None:
             items.append(

@@ -9,6 +9,8 @@ from hpc_site_preflight.reporting.tracker import RunTracker
 _FIELD_DESCRIPTIONS = {
     "allocation_required": "Whether a project or allocation is required to submit jobs.",
     "required_submission_options": "Scheduler options the site requires in a job submission.",
+    "guaranteed_runtime": "Whether HTCondor jobs are guaranteed to run to completion.",
+    "preemptible": "Whether HTCondor jobs may be displaced or evicted.",
     "maximum_walltime_seconds": "Documented enforced walltime limits for queues or partitions.",
     "manager_worker_connectivity": "Whether compute workers can connect to a workflow manager.",
     "worker_worker_connectivity": "Whether compute workers can connect directly to each other.",

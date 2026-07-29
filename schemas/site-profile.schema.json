@@ -299,6 +299,36 @@
           "default": null,
           "title": "File Transfer Supported"
         },
+        "guaranteed_runtime": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Guaranteed Runtime"
+        },
+        "preemptible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preemptible"
+        },
+        "maximum_walltime": {
+          "const": "not_applicable",
+          "default": "not_applicable",
+          "title": "Maximum Walltime",
+          "type": "string"
+        },
         "submit_attributes": {
           "items": {
             "$ref": "#/$defs/SubmissionOption"

@@ -5,6 +5,7 @@ from hpc_site_preflight.documentation.models import (
     ChargingModelFinding,
     DocumentationEvidence,
     DocumentationFinding,
+    HTCondorPolicyFinding,
     NetworkFinding,
     PartitionFinding,
     RuntimeMode,
@@ -86,6 +87,14 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
     if isinstance(finding, ChargingModelFinding):
         profile.accounting.charging_model = finding.charging_model
         return ["/accounting/charging_model"]
+    if isinstance(finding, HTCondorPolicyFinding):
+        if profile.htcondor is None:
+            return []
+        if finding.name == "guaranteed_runtime":
+            profile.htcondor.guaranteed_runtime = finding.value
+        else:
+            profile.htcondor.preemptible = finding.value
+        return [f"/htcondor/{finding.name}"]
     if isinstance(finding, PartitionFinding):
         if profile.slurm is None:
             return []
@@ -208,6 +217,8 @@ def _finding_value(finding: DocumentationFinding) -> bool | int | str:
         return finding.available
     if isinstance(finding, ChargingModelFinding):
         return finding.charging_model
+    if isinstance(finding, HTCondorPolicyFinding):
+        return finding.value
     return finding.purge_after_days
 
 

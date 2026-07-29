@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Literal, TypeAlias
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from hpc_site_preflight.providers.base import ModelProviderName
 
@@ -16,6 +16,7 @@ ExtractionGroupName = Literal["submission", "network", "operational"]
 BlockKind = Literal["text", "table"]
 SubmissionRequirement = Literal["required", "recommended", "optional", "conditional"]
 NetworkCapabilityName = Literal["manager_worker", "worker_worker", "outbound_compute"]
+HTCondorPolicyName = Literal["guaranteed_runtime", "preemptible"]
 SubmissionOptionName = Literal[
     "account",
     "partition",
@@ -221,9 +222,24 @@ class ExtractedPartition(StrictModel):
 
 class SubmissionExtractionResult(StrictModel):
     allocation_required: ExtractedBoolean | None
+    guaranteed_runtime: ExtractedBoolean | None
+    preemptible: ExtractedBoolean | None
     submission_options: list[ExtractedSubmissionOption]
     unmapped_options: list[ExtractedUnmappedSubmissionOption]
     partitions: list[ExtractedPartition]
+
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_runtime_policy_fields(cls, value: object) -> object:
+        """Treat missing runtime fields in older recordings as documentation silence."""
+
+        if isinstance(value, dict):
+            return {
+                "guaranteed_runtime": None,
+                "preemptible": None,
+                **value,
+            }
+        return value
 
 
 class ExtractedNetworkCapability(StrictModel):
@@ -305,6 +321,13 @@ class ChargingModelFinding(StrictModel):
     citations: list[DocumentationCitation] = Field(min_length=1)
 
 
+class HTCondorPolicyFinding(StrictModel):
+    name: HTCondorPolicyName
+    value: bool
+    note: str
+    citations: list[DocumentationCitation] = Field(min_length=1)
+
+
 class StoragePolicyFinding(StrictModel):
     name: str
     purge_after_days: int = Field(ge=0)
@@ -319,6 +342,7 @@ DocumentationFinding: TypeAlias = (
     | PartitionFinding
     | NetworkFinding
     | ChargingModelFinding
+    | HTCondorPolicyFinding
     | StoragePolicyFinding
 )
 

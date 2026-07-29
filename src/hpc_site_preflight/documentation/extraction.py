@@ -19,6 +19,7 @@ from hpc_site_preflight.documentation.models import (
     ExtractionGroupName,
     FieldRetrieval,
     FullCorpusExtractionResult,
+    HTCondorPolicyFinding,
     NetworkExtractionResult,
     NetworkFinding,
     OperationalExtractionResult,
@@ -51,6 +52,8 @@ Use null or an empty list when the documentation does not state a value."""
 _GROUP_FIELDS = {
     "submission": (
         "allocation_required",
+        "guaranteed_runtime",
+        "preemptible",
         "required_submission_options",
         "maximum_walltime_seconds",
     ),
@@ -124,10 +127,15 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
         "general policy prose as submission options.",
     ]
     if scheduler == "htcondor":
-        instructions.append(
-            "A resource-specific Condor example may establish a conditional attribute only "
-            "when its heading or prose explicitly states that resource condition; an example "
-            "alone does not establish a site-wide requirement."
+        instructions.extend(
+            [
+                "A resource-specific Condor example may establish a conditional attribute only "
+                "when its heading or prose explicitly states that resource condition; an example "
+                "alone does not establish a site-wide requirement.",
+                'A statement that jobs "may be kicked off" or "must run elsewhere" establishes '
+                "guaranteed_runtime=false and preemptible=true; both values may cite the same "
+                "exact span.",
+            ]
         )
     return instructions
 
@@ -768,6 +776,35 @@ def _validate_group(
                     )
                 )
 
+        for name in ("guaranteed_runtime", "preemptible"):
+            field = getattr(result, name)
+            if field is None:
+                continue
+            if scheduler != "htcondor":
+                rejected.append(f"{name}: field applies only to HTCondor")
+                continue
+            citations, error = _citations(
+                name,
+                field.evidence_span_ids,
+                span_map,
+                retrieved_chunks,
+            )
+            if error:
+                rejected.append(f"{name}: {error}")
+            elif not _supports_htcondor_runtime_policy(name, field.value, citations):
+                rejected.append(
+                    f"{name}: cited text does not explicitly support the proposed value"
+                )
+            else:
+                findings.append(
+                    HTCondorPolicyFinding(
+                        name=name,
+                        value=field.value,
+                        note=field.note,
+                        citations=citations,
+                    )
+                )
+
         allowed_options = _SLURM_OPTIONS if scheduler == "slurm" else _HTCONDOR_OPTIONS
         for option in result.submission_options:
             if option.name not in allowed_options:
@@ -941,6 +978,20 @@ def _validate_group(
     return _ValidatedGroup(findings=findings, rejected=rejected)
 
 
+def _supports_htcondor_runtime_policy(
+    name: str,
+    value: bool,
+    citations: list[DocumentationCitation],
+) -> bool:
+    """Accept the reviewed HTCondor values only from explicit displacement wording."""
+
+    text = " ".join(citation.quote for citation in citations).casefold()
+    displacement = "kicked off" in text or "must run elsewhere" in text
+    if name == "guaranteed_runtime":
+        return displacement and value is False
+    return displacement and value is True
+
+
 def _explicit_negative_network_evidence(
     citations: list[DocumentationCitation],
 ) -> bool:
@@ -1050,6 +1101,8 @@ def _finding_key(finding: DocumentationFinding) -> tuple[str, str | None]:
         return "required_submission_options", finding.documented_name
     if isinstance(finding, PartitionFinding):
         return "maximum_walltime_seconds", finding.name
+    if isinstance(finding, HTCondorPolicyFinding):
+        return finding.name, None
     if isinstance(finding, NetworkFinding):
         return _NETWORK_RETRIEVAL[finding.name], None
     if isinstance(finding, ChargingModelFinding):
@@ -1106,7 +1159,10 @@ def _expected_fields(scheduler: str, storage_names: set[str]) -> set[str]:
     """Return policy fields expected for the scheduler and observed storage resources."""
 
     fields = set().union(*_GROUP_FIELDS.values())
-    if scheduler != "slurm":
+    if scheduler == "slurm":
+        fields.discard("guaranteed_runtime")
+        fields.discard("preemptible")
+    else:
         fields.discard("maximum_walltime_seconds")
     if not storage_names:
         fields.discard("purge_after_days")
@@ -1121,7 +1177,11 @@ def _requested_fields(
     """Return fields from one extraction group that apply to the current site."""
 
     fields = list(_GROUP_FIELDS[group])
-    if scheduler != "slurm" and "maximum_walltime_seconds" in fields:
+    if scheduler == "slurm":
+        for field in ("guaranteed_runtime", "preemptible"):
+            if field in fields:
+                fields.remove(field)
+    elif "maximum_walltime_seconds" in fields:
         fields.remove("maximum_walltime_seconds")
     if not storage_names and "purge_after_days" in fields:
         fields.remove("purge_after_days")

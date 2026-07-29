@@ -34,6 +34,7 @@ from hpc_site_preflight.documentation.models import (
     DocumentationEvidence,
     EvidenceSpan,
     FieldRetrieval,
+    HTCondorPolicyFinding,
     NetworkExtractionResult,
     NetworkFinding,
     PartitionFinding,
@@ -1534,6 +1535,96 @@ def test_typed_htcondor_attributes_are_not_valid_slurm_options() -> None:
     ]
     assert not slurm.findings
     assert "not in the reviewed slurm profile contract" in slurm.rejected[0]
+
+
+def test_htcondor_displacement_policy_is_extracted_and_cited() -> None:
+    measurements = _inputs("notre-dame-crc")
+    quote = (
+        "Of course, if you are borrowing machines owned by other people, then "
+        "you must accept the possibility that some jobs may be kicked off and "
+        "must run elsewhere."
+    )
+    span = EvidenceSpan(
+        span_id="doc-resources-condor-html:c9:s3",
+        chunk_id="doc-resources-condor-html:c9",
+        source_url="https://docs.crc.nd.edu/resources/condor.html",
+        title="HTCondor",
+        heading="HTCondor > About Condor",
+        scope="target_site",
+        quote=quote,
+    )
+    result = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "guaranteed_runtime": {
+                "value": False,
+                "evidence_span_ids": [span.span_id],
+                "note": "Borrowed machines may displace jobs.",
+            },
+            "preemptible": {
+                "value": True,
+                "evidence_span_ids": [span.span_id],
+                "note": "Displaced jobs must run elsewhere.",
+            },
+            "submission_options": [],
+            "unmapped_options": [],
+            "partitions": [],
+        }
+    )
+    retrievals = [
+        FieldRetrieval(
+            field=field,
+            queries=["jobs kicked off must run elsewhere"],
+            hits=[RetrievalHit(chunk_id=span.chunk_id, score=1.0)],
+        )
+        for field in ("guaranteed_runtime", "preemptible")
+    ]
+
+    validated = _validate_group(
+        result,
+        [span],
+        retrievals,
+        "htcondor",
+        set(),
+        set(),
+    )
+    assert not validated.rejected
+    assert [
+        (finding.name, finding.value)
+        for finding in validated.findings
+        if isinstance(finding, HTCondorPolicyFinding)
+    ] == [("guaranteed_runtime", False), ("preemptible", True)]
+
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="live",
+        context_mode="bm25",
+        findings=validated.findings,
+        rejected=[],
+        unresolved=[],
+        selected_chunk_ids=[span.chunk_id],
+        retrieval=retrievals,
+    )
+    profile, report = compile_profile(measurements)
+    profile, report = apply_documentation(profile, report, documentation)
+
+    assert profile.htcondor is not None
+    assert profile.htcondor.guaranteed_runtime is False
+    assert profile.htcondor.preemptible is True
+    assert profile.htcondor.maximum_walltime == "not_applicable"
+    evidence = {
+        item.field_path: item
+        for item in report.evidence
+        if item.source_type == "documentation"
+    }
+    assert evidence["/htcondor/guaranteed_runtime"].exact_quote == quote
+    assert evidence["/htcondor/preemptible"].exact_quote == quote
+    assert all(
+        item.source_reference == span.source_url for item in evidence.values()
+    )
 
 
 def test_same_heading_context_can_support_one_field_citation() -> None:

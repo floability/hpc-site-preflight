@@ -206,6 +206,9 @@ def test_htcondor_profile_has_resource_groups_not_partitions() -> None:
     assert profile.htcondor.pool_totals.advertised_gpus == 310
     assert len(profile.htcondor.cpu_groups) == 11
     assert len(profile.htcondor.gpu_groups) == 12
+    assert profile.htcondor.guaranteed_runtime is None
+    assert profile.htcondor.preemptible is None
+    assert profile.htcondor.maximum_walltime == "not_applicable"
     assert [item.name for item in profile.htcondor.submit_attributes] == [
         "universe",
         "executable",
@@ -216,6 +219,19 @@ def test_htcondor_profile_has_resource_groups_not_partitions() -> None:
         "when_to_transfer_output",
     ]
     assert not any("/slurm/partitions/" in item.field for item in profile.unresolved)
+    assert {
+        "/htcondor/guaranteed_runtime",
+        "/htcondor/preemptible",
+    } <= {item.field for item in profile.unresolved}
+
+
+def test_htcondor_runtime_fields_do_not_change_slurm_profile() -> None:
+    profile, _ = _compile("anvil")
+
+    assert profile.slurm is not None
+    assert "guaranteed_runtime" not in profile.slurm.model_dump()
+    assert "preemptible" not in profile.slurm.model_dump()
+    assert "maximum_walltime" not in profile.slurm.model_dump()
 
 
 def test_measurement_build_is_deterministic() -> None:

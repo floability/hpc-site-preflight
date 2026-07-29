@@ -22,6 +22,14 @@ _COMMON_FIELD_QUERIES: dict[str, tuple[str, ...]] = {
         "required scheduler submission directives job file",
         "mandatory job submission fields options",
     ),
+    "guaranteed_runtime": (
+        "job guaranteed runtime completion",
+        "jobs kicked off must run elsewhere",
+    ),
+    "preemptible": (
+        "jobs preempted evicted kicked off",
+        "borrowed machines jobs must run elsewhere",
+    ),
     "maximum_walltime_seconds": (
         "partition maximum walltime time limit",
         "queue maximum job duration",

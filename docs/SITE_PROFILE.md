@@ -182,6 +182,9 @@ the same. Only the scheduler section changes:
     "submit_command": "condor_submit",
     "collector_host": "condorfe.example.edu",
     "file_transfer_supported": true,
+    "guaranteed_runtime": false,
+    "preemptible": true,
+    "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
         "name": "request_cpus",

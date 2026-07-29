@@ -123,6 +123,9 @@ class HTCondorProfile(BaseModel):
     submit_command: str | None = None
     collector_host: str | None = None
     file_transfer_supported: bool | None = None
+    guaranteed_runtime: bool | None = None
+    preemptible: bool | None = None
+    maximum_walltime: Literal["not_applicable"] = "not_applicable"
     submit_attributes: list[SubmissionOption] = Field(default_factory=list)
     unmapped_submit_attributes: list[UnmappedSubmissionOption] = Field(
         default_factory=list
