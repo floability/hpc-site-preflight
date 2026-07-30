@@ -1,0 +1,105 @@
+{
+  "schema_version": "0.1",
+  "site_id": "tacc-stampede3",
+  "scheduler": "slurm",
+  "evidence_source": "measured",
+  "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+  "collected_at": "2026-07-30T19:39:35.001644Z",
+  "status": "completed",
+  "storage_results": [
+    {
+      "name": "home",
+      "path": "/home1/10724/mislam11",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    },
+    {
+      "name": "scratch",
+      "path": "/scratch/10724/mislam11",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    },
+    {
+      "name": "work",
+      "path": "/work2/10724/mislam11/stampede3",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    }
+  ],
+  "login_compute_attempts": [
+    {
+      "port": 30000,
+      "status": "passed"
+    },
+    {
+      "port": 30264,
+      "status": "passed"
+    },
+    {
+      "port": 31062,
+      "status": "passed"
+    },
+    {
+      "port": 31534,
+      "status": "passed"
+    },
+    {
+      "port": 32504,
+      "status": "passed"
+    },
+    {
+      "port": 32721,
+      "status": "passed"
+    },
+    {
+      "port": 33795,
+      "status": "passed"
+    },
+    {
+      "port": 33957,
+      "status": "passed"
+    }
+  ],
+  "compute_compute_attempts": [
+    {
+      "port": 30000,
+      "status": "passed"
+    },
+    {
+      "port": 30663,
+      "status": "passed"
+    },
+    {
+      "port": 31185,
+      "status": "passed"
+    },
+    {
+      "port": 31660,
+      "status": "passed"
+    },
+    {
+      "port": 32463,
+      "status": "passed"
+    },
+    {
+      "port": 32728,
+      "status": "passed"
+    },
+    {
+      "port": 33430,
+      "status": "passed"
+    },
+    {
+      "port": 33558,
+      "status": "passed"
+    }
+  ],
+  "primary_node": "c454-072",
+  "peer_node": "c454-084",
+  "distinct_nodes": true,
+  "errors": [],
+  "source_reference": "/home1/10724/mislam11/preflight/hpc-site-preflight/pilot-runs/stampede3-final/0d57a2458f4b450b8195810f33dfd072/pilot-result.json"
+}
