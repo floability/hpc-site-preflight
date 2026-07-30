@@ -615,7 +615,7 @@ def test_documentation_fills_stampede_resources_options_storage_and_network() ->
             ),
             SubmissionOptionFinding(
                 name="gres",
-                syntax=["--gres={resource}"],
+                syntax=["#SBATCH --gres=gpu:4"],
                 requirement="optional",
                 support="unsupported",
                 note="The scheduler rejects this option.",
@@ -649,6 +649,7 @@ def test_documentation_fills_stampede_resources_options_storage_and_network() ->
     assert h100.gpu_count_per_node == 4
     assert h100.gpu_models == ["NVIDIA H100 SXM5"]
     gres = next(item for item in profile.slurm.options if item.name == "gres")
+    assert gres.syntax == ["--gres={resource}"]
     assert gres.support == "unsupported"
     scratch = next(item for item in profile.storage if item.id == "scratch")
     assert scratch.compute_visible is True

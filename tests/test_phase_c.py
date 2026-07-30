@@ -15,7 +15,11 @@ from hpc_site_preflight.evidence.reconciliation import (
 )
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.profiles.compiler import compile_profile
-from hpc_site_preflight.profiles.models import SiteProfile, SubmissionOption
+from hpc_site_preflight.profiles.models import (
+    SiteProfile,
+    SlurmProfile,
+    SubmissionOption,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 SIMULATE_ROOT = ROOT / "examples" / "simulate"
@@ -64,6 +68,27 @@ def test_submission_option_preserves_syntax_order() -> None:
     )
     assert option.syntax == ["-A {account}", "--account={account}"]
     assert option.required is True
+
+
+def test_slurm_profile_normalizes_known_option_syntax() -> None:
+    profile = SlurmProfile(
+        options=[
+            SubmissionOption(
+                name="nodes",
+                syntax=["#SBATCH --nodes=<count>"],
+            ),
+            SubmissionOption(
+                name="partition",
+                syntax=["-p queue_name"],
+            ),
+        ]
+    )
+
+    assert profile.options[0].syntax == ["--nodes={count}", "-N {count}"]
+    assert profile.options[1].syntax == [
+        "--partition={partition}",
+        "-p {partition}",
+    ]
 
 
 def test_detailed_evidence_supports_documentation_provenance() -> None:

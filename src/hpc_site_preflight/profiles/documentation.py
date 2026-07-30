@@ -33,6 +33,7 @@ from hpc_site_preflight.profiles.models import (
     SubmissionOption,
     UnmappedSubmissionOption,
     UnresolvedWorkItem,
+    canonical_slurm_syntax,
 )
 
 
@@ -146,6 +147,9 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             setattr(storage, finding.field, finding.value)
             return [f"/storage/{storage.id}/{finding.field}"]
     if isinstance(finding, SubmissionOptionFinding):
+        syntax = finding.syntax
+        if profile.slurm is not None:
+            syntax = canonical_slurm_syntax(finding.name) or syntax
         options = (
             profile.slurm.options
             if profile.slurm is not None
@@ -157,12 +161,12 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
             (item for item in options if item.name == finding.name),
             None,
         )
-        if option is None and finding.syntax:
-            option = SubmissionOption(name=finding.name, syntax=finding.syntax)
+        if option is None and syntax:
+            option = SubmissionOption(name=finding.name, syntax=syntax)
             options.append(option)
         if option is not None:
-            if finding.syntax:
-                option.syntax = finding.syntax
+            if syntax:
+                option.syntax = syntax
             option.required = (
                 True
                 if finding.requirement == "required"

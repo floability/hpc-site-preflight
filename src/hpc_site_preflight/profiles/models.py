@@ -25,6 +25,34 @@ NextAction = Literal[
     "admin_confirmation",
 ]
 
+_CANONICAL_SLURM_SYNTAX: dict[str, list[str]] = {
+    "account": ["--account={account}", "-A {account}"],
+    "array": ["--array={tasklist}", "-a {tasklist}"],
+    "cpus-per-task": ["--cpus-per-task={count}"],
+    "dependency": ["--dependency={dependency}", "-d {dependency}"],
+    "error": ["--error={path}", "-e {path}"],
+    "export": ["--export={mode}"],
+    "gpus-per-task": ["--gpus-per-task={count}"],
+    "gres": ["--gres={resource}"],
+    "job-name": ["--job-name={name}", "-J {name}"],
+    "mail-type": ["--mail-type={type}"],
+    "mail-user": ["--mail-user={email}"],
+    "mem": ["--mem={size}"],
+    "nodes": ["--nodes={count}", "-N {count}"],
+    "ntasks": ["--ntasks={count}", "-n {count}"],
+    "ntasks-per-node": ["--ntasks-per-node={count}"],
+    "output": ["--output={path}", "-o {path}"],
+    "partition": ["--partition={partition}", "-p {partition}"],
+    "time": ["--time={time}", "-t {time}"],
+}
+
+
+def canonical_slurm_syntax(name: str) -> list[str] | None:
+    """Return the stable argument template for one reviewed Slurm option."""
+
+    syntax = _CANONICAL_SLURM_SYNTAX.get(name)
+    return list(syntax) if syntax is not None else None
+
 
 class SubmissionOption(BaseModel):
     """One semantic scheduler option with ordered rendering forms."""
@@ -116,6 +144,16 @@ class SlurmProfile(BaseModel):
     options: list[SubmissionOption] = Field(default_factory=list)
     unmapped_options: list[UnmappedSubmissionOption] = Field(default_factory=list)
     partitions: list[PartitionProfile] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def normalize_option_syntax(self) -> Self:
+        """Render known Slurm options as stable long-form argument templates."""
+
+        for option in self.options:
+            syntax = canonical_slurm_syntax(option.name)
+            if syntax is not None:
+                option.syntax = syntax
+        return self
 
 
 class HTCondorProfile(BaseModel):
