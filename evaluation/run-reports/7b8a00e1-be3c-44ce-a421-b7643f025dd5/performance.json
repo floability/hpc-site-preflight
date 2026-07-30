@@ -1,0 +1,547 @@
+{
+  "artifacts": [
+    {
+      "kind": "performance_report",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/run-reports/7b8a00e1-be3c-44ce-a421-b7643f025dd5/performance.json"
+    },
+    {
+      "kind": "execution_trace",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/run-reports/7b8a00e1-be3c-44ce-a421-b7643f025dd5/trace.jsonl"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/manifest.json"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/documents.jsonl"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/chunks.jsonl"
+    },
+    {
+      "kind": "site_profile",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gpt-5.6-terra-full-corpus-rep1/site-profile.json"
+    },
+    {
+      "kind": "evidence_report",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gpt-5.6-terra-full-corpus-rep1/evidence-report-7b8a00e1-be3c-44ce-a421-b7643f025dd5.json"
+    },
+    {
+      "kind": "documentation_evidence",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gpt-5.6-terra-full-corpus-rep1/documentation-evidence.json"
+    },
+    {
+      "kind": "pilot_evidence",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gpt-5.6-terra-full-corpus-rep1/pilot-evidence.json"
+    }
+  ],
+  "command": "profile build",
+  "duration_seconds": 49.97669408300135,
+  "ended_at": "2026-07-30T21:26:46.757708Z",
+  "error_message": null,
+  "error_type": null,
+  "mode": "site=simulate, model=live, web=live, corpus=frozen",
+  "model_usage": {
+    "input_tokens": 45972,
+    "output_tokens": 5458,
+    "requests": 9,
+    "total_tokens": 51430,
+    "usage_available": true
+  },
+  "retries": 0,
+  "run_id": "7b8a00e1-be3c-44ce-a421-b7643f025dd5",
+  "schema_version": "0.1",
+  "started_at": "2026-07-30T21:25:56.780877Z",
+  "status": "completed",
+  "steps": [
+    {
+      "duration_seconds": 0.00018412499775877222,
+      "ended_at": "2026-07-30T21:25:56.781717Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_load",
+      "retries": 0,
+      "started_at": "2026-07-30T21:25:56.781533Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00011341700155753642,
+      "ended_at": "2026-07-30T21:25:56.782242Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_validate",
+      "retries": 0,
+      "started_at": "2026-07-30T21:25:56.782124Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0022924579971004277,
+      "ended_at": "2026-07-30T21:25:56.785115Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "measurement_profile_build",
+      "retries": 0,
+      "started_at": "2026-07-30T21:25:56.782811Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0015631669957656413,
+      "ended_at": "2026-07-30T21:25:56.825533Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_corpus_load",
+      "retries": 0,
+      "started_at": "2026-07-30T21:25:56.823959Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.013946125000074971,
+      "ended_at": "2026-07-30T21:25:56.839870Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T21:25:56.825924Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 4.284903415995359,
+      "ended_at": "2026-07-30T21:26:01.126116Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4969,
+        "output_tokens": 349,
+        "requests": 1,
+        "total_tokens": 5318,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:25:56.841203Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0005393750034272671,
+      "ended_at": "2026-07-30T21:26:01.128485Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:01.127930Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 15.764781582998694,
+      "ended_at": "2026-07-30T21:26:16.896038Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 5731,
+        "output_tokens": 1998,
+        "requests": 1,
+        "total_tokens": 7729,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:01.131216Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0021712080051656812,
+      "ended_at": "2026-07-30T21:26:16.901854Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:16.899636Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 6.33789108399651,
+      "ended_at": "2026-07-30T21:26:23.242751Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 5194,
+        "output_tokens": 821,
+        "requests": 1,
+        "total_tokens": 6015,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:16.904843Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0009944159974111244,
+      "ended_at": "2026-07-30T21:26:23.246404Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:23.245363Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 2.5174339170043822,
+      "ended_at": "2026-07-30T21:26:25.766347Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4942,
+        "output_tokens": 269,
+        "requests": 1,
+        "total_tokens": 5211,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:23.248905Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0004434160000528209,
+      "ended_at": "2026-07-30T21:26:25.769360Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:25.768892Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 6.074151584005449,
+      "ended_at": "2026-07-30T21:26:31.847347Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4867,
+        "output_tokens": 624,
+        "requests": 1,
+        "total_tokens": 5491,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:25.773197Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0006709170047543012,
+      "ended_at": "2026-07-30T21:26:31.852190Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:31.851485Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 2.4485230000063893,
+      "ended_at": "2026-07-30T21:26:34.303296Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 5020,
+        "output_tokens": 144,
+        "requests": 1,
+        "total_tokens": 5164,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:31.854685Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0006642919979640283,
+      "ended_at": "2026-07-30T21:26:34.309008Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:34.308300Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 1.6286007500020787,
+      "ended_at": "2026-07-30T21:26:35.940048Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 6508,
+        "output_tokens": 114,
+        "requests": 1,
+        "total_tokens": 6622,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:34.311447Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0004672499999287538,
+      "ended_at": "2026-07-30T21:26:35.944038Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:35.943519Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 8.170251625000674,
+      "ended_at": "2026-07-30T21:26:44.118341Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4664,
+        "output_tokens": 968,
+        "requests": 1,
+        "total_tokens": 5632,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:35.948047Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0010447919994476251,
+      "ended_at": "2026-07-30T21:26:44.123565Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:44.122484Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 2.565340125001967,
+      "ended_at": "2026-07-30T21:26:46.691973Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4077,
+        "output_tokens": 171,
+        "requests": 1,
+        "total_tokens": 4248,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:44.126636Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0004882499997620471,
+      "ended_at": "2026-07-30T21:26:46.696101Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:46.695565Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.004125708001083694,
+      "ended_at": "2026-07-30T21:26:46.724315Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:46.720167Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0002806670017889701,
+      "ended_at": "2026-07-30T21:26:46.726021Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_pilot_load",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:46.725733Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00039045800076564774,
+      "ended_at": "2026-07-30T21:26:46.727440Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "pilot_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:46.727045Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0276306250016205,
+      "ended_at": "2026-07-30T21:26:46.756081Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "profile_artifact_write",
+      "retries": 0,
+      "started_at": "2026-07-30T21:26:46.728447Z",
+      "status": "completed",
+      "tool_calls": 0
+    }
+  ],
+  "tool_calls": 0
+}

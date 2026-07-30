@@ -53,7 +53,7 @@ class OpenAIProvider(ModelProvider):
         model: str,
         api_key: str | None = None,
         base_url: str = _DEFAULT_BASE_URL,
-        timeout: float = 90.0,
+        timeout: float = 300.0,
         max_retries: int = 0,
         client: httpx.Client | None = None,
     ) -> None:

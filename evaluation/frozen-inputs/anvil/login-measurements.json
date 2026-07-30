@@ -1,0 +1,238 @@
+{
+  "schema_version": "0.7",
+  "collected_at": "2026-07-29T18:49:10.480978Z",
+  "evidence_source": "measured",
+  "collector_version": "0.7.0",
+  "detected_schedulers": [
+    "slurm"
+  ],
+  "site_facts": {
+    "site_id": "anvil",
+    "site_name": "Anvil",
+    "aliases": [],
+    "hostname": "login03",
+    "fqdn": "login03.anvil.rcac.purdue.edu",
+    "dns_suffix": "anvil.rcac.purdue.edu",
+    "hostname_patterns": [
+      "*.anvil.rcac.purdue.edu"
+    ],
+    "documentation_domains": [
+      "purdue.edu"
+    ],
+    "preferred_path_tokens": [
+      "anvil"
+    ],
+    "username": "x-mislam11",
+    "uid": 7957988,
+    "groups": [
+      "x-cis250350"
+    ],
+    "home_directory": "/home/x-mislam11",
+    "working_directory": "/home/x-mislam11/site-preflight/hpc-site-preflight",
+    "os_id": "rocky",
+    "os_version": "8.10",
+    "kernel_release": "4.18.0-553.81.1.el8_10.x86_64",
+    "architecture": "x86_64",
+    "cpu_count": 32,
+    "available_memory_bytes": 152516915200
+  },
+  "storage": {
+    "locations": [
+      {
+        "id": "project",
+        "role": "project",
+        "environment_variables": [
+          "CLUSTER_PROJECT",
+          "CLUSTER_WORK",
+          "PROJECT",
+          "RCAC_PROJECT",
+          "RCAC_WORK",
+          "WORK"
+        ],
+        "observed_path": "/anvil/projects/x-cis250350",
+        "path_pattern": "/anvil/projects/{group}",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwxrws---",
+        "filesystem_type": "gpfs"
+      },
+      {
+        "id": "scratch",
+        "role": "scratch",
+        "environment_variables": [
+          "CLUSTER_SCRATCH",
+          "RCAC_SCRATCH",
+          "SCRATCH"
+        ],
+        "observed_path": "/anvil/scratch/x-mislam11",
+        "path_pattern": "/anvil/scratch/{username}",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwx------",
+        "filesystem_type": "gpfs"
+      },
+      {
+        "id": "home",
+        "role": "home",
+        "environment_variables": [
+          "HOME"
+        ],
+        "observed_path": "/home/x-mislam11",
+        "path_pattern": "/home/{username}",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwx------",
+        "filesystem_type": "nfs"
+      }
+    ]
+  },
+  "slurm": {
+    "version": "25.11.1",
+    "available_commands": [
+      "sinfo",
+      "sbatch",
+      "squeue",
+      "sacct"
+    ],
+    "submit_command_available": true,
+    "default_partition": "shared",
+    "partitions": [
+      {
+        "name": "wholenode",
+        "node_count": 750,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "standard",
+        "node_count": 750,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "shared",
+        "node_count": 250,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "wide",
+        "node_count": 746,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "highmem",
+        "node_count": 32,
+        "memory_mib_per_node": 1031400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "debug",
+        "node_count": 17,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "gpu",
+        "node_count": 16,
+        "memory_mib_per_node": 515400,
+        "cpus_per_node": 128,
+        "gres": [
+          "gpu:4"
+        ],
+        "gpu_count_per_node": 4,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "ai",
+        "node_count": 21,
+        "memory_mib_per_node": 1031000,
+        "cpus_per_node": 96,
+        "gres": [
+          "gpu:4"
+        ],
+        "gpu_count_per_node": 4,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "gpu-debug",
+        "node_count": 16,
+        "memory_mib_per_node": 515400,
+        "cpus_per_node": 128,
+        "gres": [
+          "gpu:4"
+        ],
+        "gpu_count_per_node": 4,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "profiling",
+        "node_count": 4,
+        "memory_mib_per_node": 257400,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      }
+    ],
+    "visible_accounts": [],
+    "visible_qos": []
+  },
+  "htcondor": null,
+  "networking": null
+}

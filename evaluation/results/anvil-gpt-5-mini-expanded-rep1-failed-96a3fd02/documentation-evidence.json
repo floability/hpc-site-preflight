@@ -1,0 +1,975 @@
+{
+  "site_id": "anvil",
+  "model_mode": "live",
+  "model_provider": "openai",
+  "model": "gpt-5-mini",
+  "web_mode": "live",
+  "context_mode": "llm-expanded-bm25",
+  "corpus_fingerprint": "b4702f0df1926850d6252174ebf22394763b3add5842824b6f1bdd5c05253cde",
+  "findings": [
+    {
+      "name": "charging_unit",
+      "value": "Service Unit (SU)",
+      "note": "Charge unit for Anvil.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c124:s1",
+          "chunk_id": "doc-anvil-jobs:c124",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > CPU Nodes \u00b6",
+          "quote": "The charge unit for Anvil is the Service Unit (SU) ."
+        }
+      ]
+    },
+    {
+      "name": "filesystem_storage_charged",
+      "value": false,
+      "note": "Filesystem storage is not charged.",
+      "citations": [
+        {
+          "span_id": "doc-anvil-jobs:c132:s1",
+          "chunk_id": "doc-anvil-jobs:c132",
+          "url": "https://docs.rcac.purdue.edu/userguides/anvil/jobs/",
+          "title": "Job Submission - RCAC Documentation",
+          "heading": "Job Submission - RCAC Documentation > Job Submission on Anvil \u00b6 > Job Accounting \u00b6 > Filesystem \u00b6",
+          "quote": "Filesystem storage is not charged."
+        }
+      ]
+    }
+  ],
+  "rejected": [
+    "submission: model request failed: OpenAI request failed before a response was received.",
+    "network/manager_worker: false requires explicit negative documentation, not documentation silence",
+    "network/worker_worker: evidence was not retrieved for this field: doc-anvil-jobs:c61:s1",
+    "network/outbound_compute: evidence was not retrieved for this field: doc-anvil-jobs:c40:s1",
+    "after correction: network/worker_worker: evidence was not retrieved for this field: doc-anvil-jobs:c61:s1",
+    "after correction: network/outbound_compute: evidence was not retrieved for this field: doc-anvil-jobs:c40:s1",
+    "charging_model: evidence was not retrieved for this field: doc-anvil-jobs:c124:s2, doc-anvil-jobs:c129:s1"
+  ],
+  "unresolved": [
+    "allocation_required",
+    "charging_model",
+    "features",
+    "gpu_count_per_node",
+    "gpu_models",
+    "manager_worker_connectivity",
+    "maximum_nodes_per_job",
+    "maximum_walltime_seconds",
+    "outbound_compute",
+    "purge_after_days",
+    "required_submission_options",
+    "shared_nodes",
+    "storage_backup_policy",
+    "storage_compute_readable",
+    "storage_compute_visible",
+    "storage_compute_writable",
+    "storage_purge_condition",
+    "storage_shared_across_compute_nodes",
+    "worker_worker_connectivity"
+  ],
+  "selected_chunk_ids": [
+    "doc-anvil-jobs:c204",
+    "doc-anvil-jobs:c91",
+    "doc-anvil-jobs:c24",
+    "doc-anvil-jobs:c35",
+    "doc-anvil-jobs:c80",
+    "doc-anvil-jobs:c41",
+    "doc-anvil-jobs:c8",
+    "doc-compute-anvil:c34",
+    "doc-anvil-jobs:c40",
+    "doc-anvil-jobs:c131",
+    "doc-anvil-jobs:c43",
+    "doc-anvil-jobs:c89",
+    "doc-anvil-jobs:c48",
+    "doc-anvil-jobs:c202",
+    "doc-compute-anvil:c33",
+    "doc-anvil-jobs:c61",
+    "doc-anvil-jobs:c37",
+    "doc-anvil-jobs:c42",
+    "doc-compute-anvil:c35",
+    "doc-compute-anvil:c13",
+    "doc-anvil-jobs:c3",
+    "doc-anvil-jobs:c124",
+    "doc-anvil-jobs:c17",
+    "doc-anvil-jobs:c132",
+    "doc-anvil-jobs:c121",
+    "doc-compute-anvil:c5",
+    "doc-compute-anvil:c2",
+    "doc-anvil-jobs:c111",
+    "doc-anvil-jobs:c107",
+    "doc-anvil-jobs:c197",
+    "doc-anvil-jobs:c180",
+    "doc-anvil-jobs:c187",
+    "doc-anvil-jobs:c129",
+    "doc-anvil-jobs:c119",
+    "doc-anvil-jobs:c31",
+    "doc-anvil-jobs:c159"
+  ],
+  "retrieval": [
+    {
+      "field": "allocation_required",
+      "queries": [
+        "allocation project access required job submission",
+        "job submission authorization requirements",
+        "Slurm allocation account project required job submission",
+        "job submission requires allocation account",
+        "Anvil Slurm require allocation or project account to submit jobs"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 8.17945,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c80",
+          "score": 1.427669,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c40",
+          "score": 13.478339,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c43",
+          "score": 12.443821,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c48",
+          "score": 17.493361,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 8.08336,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "required_submission_options",
+      "queries": [
+        "required scheduler submission directives job file",
+        "mandatory job submission fields options",
+        "required sbatch submission options account partition",
+        "job script account partition time nodes memory",
+        "mandatory SBATCH fields",
+        "must at minimum specify",
+        "account -A --account allocation account",
+        "partition -p showpartitions",
+        "site-specific mandatory SBATCH directives licenses constraint reservation",
+        "additional required #SBATCH options",
+        "common sbatch options unsupported not available avoid",
+        "gres gpus-per-task mem export array dependency mail-type",
+        "Anvil Slurm site-required sbatch directives mandatory flags --account --partition --time --nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c91",
+          "score": 8.405353,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c41",
+          "score": 13.995366,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c40",
+          "score": 23.05748,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c89",
+          "score": 20.436083,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 7.89463,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c42",
+          "score": 20.589803,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "maximum_walltime_seconds",
+      "queries": [
+        "partition maximum walltime time limit",
+        "queue maximum job duration",
+        "ai debug gpu gpu-debug highmem profiling shared standard wholenode wide partition queue maximum walltime",
+        "Anvil partition maximum walltime limits per queue (ai, debug, gpu, highmem, standard, wide)"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 21.26822,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 15.76727,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 74.34543,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c48",
+          "score": 11.407879,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 21.026547,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 7.253756,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "maximum_nodes_per_job",
+      "queries": [
+        "partition queue maximum nodes per job",
+        "job size limit nodes",
+        "ai debug gpu gpu-debug highmem profiling shared standard wholenode wide partition queue maximum nodes per job",
+        "Anvil partition maximum nodes per job limits (nodes per job) for ai gpu shared wide"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 19.930979,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 13.561116,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 79.132619,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 16.261534,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c48",
+          "score": 16.518779,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c35",
+          "score": 5.566469,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "shared_nodes",
+      "queries": [
+        "partition shared nodes whole node",
+        "node sharing policy",
+        "node-sharing complete node dedicated one user",
+        "all GPU nodes are shared shared queues node-exclusive",
+        "ai debug gpu gpu-debug highmem profiling shared standard wholenode wide partition queue node sharing",
+        "Anvil Slurm node-sharing policy shared vs exclusive nodes GPU node sharing per partition"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 21.527128,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c8",
+          "score": 9.380843,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 12.646511,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c131",
+          "score": 20.56561,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 18.726599,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 24.052304,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "gpu_count_per_node",
+      "queries": [
+        "GPU count per node partition queue",
+        "GPUs per compute node specifications",
+        "each GPU node has GPUs",
+        "ai debug gpu gpu-debug highmem profiling shared standard wholenode wide partition queue GPUs per node",
+        "Anvil GPUs per node count for GPU partitions number of GPUs per compute node"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 29.311298,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 39.494881,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c131",
+          "score": 19.124353,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 79.744794,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 37.895766,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 17.567283,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "gpu_models",
+      "queries": [
+        "GPU model partition queue specifications",
+        "NVIDIA AMD Intel GPU node type",
+        "ai debug gpu gpu-debug highmem profiling shared standard wholenode wide partition queue GPU model",
+        "Anvil GPU model list available on GPU partitions (NVIDIA/AMD model names) per partition"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 17.567283,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 30.086044,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 74.34543,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 22.557114,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 11.733448,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c131",
+          "score": 7.962815,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "features",
+      "queries": [
+        "partition node features architecture",
+        "queue node type hardware features",
+        "ai debug gpu gpu-debug highmem profiling shared standard wholenode wide partition queue node features",
+        "Anvil partition node features and architectures (CPU type, memory, interconnect, accelerators)"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c91",
+          "score": 18.695997,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 20.39158,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 79.744794,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 15.492812,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c37",
+          "score": 9.149731,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 12.088635,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "manager_worker_connectivity",
+      "queries": [
+        "manager worker connectivity login compute TCP",
+        "compute node connect to login manager",
+        "Anvil allow compute workers to connect to workflow manager head/login node network"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 12.992881,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 13.957239,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c91",
+          "score": 14.893141,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c37",
+          "score": 7.995505,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 11.266193,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c3",
+          "score": 8.642028,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "worker_worker_connectivity",
+      "queries": [
+        "worker compute node to node connectivity TCP",
+        "inter-node application network policy",
+        "Anvil inter-node worker-to-worker connectivity direct TCP node-to-node communication policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 15.882846,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c91",
+          "score": 9.423028,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c8",
+          "score": 9.384148,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 13.957239,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c40",
+          "score": 8.307923,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 7.828516,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "outbound_compute",
+      "queries": [
+        "outbound compute node internet network egress",
+        "compute nodes access external network",
+        "Anvil compute node outbound internet access egress firewall policy for compute nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c91",
+          "score": 14.889418,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 10.248557,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 16.202281,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 9.103064,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c13",
+          "score": 8.551785,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 13.533531,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "charging_unit",
+      "queries": [
+        "charging unit service unit node hour core hour",
+        "allocation accounting unit",
+        "Anvil allocation charging unit (node-hour, core-hour, GPU-hour) accounting unit"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c124",
+          "score": 18.287239,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c121",
+          "score": 7.680542,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 25.94325,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c40",
+          "score": 8.828681,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 7.117839,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c31",
+          "score": 11.337026,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "charging_model",
+      "queries": [
+        "charging accounting service units credits allocation cost",
+        "job charge cores memory node allocation",
+        "Anvil charging model how jobs consume allocation (per node-hour, per core, per GPU)"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c17",
+          "score": 14.461826,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 22.411653,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 36.459753,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c180",
+          "score": 11.642713,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 19.596095,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 14.220764,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "filesystem_storage_charged",
+      "queries": [
+        "filesystem storage charged allocation quota cost",
+        "storage usage accounting charge",
+        "Anvil does filesystem storage usage count against allocation or quota storage accounting"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c132",
+          "score": 19.08552,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c121",
+          "score": 8.414168,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 12.512346,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 7.117839,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c129",
+          "score": 7.681361,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c43",
+          "score": 8.237602,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_visible",
+      "queries": [
+        "storage filesystem visible compute nodes",
+        "home scratch work mounted compute nodes",
+        "home project scratch storage filesystem compute visibility",
+        "Anvil are home, project, scratch mounted and visible on compute nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c132",
+          "score": 14.177468,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 10.248557,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c2",
+          "score": 10.155498,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c197",
+          "score": 13.311347,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c34",
+          "score": 8.915527,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c5",
+          "score": 9.171494,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_readable",
+      "queries": [
+        "storage filesystem readable compute nodes",
+        "compute jobs read home scratch work",
+        "home project scratch storage filesystem compute readable",
+        "Anvil can compute jobs read home, project, scratch filesystems read access"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c132",
+          "score": 14.177468,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c5",
+          "score": 9.171494,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c2",
+          "score": 10.155498,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c187",
+          "score": 11.872945,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 10.248557,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c159",
+          "score": 8.760487,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_writable",
+      "queries": [
+        "storage filesystem writable compute nodes",
+        "compute jobs write home scratch work",
+        "home project scratch storage filesystem compute writable"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c132",
+          "score": 14.177468,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c5",
+          "score": 9.171494,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c2",
+          "score": 10.155498,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 10.248557,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c91",
+          "score": 8.127668,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c197",
+          "score": 7.769706,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_shared_across_compute_nodes",
+      "queries": [
+        "shared filesystem across compute nodes",
+        "same storage mounted all nodes",
+        "mounts three file systems shared across all nodes home work scratch",
+        "home project scratch shared storage all compute nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c24",
+          "score": 12.059299,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c2",
+          "score": 6.772612,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 15.276218,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 16.252453,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c33",
+          "score": 10.248557,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c131",
+          "score": 6.395347,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_backup_policy",
+      "queries": [
+        "storage filesystem backup policy",
+        "home scratch work backed up",
+        "home project scratch storage filesystem backup policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c132",
+          "score": 14.177468,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c35",
+          "score": 11.330217,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c197",
+          "score": 7.769706,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c2",
+          "score": 6.772612,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c40",
+          "score": 7.545948,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c187",
+          "score": 7.256042,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "purge_after_days",
+      "queries": [
+        "purge retention deletion expiration scratch policy",
+        "scratch files removed after days",
+        "home project scratch storage scratch purge retention days"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 9.668626,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c111",
+          "score": 9.284101,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 8.944234,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 8.233169,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c119",
+          "score": 9.057826,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c197",
+          "score": 7.769706,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_purge_condition",
+      "queries": [
+        "storage purge condition inactive files",
+        "scratch retention deletion condition",
+        "home project scratch storage scratch purge condition"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-anvil-jobs:c204",
+          "score": 9.668626,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c107",
+          "score": 6.500675,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c61",
+          "score": 8.944234,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c202",
+          "score": 8.233169,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-anvil-jobs:c197",
+          "score": 7.769706,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-compute-anvil:c2",
+          "score": 6.772612,
+          "cited": false
+        }
+      ]
+    }
+  ]
+}

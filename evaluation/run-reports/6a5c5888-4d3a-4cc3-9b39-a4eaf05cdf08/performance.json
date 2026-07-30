@@ -1,0 +1,313 @@
+{
+  "artifacts": [
+    {
+      "kind": "performance_report",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/run-reports/6a5c5888-4d3a-4cc3-9b39-a4eaf05cdf08/performance.json"
+    },
+    {
+      "kind": "execution_trace",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/run-reports/6a5c5888-4d3a-4cc3-9b39-a4eaf05cdf08/trace.jsonl"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/manifest.json"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/documents.jsonl"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/chunks.jsonl"
+    },
+    {
+      "kind": "site_profile",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-2.5-pro-bm25-rep1/site-profile.json"
+    },
+    {
+      "kind": "evidence_report",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-2.5-pro-bm25-rep1/evidence-report-6a5c5888-4d3a-4cc3-9b39-a4eaf05cdf08.json"
+    },
+    {
+      "kind": "documentation_evidence",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-2.5-pro-bm25-rep1/documentation-evidence.json"
+    },
+    {
+      "kind": "pilot_evidence",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-2.5-pro-bm25-rep1/pilot-evidence.json"
+    }
+  ],
+  "command": "profile build",
+  "duration_seconds": 1.084404083994741,
+  "ended_at": "2026-07-30T20:46:14.168698Z",
+  "error_message": null,
+  "error_type": null,
+  "mode": "site=simulate, model=live, web=live, corpus=frozen",
+  "model_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "requests": 3,
+    "total_tokens": 0,
+    "usage_available": false
+  },
+  "retries": 0,
+  "run_id": "6a5c5888-4d3a-4cc3-9b39-a4eaf05cdf08",
+  "schema_version": "0.1",
+  "started_at": "2026-07-30T20:46:13.084297Z",
+  "status": "completed",
+  "steps": [
+    {
+      "duration_seconds": 0.0001963339964277111,
+      "ended_at": "2026-07-30T20:46:13.085195Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_load",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.084999Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00015033299860078841,
+      "ended_at": "2026-07-30T20:46:13.085748Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_validate",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.085593Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0025328339979751036,
+      "ended_at": "2026-07-30T20:46:13.088839Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "measurement_profile_build",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.086299Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0019932089999201708,
+      "ended_at": "2026-07-30T20:46:13.130942Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_corpus_load",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.128925Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.15353287500329316,
+      "ended_at": "2026-07-30T20:46:13.284917Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.131379Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.38751283299643546,
+      "ended_at": "2026-07-30T20:46:13.673321Z",
+      "error_message": "Gemini request failed with HTTP status 404.",
+      "error_type": "ModelProviderError",
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 1,
+        "total_tokens": 0,
+        "usage_available": false
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.285804Z",
+      "status": "failed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0315515409965883,
+      "ended_at": "2026-07-30T20:46:13.705773Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.674207Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.2045446659976733,
+      "ended_at": "2026-07-30T20:46:13.911004Z",
+      "error_message": "Gemini request failed with HTTP status 404.",
+      "error_type": "ModelProviderError",
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 1,
+        "total_tokens": 0,
+        "usage_available": false
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.706456Z",
+      "status": "failed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.12379920900275465,
+      "ended_at": "2026-07-30T20:46:14.036173Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:13.912351Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.12066629200126044,
+      "ended_at": "2026-07-30T20:46:14.157844Z",
+      "error_message": "Gemini request failed with HTTP status 404.",
+      "error_type": "ModelProviderError",
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 1,
+        "total_tokens": 0,
+        "usage_available": false
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:14.037173Z",
+      "status": "failed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00021137499425094575,
+      "ended_at": "2026-07-30T20:46:14.159883Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:14.159662Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00026900000375462696,
+      "ended_at": "2026-07-30T20:46:14.160925Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_pilot_load",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:14.160645Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00040758300019660965,
+      "ended_at": "2026-07-30T20:46:14.162290Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "pilot_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:14.161870Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.005029708001529798,
+      "ended_at": "2026-07-30T20:46:14.167996Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "profile_artifact_write",
+      "retries": 0,
+      "started_at": "2026-07-30T20:46:14.162961Z",
+      "status": "completed",
+      "tool_calls": 0
+    }
+  ],
+  "tool_calls": 0
+}
