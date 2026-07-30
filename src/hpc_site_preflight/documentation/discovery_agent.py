@@ -33,7 +33,13 @@ Set decision to complete when the available official pages are sufficient or the
 Set decision to search_more only when another bounded search is likely to find better official
 documentation. In that case, provide at most three search queries, not URLs."""
 
-_TOPIC_ORDER = ("canonical", "submission", "resources", "storage", "networking", "user")
+_COVERAGE_TOPICS = ("submission", "resources", "storage", "networking")
+_TOPIC_TERMS = {
+    "submission": ("submit", "sbatch", "condor_submit", "job", "queue"),
+    "resources": ("resource", "partition", "node", "cpu", "core", "gpu", "machine"),
+    "storage": ("storage", "filesystem", "scratch", "project", "home", "work"),
+    "networking": ("network", "port", "tcp", "firewall", "connect"),
+}
 _USEFUL_LINK_TERMS = (
     "account",
     "allocation",
@@ -57,6 +63,7 @@ class _Candidate:
     result: SearchResult
     score: int
     topics: set[str] = field(default_factory=set)
+    reserved_topic: str | None = None
 
 
 class DiscoveryAgent:
@@ -223,6 +230,7 @@ class DiscoveryAgent:
         """
 
         queue = _ordered_candidates(candidates)
+        covered_topics: set[str] = set()
         fetched_urls = set(tools.fetched_pages)
         starting_page_count = tools.pages_used
         available_pages = min(
@@ -266,10 +274,17 @@ class DiscoveryAgent:
                     )
             except DocumentationError as exc:
                 tracker.progress(f"Fetch {request_number} failed: {exc}")
+                _reserve_next_candidate(queue, candidate.reserved_topic)
+                queue.sort(key=lambda item: _fetch_sort_key(item, covered_topics))
                 continue
 
             fetched_urls.add(page.url)
             tracker.progress(f"Fetch {request_number}: accepted as {page.scope}")
+            if candidate.reserved_topic is not None:
+                if page.scope == "target_site":
+                    covered_topics.add(candidate.reserved_topic)
+                else:
+                    _reserve_next_candidate(queue, candidate.reserved_topic)
             added_links = 0
 
             for link in page.links:
@@ -283,9 +298,15 @@ class DiscoveryAgent:
                     continue
                 linked = SearchResult(url=link.url, title=link.text or link.url, snippet="")
                 linked_score = _candidate_score(identity, linked, scope, "canonical") + 5
-                queue.append(_Candidate(linked, linked_score, {"canonical"}))
+                linked_topics = _matching_topics(linked) or {"canonical"}
+                queue.append(_Candidate(linked, linked_score, linked_topics))
                 added_links += 1
-            queue.sort(key=_candidate_sort_key)
+            for topic in _COVERAGE_TOPICS:
+                if topic not in covered_topics:
+                    _reserve_next_candidate(queue, topic)
+            queue.sort(
+                key=lambda item: _fetch_sort_key(item, covered_topics)
+            )
             if added_links:
                 tracker.progress(f"Added {added_links} useful guide link(s) to the ranking")
 
@@ -427,21 +448,85 @@ def _candidate_score(
 
 
 def _ordered_candidates(candidates: dict[str, _Candidate]) -> list[_Candidate]:
-    """Return search candidates with one strong result per topic before the remaining ranking."""
+    """Reserve one relevant candidate per topic, then append the overall ranking."""
 
     ranked = sorted(candidates.values(), key=_candidate_sort_key)
     ordered: list[_Candidate] = []
     used: set[str] = set()
-    for topic in _TOPIC_ORDER:
-        candidate = next(
-            (item for item in ranked if topic in item.topics and item.result.url not in used),
-            None,
+    for topic in _COVERAGE_TOPICS:
+        topic_candidates = [
+            item
+            for item in ranked
+            if topic in item.topics and item.result.url not in used
+        ]
+        candidate = min(
+            topic_candidates,
+            key=lambda item: _topic_candidate_sort_key(item, topic),
+            default=None,
         )
         if candidate is not None:
+            candidate.reserved_topic = topic
             ordered.append(candidate)
             used.add(candidate.result.url)
     ordered.extend(item for item in ranked if item.result.url not in used)
     return ordered
+
+
+def _topic_candidate_sort_key(candidate: _Candidate, topic: str) -> tuple[int, int, str]:
+    """Prefer candidates whose search metadata names the reserved topic."""
+
+    text = (
+        f"{candidate.result.url} {candidate.result.title} {candidate.result.snippet}"
+    ).lower()
+    relevance = sum(term in text for term in _TOPIC_TERMS[topic])
+    return -relevance, -candidate.score, candidate.result.url
+
+
+def _fetch_sort_key(
+    candidate: _Candidate,
+    covered_topics: set[str],
+) -> tuple[int, int, str]:
+    """Keep unfetched topic reservations ahead of newly discovered links."""
+
+    topic = candidate.reserved_topic
+    if topic is not None and topic not in covered_topics:
+        return 0, _COVERAGE_TOPICS.index(topic), candidate.result.url
+    return 1, -candidate.score, candidate.result.url
+
+
+def _reserve_next_candidate(
+    queue: list[_Candidate],
+    topic: str | None,
+) -> None:
+    """Reserve the next relevant candidate when a topic still lacks a target-site page."""
+
+    if topic is None:
+        return
+    if any(candidate.reserved_topic == topic for candidate in queue):
+        return
+    available = [
+        candidate
+        for candidate in queue
+        if topic in candidate.topics and candidate.reserved_topic is None
+    ]
+    candidate = min(
+        available,
+        key=lambda item: _topic_candidate_sort_key(item, topic),
+        default=None,
+    )
+    if candidate is not None:
+        candidate.reserved_topic = topic
+
+
+def _matching_topics(result: SearchResult) -> set[str]:
+    """Infer policy topics named by a discovered link."""
+
+    text = f"{result.url} {result.title} {result.snippet}".lower()
+    return {
+        topic
+        for topic in _COVERAGE_TOPICS
+        if any(term in text for term in _TOPIC_TERMS[topic])
+    }
 
 
 def _candidate_sort_key(candidate: _Candidate) -> tuple[int, str]:

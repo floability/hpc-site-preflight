@@ -2,6 +2,7 @@
 
 import re
 from collections.abc import Iterable
+from fnmatch import fnmatchcase
 from urllib.parse import urlparse
 
 from hpc_site_preflight.documentation.models import (
@@ -12,7 +13,7 @@ from hpc_site_preflight.documentation.models import (
 )
 from hpc_site_preflight.measurements.base import MeasurementBundle
 
-_SCOPE_MARKERS = {"clusters", "hpc", "systems", "userguides"}
+_SCOPE_MARKERS = {"clusters", "hpc", "knowledge", "systems", "userguides"}
 _GENERIC_PATH_TOKENS = {"docs", "documentation", "guide", "guides", "policies"}
 
 
@@ -136,6 +137,11 @@ def classify_source(identity: SiteIdentity, url: str, title: str, text: str) -> 
     hostname = (parsed.hostname or "").lower().strip(".")
     if parsed.scheme != "https" or not _allowed_host(hostname, identity.allowed_domains):
         return "out_of_scope"
+    if any(
+        fnmatchcase(hostname, pattern.lower().strip("."))
+        for pattern in identity.hostname_patterns
+    ):
+        return "target_site"
 
     path_segments = [segment.lower() for segment in parsed.path.split("/") if segment]
     preferred = {_normalize(token) for token in identity.preferred_path_tokens}
@@ -145,13 +151,13 @@ def classify_source(identity: SiteIdentity, url: str, title: str, text: str) -> 
     if preferred & normalized_segments:
         return "target_site"
 
-    prominent = f"{title}\n{text[:2000]}".lower()
-    if any(alias.lower() in prominent for alias in identity.aliases):
-        return "target_site"
-
     scoped_token = _scoped_path_token(path_segments)
     if scoped_token and _normalize(scoped_token) not in preferred:
         return "sibling_site"
+
+    prominent = f"{title}\n{text[:2000]}".lower()
+    if any(alias.lower() in prominent for alias in identity.aliases):
+        return "target_site"
     return "organization_general"
 
 

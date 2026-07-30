@@ -12,7 +12,12 @@ from hpc_site_preflight.documentation.corpus import (
     load_corpus,
     write_corpus,
 )
-from hpc_site_preflight.documentation.discovery_agent import DiscoveryAgent
+from hpc_site_preflight.documentation.discovery_agent import (
+    DiscoveryAgent,
+    _Candidate,
+    _fetch_sort_key,
+    _ordered_candidates,
+)
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
     _correctable_errors,
@@ -215,6 +220,65 @@ def test_user_hints_extend_documentation_identity_and_queries() -> None:
     assert "queues" in plan.queries[-1].query
 
 
+def test_discovery_reserves_relevant_page_for_each_topic() -> None:
+    def candidate(
+        path: str,
+        title: str,
+        snippet: str,
+        score: int,
+        topic: str,
+    ) -> _Candidate:
+        return _Candidate(
+            SearchResult(
+                url=f"https://docs.example.edu/{path}",
+                title=title,
+                snippet=snippet,
+            ),
+            score,
+            {topic},
+        )
+
+    candidates = {
+        "submission": candidate("jobs", "Job submission", "Submit batch jobs.", 100, "submission"),
+        "resources": candidate(
+            "resources", "Compute resources", "CPU and GPU nodes.", 100, "resources"
+        ),
+        "storage": candidate("storage", "Storage", "Home and scratch filesystems.", 100, "storage"),
+        "networking": candidate(
+            "network", "Network connectivity", "TCP and firewall policy.", 100, "networking"
+        ),
+        "storage-distractor": candidate("condor", "HTCondor", "Scheduler guide.", 500, "storage"),
+    }
+
+    ordered = _ordered_candidates(candidates)
+
+    assert [candidate.result.url for candidate in ordered[:4]] == [
+        "https://docs.example.edu/jobs",
+        "https://docs.example.edu/resources",
+        "https://docs.example.edu/storage",
+        "https://docs.example.edu/network",
+    ]
+    assert [candidate.reserved_topic for candidate in ordered[:4]] == [
+        "submission",
+        "resources",
+        "storage",
+        "networking",
+    ]
+    assert candidates["storage-distractor"].reserved_topic is None
+
+    remaining = ordered[1:]
+    remaining.append(
+        candidate("high-score-link", "New link", "", 1000, "canonical")
+    )
+    remaining.sort(key=lambda item: _fetch_sort_key(item, {"submission"}))
+
+    assert [candidate.result.url for candidate in remaining[:3]] == [
+        "https://docs.example.edu/resources",
+        "https://docs.example.edu/storage",
+        "https://docs.example.edu/network",
+    ]
+
+
 def test_preferred_filename_stem_establishes_target_site_scope() -> None:
     identity = build_site_identity(_inputs("notre-dame-crc"))
 
@@ -226,6 +290,32 @@ def test_preferred_filename_stem_establishes_target_site_scope() -> None:
     )
 
     assert scope == "target_site"
+
+
+def test_site_hostname_pattern_establishes_target_site_scope() -> None:
+    identity = build_site_identity(_inputs("notre-dame-crc"))
+
+    scope = classify_source(
+        identity,
+        "https://docs.crc.nd.edu/infrastructure/storage.html",
+        "Storage",
+        "CRC filesystem documentation.",
+    )
+
+    assert scope == "target_site"
+
+
+def test_sibling_path_is_not_overridden_by_target_name_in_navigation() -> None:
+    identity = build_site_identity(_inputs("anvil"))
+
+    scope = classify_source(
+        identity,
+        "https://www.rcac.purdue.edu/knowledge/bell/run/slurm",
+        "Bell Slurm",
+        "Navigation: Anvil, Bell, Gilbreth.",
+    )
+
+    assert scope == "sibling_site"
 
 
 def test_web_tools_enforce_domain_scope_and_budgets() -> None:
