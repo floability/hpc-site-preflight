@@ -74,7 +74,7 @@ anvil,19,/slurm/partitions/gpu/node_count,slurm,integer,,,16,configuration,,"mea
 anvil,19,/slurm/partitions/gpu/cpus_per_node,slurm,integer,,,128,configuration,,"measurement: sinfo -h -o ""%P|%D|%m|%c|%G|%l""",numeric_exact,
 anvil,19,/slurm/partitions/gpu/memory_mib_per_node,slurm,integer,,,515400,configuration,,"measurement: sinfo -h -o ""%P|%D|%m|%c|%G|%l""",numeric_exact,
 anvil,19,/slurm/partitions/gpu/gpu_count_per_node,slurm,integer,,,4,configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",numeric_exact,
-anvil,19,/slurm/partitions/gpu/gpu_models,slurm,array,,,[],configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",set,"Example is the measured value; current profile selected [""NVIDIA A100""]."
+anvil,19,/slurm/partitions/gpu/gpu_models,slurm,array,has_value,"[""NVIDIA A100""]","[""NVIDIA A100""]",configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",set,"Confirmed from the Anvil GPU node specifications."
 anvil,20,/slurm/partitions/ai/maximum_walltime_seconds,slurm,integer,,,-1,policy,,"doc: Anvil user guide, queue maximum walltime; compare with sinfo -h -o ""%P|%l""",numeric_exact,Example is the measured value; current profile selected 172800.
 anvil,20,/slurm/partitions/ai/maximum_nodes_per_job,slurm,integer,,,null,policy,,"doc: Anvil user guide, queue node limits and node-sharing rules",numeric_exact,
 anvil,20,/slurm/partitions/ai/shared_nodes,slurm,boolean,,,true,policy,,"doc: Anvil user guide, queue node limits and node-sharing rules",exact_trimmed_lower,
@@ -82,7 +82,7 @@ anvil,20,/slurm/partitions/ai/node_count,slurm,integer,,,21,configuration,,"meas
 anvil,20,/slurm/partitions/ai/cpus_per_node,slurm,integer,,,96,configuration,,"measurement: sinfo -h -o ""%P|%D|%m|%c|%G|%l""",numeric_exact,
 anvil,20,/slurm/partitions/ai/memory_mib_per_node,slurm,integer,,,1031000,configuration,,"measurement: sinfo -h -o ""%P|%D|%m|%c|%G|%l""",numeric_exact,
 anvil,20,/slurm/partitions/ai/gpu_count_per_node,slurm,integer,,,4,configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",numeric_exact,
-anvil,20,/slurm/partitions/ai/gpu_models,slurm,array,,,[],configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",set,"Example is the measured value; current profile selected [""NVIDIA H100""]."
+anvil,20,/slurm/partitions/ai/gpu_models,slurm,array,has_value,"[""NVIDIA H100""]","[""NVIDIA H100""]",configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",set,"Confirmed from the Anvil AI node specifications."
 anvil,21,/slurm/partitions/gpu-debug/maximum_walltime_seconds,slurm,integer,,,-1,policy,,"doc: Anvil user guide, queue maximum walltime; compare with sinfo -h -o ""%P|%l""",numeric_exact,Example is the measured value; current profile selected 1800.
 anvil,21,/slurm/partitions/gpu-debug/maximum_nodes_per_job,slurm,integer,,,1,policy,,"doc: Anvil user guide, queue node limits and node-sharing rules",numeric_exact,
 anvil,21,/slurm/partitions/gpu-debug/shared_nodes,slurm,boolean,,,true,policy,,"doc: Anvil user guide, queue node limits and node-sharing rules",exact_trimmed_lower,
@@ -90,7 +90,7 @@ anvil,21,/slurm/partitions/gpu-debug/node_count,slurm,integer,,,16,configuration
 anvil,21,/slurm/partitions/gpu-debug/cpus_per_node,slurm,integer,,,128,configuration,,"measurement: sinfo -h -o ""%P|%D|%m|%c|%G|%l""",numeric_exact,
 anvil,21,/slurm/partitions/gpu-debug/memory_mib_per_node,slurm,integer,,,515400,configuration,,"measurement: sinfo -h -o ""%P|%D|%m|%c|%G|%l""",numeric_exact,
 anvil,21,/slurm/partitions/gpu-debug/gpu_count_per_node,slurm,integer,,,4,configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",numeric_exact,
-anvil,21,/slurm/partitions/gpu-debug/gpu_models,slurm,array,,,[],configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",set,"Example is the measured value; current profile selected [""NVIDIA A100""]."
+anvil,21,/slurm/partitions/gpu-debug/gpu_models,slurm,array,has_value,"[""NVIDIA A100""]","[""NVIDIA A100""]",configuration,,"measurement: sinfo -h -o ""%P|%G""; doc: Anvil user guide, GPU and AI node specifications",set,"Confirmed from the Anvil GPU node specifications."
 anvil,22,/slurm/partitions/profiling/maximum_walltime_seconds,slurm,integer,,,-1,policy,,"doc: Anvil user guide, queue maximum walltime; compare with sinfo -h -o ""%P|%l""",numeric_exact,
 anvil,22,/slurm/partitions/profiling/maximum_nodes_per_job,slurm,integer,,,null,policy,,"doc: Anvil user guide, queue node limits and node-sharing rules",numeric_exact,
 anvil,22,/slurm/partitions/profiling/shared_nodes,slurm,boolean,,,null,policy,,"doc: Anvil user guide, queue node limits and node-sharing rules",exact_trimmed_lower,
