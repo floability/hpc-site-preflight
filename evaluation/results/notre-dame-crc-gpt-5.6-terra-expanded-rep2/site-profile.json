@@ -14,15 +14,20 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
         "name": "universe",
         "syntax": [
-          "universe = vanilla"
+          "universe = {universe}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "vanilla",
         "allowed_values": null
@@ -30,10 +35,10 @@
       {
         "name": "executable",
         "syntax": [
-          "executable = Path_to_your_executable_file/executable.sh"
+          "executable = {path}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "<executable>",
         "allowed_values": null
@@ -43,9 +48,9 @@
         "syntax": [
           "request_cpus = 4"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "For multi-threaded or multicore SMP Condor jobs.",
         "example": "1",
         "allowed_values": null
       },
@@ -65,19 +70,19 @@
         "syntax": [
           "request_gpus = 1"
         ],
-        "required": null,
+        "required": false,
         "support": "supported",
-        "condition": "For the documented Amber job running with 1 GPU.",
+        "condition": null,
         "example": "1",
         "allowed_values": null
       },
       {
         "name": "should_transfer_files",
         "syntax": [
-          "should_transfer_files = yes"
+          "should_transfer_files = {mode}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "yes",
         "allowed_values": [
@@ -89,10 +94,10 @@
       {
         "name": "when_to_transfer_output",
         "syntax": [
-          "when_to_transfer_output = on_exit"
+          "when_to_transfer_output = {mode}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "on_exit",
         "allowed_values": [
@@ -113,33 +118,13 @@
         "status": "needs_mapping"
       },
       {
-        "documented_name": "output",
+        "documented_name": "environment",
         "documented_syntax": [
-          "output = test.output"
+          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
         ],
-        "requirement": "optional",
+        "requirement": "conditional",
         "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "error",
-        "documented_syntax": [
-          "error = test.error"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "log",
-        "documented_syntax": [
-          "log = logfile"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
+        "condition": "For multi-threaded or multicore SMP Condor jobs.",
         "status": "needs_mapping"
       }
     ],
@@ -387,6 +372,36 @@
   },
   "unresolved": [
     {
+      "field": "/htcondor/submit_attributes/universe/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/universe/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/executable/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/executable/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_cpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
@@ -399,8 +414,26 @@
       "action_id": "submission_policy_search"
     },
     {
-      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "field": "/htcondor/submit_attributes/should_transfer_files/required",
       "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/should_transfer_files/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/when_to_transfer_output/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/when_to_transfer_output/support",
+      "reason": "Login measurements do not establish site support for this option.",
       "next_action": "additional_documentation",
       "action_id": "submission_policy_search"
     },
@@ -502,5 +535,5 @@
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-e30eb45a-2e3b-4665-ba00-f70c69abd144"
+  "evidence_id": "report-9c66c455-dde1-44d7-8a11-3d66acd7c11f"
 }

@@ -12,17 +12,22 @@
     "submit_command": "condor_submit",
     "collector_host": "condor-central-mgr.crc.nd.edu",
     "file_transfer_supported": true,
-    "guaranteed_runtime": false,
-    "preemptible": true,
+    "guaranteed_runtime": null,
+    "preemptible": null,
+    "submission_host": null,
+    "machine_requirements_supported": null,
+    "dynamic_slots_enabled": null,
+    "bulk_submission_supported": null,
+    "completion_email_supported": null,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
         "name": "universe",
         "syntax": [
-          "universe = vanilla"
+          "universe = {universe}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "vanilla",
         "allowed_values": null
@@ -30,10 +35,10 @@
       {
         "name": "executable",
         "syntax": [
-          "executable = Path_to_your_executable_file/executable.sh"
+          "executable = {path}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "<executable>",
         "allowed_values": null
@@ -41,10 +46,10 @@
       {
         "name": "request_cpus",
         "syntax": [
-          "request_cpus = 4"
+          "request_cpus = {count}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "1",
         "allowed_values": null
@@ -63,10 +68,10 @@
       {
         "name": "request_gpus",
         "syntax": [
-          "request_gpus = 1"
+          "request_gpus = {count}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "1",
         "allowed_values": null
@@ -74,10 +79,10 @@
       {
         "name": "should_transfer_files",
         "syntax": [
-          "should_transfer_files = yes"
+          "should_transfer_files = {mode}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "yes",
         "allowed_values": [
@@ -89,10 +94,10 @@
       {
         "name": "when_to_transfer_output",
         "syntax": [
-          "when_to_transfer_output = on_exit"
+          "when_to_transfer_output = {mode}"
         ],
-        "required": false,
-        "support": "supported",
+        "required": null,
+        "support": "unknown",
         "condition": null,
         "example": "on_exit",
         "allowed_values": [
@@ -101,58 +106,7 @@
         ]
       }
     ],
-    "unmapped_submit_attributes": [
-      {
-        "documented_name": "getenv",
-        "documented_syntax": [
-          "getenv = true"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "output",
-        "documented_syntax": [
-          "output = test.output"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "error",
-        "documented_syntax": [
-          "error = test.error"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "log",
-        "documented_syntax": [
-          "log = logfile"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "environment",
-        "documented_syntax": [
-          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      }
-    ],
+    "unmapped_submit_attributes": [],
     "pool_totals": {
       "machine_count": 390,
       "cpu_cores": 14242,
@@ -348,7 +302,7 @@
     "compute": {
       "hostname_patterns": [],
       "dns_resolution": null,
-      "outbound_https": true,
+      "outbound_https": null,
       "local_tcp_bind": null,
       "local_tcp_loopback": null
     },
@@ -383,9 +337,9 @@
   },
   "accounting": {
     "allocation_required": null,
-    "charging_unit": "per faculty sponsor",
-    "charging_model": null,
-    "filesystem_storage_charged": null
+    "charging_unit": null,
+    "charging_model": "Storage allocations are tracked per faculty sponsor",
+    "filesystem_storage_charged": true
   },
   "section_status": {
     "scheduler": "measured",
@@ -397,6 +351,84 @@
   },
   "unresolved": [
     {
+      "field": "/htcondor/guaranteed_runtime",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/preemptible",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/submission_host",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/machine_requirements_supported",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/dynamic_slots_enabled",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/bulk_submission_supported",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/completion_email_supported",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/universe/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/universe/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/executable/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/executable/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_cpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_cpus/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
@@ -404,6 +436,42 @@
     },
     {
       "field": "/htcondor/submit_attributes/request_memory/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/should_transfer_files/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/should_transfer_files/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/when_to_transfer_output/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/when_to_transfer_output/support",
       "reason": "Login measurements do not establish site support for this option.",
       "next_action": "additional_documentation",
       "action_id": "submission_policy_search"
@@ -425,6 +493,12 @@
       "reason": "This login-node network fact was not measured.",
       "next_action": "login_measurement",
       "action_id": "login_outbound_https"
+    },
+    {
+      "field": "/network/compute/outbound_https",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_outbound_https"
     },
     {
       "field": "/network/login/local_tcp_bind",
@@ -481,24 +555,12 @@
       "action_id": "accounting_policy_search"
     },
     {
-      "field": "/accounting/charging_model",
+      "field": "/accounting/charging_unit",
       "reason": "Accounting policy cannot be established by login measurement.",
       "next_action": "additional_documentation",
       "action_id": "accounting_policy_search"
-    },
-    {
-      "field": "/accounting/filesystem_storage_charged",
-      "reason": "Accounting policy cannot be established by login measurement.",
-      "next_action": "additional_documentation",
-      "action_id": "accounting_policy_search"
-    },
-    {
-      "field": "/htcondor/unmapped_submit_attributes",
-      "reason": "Documented submission option 'getenv' needs a reviewed mapping.",
-      "next_action": "admin_confirmation",
-      "action_id": "submission_option_mapping"
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-de86fe8d-8962-4417-89bd-b3db04130de2"
+  "evidence_id": "report-5da56bd5-c76b-43ca-8fb2-1ec02e3fc50f"
 }

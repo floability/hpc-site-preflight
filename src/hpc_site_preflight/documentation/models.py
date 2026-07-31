@@ -17,7 +17,16 @@ BlockKind = Literal["text", "table"]
 SubmissionRequirement = Literal["required", "recommended", "optional", "conditional"]
 SubmissionSupport = Literal["supported", "unsupported", "discouraged", "unknown"]
 NetworkCapabilityName = Literal["manager_worker", "worker_worker", "outbound_compute"]
-HTCondorPolicyName = Literal["guaranteed_runtime", "preemptible"]
+HTCondorPolicyName = Literal[
+    "guaranteed_runtime",
+    "preemptible",
+    "submission_host",
+    "machine_requirements_supported",
+    "dynamic_slots_enabled",
+    "bulk_submission_supported",
+    "completion_email_supported",
+]
+HTCondorPolicyValue: TypeAlias = str | bool
 SubmissionOptionName = str
 AccountingPolicyName = Literal[
     "charging_unit",
@@ -277,6 +286,11 @@ class SubmissionExtractionResult(StrictModel):
     allocation_required: ExtractedBoolean | None
     guaranteed_runtime: ExtractedBoolean | None
     preemptible: ExtractedBoolean | None
+    submission_host: ExtractedString | None
+    machine_requirements_supported: ExtractedBoolean | None
+    dynamic_slots_enabled: ExtractedBoolean | None
+    bulk_submission_supported: ExtractedBoolean | None
+    completion_email_supported: ExtractedBoolean | None
     submission_options: list[ExtractedSubmissionOption]
     unmapped_options: list[ExtractedUnmappedSubmissionOption]
     partitions: list[ExtractedPartition]
@@ -314,6 +328,11 @@ class SubmissionExtractionResult(StrictModel):
             return {
                 "guaranteed_runtime": None,
                 "preemptible": None,
+                "submission_host": None,
+                "machine_requirements_supported": None,
+                "dynamic_slots_enabled": None,
+                "bulk_submission_supported": None,
+                "completion_email_supported": None,
                 **value,
                 "submission_options": submission_options,
                 "unmapped_options": unmapped_options,
@@ -535,7 +554,7 @@ class AccountingPolicyFinding(StrictModel):
 
 class HTCondorPolicyFinding(StrictModel):
     name: HTCondorPolicyName
-    value: bool
+    value: HTCondorPolicyValue
     note: str
     citations: list[DocumentationCitation] = Field(min_length=1)
 

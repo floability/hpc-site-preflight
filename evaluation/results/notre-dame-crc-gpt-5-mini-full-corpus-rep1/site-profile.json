@@ -12,8 +12,13 @@
     "submit_command": "condor_submit",
     "collector_host": "condor-central-mgr.crc.nd.edu",
     "file_transfer_supported": true,
-    "guaranteed_runtime": false,
-    "preemptible": true,
+    "guaranteed_runtime": null,
+    "preemptible": null,
+    "submission_host": null,
+    "machine_requirements_supported": null,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": null,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -30,7 +35,7 @@
       {
         "name": "executable",
         "syntax": [
-          "executable = /path/to/executable"
+          "executable = <path>"
         ],
         "required": false,
         "support": "supported",
@@ -45,7 +50,7 @@
         ],
         "required": false,
         "support": "supported",
-        "condition": "for multi-threaded or multicore (SMP) jobs",
+        "condition": null,
         "example": "1",
         "allowed_values": null
       },
@@ -67,7 +72,7 @@
         ],
         "required": false,
         "support": "supported",
-        "condition": "when submitting jobs intended to run on GPU nodes",
+        "condition": null,
         "example": "1",
         "allowed_values": null
       },
@@ -89,7 +94,7 @@
       {
         "name": "when_to_transfer_output",
         "syntax": [
-          "when_to_transfer_output = on_exit"
+          "when_to_transfer_output = on_exit|..."
         ],
         "required": false,
         "support": "supported",
@@ -103,10 +108,9 @@
     ],
     "unmapped_submit_attributes": [
       {
-        "documented_name": "arguments",
+        "documented_name": "getenv",
         "documented_syntax": [
-          "arguments = ...",
-          "arguments = hello $(PROCESS)"
+          "getenv = true|false"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -116,27 +120,7 @@
       {
         "documented_name": "output",
         "documented_syntax": [
-          "output = filename"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "log",
-        "documented_syntax": [
-          "log = filename"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "getenv",
-        "documented_syntax": [
-          "getenv = true"
+          "output = <filename>"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -146,7 +130,7 @@
       {
         "documented_name": "error",
         "documented_syntax": [
-          "error = <file>"
+          "error = <filename>"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -154,9 +138,9 @@
         "status": "needs_mapping"
       },
       {
-        "documented_name": "environment",
+        "documented_name": "log",
         "documented_syntax": [
-          "environment = <assignment-list>"
+          "log = <filename>"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -341,7 +325,7 @@
       "compute_readable": true,
       "compute_writable": true,
       "shared_across_compute_nodes": null,
-      "backup_policy": null,
+      "backup_policy": "automatic daily snapshots, up to 30 days recovery",
       "purge_after_days": null,
       "purge_condition": null
     }
@@ -394,8 +378,8 @@
   },
   "accounting": {
     "allocation_required": null,
-    "charging_unit": null,
-    "charging_model": null,
+    "charging_unit": "faculty sponsor (advisor)",
+    "charging_model": "Group-centric allocation: group storage 5TB per research group; additional storage available for a cost",
     "filesystem_storage_charged": true
   },
   "section_status": {
@@ -407,6 +391,36 @@
     "accounting": "documented"
   },
   "unresolved": [
+    {
+      "field": "/htcondor/guaranteed_runtime",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/preemptible",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/submission_host",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/machine_requirements_supported",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
+    {
+      "field": "/htcondor/completion_email_supported",
+      "reason": "Login measurements do not establish this HTCondor site policy.",
+      "next_action": "additional_documentation",
+      "action_id": "htcondor_site_policy_search"
+    },
     {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
@@ -474,12 +488,6 @@
       "action_id": "home_shared_across_compute_nodes"
     },
     {
-      "field": "/storage/home/backup_policy",
-      "reason": "Storage policy requires authoritative documentation.",
-      "next_action": "additional_documentation",
-      "action_id": "storage_policy_search"
-    },
-    {
       "field": "/storage/home/purge_after_days",
       "reason": "Storage policy requires authoritative documentation.",
       "next_action": "additional_documentation",
@@ -498,24 +506,12 @@
       "action_id": "accounting_policy_search"
     },
     {
-      "field": "/accounting/charging_unit",
-      "reason": "Accounting policy cannot be established by login measurement.",
-      "next_action": "additional_documentation",
-      "action_id": "accounting_policy_search"
-    },
-    {
-      "field": "/accounting/charging_model",
-      "reason": "Accounting policy cannot be established by login measurement.",
-      "next_action": "additional_documentation",
-      "action_id": "accounting_policy_search"
-    },
-    {
       "field": "/htcondor/unmapped_submit_attributes",
-      "reason": "Documented submission option 'arguments' needs a reviewed mapping.",
+      "reason": "Documented submission option 'getenv' needs a reviewed mapping.",
       "next_action": "admin_confirmation",
       "action_id": "submission_option_mapping"
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-ec6a290c-a503-4412-993d-f29af67329a7"
+  "evidence_id": "report-79188c61-2b2b-4e61-a1ae-24967edc5fd9"
 }

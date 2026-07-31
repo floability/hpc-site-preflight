@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -45,7 +50,7 @@
         ],
         "required": null,
         "support": "supported",
-        "condition": "Submitting Multicore SMP jobs",
+        "condition": "multi-threaded or multicore SMP Condor jobs",
         "example": "1",
         "allowed_values": null
       },
@@ -113,6 +118,16 @@
         "status": "needs_mapping"
       },
       {
+        "documented_name": "environment",
+        "documented_syntax": [
+          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
+        ],
+        "requirement": "optional",
+        "support": "supported",
+        "condition": null,
+        "status": "needs_mapping"
+      },
+      {
         "documented_name": "output",
         "documented_syntax": [
           "output = test.output"
@@ -140,16 +155,6 @@
         "requirement": "optional",
         "support": "supported",
         "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "environment",
-        "documented_syntax": [
-          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
-        ],
-        "requirement": "conditional",
-        "support": "supported",
-        "condition": "Submitting Multicore SMP jobs",
         "status": "needs_mapping"
       }
     ],
@@ -524,5 +529,5 @@
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-c4045c09-54bb-4cf4-8482-ddc489cdc315"
+  "evidence_id": "report-7416426e-aac5-4eec-8cbd-7c9cb8ee197d"
 }

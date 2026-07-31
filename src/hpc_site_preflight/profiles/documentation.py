@@ -112,10 +112,7 @@ def _apply_finding(profile: SiteProfile, finding: DocumentationFinding) -> list[
     if isinstance(finding, HTCondorPolicyFinding):
         if profile.htcondor is None:
             return []
-        if finding.name == "guaranteed_runtime":
-            profile.htcondor.guaranteed_runtime = finding.value
-        else:
-            profile.htcondor.preemptible = finding.value
+        setattr(profile.htcondor, finding.name, finding.value)
         return [f"/htcondor/{finding.name}"]
     if isinstance(finding, PartitionFinding):
         if profile.slurm is None:

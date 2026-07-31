@@ -145,6 +145,26 @@ _SCHEDULER_FIELD_QUERIES: dict[str, dict[str, tuple[str, ...]]] = {
             "site-specific mandatory HTCondor submit attributes",
             "required ClassAd accounting_group requirements +ProjectName",
         ),
+        "submission_host": (
+            "HTCondor login host condor_submit submit jobs",
+            "where to log in to submit Condor jobs",
+        ),
+        "machine_requirements_supported": (
+            "HTCondor specify machine cluster memory processor requirements",
+            "Condor machine selection requirements",
+        ),
+        "dynamic_slots_enabled": (
+            "HTCondor pool configured dynamic slots multicore SMP",
+            "dynamic slots request_cpus",
+        ),
+        "bulk_submission_supported": (
+            "HTCondor submit many jobs queue PROCESS macro",
+            "Condor bulk submission queue several jobs",
+        ),
+        "completion_email_supported": (
+            "HTCondor completion email disabled site policy",
+            "job complete email notification",
+        ),
     },
 }
 
@@ -342,7 +362,7 @@ def _retrieve_field(
 def base_queries(field: str, scheduler: str, resources: set[str]) -> list[str]:
     """Return reviewed BM25 query variants for one profile field."""
 
-    queries = list(_COMMON_FIELD_QUERIES[field])
+    queries = list(_COMMON_FIELD_QUERIES.get(field, ()))
     queries.extend(_SCHEDULER_FIELD_QUERIES.get(scheduler, {}).get(field, ()))
     if resources and field in _RESOURCE_QUERY:
         queries.append(f"{' '.join(sorted(resources))} {_RESOURCE_QUERY[field]}")

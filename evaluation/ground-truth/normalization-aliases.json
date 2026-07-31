@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1",
+  "aliases": [
+    {
+      "canonical": "NVIDIA A100",
+      "values": [
+        "A100",
+        "NVIDIA A100"
+      ]
+    },
+    {
+      "canonical": "NVIDIA H100",
+      "values": [
+        "H100",
+        "NVIDIA H100"
+      ]
+    },
+    {
+      "canonical": "Intel Data Center GPU Max 1550",
+      "values": [
+        "Intel Data Center GPU Max 1550",
+        "Intel Data Center GPU Max 1550s",
+        "Intel Data Center GPU Max 1550 (Ponte Vecchio)",
+        "Intel Data Center GPU Max 1550s (Ponte Vecchio)",
+        "Intel Data Center GPU Max 1550s (\"Ponte Vecchio\")",
+        "Ponte Vecchio"
+      ]
+    }
+  ]
+}

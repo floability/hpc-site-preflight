@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -30,7 +35,9 @@
       {
         "name": "executable",
         "syntax": [
-          "executable = Path_to_your_executable_file/executable.sh"
+          "executable = /bin/echo",
+          "executable = Path_to_your_executable_file/executable.sh",
+          "executable = hello_world.x"
         ],
         "required": false,
         "support": "supported",
@@ -43,9 +50,9 @@
         "syntax": [
           "request_cpus = 4"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "For multi-threaded or multicore SMP Condor jobs.",
         "example": "1",
         "allowed_values": null
       },
@@ -65,9 +72,9 @@
         "syntax": [
           "request_gpus = 1"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "For an Amber job running with 1 GPU.",
         "example": "1",
         "allowed_values": null
       },
@@ -103,6 +110,26 @@
     ],
     "unmapped_submit_attributes": [
       {
+        "documented_name": "arguments",
+        "documented_syntax": [
+          "arguments = hello $( PROCESS )"
+        ],
+        "requirement": "optional",
+        "support": "supported",
+        "condition": null,
+        "status": "needs_mapping"
+      },
+      {
+        "documented_name": "environment",
+        "documented_syntax": [
+          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
+        ],
+        "requirement": "conditional",
+        "support": "supported",
+        "condition": "For multi-threaded or multicore SMP Condor jobs.",
+        "status": "needs_mapping"
+      },
+      {
         "documented_name": "getenv",
         "documented_syntax": [
           "getenv = true"
@@ -136,16 +163,6 @@
         "documented_name": "log",
         "documented_syntax": [
           "log = logfile"
-        ],
-        "requirement": "optional",
-        "support": "supported",
-        "condition": null,
-        "status": "needs_mapping"
-      },
-      {
-        "documented_name": "environment",
-        "documented_syntax": [
-          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -397,6 +414,12 @@
   },
   "unresolved": [
     {
+      "field": "/htcondor/submit_attributes/request_cpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
@@ -405,6 +428,12 @@
     {
       "field": "/htcondor/submit_attributes/request_memory/support",
       "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
       "action_id": "submission_policy_search"
     },
@@ -500,11 +529,11 @@
     },
     {
       "field": "/htcondor/unmapped_submit_attributes",
-      "reason": "Documented submission option 'getenv' needs a reviewed mapping.",
+      "reason": "Documented submission option 'arguments' needs a reviewed mapping.",
       "next_action": "admin_confirmation",
       "action_id": "submission_option_mapping"
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-b9520b4e-46a6-4488-849f-adbf54b911fb"
+  "evidence_id": "report-491a4a3e-dd04-44a2-a01d-cb69a9f0ca70"
 }

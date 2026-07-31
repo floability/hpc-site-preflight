@@ -167,6 +167,11 @@ class HTCondorProfile(BaseModel):
     file_transfer_supported: bool | None = None
     guaranteed_runtime: bool | None = None
     preemptible: bool | None = None
+    submission_host: str | None = None
+    machine_requirements_supported: bool | None = None
+    dynamic_slots_enabled: bool | None = None
+    bulk_submission_supported: bool | None = None
+    completion_email_supported: bool | None = None
     maximum_walltime: Literal["not_applicable"] = "not_applicable"
     submit_attributes: list[SubmissionOption] = Field(default_factory=list)
     unmapped_submit_attributes: list[UnmappedSubmissionOption] = Field(

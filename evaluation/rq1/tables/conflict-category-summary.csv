@@ -1,0 +1,4 @@
+site,conflict_category,weighted_run_occurrences,raw_run_occurrences,conflicts_per_configuration
+anvil,other,3.333333333333333,4,0.27777777777777773
+anvil,walltime_policy,88.0,152,7.333333333333333
+stampede3,walltime_policy,72.0,120,6.0

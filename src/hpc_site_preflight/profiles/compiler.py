@@ -778,13 +778,21 @@ def _unresolved_items(
                     )
                 )
     else:
-        for field in ("guaranteed_runtime", "preemptible"):
+        for field in (
+            "guaranteed_runtime",
+            "preemptible",
+            "submission_host",
+            "machine_requirements_supported",
+            "dynamic_slots_enabled",
+            "bulk_submission_supported",
+            "completion_email_supported",
+        ):
             items.append(
                 UnresolvedWorkItem(
                     field=f"/htcondor/{field}",
-                    reason="Login measurements do not establish HTCondor eviction policy.",
+                    reason="Login measurements do not establish this HTCondor site policy.",
                     next_action="additional_documentation",
-                    action_id="htcondor_runtime_policy_search",
+                    action_id="htcondor_site_policy_search",
                 )
             )
     for option in submission_options:

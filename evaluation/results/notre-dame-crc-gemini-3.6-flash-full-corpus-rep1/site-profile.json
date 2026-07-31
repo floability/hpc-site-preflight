@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -105,8 +110,7 @@
       {
         "documented_name": "arguments",
         "documented_syntax": [
-          "arguments = hello condor",
-          "arguments = hello $( PROCESS )"
+          "arguments = hello condor"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -116,8 +120,7 @@
       {
         "documented_name": "output",
         "documented_syntax": [
-          "output = test.output",
-          "output = test.output. $( PROCESS )"
+          "output = test.output"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -137,7 +140,7 @@
       {
         "documented_name": "error",
         "documented_syntax": [
-          "error = test.error. $( PROCESS )"
+          "error = test.error.$(PROCESS)"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -518,5 +521,5 @@
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-fcab09b8-534d-40c3-821d-19c341665895"
+  "evidence_id": "report-ee52860f-c47d-4b3f-8027-acad28097c63"
 }

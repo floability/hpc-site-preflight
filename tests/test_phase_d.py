@@ -21,6 +21,7 @@ from hpc_site_preflight.documentation.discovery_agent import (
 from hpc_site_preflight.documentation.extraction import (
     _canonical_option_name,
     _correctable_errors,
+    _requested_fields,
     _supports_required_option,
     _valid_unmapped_syntax,
     _validate_group,
@@ -2228,6 +2229,143 @@ def test_htcondor_displacement_policy_is_extracted_and_cited() -> None:
     assert all(
         item.source_reference == span.source_url for item in evidence.values()
     )
+
+
+def test_documented_htcondor_site_policies_are_extracted_and_cited() -> None:
+    measurements = _inputs("notre-dame-crc")
+    source_url = "https://docs.example.edu/htcondor.html"
+    statements = {
+        "submission_host": (
+            "Submit jobs from the HTCondor access point submit.example.edu.",
+            "submit.example.edu",
+        ),
+        "machine_requirements_supported": (
+            "Jobs may select machine resources using Requirements for CPU or memory.",
+            True,
+        ),
+        "dynamic_slots_enabled": (
+            "The condor pool is configured to enable dynamic slots.",
+            True,
+        ),
+        "bulk_submission_supported": (
+            "A submit file can enqueue multiple jobs with queue 100.",
+            True,
+        ),
+        "completion_email_supported": (
+            "Completion email notifications are not supported.",
+            False,
+        ),
+    }
+    spans = [
+        EvidenceSpan(
+            span_id=f"condor:{index}:s1",
+            chunk_id=f"condor:{index}",
+            source_url=source_url,
+            title="HTCondor",
+            heading="HTCondor",
+            scope="target_site",
+            quote=quote,
+        )
+        for index, (quote, _) in enumerate(statements.values(), start=1)
+    ]
+    result_values = {
+        name: {
+            "value": value,
+            "evidence_span_ids": [span.span_id],
+            "note": "Explicit Notre Dame HTCondor policy.",
+        }
+        for (name, (_, value)), span in zip(statements.items(), spans, strict=True)
+    }
+    result = SubmissionExtractionResult.model_validate(
+        {
+            "allocation_required": None,
+            "guaranteed_runtime": None,
+            "preemptible": None,
+            **result_values,
+            "submission_options": [],
+            "unmapped_options": [],
+            "partitions": [],
+        }
+    )
+    retrievals = [
+        FieldRetrieval(
+            field=name,
+            queries=[name],
+            hits=[RetrievalHit(chunk_id=span.chunk_id, score=1.0)],
+        )
+        for name, span in zip(statements, spans, strict=True)
+    ]
+
+    validated = _validate_group(
+        result,
+        spans,
+        retrievals,
+        "htcondor",
+        set(),
+        set(),
+    )
+    assert not validated.rejected
+    assert {
+        finding.name: finding.value
+        for finding in validated.findings
+        if isinstance(finding, HTCondorPolicyFinding)
+    } == {name: value for name, (_, value) in statements.items()}
+
+    slurm_validation = _validate_group(
+        result,
+        spans,
+        retrievals,
+        "slurm",
+        set(),
+        set(),
+    )
+    assert not slurm_validation.findings
+    assert all(
+        "field applies only to HTCondor" in rejection
+        for rejection in slurm_validation.rejected
+    )
+
+    documentation = DocumentationEvidence(
+        site_id=measurements.site_id,
+        model_mode="simulate",
+        model_provider="recorded",
+        model=None,
+        web_mode="live",
+        context_mode="bm25",
+        findings=validated.findings,
+        rejected=[],
+        unresolved=[],
+        selected_chunk_ids=[span.chunk_id for span in spans],
+        retrieval=retrievals,
+    )
+    profile, report = compile_profile(measurements)
+    profile, report = apply_documentation(profile, report, documentation)
+
+    assert profile.htcondor is not None
+    for name, (_, expected) in statements.items():
+        assert getattr(profile.htcondor, name) == expected
+        path = f"/htcondor/{name}"
+        assert any(
+            item.profile_field == path and item.evidence_ids
+            for item in report.links
+        )
+
+
+def test_htcondor_site_policy_fields_are_not_requested_for_slurm() -> None:
+    condor_fields = {
+        "submission_host",
+        "machine_requirements_supported",
+        "dynamic_slots_enabled",
+        "bulk_submission_supported",
+        "completion_email_supported",
+    }
+
+    assert condor_fields <= set(_requested_fields("submission", "htcondor", set()))
+    assert condor_fields.isdisjoint(
+        _requested_fields("submission", "slurm", set())
+    )
+    assert base_queries("submission_host", "htcondor", set())
+    assert not base_queries("submission_host", "slurm", set())
 
 
 def test_same_heading_context_can_support_one_field_citation() -> None:

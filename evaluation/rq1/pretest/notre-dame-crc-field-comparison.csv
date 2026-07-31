@@ -1,0 +1,72 @@
+site_id,field_id,field_path,section,value_type,evidence_class,expected_state,expected_value_json,example_value_json,observed_state,observed_value_json,match_rule,outcome
+notre-dame-crc,1,/scheduler_type,scheduler,string,configuration,has_value,"""htcondor""","""htcondor""",has_value,"""htcondor""",exact_trimmed_lower,correct_value
+notre-dame-crc,2,/htcondor/version,htcondor,string,configuration,has_value,"""23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167""","""23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167""",has_value,"""23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167""",exact_trimmed_lower,correct_value
+notre-dame-crc,3,/htcondor/submit_command,htcondor,string,configuration,has_value,"""condor_submit""","""condor_submit""",has_value,"""condor_submit""",exact_trimmed_lower,correct_value
+notre-dame-crc,4,/htcondor/collector_host,htcondor,string,configuration,has_value,"""condor-central-mgr.crc.nd.edu""","""condor-central-mgr.crc.nd.edu""",has_value,"""condor-central-mgr.crc.nd.edu""",exact_trimmed_lower,correct_value
+notre-dame-crc,5,/htcondor/file_transfer_supported,htcondor,boolean,configuration,has_value,TRUE,TRUE,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,6,/htcondor/guaranteed_runtime,htcondor,boolean,policy,has_value,FALSE,FALSE,has_value,false,exact_trimmed_lower,correct_value
+notre-dame-crc,7,/htcondor/preemptible,htcondor,boolean,policy,has_value,TRUE,TRUE,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,8,/htcondor/maximum_walltime,htcondor,string,policy,has_value,"""not_applicable""","""not_applicable""",has_value,"""not_applicable""",exact_trimmed_lower,correct_value
+notre-dame-crc,10,/htcondor/submit_attributes/executable/syntax,htcondor,array,policy,has_value,"[""executable = Path_to_your_executable_file/executable.sh""]","[""executable = Path_to_your_executable_file/executable.sh""]",has_value,"[""executable = Path_to_your_executable_file/executable.sh""]",set,correct_value
+notre-dame-crc,10,/htcondor/submit_attributes/executable/required,htcondor,boolean,policy,has_value,FALSE,FALSE,has_value,false,exact_trimmed_lower,correct_value
+notre-dame-crc,11,/htcondor/submit_attributes/request_cpus/syntax,htcondor,array,policy,has_value,"[""request_cpus = {cpu_count}""]","[""request_cpus = 4""]",has_value,"[""request_cpus = 4""]",set,incorrect_value
+notre-dame-crc,11,/htcondor/submit_attributes/request_cpus/required,htcondor,boolean,policy,has_value,FALSE,FALSE,has_value,false,exact_trimmed_lower,correct_value
+notre-dame-crc,12,/htcondor/submit_attributes/request_memory/syntax,htcondor,array,policy,has_value,"[""request_memory = {memory_mib}MB""]","[""request_memory = {memory_mib}MB""]",has_value,"[""request_memory = {memory_mib}MB""]",set,correct_value
+notre-dame-crc,12,/htcondor/submit_attributes/request_memory/required,htcondor,boolean,policy,has_value,FALSE,null,empty,null,exact_trimmed_lower,false_abstention
+notre-dame-crc,13,/htcondor/submit_attributes/request_gpus/syntax,htcondor,array,policy,has_value,"[""request_gpus = {gpu_count}""]","[""request_gpus = 1""]",has_value,"[""request_gpus = 1""]",set,incorrect_value
+notre-dame-crc,13,/htcondor/submit_attributes/request_gpus/required,htcondor,boolean,policy,has_value,FALSE,FALSE,has_value,false,exact_trimmed_lower,correct_value
+notre-dame-crc,14,/htcondor/submit_attributes/should_transfer_files/syntax,htcondor,array,policy,has_value,"[""should_transfer_files ={value}""]","[""should_transfer_files = yes""]",has_value,"[""should_transfer_files = yes""]",set,incorrect_value
+notre-dame-crc,14,/htcondor/submit_attributes/should_transfer_files/required,htcondor,boolean,policy,has_value,FALSE,FALSE,has_value,false,exact_trimmed_lower,correct_value
+notre-dame-crc,15,/htcondor/submit_attributes/when_to_transfer_output/syntax,htcondor,array,policy,has_value,"[""when_to_transfer_output = on_exit""]","[""when_to_transfer_output = on_exit""]",has_value,"[""when_to_transfer_output = on_exit""]",set,correct_value
+notre-dame-crc,15,/htcondor/submit_attributes/when_to_transfer_output/required,htcondor,boolean,policy,has_value,FALSE,FALSE,has_value,false,exact_trimmed_lower,correct_value
+notre-dame-crc,16,/htcondor/pool_totals/machine_count,htcondor,integer,configuration,has_value,390,390,has_value,390,numeric_exact,correct_value
+notre-dame-crc,16,/htcondor/pool_totals/cpu_cores,htcondor,integer,configuration,has_value,14242,14242,has_value,14242,numeric_exact,correct_value
+notre-dame-crc,16,/htcondor/pool_totals/memory_mib,htcondor,integer,configuration,has_value,96129306,96129306,has_value,96129306,numeric_exact,correct_value
+notre-dame-crc,16,/htcondor/pool_totals/advertised_gpus,htcondor,integer,configuration,has_value,310,310,has_value,310,numeric_exact,correct_value
+notre-dame-crc,17,/htcondor/available_commands,htcondor,array,configuration,has_value,"[""condor_status"",""condor_submit"",""condor_q"",""condor_history""]","[""condor_status"",""condor_submit"",""condor_q"",""condor_history""]",missing,<missing>,set,false_abstention
+notre-dame-crc,18,/htcondor/submit_command_available,htcondor,boolean,configuration,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,19,/htcondor/unclassified_machine_count,htcondor,integer,configuration,has_value,0,0,has_value,0,numeric_exact,correct_value
+notre-dame-crc,20,/htcondor/resource_summary/cpu_cores_per_machine_values,htcondor,array,configuration,has_value,"[2,4,16,20,24,32,40,48,64,80,128]","[2,4,16,20,24,32,40,48,64,80,128]",has_value,"[2, 4, 16, 20, 24, 32, 40, 48, 64, 80, 128]",set,correct_value
+notre-dame-crc,21,/htcondor/resource_summary/cpu_cores_per_machine_min,htcondor,integer,configuration,has_value,2,2,has_value,2,numeric_exact,correct_value
+notre-dame-crc,22,/htcondor/resource_summary/cpu_cores_per_machine_max,htcondor,integer,configuration,has_value,128,128,has_value,128,numeric_exact,correct_value
+notre-dame-crc,23,/htcondor/resource_summary/memory_mib_per_machine_min,htcondor,integer,configuration,has_value,3655,3655,has_value,3655,numeric_exact,correct_value
+notre-dame-crc,24,/htcondor/resource_summary/memory_mib_per_machine_max,htcondor,integer,configuration,has_value,2051122,2051122,has_value,2051122,numeric_exact,correct_value
+notre-dame-crc,25,/htcondor/resource_summary/gpu_capable_machine_count,htcondor,integer,configuration,has_value,81,81,has_value,81,numeric_exact,correct_value
+notre-dame-crc,26,/htcondor/resource_summary/gpus_per_machine_values,htcondor,array,configuration,has_value,"[1,3,4,6]","[1,3,4,6]",has_value,"[1, 3, 4, 6]",set,correct_value
+notre-dame-crc,27,/htcondor/resource_summary/gpus_per_machine_min,htcondor,integer,configuration,has_value,1,1,has_value,1,numeric_exact,correct_value
+notre-dame-crc,28,/htcondor/resource_summary/gpus_per_machine_max,htcondor,integer,configuration,has_value,6,6,has_value,6,numeric_exact,correct_value
+notre-dame-crc,40,/storage/home/environment_variables,storage,array,configuration,has_value,"[""HOME""]","[""HOME""]",has_value,"[""HOME""]",set,correct_value
+notre-dame-crc,40,/storage/home/path_pattern,storage,string,configuration,has_value,"""/users/{username}""","""/users/{username}""",has_value,"""/users/{username}""",exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/filesystem_type,storage,string,configuration,has_value,"""nfs""","""nfs""",has_value,"""nfs""",exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/login_readable,storage,boolean,configuration,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/login_writable,storage,boolean,configuration,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/compute_visible,storage,boolean,capability,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/compute_readable,storage,boolean,capability,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/compute_writable,storage,boolean,capability,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,40,/storage/home/shared_across_compute_nodes,storage,boolean,capability,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,40,/storage/home/purge_after_days,storage,integer,policy,absent,,null,empty,null,numeric_exact,correct_abstention
+notre-dame-crc,41,/storage/group/environment_variables,storage,array,configuration,absent,,[],missing,<missing>,set,correct_abstention
+notre-dame-crc,41,/storage/group/path_pattern,storage,string,configuration,has_value,"""/groups/{group}""","""/groups/{group}""",missing,<missing>,exact_trimmed_lower,false_abstention
+notre-dame-crc,41,/storage/group/filesystem_type,storage,string,configuration,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/login_readable,storage,boolean,configuration,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/login_writable,storage,boolean,configuration,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/compute_visible,storage,boolean,capability,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/compute_readable,storage,boolean,capability,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/compute_writable,storage,boolean,capability,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/shared_across_compute_nodes,storage,boolean,capability,absent,,null,missing,<missing>,exact_trimmed_lower,correct_abstention
+notre-dame-crc,41,/storage/group/purge_after_days,storage,integer,policy,absent,,null,missing,<missing>,numeric_exact,correct_abstention
+notre-dame-crc,42,/network/login/hostname_patterns,network,array,identity,has_value,"[""*.crc.nd.edu""]","[""*.crc.nd.edu""]",has_value,"[""*.crc.nd.edu""]",set,correct_value
+notre-dame-crc,43,/network/login/dns_resolution,network,boolean,configuration,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,44,/network/login/outbound_https,network,boolean,configuration,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,45,/network/login/local_tcp_bind,network,boolean,configuration,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,46,/network/login/local_tcp_loopback,network,boolean,configuration,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,47,/network/compute/hostname_patterns,network,array,identity,has_value,"[""*.crc.nd.edu""]","[""*.crc.nd.edu""]",empty,[],set,false_abstention
+notre-dame-crc,48,/network/compute/dns_resolution,network,boolean,capability,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,49,/network/compute/outbound_https,network,boolean,capability,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,50,/network/compute/local_tcp_bind,network,boolean,capability,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,51,/network/compute/local_tcp_loopback,network,boolean,capability,absent,,null,empty,null,exact_trimmed_lower,correct_abstention
+notre-dame-crc,52,/network/login_compute/tcp_connect,network,boolean,capability,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,53,/network/login_compute/suggested_port_range,network,string,capability,has_value,"""9000-12999""","""9000-12999""",has_value,"""9000-12999""",exact_trimmed_lower,correct_value
+notre-dame-crc,54,/network/compute_compute/tcp_connect,network,boolean,capability,has_value,true,true,has_value,true,exact_trimmed_lower,correct_value
+notre-dame-crc,55,/network/compute_compute/suggested_port_range,network,string,capability,has_value,"""9000-12999""","""9000-12999""",has_value,"""9000-12999""",exact_trimmed_lower,correct_value
+notre-dame-crc,56,/accounting/allocation_required,accounting,boolean,policy,absent,,null,empty,null,exact_trimmed_lower,correct_abstention

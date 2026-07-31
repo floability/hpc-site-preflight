@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -45,7 +50,7 @@
         ],
         "required": null,
         "support": "supported",
-        "condition": "When submitting multi-threaded or multicore SMP Condor jobs.",
+        "condition": "For multi-threaded or multicore SMP Condor jobs.",
         "example": "1",
         "allowed_values": null
       },
@@ -67,7 +72,7 @@
         ],
         "required": null,
         "support": "supported",
-        "condition": "For running an Amber job with 1 GPU.",
+        "condition": "For an Amber job to a GPU node / running Amber with 1 GPU.",
         "example": "1",
         "allowed_values": null
       },
@@ -105,8 +110,7 @@
       {
         "documented_name": "arguments",
         "documented_syntax": [
-          "arguments = hello condor",
-          "arguments = hello $( PROCESS )"
+          "arguments = hello condor"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -116,8 +120,7 @@
       {
         "documented_name": "output",
         "documented_syntax": [
-          "output = test.output",
-          "output = test.output.$( PROCESS )"
+          "output = test.output"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -137,7 +140,7 @@
       {
         "documented_name": "error",
         "documented_syntax": [
-          "error = test.error.$( PROCESS )"
+          "error = test.error.$(PROCESS)"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -151,7 +154,7 @@
         ],
         "requirement": "conditional",
         "support": "supported",
-        "condition": "When submitting multi-threaded or multicore SMP Condor jobs.",
+        "condition": "For multi-threaded or multicore SMP Condor jobs.",
         "status": "needs_mapping"
       },
       {
@@ -395,8 +398,8 @@
   },
   "accounting": {
     "allocation_required": null,
-    "charging_unit": null,
-    "charging_model": "Storage allocations are attributed to the user's account sponsor (faculty advisor).",
+    "charging_unit": "faculty sponsor",
+    "charging_model": null,
     "filesystem_storage_charged": true
   },
   "section_status": {
@@ -511,7 +514,7 @@
       "action_id": "accounting_policy_search"
     },
     {
-      "field": "/accounting/charging_unit",
+      "field": "/accounting/charging_model",
       "reason": "Accounting policy cannot be established by login measurement.",
       "next_action": "additional_documentation",
       "action_id": "accounting_policy_search"
@@ -524,5 +527,5 @@
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-3ee417a3-c03f-47eb-9389-18b1d833ea2d"
+  "evidence_id": "report-b6f1b0a2-94a0-472c-bcac-aace7fd6d681"
 }

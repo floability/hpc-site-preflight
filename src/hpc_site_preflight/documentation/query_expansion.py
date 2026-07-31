@@ -11,6 +11,13 @@ _FIELD_DESCRIPTIONS = {
     "required_submission_options": "Scheduler options the site requires in a job submission.",
     "guaranteed_runtime": "Whether HTCondor jobs are guaranteed to run to completion.",
     "preemptible": "Whether HTCondor jobs may be displaced or evicted.",
+    "submission_host": "The site host where users submit HTCondor jobs.",
+    "machine_requirements_supported": (
+        "Whether jobs may select machine resources using requirements."
+    ),
+    "dynamic_slots_enabled": "Whether the HTCondor pool enables dynamic slots.",
+    "bulk_submission_supported": "Whether one submit description may enqueue many jobs.",
+    "completion_email_supported": "Whether the site sends job-completion email.",
     "maximum_walltime_seconds": "Documented enforced walltime limits for queues or partitions.",
     "maximum_nodes_per_job": "Documented maximum nodes allowed in one partition job.",
     "shared_nodes": "Whether jobs may share nodes in a partition.",

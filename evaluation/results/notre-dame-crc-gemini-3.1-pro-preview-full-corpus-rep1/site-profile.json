@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -45,7 +50,7 @@
         ],
         "required": null,
         "support": "supported",
-        "condition": "Required for multi-threaded or multicore SMP Condor jobs (e.g. OpenMP) and demonstrated for multi-core MATLAB jobs.",
+        "condition": "When submitting multi-threaded or multicore SMP jobs",
         "example": "1",
         "allowed_values": null
       },
@@ -67,7 +72,7 @@
         ],
         "required": null,
         "support": "supported",
-        "condition": "When running jobs that require a GPU node.",
+        "condition": "When running jobs that require a GPU",
         "example": "1",
         "allowed_values": null
       },
@@ -147,11 +152,11 @@
       {
         "documented_name": "environment",
         "documented_syntax": [
-          "environment = OMP_NUM_THREADS=4; LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
         ],
         "requirement": "conditional",
         "support": "supported",
-        "condition": "Required to set environment variables when submitting multi-threaded or multicore SMP Condor jobs.",
+        "condition": "When submitting multi-threaded or multicore SMP jobs",
         "status": "needs_mapping"
       },
       {
@@ -530,5 +535,5 @@
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-715458bf-7009-49b3-bce4-021a55e94dac"
+  "evidence_id": "report-dea10f4a-5572-4e2f-9a04-a8c7472f72f6"
 }

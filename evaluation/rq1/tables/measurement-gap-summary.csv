@@ -1,0 +1,13 @@
+site,evidence_class,weighted_recoveries,weighted_opportunities,raw_recoveries,raw_opportunities,recovery_rate
+anvil,capability,156.00000000000003,204.0,260,340,0.7647058823529413
+anvil,configuration,5.666666666666665,48.0,13,80,0.11805555555555552
+anvil,identity,12.000000000000002,12.0,20,20,1.0000000000000002
+anvil,policy,287.0,372.0,491,620,0.771505376344086
+notre-dame-crc,capability,84.0,144.0,140,240,0.5833333333333334
+notre-dame-crc,configuration,0.0,60.0,0,100,0.0
+notre-dame-crc,identity,12.0,12.0,20,20,1.0
+notre-dame-crc,policy,191.0,240.0,307,400,0.7958333333333333
+stampede3,capability,182.0,204.0,288,340,0.8921568627450981
+stampede3,configuration,48.00000000000001,60.0,80,100,0.8000000000000002
+stampede3,identity,12.0,12.0,20,20,1.0
+stampede3,policy,526.3333333333333,600.0,893,1000,0.8772222222222221

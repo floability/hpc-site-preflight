@@ -1,0 +1,4 @@
+site,seed,run_id,model,mode,rep,profile_path
+anvil,20260730,7b8a00e1-be3c-44ce-a421-b7643f025dd5,gpt-5.6-terra,full-corpus,1,evaluation/results/anvil-gpt-5.6-terra-full-corpus-rep1/site-profile.json
+stampede3,20260730,b4ad3fbc-b5ff-4e8f-922e-6c8580c56439,gemini-3.6-flash,bm25,1,evaluation/results/stampede3-gemini-3.6-flash-bm25-rep1/site-profile.json
+notre-dame-crc,20260730,13ca721f-bdf3-4a11-bc5f-3cde6e40544c,gemini-3.6-flash,expanded,3,evaluation/results/notre-dame-crc-gemini-3.6-flash-expanded-rep3/site-profile.json

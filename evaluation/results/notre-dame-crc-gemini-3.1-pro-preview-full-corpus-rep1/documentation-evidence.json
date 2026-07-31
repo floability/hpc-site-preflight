@@ -10,7 +10,7 @@
     {
       "name": "filesystem_storage_charged",
       "value": true,
-      "note": "Additional group storage and long term storage are available for a cost.",
+      "note": "Additional storage beyond 5TB is available for a cost, and long-term storage is available upon request for a cost.",
       "citations": [
         {
           "span_id": "doc-infrastructure-storage-html:c25:s2",
@@ -48,7 +48,7 @@
     {
       "name": "preemptible",
       "value": true,
-      "note": "Jobs may be kicked off and must run elsewhere.",
+      "note": "Jobs borrowing other people's machines may be kicked off.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c9:s3",
@@ -61,6 +61,90 @@
       ]
     },
     {
+      "name": "submission_host",
+      "value": "condorfe.crc.nd.edu",
+      "note": "Users must log into condorfe.crc.nd.edu to submit jobs.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c13:s1",
+          "chunk_id": "doc-resources-condor-html:c13",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "Log into condorfe.crc.nd.edu to submit jobs."
+        }
+      ]
+    },
+    {
+      "name": "machine_requirements_supported",
+      "value": true,
+      "note": "Users can specify requirements on what machines to use, such as a particular cluster, memory, or processor type.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c9:s1",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "Users that submit jobs to Condor can specify their own requirements on what machines to use."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c9:s2",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "You can require the use of one particular machine, or any from a particular cluster, or any with a certain amount of memory or processor type."
+        }
+      ]
+    },
+    {
+      "name": "bulk_submission_supported",
+      "value": true,
+      "note": "Users can queue several jobs at once via Condor using the queue command and $(PROCESS) macro.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c28:s1",
+          "chunk_id": "doc-resources-condor-html:c28",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "Because you will certainly want to run many jobs at once via Condor, you can easily modify your submit file to run a program with tens or hundreds of variations."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c28:s2",
+          "chunk_id": "doc-resources-condor-html:c28",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "Change the queue command to queue several jobs at once, and the $(PROCESS) macro to modify the parameters with the job number."
+        }
+      ]
+    },
+    {
+      "name": "completion_email_supported",
+      "value": false,
+      "note": "Completion email features have been disabled at Notre Dame due to email security configurations.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c27:s1",
+          "chunk_id": "doc-resources-condor-html:c27",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "Despite what the Condor manual says, you will NOT receive email when a job is complete."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c27:s2",
+          "chunk_id": "doc-resources-condor-html:c27",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "This feature has been disabled at Notre Dame due to our email security configuration."
+        }
+      ]
+    },
+    {
       "name": "universe",
       "syntax": [
         "universe = vanilla"
@@ -68,7 +152,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Specifies the Condor universe for the job.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -96,7 +180,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Specifies the executable script or binary to run.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -124,7 +208,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Directs HTCondor to transfer files.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -152,7 +236,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Specifies when to transfer output files back.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -181,7 +265,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Provides arguments to the executable.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -210,7 +294,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Directs standard output to a file.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -238,7 +322,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Directs standard error to a file.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c29:s2",
@@ -258,7 +342,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Directs HTCondor to create a log file for the job.",
+      "note": "Demonstrated in sample submit file.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c15:s1",
@@ -279,14 +363,29 @@
       ]
     },
     {
+      "name": "dynamic_slots_enabled",
+      "value": true,
+      "note": "The condor pool is configured to enable dynamic slots.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c34:s1",
+          "chunk_id": "doc-resources-condor-html:c34",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "The condor pool is configured to enable dynamic slots."
+        }
+      ]
+    },
+    {
       "name": "request_cpus",
       "syntax": [
         "request_cpus = 4"
       ],
       "requirement": "conditional",
       "support": "supported",
-      "condition": "Required for multi-threaded or multicore SMP Condor jobs (e.g. OpenMP) and demonstrated for multi-core MATLAB jobs.",
-      "note": "A Condor submission script template includes request_cpus = 4 for a 4-core MATLAB job or multicore SMP jobs.",
+      "condition": "When submitting multi-threaded or multicore SMP jobs",
+      "note": "Requests a specific number of CPU cores for multi-threaded jobs.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c34:s2",
@@ -297,36 +396,12 @@
           "quote": "Therefore, if you want to submit multi-threaded or multicore SMP Condor jobs (e.g."
         },
         {
-          "span_id": "doc-resources-condor-html:c34:s3",
-          "chunk_id": "doc-resources-condor-html:c34",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
-          "quote": "using OpenMP), you can add below lines in your Condor job script:"
-        },
-        {
           "span_id": "doc-resources-condor-html:c35:s2",
           "chunk_id": "doc-resources-condor-html:c35",
           "url": "https://docs.crc.nd.edu/resources/condor.html",
           "title": "HTCondor \u2014 User Documentation  documentation",
           "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
           "quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ..."
-        },
-        {
-          "span_id": "doc-resources-condor-html:c44:s1",
-          "chunk_id": "doc-resources-condor-html:c44",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
-          "quote": "Following is a Condor submission script template for running Matlab with 4 cores:"
-        },
-        {
-          "span_id": "doc-resources-condor-html:c45:s1",
-          "chunk_id": "doc-resources-condor-html:c45",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10"
         }
       ]
     },
@@ -337,8 +412,8 @@
       ],
       "requirement": "conditional",
       "support": "supported",
-      "condition": "When running jobs that require a GPU node.",
-      "note": "Documented in an example for submitting jobs to a GPU node.",
+      "condition": "When running jobs that require a GPU",
+      "note": "Requests GPU resources for a job.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c48:s1",
@@ -361,12 +436,12 @@
     {
       "documented_name": "environment",
       "documented_syntax": [
-        "environment = OMP_NUM_THREADS=4; LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+        "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
       ],
       "requirement": "conditional",
       "support": "supported",
-      "condition": "Required to set environment variables when submitting multi-threaded or multicore SMP Condor jobs.",
-      "note": "Shown in the example for OpenMP multicore SMP jobs.",
+      "condition": "When submitting multi-threaded or multicore SMP jobs",
+      "note": "Sets environment variables for the execution context.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c34:s2",
@@ -375,14 +450,6 @@
           "title": "HTCondor \u2014 User Documentation  documentation",
           "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
           "quote": "Therefore, if you want to submit multi-threaded or multicore SMP Condor jobs (e.g."
-        },
-        {
-          "span_id": "doc-resources-condor-html:c34:s3",
-          "chunk_id": "doc-resources-condor-html:c34",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
-          "quote": "using OpenMP), you can add below lines in your Condor job script:"
         },
         {
           "span_id": "doc-resources-condor-html:c35:s2",
@@ -402,7 +469,7 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Documented in provided example job scripts.",
+      "note": "Enables the transfer of the current environment to the job.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c45:s1",
@@ -432,16 +499,17 @@
     "after correction batch 1/4: operational: storage//groups/PI_netid: storage resource is not present in measured site resources",
     "after correction batch 1/4: operational: storage//bluefs: storage resource is not present in measured site resources",
     "after correction batch 1/4: operational: storage//goldfs: storage resource is not present in measured site resources",
-    "batch 2/4: operational: storage//users/netid: storage resource is not present in measured site resources",
-    "batch 2/4: operational: storage//groups/PI_netid: storage resource is not present in measured site resources",
-    "batch 2/4: operational: storage//bluefs/PI_netid: storage resource is not present in measured site resources",
-    "batch 2/4: operational: storage//goldfs/PI_netid: storage resource is not present in measured site resources",
+    "batch 2/4: submission: submission_host: cited text does not explicitly support the proposed value",
+    "batch 2/4: operational: storage//users: storage resource is not present in measured site resources",
+    "batch 2/4: operational: storage//groups: storage resource is not present in measured site resources",
+    "batch 2/4: operational: storage//bluefs: storage resource is not present in measured site resources",
+    "batch 2/4: operational: storage//goldfs: storage resource is not present in measured site resources",
     "batch 2/4: operational: storage//tmp: storage resource is not present in measured site resources",
-    "after correction batch 2/4: operational: storage//users/netid: storage resource is not present in measured site resources",
-    "after correction batch 2/4: operational: storage//groups/PI_netid: storage resource is not present in measured site resources",
-    "after correction batch 2/4: operational: storage//bluefs/PI_netid: storage resource is not present in measured site resources",
-    "after correction batch 2/4: operational: storage//goldfs/PI_netid: storage resource is not present in measured site resources",
-    "after correction batch 2/4: operational: storage//tmp: storage resource is not present in measured site resources",
+    "after correction batch 2/4: operational: storage/User Home Directory: storage resource is not present in measured site resources",
+    "after correction batch 2/4: operational: storage/Group Directory: storage resource is not present in measured site resources",
+    "after correction batch 2/4: operational: storage/Long term storage (/bluefs): storage resource is not present in measured site resources",
+    "after correction batch 2/4: operational: storage/Long term storage (/goldfs): storage resource is not present in measured site resources",
+    "after correction batch 2/4: operational: storage/node-local temporary /scratch /tmp: storage resource is not present in measured site resources",
     "batch 3/4: submission: unmapped_options/queue: no literal htcondor submission syntax",
     "after correction batch 3/4: submission: unmapped_options/queue: no literal htcondor submission syntax",
     "batch 4/4: submission: unmapped_options/queue: no literal htcondor submission syntax"
@@ -2195,6 +2263,2711 @@
       ]
     },
     {
+      "field": "submission_host",
+      "queries": [],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c2",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c3",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c4",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c57",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": null,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c33",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c36",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c42",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c54",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c56",
+          "score": null,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "machine_requirements_supported",
+      "queries": [],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c2",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c3",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c4",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c57",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": null,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c33",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c36",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c42",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c54",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c56",
+          "score": null,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "dynamic_slots_enabled",
+      "queries": [],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c2",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c3",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c4",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c57",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c33",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": null,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c36",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c42",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c54",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c56",
+          "score": null,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "bulk_submission_supported",
+      "queries": [],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c2",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c3",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c4",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c57",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": null,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c33",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c36",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c42",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c54",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c56",
+          "score": null,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "completion_email_supported",
+      "queries": [],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c2",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c3",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c4",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c57",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c12",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c1",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c5",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c6",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c7",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c8",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c11",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c15",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c19",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c20",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c21",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c22",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c23",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c25",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": null,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c30",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c33",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c36",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c37",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c39",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c41",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c42",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c43",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c46",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c51",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c54",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c55",
+          "score": null,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c56",
+          "score": null,
+          "cited": false
+        }
+      ]
+    },
+    {
       "field": "required_submission_options",
       "queries": [],
       "hits": [
@@ -2676,7 +5449,7 @@
         {
           "chunk_id": "doc-resources-condor-html:c44",
           "score": null,
-          "cited": true
+          "cited": false
         },
         {
           "chunk_id": "doc-resources-condor-html:c45",

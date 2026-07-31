@@ -1,0 +1,3 @@
+site,runs,full_topic_coverage_runs,official_pages,selected_pages_checked,scope_violations,fetch_successes,fetch_attempts,fetch_yield,url_stability,tokens_mean,tokens_sd,latency_sec_mean,latency_sec_sd
+anvil,9,8,24,24,0,63,105,0.6,0.5425555555555557,4642.888888888889,1956.0014343325802,149.57866666666666,88.2166046628978
+stampede3,12,12,12,12,0,122,123,0.991869918699187,1.0,4302.916666666667,410.8957970831608,40.037499999999994,7.292277216343328

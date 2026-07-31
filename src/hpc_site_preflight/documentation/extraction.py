@@ -23,6 +23,7 @@ from hpc_site_preflight.documentation.models import (
     FieldRetrieval,
     FullCorpusExtractionResult,
     HTCondorPolicyFinding,
+    HTCondorPolicyName,
     NetworkExtractionResult,
     NetworkFinding,
     OperationalExtractionResult,
@@ -57,11 +58,19 @@ Return false for a network capability only when the cited text explicitly denies
 Do not invent port ranges, limits, charging rules, or purge periods.
 Use null or an empty list when the documentation does not state a value."""
 
+_HTCONDOR_POLICY_FIELDS: tuple[HTCondorPolicyName, ...] = (
+    "guaranteed_runtime",
+    "preemptible",
+    "submission_host",
+    "machine_requirements_supported",
+    "dynamic_slots_enabled",
+    "bulk_submission_supported",
+    "completion_email_supported",
+)
 _GROUP_FIELDS = {
     "submission": (
         "allocation_required",
-        "guaranteed_runtime",
-        "preemptible",
+        *_HTCONDOR_POLICY_FIELDS,
         "required_submission_options",
         "maximum_walltime_seconds",
         "maximum_nodes_per_job",
@@ -220,6 +229,11 @@ def _submission_option_instructions(scheduler: str) -> list[str]:
                 'A statement that jobs "may be kicked off" or "must run elsewhere" establishes '
                 "guaranteed_runtime=false and preemptible=true; both values may cite the same "
                 "exact span.",
+                "Populate submission_host only when the site explicitly names the host used to "
+                "submit jobs.",
+                "Populate machine_requirements_supported, dynamic_slots_enabled, "
+                "bulk_submission_supported, and completion_email_supported only from explicit "
+                "site statements; do not infer them from generic HTCondor behavior.",
             ]
         )
     return instructions
@@ -861,7 +875,7 @@ def _validate_group(
                     )
                 )
 
-        for name in ("guaranteed_runtime", "preemptible"):
+        for name in _HTCONDOR_POLICY_FIELDS:
             field = getattr(result, name)
             if field is None:
                 continue
@@ -876,7 +890,7 @@ def _validate_group(
             )
             if error:
                 rejected.append(f"{name}: {error}")
-            elif not _supports_htcondor_runtime_policy(name, field.value, citations):
+            elif not _supports_htcondor_policy(name, field.value, citations):
                 rejected.append(
                     f"{name}: cited text does not explicitly support the proposed value"
                 )
@@ -1212,18 +1226,88 @@ def _canonical_storage_name(name: str, storage_names: set[str]) -> str | None:
     )
 
 
-def _supports_htcondor_runtime_policy(
+def _supports_htcondor_policy(
     name: str,
-    value: bool,
+    value: str | bool,
     citations: list[DocumentationCitation],
 ) -> bool:
-    """Accept the reviewed HTCondor values only from explicit displacement wording."""
+    """Accept HTCondor policy values only from reviewed, explicit wording."""
 
     text = " ".join(citation.quote for citation in citations).casefold()
     displacement = "kicked off" in text or "must run elsewhere" in text
     if name == "guaranteed_runtime":
         return displacement and value is False
-    return displacement and value is True
+    if name == "preemptible":
+        return displacement and value is True
+    if name == "submission_host":
+        return (
+            isinstance(value, str)
+            and value.casefold() in text
+            and _looks_like_hostname(value)
+            and any(term in text for term in ("submit", "submission"))
+            and any(
+                term in text
+                for term in ("host", "login", "log in", "log into", "access point")
+            )
+        )
+    if name == "machine_requirements_supported":
+        return (
+            value is True
+            and any(term in text for term in ("requirement", "constraint", "select"))
+            and any(
+                term in text
+                for term in (
+                    "machine",
+                    "resource",
+                    "memory",
+                    "cpu",
+                    "processor",
+                    "architecture",
+                )
+            )
+            and any(term in text for term in ("can", "may", "allow", "support", "specify"))
+        )
+    if name == "dynamic_slots_enabled":
+        return (
+            value is True
+            and "dynamic slots" in text
+            and any(term in text for term in ("enable", "enabled", "configured"))
+        )
+    if name == "bulk_submission_supported":
+        multiple_jobs = any(
+            term in text
+            for term in (
+                "several jobs",
+                "many jobs",
+                "multiple jobs",
+                "hundreds of",
+                "$(process)",
+            )
+        )
+        return (
+            value is True
+            and "queue" in text
+            and (multiple_jobs or bool(re.search(r"\bqueue\s+\d+\b", text)))
+        )
+    if name == "completion_email_supported":
+        explicit_denial = any(
+            term in text
+            for term in ("not receive", "does not", "not supported", "disabled", "no email")
+        )
+        return value is False and "email" in text and explicit_denial
+    return False
+
+
+def _looks_like_hostname(value: str) -> bool:
+    """Return whether a documented submission endpoint resembles a DNS hostname."""
+
+    return bool(
+        re.fullmatch(
+            r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?"
+            r"(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+",
+            value.strip().casefold(),
+        )
+    )
 
 
 def _supports_required_option(
@@ -1447,8 +1531,7 @@ def _expected_fields(scheduler: str, storage_names: set[str]) -> set[str]:
 
     fields = set().union(*_GROUP_FIELDS.values())
     if scheduler == "slurm":
-        fields.discard("guaranteed_runtime")
-        fields.discard("preemptible")
+        fields.difference_update(_HTCONDOR_POLICY_FIELDS)
     else:
         fields.difference_update(_PARTITION_FIELDS)
     if not storage_names:
@@ -1465,7 +1548,7 @@ def _requested_fields(
 
     fields = list(_GROUP_FIELDS[group])
     if scheduler == "slurm":
-        for field in ("guaranteed_runtime", "preemptible"):
+        for field in _HTCONDOR_POLICY_FIELDS:
             if field in fields:
                 fields.remove(field)
     else:

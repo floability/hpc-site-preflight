@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -43,9 +48,9 @@
         "syntax": [
           "request_cpus = 4"
         ],
-        "required": null,
+        "required": false,
         "support": "supported",
-        "condition": "When submitting multi-threaded or multicore SMP Condor jobs.",
+        "condition": null,
         "example": "1",
         "allowed_values": null
       },
@@ -65,9 +70,9 @@
         "syntax": [
           "request_gpus = 1"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "When submitting jobs to GPU nodes",
         "example": "1",
         "allowed_values": null
       },
@@ -103,16 +108,6 @@
     ],
     "unmapped_submit_attributes": [
       {
-        "documented_name": "environment",
-        "documented_syntax": [
-          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
-        ],
-        "requirement": "conditional",
-        "support": "supported",
-        "condition": "When submitting multi-threaded or multicore SMP Condor jobs.",
-        "status": "needs_mapping"
-      },
-      {
         "documented_name": "getenv",
         "documented_syntax": [
           "getenv = true"
@@ -146,6 +141,16 @@
         "documented_name": "log",
         "documented_syntax": [
           "log = logfile"
+        ],
+        "requirement": "optional",
+        "support": "supported",
+        "condition": null,
+        "status": "needs_mapping"
+      },
+      {
+        "documented_name": "environment",
+        "documented_syntax": [
+          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -385,7 +390,7 @@
     "allocation_required": null,
     "charging_unit": null,
     "charging_model": null,
-    "filesystem_storage_charged": null
+    "filesystem_storage_charged": true
   },
   "section_status": {
     "scheduler": "measured",
@@ -393,15 +398,9 @@
     "resources": "measured",
     "network": "pilot_validated",
     "storage": "pilot_validated",
-    "accounting": "partial"
+    "accounting": "documented"
   },
   "unresolved": [
-    {
-      "field": "/htcondor/submit_attributes/request_cpus/required",
-      "reason": "Login measurements do not establish whether this option is required.",
-      "next_action": "additional_documentation",
-      "action_id": "submission_policy_search"
-    },
     {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
@@ -411,6 +410,12 @@
     {
       "field": "/htcondor/submit_attributes/request_memory/support",
       "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
       "action_id": "submission_policy_search"
     },
@@ -505,18 +510,12 @@
       "action_id": "accounting_policy_search"
     },
     {
-      "field": "/accounting/filesystem_storage_charged",
-      "reason": "Accounting policy cannot be established by login measurement.",
-      "next_action": "additional_documentation",
-      "action_id": "accounting_policy_search"
-    },
-    {
       "field": "/htcondor/unmapped_submit_attributes",
-      "reason": "Documented submission option 'environment' needs a reviewed mapping.",
+      "reason": "Documented submission option 'getenv' needs a reviewed mapping.",
       "next_action": "admin_confirmation",
       "action_id": "submission_option_mapping"
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-468ef2da-2a5e-4e95-9e70-4b0d7260d309"
+  "evidence_id": "report-c6a22c56-3011-4576-aa00-fa3d09f31bae"
 }

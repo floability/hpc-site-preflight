@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1",
+  "revision": 6,
+  "frozen_on": "2026-07-31",
+  "revision_note": "Notre Dame truth includes five documented HTCondor policies now represented by the profile schema.",
+  "hash_algorithm": "sha256",
+  "files": {
+    "evaluation/ground-truth/completed-anvil-site-profile-ground-truth.csv": "66c97ed3b2636437a74e51536ae8b0cbfe8600392cfa9cb73d7173e1cf844664",
+    "evaluation/ground-truth/completed-stampede3-site-profile-ground-truth.csv": "b002cd4e356e1d0394ba0ddf9c6880b9677d1bf006ee5f55189ff7f54cd22a8e",
+    "evaluation/ground-truth/completed-notre-dame-crc-site-profile-ground-truth.csv": "003842d96fdfe91575b0dbfcc7d139fde27c804b91d2de3eb5eb149cc0a2043d",
+    "evaluation/ground-truth/normalization-aliases.json": "14cb74934ba48c56e376669d38b1cff3f1c9022beba99f3c05a82e666de5e3eb",
+    "evaluation/rq1/evaluate_profile.py": "2f1c3623662458eeb63820d84b3f929b7d2a9d3eafa271f0ce9af37b27a70ef6",
+    "evaluation/rq1/run_rq1_analysis.py": "a3426acf3e1a04e151e2070faed8d0837604b746e9fe5a42fe85509f8d2b3351"
+  }
+}

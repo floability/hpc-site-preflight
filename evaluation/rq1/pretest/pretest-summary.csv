@@ -1,0 +1,4 @@
+site,evaluated_fields,correct_value,correct_abstention,incorrect_value,false_abstention,unsupported_value,correct_total,field_accuracy
+anvil,147,96,31,2,14,4,127,0.863946
+stampede3,159,108,29,4,6,12,137,0.861635
+notre-dame-crc,71,44,20,3,4,0,64,0.901408

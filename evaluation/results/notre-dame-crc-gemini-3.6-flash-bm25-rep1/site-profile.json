@@ -14,6 +14,11 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
@@ -30,7 +35,7 @@
       {
         "name": "executable",
         "syntax": [
-          "executable = Path_to_your_executable_file/executable.sh"
+          "executable = <path>"
         ],
         "required": false,
         "support": "supported",
@@ -41,11 +46,11 @@
       {
         "name": "request_cpus",
         "syntax": [
-          "request_cpus = 4"
+          "request_cpus = <number>"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "For multi-threaded or multicore SMP Condor jobs",
         "example": "1",
         "allowed_values": null
       },
@@ -63,11 +68,11 @@
       {
         "name": "request_gpus",
         "syntax": [
-          "request_gpus = 1"
+          "request_gpus = <number>"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "For jobs requiring GPU nodes",
         "example": "1",
         "allowed_values": null
       },
@@ -103,9 +108,9 @@
     ],
     "unmapped_submit_attributes": [
       {
-        "documented_name": "environment",
+        "documented_name": "arguments",
         "documented_syntax": [
-          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
+          "arguments = <string>"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -113,13 +118,13 @@
         "status": "needs_mapping"
       },
       {
-        "documented_name": "error",
+        "documented_name": "environment",
         "documented_syntax": [
-          "error = test.error"
+          "environment = <variable_assignments>"
         ],
-        "requirement": "optional",
+        "requirement": "conditional",
         "support": "supported",
-        "condition": null,
+        "condition": "For multi-threaded or multicore SMP Condor jobs",
         "status": "needs_mapping"
       },
       {
@@ -135,7 +140,7 @@
       {
         "documented_name": "log",
         "documented_syntax": [
-          "log = logfile"
+          "log = <filename>"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -145,7 +150,17 @@
       {
         "documented_name": "output",
         "documented_syntax": [
-          "output = test.output"
+          "output = <filename>"
+        ],
+        "requirement": "optional",
+        "support": "supported",
+        "condition": null,
+        "status": "needs_mapping"
+      },
+      {
+        "documented_name": "error",
+        "documented_syntax": [
+          "error = <filename>"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -397,6 +412,12 @@
   },
   "unresolved": [
     {
+      "field": "/htcondor/submit_attributes/request_cpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
@@ -405,6 +426,12 @@
     {
       "field": "/htcondor/submit_attributes/request_memory/support",
       "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
       "action_id": "submission_policy_search"
     },
@@ -500,11 +527,11 @@
     },
     {
       "field": "/htcondor/unmapped_submit_attributes",
-      "reason": "Documented submission option 'environment' needs a reviewed mapping.",
+      "reason": "Documented submission option 'arguments' needs a reviewed mapping.",
       "next_action": "admin_confirmation",
       "action_id": "submission_option_mapping"
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-c5114da1-a264-4e06-8fff-155c579047d3"
+  "evidence_id": "report-d937aaf5-a66f-48dc-bdf8-6836f4faa389"
 }

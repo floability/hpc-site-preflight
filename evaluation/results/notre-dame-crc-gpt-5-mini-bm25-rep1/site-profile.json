@@ -14,12 +14,17 @@
     "file_transfer_supported": true,
     "guaranteed_runtime": false,
     "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
     "maximum_walltime": "not_applicable",
     "submit_attributes": [
       {
         "name": "universe",
         "syntax": [
-          "universe = vanilla"
+          "universe = <type> (e.g. vanilla)"
         ],
         "required": false,
         "support": "supported",
@@ -30,7 +35,7 @@
       {
         "name": "executable",
         "syntax": [
-          "executable = Path_to_your_executable_file/executable.sh"
+          "executable = <path_to_executable>"
         ],
         "required": false,
         "support": "supported",
@@ -41,11 +46,11 @@
       {
         "name": "request_cpus",
         "syntax": [
-          "request_cpus = 4"
+          "request_cpus = <integer>"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "When submitting multi-threaded or multicore (SMP) jobs; docs show adding request_cpus for such jobs.",
         "example": "1",
         "allowed_values": null
       },
@@ -63,18 +68,18 @@
       {
         "name": "request_gpus",
         "syntax": [
-          "request_gpus = 1"
+          "request_gpus = <integer>"
         ],
-        "required": false,
+        "required": null,
         "support": "supported",
-        "condition": null,
+        "condition": "When submitting to a GPU node (GPU example shows request_gpus = 1).",
         "example": "1",
         "allowed_values": null
       },
       {
         "name": "should_transfer_files",
         "syntax": [
-          "should_transfer_files = yes"
+          "should_transfer_files = yes|no"
         ],
         "required": false,
         "support": "supported",
@@ -89,7 +94,7 @@
       {
         "name": "when_to_transfer_output",
         "syntax": [
-          "when_to_transfer_output = on_exit"
+          "when_to_transfer_output = <event> (e.g. on_exit)"
         ],
         "required": false,
         "support": "supported",
@@ -103,9 +108,10 @@
     ],
     "unmapped_submit_attributes": [
       {
-        "documented_name": "getenv",
+        "documented_name": "arguments",
         "documented_syntax": [
-          "getenv = true"
+          "arguments = <args>",
+          "arguments = hello $(PROCESS)"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -115,6 +121,7 @@
       {
         "documented_name": "output",
         "documented_syntax": [
+          "output = <file>",
           "output = test.output"
         ],
         "requirement": "optional",
@@ -125,6 +132,7 @@
       {
         "documented_name": "error",
         "documented_syntax": [
+          "error = <file>",
           "error = test.error"
         ],
         "requirement": "optional",
@@ -135,7 +143,20 @@
       {
         "documented_name": "log",
         "documented_syntax": [
-          "log = logfile"
+          "log = <file>",
+          "log = logfile",
+          "log = test.logfile"
+        ],
+        "requirement": "optional",
+        "support": "supported",
+        "condition": null,
+        "status": "needs_mapping"
+      },
+      {
+        "documented_name": "getenv",
+        "documented_syntax": [
+          "getenv = <true|false>",
+          "getenv = true"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -145,7 +166,8 @@
       {
         "documented_name": "environment",
         "documented_syntax": [
-          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
+          "environment = <VAR>=<value>",
+          "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}"
         ],
         "requirement": "optional",
         "support": "supported",
@@ -330,9 +352,9 @@
       "compute_readable": true,
       "compute_writable": true,
       "shared_across_compute_nodes": null,
-      "backup_policy": null,
-      "purge_after_days": null,
-      "purge_condition": null
+      "backup_policy": "Nightly, 30 day retention limit.",
+      "purge_after_days": 30,
+      "purge_condition": "Expiration of affiliation with ND."
     }
   ],
   "network": {
@@ -383,7 +405,7 @@
   },
   "accounting": {
     "allocation_required": null,
-    "charging_unit": "per faculty sponsor (per PI)",
+    "charging_unit": null,
     "charging_model": null,
     "filesystem_storage_charged": true
   },
@@ -397,6 +419,12 @@
   },
   "unresolved": [
     {
+      "field": "/htcondor/submit_attributes/request_cpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
       "field": "/htcondor/submit_attributes/request_memory/required",
       "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
@@ -405,6 +433,12 @@
     {
       "field": "/htcondor/submit_attributes/request_memory/support",
       "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
       "next_action": "additional_documentation",
       "action_id": "submission_policy_search"
     },
@@ -463,25 +497,13 @@
       "action_id": "home_shared_across_compute_nodes"
     },
     {
-      "field": "/storage/home/backup_policy",
-      "reason": "Storage policy requires authoritative documentation.",
-      "next_action": "additional_documentation",
-      "action_id": "storage_policy_search"
-    },
-    {
-      "field": "/storage/home/purge_after_days",
-      "reason": "Storage policy requires authoritative documentation.",
-      "next_action": "additional_documentation",
-      "action_id": "storage_policy_search"
-    },
-    {
-      "field": "/storage/home/purge_condition",
-      "reason": "Storage policy requires authoritative documentation.",
-      "next_action": "additional_documentation",
-      "action_id": "storage_policy_search"
-    },
-    {
       "field": "/accounting/allocation_required",
+      "reason": "Accounting policy cannot be established by login measurement.",
+      "next_action": "additional_documentation",
+      "action_id": "accounting_policy_search"
+    },
+    {
+      "field": "/accounting/charging_unit",
       "reason": "Accounting policy cannot be established by login measurement.",
       "next_action": "additional_documentation",
       "action_id": "accounting_policy_search"
@@ -494,11 +516,11 @@
     },
     {
       "field": "/htcondor/unmapped_submit_attributes",
-      "reason": "Documented submission option 'getenv' needs a reviewed mapping.",
+      "reason": "Documented submission option 'arguments' needs a reviewed mapping.",
       "next_action": "admin_confirmation",
       "action_id": "submission_option_mapping"
     }
   ],
   "conflicts": [],
-  "evidence_id": "report-04ed7250-7a9a-497a-beae-15c640761d18"
+  "evidence_id": "report-0dfb81d9-bd9f-40c6-9812-380d00e26b41"
 }

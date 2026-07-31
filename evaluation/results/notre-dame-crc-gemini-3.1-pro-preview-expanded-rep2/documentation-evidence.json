@@ -10,7 +10,7 @@
     {
       "name": "guaranteed_runtime",
       "value": false,
-      "note": "Jobs borrowing machines owned by other people may be kicked off and must run elsewhere.",
+      "note": "Jobs may be kicked off and must run elsewhere.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c9:s3",
@@ -25,7 +25,7 @@
     {
       "name": "preemptible",
       "value": true,
-      "note": "Jobs may be kicked off and must run elsewhere if they are borrowing machines owned by others.",
+      "note": "If borrowing machines, jobs may be kicked off and run elsewhere.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c9:s3",
@@ -38,22 +38,121 @@
       ]
     },
     {
+      "name": "submission_host",
+      "value": "condorfe.crc.nd.edu",
+      "note": "Users must log into condorfe.crc.nd.edu to submit jobs.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c13:s1",
+          "chunk_id": "doc-resources-condor-html:c13",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "Log into condorfe.crc.nd.edu to submit jobs."
+        }
+      ]
+    },
+    {
+      "name": "machine_requirements_supported",
+      "value": true,
+      "note": "Users can specify requirements on what machines to use, including memory, processor type, or specific clusters.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c9:s1",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "Users that submit jobs to Condor can specify their own requirements on what machines to use."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c9:s2",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "You can require the use of one particular machine, or any from a particular cluster, or any with a certain amount of memory or processor type."
+        }
+      ]
+    },
+    {
+      "name": "dynamic_slots_enabled",
+      "value": true,
+      "note": "The condor pool is configured to enable dynamic slots.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c34:s1",
+          "chunk_id": "doc-resources-condor-html:c34",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "The condor pool is configured to enable dynamic slots."
+        }
+      ]
+    },
+    {
+      "name": "bulk_submission_supported",
+      "value": true,
+      "note": "Users can easily modify their submit file to queue several jobs at once using the queue command and $(PROCESS) macro.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c28:s1",
+          "chunk_id": "doc-resources-condor-html:c28",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "Because you will certainly want to run many jobs at once via Condor, you can easily modify your submit file to run a program with tens or hundreds of variations."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c28:s2",
+          "chunk_id": "doc-resources-condor-html:c28",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "Change the queue command to queue several jobs at once, and the $(PROCESS) macro to modify the parameters with the job number."
+        }
+      ]
+    },
+    {
+      "name": "completion_email_supported",
+      "value": false,
+      "note": "Completion emails are disabled due to email security configuration at Notre Dame.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c27:s1",
+          "chunk_id": "doc-resources-condor-html:c27",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "Despite what the Condor manual says, you will NOT receive email when a job is complete."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c27:s2",
+          "chunk_id": "doc-resources-condor-html:c27",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "This feature has been disabled at Notre Dame due to our email security configuration."
+        }
+      ]
+    },
+    {
       "name": "request_cpus",
       "syntax": [
         "request_cpus = 4"
       ],
       "requirement": "conditional",
       "support": "supported",
-      "condition": "Multicore SMP jobs",
-      "note": "Used when submitting Multicore SMP jobs to the Condor pool.",
+      "condition": "Submitting multi-threaded or multicore SMP Condor jobs.",
+      "note": "Required when users want to submit multi-threaded or multicore jobs.",
       "citations": [
         {
-          "span_id": "doc-resources-condor-html:c35:s1",
-          "chunk_id": "doc-resources-condor-html:c35",
+          "span_id": "doc-resources-condor-html:c34:s2",
+          "chunk_id": "doc-resources-condor-html:c34",
           "url": "https://docs.crc.nd.edu/resources/condor.html",
           "title": "HTCondor \u2014 User Documentation  documentation",
           "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
-          "quote": "..."
+          "quote": "Therefore, if you want to submit multi-threaded or multicore SMP Condor jobs (e.g."
         },
         {
           "span_id": "doc-resources-condor-html:c35:s2",
@@ -62,6 +161,14 @@
           "title": "HTCondor \u2014 User Documentation  documentation",
           "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
           "quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ..."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c44:s1",
+          "chunk_id": "doc-resources-condor-html:c44",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+          "quote": "Following is a Condor submission script template for running Matlab with 4 cores:"
         }
       ]
     },
@@ -72,8 +179,8 @@
       ],
       "requirement": "conditional",
       "support": "supported",
-      "condition": "Jobs running on a GPU node",
-      "note": "Used to request a GPU when running on a GPU node.",
+      "condition": "Submitting a job to a GPU node.",
+      "note": "Used in the submission script template for running on GPU nodes.",
       "citations": [
         {
           "span_id": "doc-resources-condor-html:c48:s1",
@@ -94,86 +201,6 @@
       ]
     },
     {
-      "name": "universe",
-      "syntax": [
-        "universe = vanilla"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
-        {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
-      "name": "executable",
-      "syntax": [
-        "executable = Path_to_your_executable_file/executable.sh"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
-        {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
-      "name": "should_transfer_files",
-      "syntax": [
-        "should_transfer_files = yes"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
-        {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
-      "name": "when_to_transfer_output",
-      "syntax": [
-        "when_to_transfer_output = on_exit"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
-        {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
       "documented_name": "getenv",
       "documented_syntax": [
         "getenv = true"
@@ -181,68 +208,16 @@
       "requirement": "optional",
       "support": "supported",
       "condition": null,
-      "note": "Documented in a sample job script.",
+      "note": "Documented in sample job submission scripts.",
       "citations": [
         {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
+          "span_id": "doc-resources-condor-html:c45:s1",
+          "chunk_id": "doc-resources-condor-html:c45",
           "url": "https://docs.crc.nd.edu/resources/condor.html",
           "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
-      "documented_name": "output",
-      "documented_syntax": [
-        "output = test.output"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
-        {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
-      "documented_name": "error",
-      "documented_syntax": [
-        "error = test.error"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
-        {
-          "span_id": "doc-resources-condor-html:c49:s1",
-          "chunk_id": "doc-resources-condor-html:c49",
-          "url": "https://docs.crc.nd.edu/resources/condor.html",
-          "title": "HTCondor \u2014 User Documentation  documentation",
-          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
-          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
-        }
-      ]
-    },
-    {
-      "documented_name": "log",
-      "documented_syntax": [
-        "log = logfile"
-      ],
-      "requirement": "optional",
-      "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
-      "citations": [
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10"
+        },
         {
           "span_id": "doc-resources-condor-html:c49:s1",
           "chunk_id": "doc-resources-condor-html:c49",
@@ -258,11 +233,19 @@
       "documented_syntax": [
         "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH }"
       ],
-      "requirement": "optional",
+      "requirement": "conditional",
       "support": "supported",
-      "condition": null,
-      "note": "Documented in a sample job script.",
+      "condition": "Submitting multi-threaded or multicore SMP Condor jobs.",
+      "note": "Used to pass environment variables such as thread count for multi-threaded jobs.",
       "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c34:s2",
+          "chunk_id": "doc-resources-condor-html:c34",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "Therefore, if you want to submit multi-threaded or multicore SMP Condor jobs (e.g."
+        },
         {
           "span_id": "doc-resources-condor-html:c35:s2",
           "chunk_id": "doc-resources-condor-html:c35",
@@ -275,13 +258,30 @@
     }
   ],
   "rejected": [
-    "unmapped_options/queue: no literal htcondor submission syntax",
+    "submission_options/universe: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "submission_options/executable: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "submission_options/should_transfer_files: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "submission_options/when_to_transfer_output: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "unmapped_options/arguments: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "unmapped_options/output: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "unmapped_options/error: evidence was not retrieved for this field: doc-resources-condor-html:c29:s2",
+    "unmapped_options/log: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "unmapped_options/queue: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "after correction: submission_options/universe: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "after correction: submission_options/executable: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "after correction: submission_options/should_transfer_files: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "after correction: submission_options/when_to_transfer_output: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "after correction: unmapped_options/arguments: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1",
+    "after correction: unmapped_options/output: evidence was not retrieved for this field: doc-resources-condor-html:c29:s1, doc-resources-condor-html:c29:s2",
+    "after correction: unmapped_options/error: evidence was not retrieved for this field: doc-resources-condor-html:c29:s2, doc-resources-condor-html:c29:s3",
+    "after correction: unmapped_options/log: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
+    "after correction: unmapped_options/queue: evidence was not retrieved for this field: doc-resources-condor-html:c29:s3",
     "filesystem_storage_charged: evidence was not retrieved for this field: doc-infrastructure-storage-html:c27:s1",
-    "storage/User Home Directory (/users/netid): storage resource is not present in measured site resources",
-    "storage/Group Directory (/groups/PI_netid): storage resource is not present in measured site resources",
-    "storage/Long term storage (/bluefs/PI_netid): storage resource is not present in measured site resources",
-    "storage/Long term storage (/goldfs/PI_netid): storage resource is not present in measured site resources",
-    "storage/Local scratch (/scratch /tmp): storage resource is not present in measured site resources",
+    "storage/User Home Directory (/users): storage resource is not present in measured site resources",
+    "storage/Group Directory (/groups): storage resource is not present in measured site resources",
+    "storage/Long term storage (/bluefs): storage resource is not present in measured site resources",
+    "storage/Long term storage (/goldfs): storage resource is not present in measured site resources",
+    "storage/node-local temporary /scratch /tmp: storage resource is not present in measured site resources",
     "after correction: filesystem_storage_charged: evidence was not retrieved for this field: doc-infrastructure-storage-html:c27:s1"
   ],
   "unresolved": [
@@ -304,44 +304,54 @@
     "doc-resources-condor-html:c48",
     "doc-resources-condor-html:c31",
     "doc-resources-condor-html:c9",
+    "doc-infrastructure-storage-html:c58",
+    "doc-resources-condor-html:c34",
+    "doc-resources-condor-html:c28",
+    "doc-resources-condor-html:c27",
     "doc-resources-condor-html:c14",
     "doc-resources-condor-html:c53",
+    "doc-resources-condor-html:c13",
+    "doc-infrastructure-storage-html:c55",
+    "doc-resources-condor-html:c35",
+    "doc-resources-condor-html:c44",
+    "doc-resources-condor-html:c32",
     "doc-resources-condor-html:c10",
-    "doc-infrastructure-storage-html:c58",
+    "doc-resources-condor-html:c18",
+    "doc-new-user-connecting-to-crc-html:c6",
     "doc-resources-condor-html:c40",
     "doc-resources-condor-html:c52",
     "doc-resources-condor-html:c24",
     "doc-new-user-connecting-to-crc-html:c8",
-    "doc-resources-condor-html:c35",
-    "doc-resources-condor-html:c13",
+    "doc-resources-condor-html:c38",
+    "doc-resources-condor-html:c29",
+    "doc-infrastructure-storage-html:c27",
+    "doc-infrastructure-storage-html:c48",
+    "doc-resources-condor-html:c45",
+    "doc-infrastructure-storage-html:c44",
     "doc-resources-condor-html:c49",
     "doc-infrastructure-storage-html:c8",
     "doc-resources-condor-html:c16",
-    "doc-resources-condor-html:c45",
-    "doc-infrastructure-storage-html:c37",
-    "doc-infrastructure-storage-html:c27",
     "doc-resources-condor-html:c5",
-    "doc-new-user-connecting-to-crc-html:c23",
+    "doc-infrastructure-storage-html:c37",
     "doc-new-user-connecting-to-crc-html:c5",
+    "doc-new-user-connecting-to-crc-html:c23",
     "doc-infrastructure-storage-html:c47",
     "doc-new-user-connecting-to-crc-html:c16",
     "doc-infrastructure-storage-html:c35",
-    "doc-new-user-connecting-to-crc-html:c6",
-    "doc-resources-condor-html:c23",
     "doc-infrastructure-storage-html:c6",
     "doc-infrastructure-storage-html:c43",
     "doc-infrastructure-storage-html:c53",
     "doc-infrastructure-storage-html:c19",
-    "doc-new-user-connecting-to-crc-html:c22",
     "doc-infrastructure-storage-html:c10",
     "doc-infrastructure-storage-html:c45",
     "doc-infrastructure-storage-html:c23",
-    "doc-infrastructure-storage-html:c49",
+    "doc-new-user-connecting-to-crc-html:c22",
     "doc-infrastructure-storage-html:c7",
-    "doc-infrastructure-storage-html:c18",
+    "doc-resources-condor-html:c23",
     "doc-resources-condor-html:c47",
     "doc-infrastructure-storage-html:c11",
-    "doc-infrastructure-storage-html:c44",
+    "doc-infrastructure-storage-html:c18",
+    "doc-infrastructure-storage-html:c49",
     "doc-infrastructure-storage-html:c21"
   ],
   "retrieval": [
@@ -352,7 +362,7 @@
         "job submission authorization requirements",
         "HTCondor submit access permission project accounting group",
         "Condor pool authorization requirements",
-        "Notre Dame CRC HTCondor project allocation required to submit jobs"
+        "Notre Dame CRC HTCondor allocation group requirement for submit access"
       ],
       "hits": [
         {
@@ -376,8 +386,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 12.023697,
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 12.41225,
           "cited": false
         },
         {
@@ -392,7 +402,7 @@
       "queries": [
         "job guaranteed runtime completion",
         "jobs kicked off must run elsewhere",
-        "Notre Dame CRC HTCondor job completion guarantee"
+        "Notre Dame CRC condor job eviction guarantee completion"
       ],
       "hits": [
         {
@@ -422,7 +432,7 @@
         },
         {
           "chunk_id": "doc-resources-condor-html:c16",
-          "score": 8.172704,
+          "score": 8.292359,
           "cited": false
         }
       ]
@@ -432,7 +442,7 @@
       "queries": [
         "jobs preempted evicted kicked off",
         "borrowed machines jobs must run elsewhere",
-        "Notre Dame CRC HTCondor job eviction preemption policy"
+        "HTCondor preemptible queue policy Notre Dame CRC job suspension"
       ],
       "hits": [
         {
@@ -446,8 +456,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-infrastructure-storage-html:c58",
-          "score": 8.798246,
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": 9.312189,
           "cited": false
         },
         {
@@ -461,8 +471,208 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c24",
-          "score": 8.373346,
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.798246,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "submission_host",
+      "queries": [
+        "HTCondor login host condor_submit submit jobs",
+        "where to log in to submit Condor jobs",
+        "Notre Dame CRC front end HTCondor submit node address"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.029831,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 9.084044,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": 10.634318,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": 7.255762,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": 7.911869,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": 8.105267,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "machine_requirements_supported",
+      "queries": [
+        "HTCondor specify machine cluster memory processor requirements",
+        "Condor machine selection requirements",
+        "Notre Dame CRC HTCondor ClassAd requirements hardware selection"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": 16.734945,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": 3.842248,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.798246,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": 5.075685,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": 3.746395,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 7.619768,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "dynamic_slots_enabled",
+      "queries": [
+        "HTCondor pool configured dynamic slots multicore SMP",
+        "dynamic slots request_cpus",
+        "partitionable slots multicore HTCondor pool Notre Dame CRC"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": 20.412924,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": 6.732544,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.798246,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": 9.927789,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": 5.566668,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c5",
+          "score": 8.533619,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "bulk_submission_supported",
+      "queries": [
+        "HTCondor submit many jobs queue PROCESS macro",
+        "Condor bulk submission queue several jobs",
+        "submit multiple jobs queue command HTCondor Notre Dame CRC"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": 16.319913,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": 6.588365,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 11.369004,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": 10.536598,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": 5.520684,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 10.339261,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "completion_email_supported",
+      "queries": [
+        "HTCondor completion email disabled site policy",
+        "job complete email notification",
+        "Notre Dame CRC condor_submit notification email alerts"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": 10.991502,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": 5.086564,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 9.453547,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": 4.063288,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": 2.968745,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.798246,
           "cited": false
         }
       ]
@@ -479,7 +689,7 @@
         "Condor submit description queue",
         "site-specific mandatory HTCondor submit attributes",
         "required ClassAd accounting_group requirements +ProjectName",
-        "Notre Dame CRC HTCondor mandatory submit attributes"
+        "mandatory HTCondor submit file parameters Notre Dame CRC"
       ],
       "hits": [
         {
@@ -510,7 +720,7 @@
         {
           "chunk_id": "doc-resources-condor-html:c45",
           "score": 23.703852,
-          "cited": false
+          "cited": true
         }
       ]
     },
@@ -519,7 +729,7 @@
       "queries": [
         "manager worker connectivity login compute TCP",
         "compute node connect to login manager",
-        "Notre Dame CRC manager worker tcp connectivity HTCondor"
+        "Notre Dame CRC HTCondor execute node network connection to head node"
       ],
       "hits": [
         {
@@ -533,8 +743,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 7.619768,
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": 13.971358,
           "cited": false
         },
         {
@@ -548,8 +758,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c23",
-          "score": 6.439464,
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": 12.047766,
           "cited": false
         }
       ]
@@ -559,7 +769,7 @@
       "queries": [
         "worker compute node to node connectivity TCP",
         "inter-node application network policy",
-        "Notre Dame CRC inter-node tcp network policy HTCondor"
+        "MPI inter node communications HTCondor compute nodes Notre Dame CRC"
       ],
       "hits": [
         {
@@ -573,8 +783,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 7.619768,
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 9.245725,
           "cited": false
         },
         {
@@ -588,8 +798,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c23",
-          "score": 6.439464,
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 7.619768,
           "cited": false
         }
       ]
@@ -599,7 +809,7 @@
       "queries": [
         "outbound compute node internet network egress",
         "compute nodes access external network",
-        "Notre Dame CRC compute node external internet access HTCondor"
+        "HTCondor worker node external internet access Notre Dame CRC"
       ],
       "hits": [
         {
@@ -639,7 +849,7 @@
       "queries": [
         "charging unit service unit node hour core hour",
         "allocation accounting unit",
-        "Notre Dame CRC core hour service unit allocation"
+        "Notre Dame CRC HTCondor compute hours billing metric"
       ],
       "hits": [
         {
@@ -653,23 +863,23 @@
           "cited": false
         },
         {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 7.619768,
+          "cited": false
+        },
+        {
           "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
-          "score": 6.64491,
+          "score": 4.248107,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c23",
+          "score": 6.439464,
           "cited": false
         },
         {
           "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
           "score": 3.413696,
-          "cited": false
-        },
-        {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 6.225368,
-          "cited": false
-        },
-        {
-          "chunk_id": "doc-resources-condor-html:c48",
-          "score": 3.070129,
           "cited": false
         }
       ]
@@ -679,7 +889,7 @@
       "queries": [
         "charging accounting service units credits allocation cost",
         "job charge cores memory node allocation",
-        "Notre Dame CRC HTCondor job charging model allocation deduction"
+        "HTCondor job accounting service unit deduction Notre Dame CRC"
       ],
       "hits": [
         {
@@ -719,7 +929,7 @@
       "queries": [
         "filesystem storage charged allocation quota cost",
         "storage usage accounting charge",
-        "Notre Dame CRC storage usage allocation charge"
+        "Notre Dame CRC file system quota allocation deduction"
       ],
       "hits": [
         {
@@ -734,7 +944,7 @@
         },
         {
           "chunk_id": "doc-infrastructure-storage-html:c58",
-          "score": 11.504504,
+          "score": 19.196995,
           "cited": false
         },
         {
@@ -748,8 +958,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 6.225368,
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 6.35894,
           "cited": false
         }
       ]
@@ -760,7 +970,7 @@
         "storage filesystem visible compute nodes",
         "home scratch work mounted compute nodes",
         "home storage filesystem compute visibility",
-        "Notre Dame CRC home storage mounted compute nodes"
+        "home directory availability HTCondor execute nodes Notre Dame CRC"
       ],
       "hits": [
         {
@@ -779,8 +989,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-infrastructure-storage-html:c49",
-          "score": 7.087508,
+          "chunk_id": "doc-resources-condor-html:c16",
+          "score": 11.154057,
           "cited": false
         },
         {
@@ -789,8 +999,8 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
-          "score": 3.700239,
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": 5.26284,
           "cited": false
         }
       ]
@@ -800,8 +1010,7 @@
       "queries": [
         "storage filesystem readable compute nodes",
         "compute jobs read home scratch work",
-        "home storage filesystem compute readable",
-        "Notre Dame CRC compute jobs read home storage"
+        "home storage filesystem compute readable"
       ],
       "hits": [
         {
@@ -820,11 +1029,6 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 7.86274,
-          "cited": false
-        },
-        {
           "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
           "score": 3.700239,
           "cited": false
@@ -832,6 +1036,11 @@
         {
           "chunk_id": "doc-resources-condor-html:c47",
           "score": 3.185926,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
           "cited": false
         }
       ]
@@ -841,8 +1050,7 @@
       "queries": [
         "storage filesystem writable compute nodes",
         "compute jobs write home scratch work",
-        "home storage filesystem compute writable",
-        "Notre Dame CRC compute jobs write home storage"
+        "home storage filesystem compute writable"
       ],
       "hits": [
         {
@@ -861,11 +1069,6 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 7.86274,
-          "cited": false
-        },
-        {
           "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
           "score": 3.700239,
           "cited": false
@@ -873,6 +1076,11 @@
         {
           "chunk_id": "doc-resources-condor-html:c47",
           "score": 3.185926,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
           "cited": false
         }
       ]
@@ -883,8 +1091,7 @@
         "shared filesystem across compute nodes",
         "same storage mounted all nodes",
         "mounts three file systems shared across all nodes home work scratch",
-        "home shared storage all compute nodes",
-        "Notre Dame CRC home shared filesystem across all compute nodes"
+        "home shared storage all compute nodes"
       ],
       "hits": [
         {
@@ -908,13 +1115,13 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c5",
-          "score": 6.991454,
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": 3.995592,
           "cited": false
         },
         {
-          "chunk_id": "doc-infrastructure-storage-html:c11",
-          "score": 3.995592,
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": 7.087508,
           "cited": false
         }
       ]
@@ -924,8 +1131,7 @@
       "queries": [
         "storage filesystem backup policy",
         "home scratch work backed up",
-        "home storage filesystem backup policy",
-        "Notre Dame CRC home filesystem backup schedule policy"
+        "home storage filesystem backup policy"
       ],
       "hits": [
         {
@@ -944,11 +1150,6 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 6.225368,
-          "cited": false
-        },
-        {
           "chunk_id": "doc-infrastructure-storage-html:c35",
           "score": 6.016747,
           "cited": false
@@ -956,6 +1157,11 @@
         {
           "chunk_id": "doc-infrastructure-storage-html:c44",
           "score": 3.260023,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
           "cited": false
         }
       ]
@@ -965,8 +1171,7 @@
       "queries": [
         "purge retention deletion expiration scratch policy",
         "scratch files removed after days",
-        "home storage scratch purge retention days",
-        "Notre Dame CRC home scratch expiration deletion days"
+        "home storage scratch purge retention days"
       ],
       "hits": [
         {
@@ -985,11 +1190,6 @@
           "cited": false
         },
         {
-          "chunk_id": "doc-resources-condor-html:c13",
-          "score": 6.225368,
-          "cited": false
-        },
-        {
           "chunk_id": "doc-infrastructure-storage-html:c27",
           "score": 4.063288,
           "cited": false
@@ -997,6 +1197,11 @@
         {
           "chunk_id": "doc-infrastructure-storage-html:c44",
           "score": 2.968745,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
           "cited": false
         }
       ]
