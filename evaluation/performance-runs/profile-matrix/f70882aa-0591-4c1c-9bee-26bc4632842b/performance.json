@@ -1,0 +1,673 @@
+{
+  "artifacts": [
+    {
+      "kind": "performance_report",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/run-reports/f70882aa-0591-4c1c-9bee-26bc4632842b/performance.json"
+    },
+    {
+      "kind": "execution_trace",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/run-reports/f70882aa-0591-4c1c-9bee-26bc4632842b/trace.jsonl"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/manifest.json"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/documents.jsonl"
+    },
+    {
+      "kind": "documentation_corpus_input",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/anvil/corpus/chunks.jsonl"
+    },
+    {
+      "kind": "site_profile",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-3.1-pro-preview-full-corpus-rep2/site-profile.json"
+    },
+    {
+      "kind": "evidence_report",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-3.1-pro-preview-full-corpus-rep2/evidence-report-f70882aa-0591-4c1c-9bee-26bc4632842b.json"
+    },
+    {
+      "kind": "documentation_evidence",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-3.1-pro-preview-full-corpus-rep2/documentation-evidence.json"
+    },
+    {
+      "kind": "pilot_evidence",
+      "path": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/results/anvil-gemini-3.1-pro-preview-full-corpus-rep2/pilot-evidence.json"
+    }
+  ],
+  "command": "profile build",
+  "duration_seconds": 400.22841991699534,
+  "ended_at": "2026-07-31T11:30:07.322715Z",
+  "error_message": null,
+  "error_type": null,
+  "mode": "site=simulate, model=live, web=live, corpus=frozen",
+  "model_usage": {
+    "input_tokens": 53396,
+    "output_tokens": 41431,
+    "requests": 14,
+    "total_tokens": 94827,
+    "usage_available": false
+  },
+  "retries": 0,
+  "run_id": "f70882aa-0591-4c1c-9bee-26bc4632842b",
+  "schema_version": "0.1",
+  "started_at": "2026-07-31T10:15:53.620779Z",
+  "status": "completed",
+  "steps": [
+    {
+      "duration_seconds": 0.00017595800454728305,
+      "ended_at": "2026-07-31T10:15:53.621606Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_load",
+      "retries": 0,
+      "started_at": "2026-07-31T10:15:53.621430Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00010525000107008964,
+      "ended_at": "2026-07-31T10:15:53.622100Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_validate",
+      "retries": 0,
+      "started_at": "2026-07-31T10:15:53.621989Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0027272080042166635,
+      "ended_at": "2026-07-31T10:15:53.625525Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "measurement_profile_build",
+      "retries": 0,
+      "started_at": "2026-07-31T10:15:53.622796Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.002070292001008056,
+      "ended_at": "2026-07-31T10:15:53.664213Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_corpus_load",
+      "retries": 0,
+      "started_at": "2026-07-31T10:15:53.662122Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.013336125004570931,
+      "ended_at": "2026-07-31T10:15:53.678006Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-31T10:15:53.664669Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 31.26137262499833,
+      "ended_at": "2026-07-31T10:16:24.940958Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4426,
+        "output_tokens": 4653,
+        "requests": 1,
+        "total_tokens": 9079,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:15:53.679487Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00038716600101906806,
+      "ended_at": "2026-07-31T10:16:24.943322Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:16:24.942915Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 14.081598749995464,
+      "ended_at": "2026-07-31T10:16:39.027025Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4561,
+        "output_tokens": 1789,
+        "requests": 1,
+        "total_tokens": 6350,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:16:24.945384Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00041295899427495897,
+      "ended_at": "2026-07-31T10:16:39.030232Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:16:39.029780Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 41.687362542012124,
+      "ended_at": "2026-07-31T10:17:20.720588Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 5616,
+        "output_tokens": 8034,
+        "requests": 1,
+        "total_tokens": 13650,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:16:39.033233Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0003770420007640496,
+      "ended_at": "2026-07-31T10:17:20.722796Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:17:20.722400Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 39.990982165996684,
+      "ended_at": "2026-07-31T10:18:01.227848Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 6330,
+        "output_tokens": 7273,
+        "requests": 1,
+        "total_tokens": 13603,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:17:20.724679Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.001394916995195672,
+      "ended_at": "2026-07-31T10:18:01.232066Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:18:01.230643Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 40.774924458994064,
+      "ended_at": "2026-07-31T10:18:42.009356Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4703,
+        "output_tokens": 4751,
+        "requests": 1,
+        "total_tokens": 9454,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:18:01.234457Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.000737459005904384,
+      "ended_at": "2026-07-31T10:18:42.013403Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:18:42.012633Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 13.462222207992454,
+      "ended_at": "2026-07-31T10:35:24.442084Z",
+      "error_message": "Gemini request failed before a response was received.",
+      "error_type": "ModelProviderError",
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 1,
+        "total_tokens": 0,
+        "usage_available": false
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:18:42.015249Z",
+      "status": "failed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 10.505166208007722,
+      "ended_at": "2026-07-31T10:35:34.950294Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4473,
+        "output_tokens": 1081,
+        "requests": 1,
+        "total_tokens": 5554,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:35:24.445396Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.000509292003698647,
+      "ended_at": "2026-07-31T10:35:34.953642Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:35:34.953089Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 26.43911737500457,
+      "ended_at": "2026-07-31T10:36:01.395715Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4395,
+        "output_tokens": 3548,
+        "requests": 1,
+        "total_tokens": 7943,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:35:34.956778Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0013567080022767186,
+      "ended_at": "2026-07-31T10:36:01.400588Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:36:01.399192Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 16.76915745799488,
+      "ended_at": "2026-07-31T10:36:18.172925Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4449,
+        "output_tokens": 1958,
+        "requests": 1,
+        "total_tokens": 6407,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:36:01.403749Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0003929999948013574,
+      "ended_at": "2026-07-31T10:36:18.176002Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T10:36:18.175584Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 83.65501795799355,
+      "ended_at": "2026-07-31T11:11:04.528238Z",
+      "error_message": "Gemini request failed before a response was received.",
+      "error_type": "ModelProviderError",
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 1,
+        "total_tokens": 0,
+        "usage_available": false
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T10:36:18.178510Z",
+      "status": "failed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 8.052140375002637,
+      "ended_at": "2026-07-31T11:11:12.583148Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 6221,
+        "output_tokens": 771,
+        "requests": 1,
+        "total_tokens": 6992,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T11:11:04.531084Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00042704200313892215,
+      "ended_at": "2026-07-31T11:11:12.587426Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T11:11:12.586954Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 13.834655375001603,
+      "ended_at": "2026-07-31T11:13:22.780794Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4086,
+        "output_tokens": 4987,
+        "requests": 1,
+        "total_tokens": 9073,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T11:11:12.590354Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0006062080065021291,
+      "ended_at": "2026-07-31T11:13:22.783735Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T11:13:22.783109Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 21.679469665992656,
+      "ended_at": "2026-07-31T11:13:44.465302Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4136,
+        "output_tokens": 2586,
+        "requests": 1,
+        "total_tokens": 6722,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T11:13:22.785832Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0003749590105144307,
+      "ended_at": "2026-07-31T11:13:44.468550Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-31T11:13:44.468152Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 37.84096395899542,
+      "ended_at": "2026-07-31T11:30:07.258818Z",
+      "error_message": "Gemini request failed before a response was received.",
+      "error_type": "ModelProviderError",
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 1,
+        "total_tokens": 0,
+        "usage_available": false
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-31T11:13:44.471212Z",
+      "status": "failed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.004714166003395803,
+      "ended_at": "2026-07-31T11:30:07.287482Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-31T11:30:07.282727Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0004962499951943755,
+      "ended_at": "2026-07-31T11:30:07.289589Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_pilot_load",
+      "retries": 0,
+      "started_at": "2026-07-31T11:30:07.289089Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0004566249990602955,
+      "ended_at": "2026-07-31T11:30:07.291676Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "pilot_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-31T11:30:07.291208Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.02806654101004824,
+      "ended_at": "2026-07-31T11:30:07.320819Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "profile_artifact_write",
+      "retries": 0,
+      "started_at": "2026-07-31T11:30:07.292753Z",
+      "status": "completed",
+      "tool_calls": 0
+    }
+  ],
+  "tool_calls": 0
+}

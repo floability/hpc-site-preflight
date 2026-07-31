@@ -16,10 +16,11 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 EVALUATION = ROOT / "evaluation"
-FROZEN_ROOT = EVALUATION / "frozen-inputs"
-RESULTS_ROOT = EVALUATION / "results"
-RUN_ROOT = EVALUATION / "run-reports"
-RUN_LOG = EVALUATION / "run-log.csv"
+FROZEN_ROOT = EVALUATION / "site-inputs"
+RESULTS_ROOT = EVALUATION / "profile-runs"
+FAILED_RESULTS_ROOT = EVALUATION / "failed-profile-runs"
+RUN_ROOT = EVALUATION / "performance-runs" / "profile-matrix"
+RUN_LOG = EVALUATION / "profile-run-log.csv"
 
 MODELS = (
     "gpt-5-mini",
@@ -29,10 +30,14 @@ MODELS = (
 )
 MODE_REPETITIONS = (
     ("bm25", "bm25", 1),
+    ("bm25", "bm25", 2),
+    ("bm25", "bm25", 3),
     ("expanded", "llm-expanded-bm25", 1),
     ("expanded", "llm-expanded-bm25", 2),
     ("expanded", "llm-expanded-bm25", 3),
     ("full-corpus", "full-corpus", 1),
+    ("full-corpus", "full-corpus", 2),
+    ("full-corpus", "full-corpus", 3),
 )
 CSV_COLUMNS = (
     "run_id",
@@ -107,7 +112,7 @@ def validate_frozen_inputs(site: str) -> tuple[Path, Path, Path, dict[str, Any]]
 
 
 def build_cases(site: str) -> list[Case]:
-    """Build the required 20 cases in matrix order."""
+    """Build the required 36 cases in matrix order."""
 
     return [
         Case(site, model, mode, cli_mode, rep)
@@ -248,10 +253,11 @@ def archive_failed_output(case: Case, run_id: str) -> None:
     if not case.output_dir.exists():
         return
     suffix = run_id[:8] if run_id else str(int(time.time()))
-    destination = case.output_dir.with_name(f"{case.output_dir.name}-failed-{suffix}")
+    FAILED_RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
+    destination = FAILED_RESULTS_ROOT / f"{case.output_dir.name}-failed-{suffix}"
     counter = 2
     while destination.exists():
-        destination = case.output_dir.with_name(
+        destination = FAILED_RESULTS_ROOT / (
             f"{case.output_dir.name}-failed-{suffix}-{counter}"
         )
         counter += 1
@@ -416,6 +422,7 @@ def main() -> int:
         "--mode",
         choices=sorted({mode for mode, _, _ in MODE_REPETITIONS}),
     )
+    parser.add_argument("--rep", type=int, choices=(1, 2, 3))
     args = parser.parse_args()
 
     measurements, pilots, corpus, metadata = validate_frozen_inputs(args.site)
@@ -424,6 +431,8 @@ def main() -> int:
         cases = [case for case in cases if case.model == args.model]
     if args.mode is not None:
         cases = [case for case in cases if case.mode == args.mode]
+    if args.rep is not None:
+        cases = [case for case in cases if case.rep == args.rep]
     done = completed_keys()
     pending = [case for case in cases if case.key not in done]
     print(

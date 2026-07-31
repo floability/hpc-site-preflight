@@ -1,0 +1,5215 @@
+{
+  "schema_version": "0.1",
+  "report_id": "report-8226ce87-144a-4bf0-b30f-a169727c694e",
+  "site_id": "tacc-stampede3",
+  "generated_at": "2026-07-29T22:16:26.696685Z",
+  "evidence": [
+    {
+      "evidence_id": "measurement:28264e6429cc80eb",
+      "field_path": "/facts/identity/hostname",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "login1",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "hostname_fqdn",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:ee22d9df83becf5f",
+      "field_path": "/facts/identity/fqdn",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "login1.stampede3.tacc.utexas.edu",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "hostname_fqdn",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:4a8d405d135cb539",
+      "field_path": "/facts/identity/dns_suffix",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "stampede3.tacc.utexas.edu",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "derive_dns_suffix",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:db5b06b9b7ea61f0",
+      "field_path": "/facts/platform/os_id",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "rocky",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "read_os_release",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d896fcb66116f1bb",
+      "field_path": "/facts/platform/os_version",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "9.7",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "read_os_release",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0119e58bd21957b4",
+      "field_path": "/facts/platform/kernel_release",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "5.14.0-611.24.1.el9_7.x86_64",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "kernel_release",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:2b8233a50aa7e72c",
+      "field_path": "/facts/platform/architecture",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "x86_64",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "machine_architecture",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6e5d6caa9f9d3aa9",
+      "field_path": "/facts/user/username",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "mislam11",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "getpass_getuser",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:85ae2e4a846d99de",
+      "field_path": "/facts/user/uid",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 901533,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "os_getuid",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:dcbea3a743f3a956",
+      "field_path": "/facts/user/groups",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "G-827953"
+      ],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "get_group_names",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3b71a065c0ebb597",
+      "field_path": "/facts/user/home_directory",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/home1/10724/mislam11",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "HOME",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:49cd333945463b3d",
+      "field_path": "/facts/user/working_directory",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/home1/10724/mislam11/preflight/hpc-site-preflight",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "os_getcwd",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f390f8d48eb4c412",
+      "field_path": "/facts/scheduler/detected_type",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "slurm",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "detect_scheduler",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:4cdc9877a1969192",
+      "field_path": "/facts/scheduler/submit_command_available",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "find_submit_command",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a41adb92baad9eb0",
+      "field_path": "/facts/storage/filesystems/home/id",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "home",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:98851eb723c9d28f",
+      "field_path": "/facts/storage/filesystems/home/role",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "home",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c7b798048cf43482",
+      "field_path": "/facts/storage/filesystems/home/environment_variables",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "HOME"
+      ],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:935d4ae2f5167be4",
+      "field_path": "/facts/storage/filesystems/home/path",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/home1/10724/mislam11",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f5745df6dce99cb0",
+      "field_path": "/facts/storage/filesystems/home/path_pattern",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/home1/10724/{username}",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "derive_storage_path_pattern",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9dd4a6618c3eceb4",
+      "field_path": "/facts/storage/filesystems/home/filesystem_type",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "nfs",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "filesystem_type",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d6f79362f38d7725",
+      "field_path": "/facts/storage/filesystems/home/readable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_readable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:06fa3ffc1182e8b0",
+      "field_path": "/facts/storage/filesystems/home/writable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_writable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f48c62b070a4d43f",
+      "field_path": "/facts/storage/filesystems/scratch/id",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "scratch",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7adce7c2715f73f8",
+      "field_path": "/facts/storage/filesystems/scratch/role",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "scratch",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b0f1338199e25bc3",
+      "field_path": "/facts/storage/filesystems/scratch/environment_variables",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "SCRATCH"
+      ],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:41fb468d1c79bd0b",
+      "field_path": "/facts/storage/filesystems/scratch/path",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/scratch/10724/mislam11",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f91111adad5e8598",
+      "field_path": "/facts/storage/filesystems/scratch/path_pattern",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/scratch/10724/{username}",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "derive_storage_path_pattern",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a9e6e929e9cd8485",
+      "field_path": "/facts/storage/filesystems/scratch/filesystem_type",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "nfs",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "filesystem_type",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:38da855d927a9ae9",
+      "field_path": "/facts/storage/filesystems/scratch/readable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_readable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c646f439564722f3",
+      "field_path": "/facts/storage/filesystems/scratch/writable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_writable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:58a3d5a6524679e4",
+      "field_path": "/facts/storage/filesystems/work/id",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "work",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:786971af1c35be4f",
+      "field_path": "/facts/storage/filesystems/work/role",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "work",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:cf77cb3c3b4891e2",
+      "field_path": "/facts/storage/filesystems/work/environment_variables",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "WORK"
+      ],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d869389304e38e07",
+      "field_path": "/facts/storage/filesystems/work/path",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/work2/10724/mislam11/stampede3",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:984562686918497d",
+      "field_path": "/facts/storage/filesystems/work/path_pattern",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/work2/10724/{username}/stampede3",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "derive_storage_path_pattern",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c55dbd6f89790ccc",
+      "field_path": "/facts/storage/filesystems/work/filesystem_type",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "lustre",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "filesystem_type",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:938b64b82f36ec3e",
+      "field_path": "/facts/storage/filesystems/work/readable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_readable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c004da1b45453b37",
+      "field_path": "/facts/storage/filesystems/work/writable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_writable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:23cc6e8c4121d8db",
+      "field_path": "/facts/scheduler/version",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "23.11.11",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_version",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:98a480fbe238bc24",
+      "field_path": "/facts/scheduler/partitions",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "skx-dev",
+        "skx",
+        "icx",
+        "spr",
+        "nvdimm",
+        "h100",
+        "pvc",
+        "amd-rtx",
+        "rtx-small"
+      ],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:e1214471b3bbdc21",
+      "field_path": "/facts/scheduler/default_partition",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "skx-dev",
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6358616bebfd6654",
+      "field_path": "/facts/scheduler/partitions/skx-dev/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 7200,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d89937ab8fc3cd20",
+      "field_path": "/facts/scheduler/partitions/skx-dev/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 72,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8b0df4db30baa098",
+      "field_path": "/facts/scheduler/partitions/skx-dev/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b274b244c9b029f1",
+      "field_path": "/facts/scheduler/node_shapes/skx-dev/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 48,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:05ec12b388a25974",
+      "field_path": "/facts/scheduler/node_shapes/skx-dev/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 191000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8c4254cff604d6ff",
+      "field_path": "/facts/scheduler/node_shapes/skx-dev/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a8f13af033a76584",
+      "field_path": "/facts/scheduler/partitions/skx/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:898e9bef29184f24",
+      "field_path": "/facts/scheduler/partitions/skx/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1160,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5f274574097261fe",
+      "field_path": "/facts/scheduler/partitions/skx/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:87befaae695fc845",
+      "field_path": "/facts/scheduler/node_shapes/skx/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 48,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:015664cf8434d46c",
+      "field_path": "/facts/scheduler/node_shapes/skx/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 191000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0ec3b8255b0badee",
+      "field_path": "/facts/scheduler/node_shapes/skx/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:466716d027c4508b",
+      "field_path": "/facts/scheduler/partitions/icx/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:75b461974c04ec42",
+      "field_path": "/facts/scheduler/partitions/icx/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 224,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c941ef706fd985f4",
+      "field_path": "/facts/scheduler/partitions/icx/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:889cc9e475f30765",
+      "field_path": "/facts/scheduler/node_shapes/icx/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 80,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c51803b9cce1c536",
+      "field_path": "/facts/scheduler/node_shapes/icx/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 256000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7593b35aa43f9797",
+      "field_path": "/facts/scheduler/node_shapes/icx/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:2eb15ea5aad1724e",
+      "field_path": "/facts/scheduler/partitions/spr/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:1e4251bf7c6468db",
+      "field_path": "/facts/scheduler/partitions/spr/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 616,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:cfd8e3a979c7f1f3",
+      "field_path": "/facts/scheduler/partitions/spr/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:92cd2fb8fd83a684",
+      "field_path": "/facts/scheduler/node_shapes/spr/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 112,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:037a52962c98e82b",
+      "field_path": "/facts/scheduler/node_shapes/spr/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 127000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c0008e07aeb8f093",
+      "field_path": "/facts/scheduler/node_shapes/spr/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f619e5d72a7f7cbf",
+      "field_path": "/facts/scheduler/partitions/nvdimm/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3babfb8f594630ed",
+      "field_path": "/facts/scheduler/partitions/nvdimm/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 3,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:04f505763dc06c6a",
+      "field_path": "/facts/scheduler/partitions/nvdimm/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:ec4653c6051f7186",
+      "field_path": "/facts/scheduler/node_shapes/nvdimm/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 80,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5161da16890bffe3",
+      "field_path": "/facts/scheduler/node_shapes/nvdimm/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4000000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:941aa010a40cc60a",
+      "field_path": "/facts/scheduler/node_shapes/nvdimm/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:58d8ab2bb4ca323d",
+      "field_path": "/facts/scheduler/partitions/h100/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:eb878c944bc50978",
+      "field_path": "/facts/scheduler/partitions/h100/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 24,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8e9dcb0ac4957624",
+      "field_path": "/facts/scheduler/partitions/h100/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:dda92e75d140d808",
+      "field_path": "/facts/scheduler/node_shapes/h100/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 96,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5c69a2ee3f78d93d",
+      "field_path": "/facts/scheduler/node_shapes/h100/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1031000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:70a6e02200db48ad",
+      "field_path": "/facts/scheduler/node_shapes/h100/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:aea9e37a5180cb4f",
+      "field_path": "/facts/scheduler/partitions/pvc/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6d00ed898aadf259",
+      "field_path": "/facts/scheduler/partitions/pvc/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 18,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9b94ce6c9fc70683",
+      "field_path": "/facts/scheduler/partitions/pvc/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c3b1777ed6f57da2",
+      "field_path": "/facts/scheduler/node_shapes/pvc/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 96,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:1e916a13ac5f47cf",
+      "field_path": "/facts/scheduler/node_shapes/pvc/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1031000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5d63cc02fc01b758",
+      "field_path": "/facts/scheduler/node_shapes/pvc/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7cc8685b0ce960de",
+      "field_path": "/facts/scheduler/partitions/amd-rtx/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:fd665d0a492883db",
+      "field_path": "/facts/scheduler/partitions/amd-rtx/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9826d727515a59fe",
+      "field_path": "/facts/scheduler/partitions/amd-rtx/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:49daefafcda8053c",
+      "field_path": "/facts/scheduler/node_shapes/amd-rtx/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 128,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:038747d0e7ad39b9",
+      "field_path": "/facts/scheduler/node_shapes/amd-rtx/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1500000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:fd3f8b9fff5b6b68",
+      "field_path": "/facts/scheduler/node_shapes/amd-rtx/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:193a2d1ab5f35fe6",
+      "field_path": "/facts/scheduler/partitions/rtx-small/maximum_walltime_seconds",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": -1,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_walltimes",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0b58e19b0879b7d1",
+      "field_path": "/facts/scheduler/partitions/rtx-small/node_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 16,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:4e1596ac923ded82",
+      "field_path": "/facts/scheduler/partitions/rtx-small/node_states",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f9f608cf9ed14016",
+      "field_path": "/facts/scheduler/node_shapes/rtx-small/cpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 28,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:ad69057630fc0654",
+      "field_path": "/facts/scheduler/node_shapes/rtx-small/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 370000,
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3fc768bb58d30576",
+      "field_path": "/facts/scheduler/node_shapes/rtx-small/gpu_models",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:80915fe8f7bea2c8",
+      "field_path": "/facts/scheduler/node_shapes",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "skx-dev",
+        "skx",
+        "icx",
+        "spr",
+        "nvdimm",
+        "h100",
+        "pvc",
+        "amd-rtx",
+        "rtx-small"
+      ],
+      "observed_at": "2026-07-29T22:16:26.696685Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "slurm_partition_resources",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:8e1f9c71084b6b86",
+      "field_path": "/accounting/allocation_required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Notices",
+      "exact_quote": "You must allow Slurm to allocate nodes to your jobs.",
+      "chunk_id": "doc-hpc-stampede3:c6",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:1e5689168e258011",
+      "field_path": "/slurm/partitions/h100/gpu_count_per_node",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > H100 nodes > Table 5a. H100 Specifications",
+      "exact_quote": "GPU: | 4x NVIDIA H100 SXM5",
+      "chunk_id": "doc-hpc-stampede3:c25",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:fd03d69835c91653",
+      "field_path": "/slurm/partitions/h100/gpu_models",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "NVIDIA H100 SXM5"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > H100 nodes > Table 5a. H100 Specifications",
+      "exact_quote": "GPU: | 4x NVIDIA H100 SXM5",
+      "chunk_id": "doc-hpc-stampede3:c25",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:f4f284d20c41f2c7",
+      "field_path": "/slurm/partitions/pvc/gpu_count_per_node",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes",
+      "exact_quote": "Stampede3 hosts 20 nodes with four Intel Data Center GPU Max 1550s \"Ponte Vecchio\" (PVC) each.",
+      "chunk_id": "doc-hpc-stampede3:c26",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:3c8f0d7eb5483961",
+      "field_path": "/slurm/partitions/pvc/gpu_models",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "Intel Data Center GPU Max 1550 (Ponte Vecchio)"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes",
+      "exact_quote": "Stampede3 hosts 20 nodes with four Intel Data Center GPU Max 1550s \"Ponte Vecchio\" (PVC) each.",
+      "chunk_id": "doc-hpc-stampede3:c26",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:7c959f4d49a0e094",
+      "field_path": "/accounting/charging_unit",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "SUs",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Notices",
+      "exact_quote": "Any and all SUs consumed by an AI process launched by you will be charged to your allocation.",
+      "chunk_id": "doc-hpc-stampede3:c7",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:9b22fe5ee22bc0ba",
+      "field_path": "/accounting/charging_model",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "SUs consumed by an AI process are charged to the user's allocation.",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Notices",
+      "exact_quote": "Any and all SUs consumed by an AI process launched by you will be charged to your allocation.",
+      "chunk_id": "doc-hpc-stampede3:c7",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:3e8f4a4a903e82e3",
+      "field_path": "/network/compute_compute/tcp_connect",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Network",
+      "exact_quote": "The ICX and SKX nodes are fully connected.",
+      "chunk_id": "doc-hpc-stampede3:c30",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:3769b3e3958cc8d2",
+      "field_path": "/network/compute_compute/tcp_connect",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Network",
+      "exact_quote": "The SPR and PVC nodes are fully connected with a fat tree topology with no oversubscription.",
+      "chunk_id": "doc-hpc-stampede3:c30",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:8ecadb99d33cf7cc",
+      "field_path": "/storage/home/compute_visible",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:539e8b49a48042c1",
+      "field_path": "/storage/home/shared_across_compute_nodes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "Stampede3 will use a shared VAST file system for the $HOME and $SCRATCH directories.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:cc8f8fc6fa82028c",
+      "field_path": "/storage/home/shared_across_compute_nodes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:114f24f2321c7bfc",
+      "field_path": "/storage/home/backup_policy",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Backed up regularly.",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+      "exact_quote": "$HOME | 15 GB, 300,000 files | Not intended for parallel or high\u2212intensity file operations. Backed up regularly.",
+      "chunk_id": "doc-hpc-stampede3:c33",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:a55560781cae00e3",
+      "field_path": "/storage/work/compute_visible",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:4585329004534d84",
+      "field_path": "/storage/work/shared_across_compute_nodes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:01d0113aa655f8ab",
+      "field_path": "/storage/work/backup_policy",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Not backed up.",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+      "exact_quote": "$WORK | 1 TB, 3,000,000 files across all TACC systems Not intended for parallel or high\u2212intensity file operations. See Stockyard system description for more information. | Not backed up.",
+      "chunk_id": "doc-hpc-stampede3:c33",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:5d54b23f877d07a5",
+      "field_path": "/storage/scratch/compute_visible",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:76ed6217723f2b78",
+      "field_path": "/storage/scratch/shared_across_compute_nodes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "Stampede3 will use a shared VAST file system for the $HOME and $SCRATCH directories.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:940f68fb7109b1a1",
+      "field_path": "/storage/scratch/shared_across_compute_nodes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+      "exact_quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes.",
+      "chunk_id": "doc-hpc-stampede3:c32",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ee28502a3c6faf2b",
+      "field_path": "/storage/scratch/backup_policy",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Not backed up.",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+      "exact_quote": "$SCRATCH | no quota Overall capacity ~10 PB. | Not backed up. Files are subject to purge if access time* is more than 10 days old. See TACC's Scratch File System Purge Policy below.",
+      "chunk_id": "doc-hpc-stampede3:c33",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:96c59383f2da8865",
+      "field_path": "/storage/scratch/purge_after_days",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 10,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Scratch File System Purge Policy",
+      "exact_quote": "Files that have not been accessed* in ten days are subject to purge.",
+      "chunk_id": "doc-hpc-stampede3:c37",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:92666a7d93e9a07d",
+      "field_path": "/storage/scratch/purge_condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Files that have not been accessed in ten days are subject to purge.",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Scratch File System Purge Policy",
+      "exact_quote": "Files that have not been accessed* in ten days are subject to purge.",
+      "chunk_id": "doc-hpc-stampede3:c37",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:c4ddd0580f5723ae",
+      "field_path": "/slurm/partitions/h100/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 172800,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "h100 | H100 | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 4 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:c69370a5bbd11b39",
+      "field_path": "/slurm/partitions/h100/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "h100 | H100 | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 4 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:722db7175c50a297",
+      "field_path": "/slurm/partitions/icx/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 172800,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "icx | ICX | 32 nodes (2560 cores) | 48 hrs | 48 | 12 | 20 | 1.5 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:b8bc2d39153c245c",
+      "field_path": "/slurm/partitions/icx/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 32,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "icx | ICX | 32 nodes (2560 cores) | 48 hrs | 48 | 12 | 20 | 1.5 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2c36f5e516d8fa97",
+      "field_path": "/slurm/partitions/nvdimm/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 172800,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "nvdimm | ICX | 1 node (80 cores) | 48 hrs | 1 | 2 | 4 | 4 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:fb6d086eaf213885",
+      "field_path": "/slurm/partitions/nvdimm/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "nvdimm | ICX | 1 node (80 cores) | 48 hrs | 1 | 2 | 4 | 4 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2768426ebd076a86",
+      "field_path": "/slurm/partitions/pvc/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 172800,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "pvc | PVC | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 3 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:6947f2e1f80fbe72",
+      "field_path": "/slurm/partitions/pvc/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "pvc | PVC | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 3 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:f11a28e7c74340a2",
+      "field_path": "/slurm/partitions/skx/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 172800,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "skx | SKX | 256 nodes (12288 cores) | 48 hrs | 256 | 40 | 60 | 1 SU",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:10026fa9f856782f",
+      "field_path": "/slurm/partitions/skx/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 256,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "skx | SKX | 256 nodes (12288 cores) | 48 hrs | 256 | 40 | 60 | 1 SU",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:8f398c8faf4fc717",
+      "field_path": "/slurm/partitions/skx-dev/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 7200,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "skx-dev | SKX | 16 nodes (768 cores) | 2 hrs | 16 | 2 | 4 | 1 SU",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:e4e76af9c58acee7",
+      "field_path": "/slurm/partitions/skx-dev/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 16,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "skx-dev | SKX | 16 nodes (768 cores) | 2 hrs | 16 | 2 | 4 | 1 SU",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:f179d23b49ffa1a2",
+      "field_path": "/slurm/partitions/spr/maximum_walltime_seconds",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 172800,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "spr | SPR | 32 nodes (3584 cores) | 48 hrs | 40 | 24 | 36 | 2 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:80a1ea6f22c6238f",
+      "field_path": "/slurm/partitions/spr/maximum_nodes_per_job",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": 32,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+      "exact_quote": "spr | SPR | 32 nodes (3584 cores) | 48 hrs | 40 | 24 | 36 | 2 SUs",
+      "chunk_id": "doc-hpc-stampede3:c129",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:049914e9c2b141bd",
+      "field_path": "/slurm/options/nodes/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -N 5"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > One MPI Application",
+      "exact_quote": "#SBATCH -N 5\n#SBATCH -n 200\nibrun ./myprogram              # ibrun uses the $SBATCH directives to properly allocate nodes and tasks To use ibrun interactively, say within an idev session, you can specify:",
+      "chunk_id": "doc-hpc-stampede3:c155",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:7974de16f570f12b",
+      "field_path": "/slurm/options/nodes/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > One MPI Application",
+      "exact_quote": "#SBATCH -N 5\n#SBATCH -n 200\nibrun ./myprogram              # ibrun uses the $SBATCH directives to properly allocate nodes and tasks To use ibrun interactively, say within an idev session, you can specify:",
+      "chunk_id": "doc-hpc-stampede3:c155",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:fbf36389476991c9",
+      "field_path": "/slurm/options/nodes/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > One MPI Application",
+      "exact_quote": "#SBATCH -N 5\n#SBATCH -n 200\nibrun ./myprogram              # ibrun uses the $SBATCH directives to properly allocate nodes and tasks To use ibrun interactively, say within an idev session, you can specify:",
+      "chunk_id": "doc-hpc-stampede3:c155",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:c0bbf4c49715afa1",
+      "field_path": "/slurm/options/ntasks/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -n 200"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > One MPI Application",
+      "exact_quote": "#SBATCH -N 5\n#SBATCH -n 200\nibrun ./myprogram              # ibrun uses the $SBATCH directives to properly allocate nodes and tasks To use ibrun interactively, say within an idev session, you can specify:",
+      "chunk_id": "doc-hpc-stampede3:c155",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:d5767481cdb75cfc",
+      "field_path": "/slurm/options/ntasks/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > One MPI Application",
+      "exact_quote": "#SBATCH -N 5\n#SBATCH -n 200\nibrun ./myprogram              # ibrun uses the $SBATCH directives to properly allocate nodes and tasks To use ibrun interactively, say within an idev session, you can specify:",
+      "chunk_id": "doc-hpc-stampede3:c155",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:f331d701aa8824f0",
+      "field_path": "/slurm/options/ntasks/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > One MPI Application",
+      "exact_quote": "#SBATCH -N 5\n#SBATCH -n 200\nibrun ./myprogram              # ibrun uses the $SBATCH directives to properly allocate nodes and tasks To use ibrun interactively, say within an idev session, you can specify:",
+      "chunk_id": "doc-hpc-stampede3:c155",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:e4bc4529ede31850",
+      "field_path": "/slurm/options/partition/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "-p skx"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ae456c72984ca8a5",
+      "field_path": "/slurm/options/partition/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:e9677d8725abc518",
+      "field_path": "/slurm/options/partition/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:53c4f0ef0002c147",
+      "field_path": "/slurm/options/time/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "-t 2:30:00"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:e916ff5ab1bd53e9",
+      "field_path": "/slurm/options/time/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:19374d841303abff",
+      "field_path": "/slurm/options/time/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:c5c590c7b065c03e",
+      "field_path": "/slurm/options/output/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -o myMPI.o%j"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Slurm Environment Variables",
+      "exact_quote": "Instead, use the following directive: #SBATCH -o myMPI.o%j     # \"%j\" expands to your job's numerical job ID",
+      "chunk_id": "doc-hpc-stampede3:c192",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:41b879561bfe9bfe",
+      "field_path": "/slurm/options/output/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -o myMPI.o%j"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Slurm Environment Variables",
+      "exact_quote": "#SBATCH -o myMPI.o%j     # \"%j\" expands to your job's numerical job ID",
+      "chunk_id": "doc-hpc-stampede3:c193",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:5c3b1f865f4df1df",
+      "field_path": "/slurm/options/output/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Slurm Environment Variables",
+      "exact_quote": "Instead, use the following directive: #SBATCH -o myMPI.o%j     # \"%j\" expands to your job's numerical job ID",
+      "chunk_id": "doc-hpc-stampede3:c192",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:76ae94aaf3bf6354",
+      "field_path": "/slurm/options/output/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Slurm Environment Variables",
+      "exact_quote": "#SBATCH -o myMPI.o%j     # \"%j\" expands to your job's numerical job ID",
+      "chunk_id": "doc-hpc-stampede3:c193",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:d7c6dc1844b57482",
+      "field_path": "/slurm/options/output/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Slurm Environment Variables",
+      "exact_quote": "Instead, use the following directive: #SBATCH -o myMPI.o%j     # \"%j\" expands to your job's numerical job ID",
+      "chunk_id": "doc-hpc-stampede3:c192",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:9638cc6787aeae09",
+      "field_path": "/slurm/options/output/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Slurm Environment Variables",
+      "exact_quote": "#SBATCH -o myMPI.o%j     # \"%j\" expands to your job's numerical job ID",
+      "chunk_id": "doc-hpc-stampede3:c193",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:0c5bf070307afd45",
+      "field_path": "/slurm/unmapped_options",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "pseudo-terminal",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions with idev and srun",
+      "exact_quote": "login1$ srun --pty -N 2 -n 8 -t 2:30:00 -p skx /bin/bash -l # same conditions as above",
+      "chunk_id": "doc-hpc-stampede3:c183",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:a9c97ddac02dc7fa",
+      "field_path": "/network/login_compute/tcp_connect",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions using ssh",
+      "exact_quote": "If you have a batch job or interactive session running on a compute node, you \"own the node\": you can connect via ssh to open a new interactive session on that node.",
+      "chunk_id": "doc-hpc-stampede3:c184",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:1681fa12f3745847",
+      "field_path": "/slurm/options/account/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -A myproject",
+        "-A"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts",
+      "exact_quote": "specify the project to be charged with the -A option.",
+      "chunk_id": "doc-hpc-stampede3:c270",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:798073cde8f0f3bc",
+      "field_path": "/slurm/options/account/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -A myproject",
+        "-A"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ae252b1416ec2b87",
+      "field_path": "/slurm/options/account/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts",
+      "exact_quote": "specify the project to be charged with the -A option.",
+      "chunk_id": "doc-hpc-stampede3:c270",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:483fa9400ce9fa9b",
+      "field_path": "/slurm/options/account/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:bed4071b86dd6b19",
+      "field_path": "/slurm/options/account/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "required if you have more than 1",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts",
+      "exact_quote": "specify the project to be charged with the -A option.",
+      "chunk_id": "doc-hpc-stampede3:c270",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:66c0b34e7eca3e61",
+      "field_path": "/slurm/options/account/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "required if you have more than 1",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:85ac56805479cb90",
+      "field_path": "/slurm/options/job-name/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -J myjob"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:b594b460173bb7fd",
+      "field_path": "/slurm/options/job-name/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:23eb634f7708d9ab",
+      "field_path": "/slurm/options/job-name/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:0c41d7cf315be84f",
+      "field_path": "/slurm/options/error/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH -e myjob.e%j"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:d333c73831ea20bf",
+      "field_path": "/slurm/options/error/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:a02a252fe4129f11",
+      "field_path": "/slurm/options/error/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:1dc8553690edb524",
+      "field_path": "/slurm/options/mail-user/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH --mail-user=username@tacc.utexas.edu"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:7d1468be5329acd7",
+      "field_path": "/slurm/options/mail-user/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:944fbb0911560f6a",
+      "field_path": "/slurm/options/mail-user/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:b202f3bc904997d8",
+      "field_path": "/slurm/options/mail-type/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "#SBATCH --mail-type=all"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:54d55ca615346b20",
+      "field_path": "/slurm/options/mail-type/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:851747b4be77171f",
+      "field_path": "/slurm/options/mail-type/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > SPR Nodes",
+      "exact_quote": "#SBATCH -J myjob           # Job name\n#SBATCH -o myjob.o%j       # Name of stdout output file\n#SBATCH -e myjob.e%j       # Name of stderr error file\n#SBATCH -p spr             # Queue (partition) name\n#SBATCH -N 4               # Total # of nodes \n#SBATCH -n 448             # Total # of mpi tasks\n#SBATCH -t 01:30:00        # Run time (hh:mm:ss)\n#SBATCH --mail-user=username@tacc.utexas.edu\n#SBATCH --mail-type=all    # Send email at begin and end of job\n#SBATCH -A myproject       # Allocation name (req'd if you have more than 1)",
+      "chunk_id": "doc-hpc-stampede3:c272",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:96b7fd03527f8e7d",
+      "field_path": "/storage/scratch/compute_readable",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > ICX Nodes",
+      "exact_quote": "Your input\n#      files, output files, and exectuable should be \n#      in the $SCRATCH directory hierarchy.",
+      "chunk_id": "doc-hpc-stampede3:c281",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:a44f96b98968676b",
+      "field_path": "/storage/scratch/compute_writable",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Scripts > ICX Nodes",
+      "exact_quote": "Your input\n#      files, output files, and exectuable should be \n#      in the $SCRATCH directory hierarchy.",
+      "chunk_id": "doc-hpc-stampede3:c281",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:8cb8b6851210308e",
+      "field_path": "/slurm/options/dependency/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "--dependency=afterok:173210"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Management > Dependent Jobs using sbatch",
+      "exact_quote": "You can use sbatch to help manage workflows that involve multiple steps: the --dependency option allows you to launch jobs that depend on the completion (or successful completion) of another job.",
+      "chunk_id": "doc-hpc-stampede3:c320",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:17fe2a6d0df83c0c",
+      "field_path": "/slurm/options/dependency/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "--dependency=afterok:173210"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Management > Dependent Jobs using sbatch",
+      "exact_quote": "login1$ sbatch --dependency=afterok:173210 myjobscript",
+      "chunk_id": "doc-hpc-stampede3:c321",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:896fc9886fdf6132",
+      "field_path": "/slurm/options/dependency/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Management > Dependent Jobs using sbatch",
+      "exact_quote": "You can use sbatch to help manage workflows that involve multiple steps: the --dependency option allows you to launch jobs that depend on the completion (or successful completion) of another job.",
+      "chunk_id": "doc-hpc-stampede3:c320",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ecbd95f1b8a747fd",
+      "field_path": "/slurm/options/dependency/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Management > Dependent Jobs using sbatch",
+      "exact_quote": "login1$ sbatch --dependency=afterok:173210 myjobscript",
+      "chunk_id": "doc-hpc-stampede3:c321",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ad76c4c299543a1e",
+      "field_path": "/slurm/options/dependency/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Management > Dependent Jobs using sbatch",
+      "exact_quote": "You can use sbatch to help manage workflows that involve multiple steps: the --dependency option allows you to launch jobs that depend on the completion (or successful completion) of another job.",
+      "chunk_id": "doc-hpc-stampede3:c320",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:192f775c8f84604c",
+      "field_path": "/slurm/options/dependency/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+      "documentation_heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Job Management > Dependent Jobs using sbatch",
+      "exact_quote": "login1$ sbatch --dependency=afterok:173210 myjobscript",
+      "chunk_id": "doc-hpc-stampede3:c321",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:e76453a4c2ac299d",
+      "field_path": "/storage/home/compute_visible",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:aca8c5f40be46176",
+      "field_path": "/storage/home/compute_readable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:52f822e0d783a96c",
+      "field_path": "/storage/home/compute_writable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:a37c5b049bb99150",
+      "field_path": "/storage/scratch/compute_visible",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:3a5a54545bf941b1",
+      "field_path": "/storage/scratch/compute_readable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:4a7ba1204e477edc",
+      "field_path": "/storage/scratch/compute_writable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:27a5037f81f26ad8",
+      "field_path": "/storage/work/compute_visible",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:4ffe406802d24e8d",
+      "field_path": "/storage/work/compute_readable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:d8b853a869dab963",
+      "field_path": "/storage/work/compute_writable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:51835d84513bd392",
+      "field_path": "/network/login_compute/tcp_connect",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:85987feb812ab828",
+      "field_path": "/network/login_compute/verified_ports",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        30000,
+        30264,
+        31062,
+        31534,
+        32504,
+        32721,
+        33795,
+        33957
+      ],
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": [
+        30000,
+        30264,
+        31062,
+        31534,
+        32504,
+        32721,
+        33795,
+        33957
+      ],
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:5d954fc2fc4c9c9b",
+      "field_path": "/network/login_compute/suggested_port_range",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "30000-33999",
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": "30000-33999",
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:00399cd9c198afa8",
+      "field_path": "/network/compute_compute/tcp_connect",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:9cf5c0909646e425",
+      "field_path": "/network/compute_compute/verified_ports",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        30000,
+        30663,
+        31185,
+        31660,
+        32463,
+        32728,
+        33430,
+        33558
+      ],
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": [
+        30000,
+        30663,
+        31185,
+        31660,
+        32463,
+        32728,
+        33430,
+        33558
+      ],
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:3d99b62e9ea49679",
+      "field_path": "/network/compute_compute/suggested_port_range",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "30000-33999",
+      "observed_at": "2026-07-30T19:39:35.001644Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/stampede3/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "0d57a2458f4b450b8195810f33dfd072",
+      "result": "30000-33999",
+      "reason": null
+    }
+  ],
+  "conflicts": [
+    {
+      "field_path": "/slurm/partitions/h100/maximum_walltime_seconds",
+      "selected_evidence_id": "documentation:c4ddd0580f5723ae",
+      "other_evidence_ids": [
+        "measurement:58d8ab2bb4ca323d"
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field_path": "/slurm/partitions/icx/maximum_walltime_seconds",
+      "selected_evidence_id": "documentation:722db7175c50a297",
+      "other_evidence_ids": [
+        "measurement:466716d027c4508b"
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field_path": "/slurm/partitions/nvdimm/maximum_walltime_seconds",
+      "selected_evidence_id": "documentation:2c36f5e516d8fa97",
+      "other_evidence_ids": [
+        "measurement:f619e5d72a7f7cbf"
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field_path": "/slurm/partitions/pvc/maximum_walltime_seconds",
+      "selected_evidence_id": "documentation:2768426ebd076a86",
+      "other_evidence_ids": [
+        "measurement:aea9e37a5180cb4f"
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field_path": "/slurm/partitions/skx/maximum_walltime_seconds",
+      "selected_evidence_id": "documentation:f11a28e7c74340a2",
+      "other_evidence_ids": [
+        "measurement:a8f13af033a76584"
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field_path": "/slurm/partitions/spr/maximum_walltime_seconds",
+      "selected_evidence_id": "documentation:f179d23b49ffa1a2",
+      "other_evidence_ids": [
+        "measurement:2eb15ea5aad1724e"
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    }
+  ],
+  "links": [
+    {
+      "profile_field": "/scheduler_type",
+      "evidence_ids": [
+        "measurement:f390f8d48eb4c412"
+      ]
+    },
+    {
+      "profile_field": "/slurm/version",
+      "evidence_ids": [
+        "measurement:23cc6e8c4121d8db"
+      ]
+    },
+    {
+      "profile_field": "/slurm/default_partition",
+      "evidence_ids": [
+        "measurement:e1214471b3bbdc21"
+      ]
+    },
+    {
+      "profile_field": "/slurm/submit_command",
+      "evidence_ids": [
+        "measurement:4cdc9877a1969192"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx-dev/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:6358616bebfd6654",
+        "documentation:8f398c8faf4fc717"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx-dev/node_count",
+      "evidence_ids": [
+        "measurement:d89937ab8fc3cd20"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx-dev/cpus_per_node",
+      "evidence_ids": [
+        "measurement:b274b244c9b029f1"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx-dev/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:05ec12b388a25974"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx-dev/gpu_models",
+      "evidence_ids": [
+        "measurement:8c4254cff604d6ff"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:a8f13af033a76584",
+        "documentation:f11a28e7c74340a2"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx/node_count",
+      "evidence_ids": [
+        "measurement:898e9bef29184f24"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx/cpus_per_node",
+      "evidence_ids": [
+        "measurement:87befaae695fc845"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:015664cf8434d46c"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx/gpu_models",
+      "evidence_ids": [
+        "measurement:0ec3b8255b0badee"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/icx/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:466716d027c4508b",
+        "documentation:722db7175c50a297"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/icx/node_count",
+      "evidence_ids": [
+        "measurement:75b461974c04ec42"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/icx/cpus_per_node",
+      "evidence_ids": [
+        "measurement:889cc9e475f30765"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/icx/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:c51803b9cce1c536"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/icx/gpu_models",
+      "evidence_ids": [
+        "measurement:7593b35aa43f9797"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/spr/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:2eb15ea5aad1724e",
+        "documentation:f179d23b49ffa1a2"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/spr/node_count",
+      "evidence_ids": [
+        "measurement:1e4251bf7c6468db"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/spr/cpus_per_node",
+      "evidence_ids": [
+        "measurement:92cd2fb8fd83a684"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/spr/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:037a52962c98e82b"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/spr/gpu_models",
+      "evidence_ids": [
+        "measurement:c0008e07aeb8f093"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/nvdimm/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:f619e5d72a7f7cbf",
+        "documentation:2c36f5e516d8fa97"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/nvdimm/node_count",
+      "evidence_ids": [
+        "measurement:3babfb8f594630ed"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/nvdimm/cpus_per_node",
+      "evidence_ids": [
+        "measurement:ec4653c6051f7186"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/nvdimm/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:5161da16890bffe3"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/nvdimm/gpu_models",
+      "evidence_ids": [
+        "measurement:941aa010a40cc60a"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:58d8ab2bb4ca323d",
+        "documentation:c4ddd0580f5723ae"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/node_count",
+      "evidence_ids": [
+        "measurement:eb878c944bc50978"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/cpus_per_node",
+      "evidence_ids": [
+        "measurement:dda92e75d140d808"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:5c69a2ee3f78d93d"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/gpu_models",
+      "evidence_ids": [
+        "measurement:70a6e02200db48ad",
+        "documentation:fd03d69835c91653"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:aea9e37a5180cb4f",
+        "documentation:2768426ebd076a86"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/node_count",
+      "evidence_ids": [
+        "measurement:6d00ed898aadf259"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/cpus_per_node",
+      "evidence_ids": [
+        "measurement:c3b1777ed6f57da2"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:1e916a13ac5f47cf"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/gpu_models",
+      "evidence_ids": [
+        "measurement:5d63cc02fc01b758",
+        "documentation:3c8f0d7eb5483961"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/amd-rtx/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:7cc8685b0ce960de"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/amd-rtx/node_count",
+      "evidence_ids": [
+        "measurement:fd665d0a492883db"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/amd-rtx/cpus_per_node",
+      "evidence_ids": [
+        "measurement:49daefafcda8053c"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/amd-rtx/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:038747d0e7ad39b9"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/amd-rtx/gpu_models",
+      "evidence_ids": [
+        "measurement:fd3f8b9fff5b6b68"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/rtx-small/maximum_walltime_seconds",
+      "evidence_ids": [
+        "measurement:193a2d1ab5f35fe6"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/rtx-small/node_count",
+      "evidence_ids": [
+        "measurement:0b58e19b0879b7d1"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/rtx-small/cpus_per_node",
+      "evidence_ids": [
+        "measurement:f9f608cf9ed14016"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/rtx-small/memory_mib_per_node",
+      "evidence_ids": [
+        "measurement:ad69057630fc0654"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/rtx-small/gpu_models",
+      "evidence_ids": [
+        "measurement:3fc768bb58d30576"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions",
+      "evidence_ids": [
+        "measurement:98a480fbe238bc24"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/id",
+      "evidence_ids": [
+        "measurement:a41adb92baad9eb0"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/role",
+      "evidence_ids": [
+        "measurement:98851eb723c9d28f"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/environment_variables",
+      "evidence_ids": [
+        "measurement:c7b798048cf43482"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/path_pattern",
+      "evidence_ids": [
+        "measurement:f5745df6dce99cb0",
+        "measurement:6e5d6caa9f9d3aa9"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/filesystem_type",
+      "evidence_ids": [
+        "measurement:9dd4a6618c3eceb4"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/login_readable",
+      "evidence_ids": [
+        "measurement:d6f79362f38d7725"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/login_writable",
+      "evidence_ids": [
+        "measurement:06fa3ffc1182e8b0"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/id",
+      "evidence_ids": [
+        "measurement:f48c62b070a4d43f"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/role",
+      "evidence_ids": [
+        "measurement:7adce7c2715f73f8"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/environment_variables",
+      "evidence_ids": [
+        "measurement:b0f1338199e25bc3"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/path_pattern",
+      "evidence_ids": [
+        "measurement:f91111adad5e8598",
+        "measurement:6e5d6caa9f9d3aa9"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/filesystem_type",
+      "evidence_ids": [
+        "measurement:a9e6e929e9cd8485"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/login_readable",
+      "evidence_ids": [
+        "measurement:38da855d927a9ae9"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/login_writable",
+      "evidence_ids": [
+        "measurement:c646f439564722f3"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/id",
+      "evidence_ids": [
+        "measurement:58a3d5a6524679e4"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/role",
+      "evidence_ids": [
+        "measurement:786971af1c35be4f"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/environment_variables",
+      "evidence_ids": [
+        "measurement:cf77cb3c3b4891e2"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/path_pattern",
+      "evidence_ids": [
+        "measurement:984562686918497d",
+        "measurement:6e5d6caa9f9d3aa9"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/filesystem_type",
+      "evidence_ids": [
+        "measurement:c55dbd6f89790ccc"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/login_readable",
+      "evidence_ids": [
+        "measurement:938b64b82f36ec3e"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/login_writable",
+      "evidence_ids": [
+        "measurement:c004da1b45453b37"
+      ]
+    },
+    {
+      "profile_field": "/accounting/allocation_required",
+      "evidence_ids": [
+        "documentation:8e1f9c71084b6b86"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/gpu_count_per_node",
+      "evidence_ids": [
+        "documentation:1e5689168e258011"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/gpu_count_per_node",
+      "evidence_ids": [
+        "documentation:f4f284d20c41f2c7"
+      ]
+    },
+    {
+      "profile_field": "/accounting/charging_unit",
+      "evidence_ids": [
+        "documentation:7c959f4d49a0e094"
+      ]
+    },
+    {
+      "profile_field": "/accounting/charging_model",
+      "evidence_ids": [
+        "documentation:9b22fe5ee22bc0ba"
+      ]
+    },
+    {
+      "profile_field": "/network/compute_compute/tcp_connect",
+      "evidence_ids": [
+        "documentation:3e8f4a4a903e82e3",
+        "documentation:3769b3e3958cc8d2",
+        "pilot:00399cd9c198afa8"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/compute_visible",
+      "evidence_ids": [
+        "documentation:8ecadb99d33cf7cc",
+        "pilot:e76453a4c2ac299d"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/shared_across_compute_nodes",
+      "evidence_ids": [
+        "documentation:539e8b49a48042c1",
+        "documentation:cc8f8fc6fa82028c"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/backup_policy",
+      "evidence_ids": [
+        "documentation:114f24f2321c7bfc"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/compute_visible",
+      "evidence_ids": [
+        "documentation:a55560781cae00e3",
+        "pilot:27a5037f81f26ad8"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/shared_across_compute_nodes",
+      "evidence_ids": [
+        "documentation:4585329004534d84"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/backup_policy",
+      "evidence_ids": [
+        "documentation:01d0113aa655f8ab"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/compute_visible",
+      "evidence_ids": [
+        "documentation:5d54b23f877d07a5",
+        "pilot:a37c5b049bb99150"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/shared_across_compute_nodes",
+      "evidence_ids": [
+        "documentation:76ed6217723f2b78",
+        "documentation:940f68fb7109b1a1"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/backup_policy",
+      "evidence_ids": [
+        "documentation:ee28502a3c6faf2b"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/purge_after_days",
+      "evidence_ids": [
+        "documentation:96c59383f2da8865"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/purge_condition",
+      "evidence_ids": [
+        "documentation:92666a7d93e9a07d"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/h100/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:c69370a5bbd11b39"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/icx/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:b8bc2d39153c245c"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/nvdimm/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:fb6d086eaf213885"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/pvc/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:6947f2e1f80fbe72"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:10026fa9f856782f"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/skx-dev/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:e4e76af9c58acee7"
+      ]
+    },
+    {
+      "profile_field": "/slurm/partitions/spr/maximum_nodes_per_job",
+      "evidence_ids": [
+        "documentation:80a1ea6f22c6238f"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/nodes/syntax",
+      "evidence_ids": [
+        "documentation:049914e9c2b141bd"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/nodes/support",
+      "evidence_ids": [
+        "documentation:7974de16f570f12b"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/nodes/required",
+      "evidence_ids": [
+        "documentation:fbf36389476991c9"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/ntasks/syntax",
+      "evidence_ids": [
+        "documentation:c0bbf4c49715afa1"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/ntasks/support",
+      "evidence_ids": [
+        "documentation:d5767481cdb75cfc"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/ntasks/required",
+      "evidence_ids": [
+        "documentation:f331d701aa8824f0"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/partition/syntax",
+      "evidence_ids": [
+        "documentation:e4bc4529ede31850"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/partition/support",
+      "evidence_ids": [
+        "documentation:ae456c72984ca8a5"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/partition/required",
+      "evidence_ids": [
+        "documentation:e9677d8725abc518"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/time/syntax",
+      "evidence_ids": [
+        "documentation:53c4f0ef0002c147"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/time/support",
+      "evidence_ids": [
+        "documentation:e916ff5ab1bd53e9"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/time/required",
+      "evidence_ids": [
+        "documentation:19374d841303abff"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/output/syntax",
+      "evidence_ids": [
+        "documentation:c5c590c7b065c03e",
+        "documentation:41b879561bfe9bfe"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/output/support",
+      "evidence_ids": [
+        "documentation:5c3b1f865f4df1df",
+        "documentation:76ae94aaf3bf6354"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/output/required",
+      "evidence_ids": [
+        "documentation:d7c6dc1844b57482",
+        "documentation:9638cc6787aeae09"
+      ]
+    },
+    {
+      "profile_field": "/slurm/unmapped_options",
+      "evidence_ids": [
+        "documentation:0c5bf070307afd45"
+      ]
+    },
+    {
+      "profile_field": "/network/login_compute/tcp_connect",
+      "evidence_ids": [
+        "documentation:a9c97ddac02dc7fa",
+        "pilot:51835d84513bd392"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/account/syntax",
+      "evidence_ids": [
+        "documentation:1681fa12f3745847",
+        "documentation:798073cde8f0f3bc"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/account/support",
+      "evidence_ids": [
+        "documentation:ae252b1416ec2b87",
+        "documentation:483fa9400ce9fa9b"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/account/condition",
+      "evidence_ids": [
+        "documentation:bed4071b86dd6b19",
+        "documentation:66c0b34e7eca3e61"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/job-name/syntax",
+      "evidence_ids": [
+        "documentation:85ac56805479cb90"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/job-name/support",
+      "evidence_ids": [
+        "documentation:b594b460173bb7fd"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/job-name/required",
+      "evidence_ids": [
+        "documentation:23eb634f7708d9ab"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/error/syntax",
+      "evidence_ids": [
+        "documentation:0c41d7cf315be84f"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/error/support",
+      "evidence_ids": [
+        "documentation:d333c73831ea20bf"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/error/required",
+      "evidence_ids": [
+        "documentation:a02a252fe4129f11"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/mail-user/syntax",
+      "evidence_ids": [
+        "documentation:1dc8553690edb524"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/mail-user/support",
+      "evidence_ids": [
+        "documentation:7d1468be5329acd7"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/mail-user/required",
+      "evidence_ids": [
+        "documentation:944fbb0911560f6a"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/mail-type/syntax",
+      "evidence_ids": [
+        "documentation:b202f3bc904997d8"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/mail-type/support",
+      "evidence_ids": [
+        "documentation:54d55ca615346b20"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/mail-type/required",
+      "evidence_ids": [
+        "documentation:851747b4be77171f"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/compute_readable",
+      "evidence_ids": [
+        "documentation:96b7fd03527f8e7d",
+        "pilot:3a5a54545bf941b1"
+      ]
+    },
+    {
+      "profile_field": "/storage/scratch/compute_writable",
+      "evidence_ids": [
+        "documentation:a44f96b98968676b",
+        "pilot:4a7ba1204e477edc"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/dependency/syntax",
+      "evidence_ids": [
+        "documentation:8cb8b6851210308e",
+        "documentation:17fe2a6d0df83c0c"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/dependency/support",
+      "evidence_ids": [
+        "documentation:896fc9886fdf6132",
+        "documentation:ecbd95f1b8a747fd"
+      ]
+    },
+    {
+      "profile_field": "/slurm/options/dependency/required",
+      "evidence_ids": [
+        "documentation:ad76c4c299543a1e",
+        "documentation:192f775c8f84604c"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/compute_readable",
+      "evidence_ids": [
+        "pilot:aca8c5f40be46176"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/compute_writable",
+      "evidence_ids": [
+        "pilot:52f822e0d783a96c"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/compute_readable",
+      "evidence_ids": [
+        "pilot:4ffe406802d24e8d"
+      ]
+    },
+    {
+      "profile_field": "/storage/work/compute_writable",
+      "evidence_ids": [
+        "pilot:d8b853a869dab963"
+      ]
+    },
+    {
+      "profile_field": "/network/login_compute/verified_ports",
+      "evidence_ids": [
+        "pilot:85987feb812ab828"
+      ]
+    },
+    {
+      "profile_field": "/network/login_compute/suggested_port_range",
+      "evidence_ids": [
+        "pilot:5d954fc2fc4c9c9b"
+      ]
+    },
+    {
+      "profile_field": "/network/compute_compute/verified_ports",
+      "evidence_ids": [
+        "pilot:9cf5c0909646e425"
+      ]
+    },
+    {
+      "profile_field": "/network/compute_compute/suggested_port_range",
+      "evidence_ids": [
+        "pilot:3d99b62e9ea49679"
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "field_path": "/slurm/partitions/skx-dev/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx-dev/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx-dev/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx-dev/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/skx/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/icx/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/icx/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/icx/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/icx/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/spr/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/spr/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/spr/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/spr/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/nvdimm/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/nvdimm/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/nvdimm/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/nvdimm/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/h100/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/h100/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/pvc/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/pvc/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/amd-rtx/maximum_walltime_seconds",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/amd-rtx/maximum_nodes_per_job",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/amd-rtx/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/amd-rtx/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/amd-rtx/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/amd-rtx/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/rtx-small/maximum_walltime_seconds",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/rtx-small/maximum_nodes_per_job",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/rtx-small/shared_nodes",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/rtx-small/gpu_count_per_node",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/rtx-small/gpu_models",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/partitions/rtx-small/features",
+      "action": "additional_documentation",
+      "action_id": "partition_policy_search",
+      "reason": "Visible scheduler configuration does not establish enforced policy."
+    },
+    {
+      "field_path": "/slurm/options/account/required",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish whether this option is required."
+    },
+    {
+      "field_path": "/slurm/options/cpus-per-task/required",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish whether this option is required."
+    },
+    {
+      "field_path": "/slurm/options/cpus-per-task/support",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish site support for this option."
+    },
+    {
+      "field_path": "/network/login/dns_resolution",
+      "action": "login_measurement",
+      "action_id": "login_dns_resolution",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/dns_resolution",
+      "action": "run_pilot",
+      "action_id": "compute_dns_resolution",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/network/login/outbound_https",
+      "action": "login_measurement",
+      "action_id": "login_outbound_https",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/outbound_https",
+      "action": "run_pilot",
+      "action_id": "compute_outbound_https",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/network/login/local_tcp_bind",
+      "action": "login_measurement",
+      "action_id": "login_local_tcp_bind",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/local_tcp_bind",
+      "action": "run_pilot",
+      "action_id": "compute_local_tcp_bind",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/network/login/local_tcp_loopback",
+      "action": "login_measurement",
+      "action_id": "login_local_tcp_loopback",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/local_tcp_loopback",
+      "action": "run_pilot",
+      "action_id": "compute_local_tcp_loopback",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/storage/home/purge_after_days",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/storage/home/purge_condition",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/storage/work/purge_after_days",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/storage/work/purge_condition",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/accounting/filesystem_storage_charged",
+      "action": "additional_documentation",
+      "action_id": "accounting_policy_search",
+      "reason": "Accounting policy cannot be established by login measurement."
+    },
+    {
+      "field_path": "/slurm/unmapped_options",
+      "action": "admin_confirmation",
+      "action_id": "submission_option_mapping",
+      "reason": "Documented submission option 'pseudo-terminal' needs a reviewed mapping."
+    }
+  ]
+}

@@ -1,0 +1,887 @@
+{
+  "schema_version": "0.4",
+  "site_id": "tacc-stampede3",
+  "site_name": "TACC Stampede3",
+  "aliases": [],
+  "profile_state": "partial",
+  "generated_at": "2026-07-29T22:16:26.696685Z",
+  "scheduler_type": "slurm",
+  "slurm": {
+    "version": "23.11.11",
+    "submit_command": "sbatch",
+    "default_partition": "skx-dev",
+    "options": [
+      {
+        "name": "account",
+        "syntax": [
+          "--account={account}",
+          "-A {account}"
+        ],
+        "required": null,
+        "support": "supported",
+        "condition": "Only necessary for logins associated with multiple projects.",
+        "example": "<account>",
+        "allowed_values": null
+      },
+      {
+        "name": "partition",
+        "syntax": [
+          "--partition={partition}",
+          "-p {partition}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": [
+          "skx-dev",
+          "skx",
+          "icx",
+          "spr",
+          "nvdimm",
+          "h100",
+          "pvc",
+          "amd-rtx",
+          "rtx-small"
+        ]
+      },
+      {
+        "name": "nodes",
+        "syntax": [
+          "--nodes={count}",
+          "-N {count}"
+        ],
+        "required": true,
+        "support": "supported",
+        "condition": "Must be paired with either -n or -ntasks-per-node.",
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "cpus-per-task",
+        "syntax": [
+          "--cpus-per-task={count}"
+        ],
+        "required": null,
+        "support": "unknown",
+        "condition": null,
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "time",
+        "syntax": [
+          "--time={time}",
+          "-t {time}"
+        ],
+        "required": true,
+        "support": "supported",
+        "condition": null,
+        "example": "01:00:00",
+        "allowed_values": null
+      },
+      {
+        "name": "array",
+        "syntax": [
+          "--array={tasklist}",
+          "-a {tasklist}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "dependency",
+        "syntax": [
+          "--dependency={dependency}",
+          "-d {dependency}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "export",
+        "syntax": [
+          "--export={mode}"
+        ],
+        "required": false,
+        "support": "discouraged",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "gres",
+        "syntax": [
+          "--gres={resource}"
+        ],
+        "required": false,
+        "support": "unsupported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "gpus-per-task",
+        "syntax": [
+          "--gpus-per-task={count}"
+        ],
+        "required": false,
+        "support": "unsupported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "job-name",
+        "syntax": [
+          "--job-name={name}",
+          "-J {name}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "ntasks",
+        "syntax": [
+          "--ntasks={count}",
+          "-n {count}"
+        ],
+        "required": null,
+        "support": "supported",
+        "condition": "Required as one of the two alternatives with -N; use either -N and -n, or -N and -ntasks-per-node.",
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "ntasks-per-node",
+        "syntax": [
+          "--ntasks-per-node={count}"
+        ],
+        "required": null,
+        "support": "supported",
+        "condition": "Required as one of the two alternatives with -N; use either -N and -n, or -N and -ntasks-per-node.",
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "mail-type",
+        "syntax": [
+          "--mail-type={type}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "mail-user",
+        "syntax": [
+          "--mail-user={email}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": "Use with the -mail-type= flag.",
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "output",
+        "syntax": [
+          "--output={path}",
+          "-o {path}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "error",
+        "syntax": [
+          "--error={path}",
+          "-e {path}"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      },
+      {
+        "name": "mem",
+        "syntax": [
+          "--mem={size}"
+        ],
+        "required": false,
+        "support": "unsupported",
+        "condition": null,
+        "example": null,
+        "allowed_values": null
+      }
+    ],
+    "unmapped_options": [],
+    "partitions": [
+      {
+        "name": "skx-dev",
+        "maximum_walltime_seconds": 7200,
+        "maximum_nodes_per_job": 16,
+        "shared_nodes": false,
+        "node_count": 72,
+        "cpus_per_node": 48,
+        "memory_mib_per_node": 191000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": [
+          "SKX"
+        ]
+      },
+      {
+        "name": "skx",
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 256,
+        "shared_nodes": false,
+        "node_count": 1160,
+        "cpus_per_node": 48,
+        "memory_mib_per_node": 191000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": [
+          "SKX"
+        ]
+      },
+      {
+        "name": "icx",
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 32,
+        "shared_nodes": false,
+        "node_count": 224,
+        "cpus_per_node": 80,
+        "memory_mib_per_node": 256000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": [
+          "ICX"
+        ]
+      },
+      {
+        "name": "spr",
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 32,
+        "shared_nodes": false,
+        "node_count": 616,
+        "cpus_per_node": 112,
+        "memory_mib_per_node": 127000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": [
+          "SPR"
+        ]
+      },
+      {
+        "name": "nvdimm",
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 1,
+        "shared_nodes": false,
+        "node_count": 3,
+        "cpus_per_node": 80,
+        "memory_mib_per_node": 4000000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": [
+          "ICX"
+        ]
+      },
+      {
+        "name": "h100",
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 4,
+        "shared_nodes": false,
+        "node_count": 24,
+        "cpus_per_node": 96,
+        "memory_mib_per_node": 1031000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": 4,
+        "gpu_models": [
+          "NVIDIA H100 SXM5"
+        ],
+        "features": [
+          "H100"
+        ]
+      },
+      {
+        "name": "pvc",
+        "maximum_walltime_seconds": 172800,
+        "maximum_nodes_per_job": 4,
+        "shared_nodes": false,
+        "node_count": 18,
+        "cpus_per_node": 96,
+        "memory_mib_per_node": 1031000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": 4,
+        "gpu_models": [
+          "Intel Data Center GPU Max 1550 (Ponte Vecchio)"
+        ],
+        "features": [
+          "PVC"
+        ]
+      },
+      {
+        "name": "amd-rtx",
+        "maximum_walltime_seconds": -1,
+        "maximum_nodes_per_job": null,
+        "shared_nodes": null,
+        "node_count": 4,
+        "cpus_per_node": 128,
+        "memory_mib_per_node": 1500000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      },
+      {
+        "name": "rtx-small",
+        "maximum_walltime_seconds": -1,
+        "maximum_nodes_per_job": null,
+        "shared_nodes": null,
+        "node_count": 16,
+        "cpus_per_node": 28,
+        "memory_mib_per_node": 370000,
+        "temporary_disk_mib_per_node": null,
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "features": []
+      }
+    ]
+  },
+  "htcondor": null,
+  "storage": [
+    {
+      "id": "home",
+      "name": "Home",
+      "role": "home",
+      "environment_variables": [
+        "HOME"
+      ],
+      "path_pattern": "/home1/10724/{username}",
+      "filesystem_type": "nfs",
+      "login_readable": true,
+      "login_writable": true,
+      "compute_visible": true,
+      "compute_readable": true,
+      "compute_writable": true,
+      "shared_across_compute_nodes": true,
+      "backup_policy": "Backed up regularly.",
+      "purge_after_days": null,
+      "purge_condition": null
+    },
+    {
+      "id": "scratch",
+      "name": "Scratch",
+      "role": "scratch",
+      "environment_variables": [
+        "SCRATCH"
+      ],
+      "path_pattern": "/scratch/10724/{username}",
+      "filesystem_type": "nfs",
+      "login_readable": true,
+      "login_writable": true,
+      "compute_visible": true,
+      "compute_readable": true,
+      "compute_writable": true,
+      "shared_across_compute_nodes": true,
+      "backup_policy": "Not backed up.",
+      "purge_after_days": 10,
+      "purge_condition": "Files that have not been accessed in ten days are subject to purge."
+    },
+    {
+      "id": "work",
+      "name": "Work",
+      "role": "work",
+      "environment_variables": [
+        "WORK"
+      ],
+      "path_pattern": "/work2/10724/{username}/stampede3",
+      "filesystem_type": "lustre",
+      "login_readable": true,
+      "login_writable": true,
+      "compute_visible": true,
+      "compute_readable": true,
+      "compute_writable": true,
+      "shared_across_compute_nodes": true,
+      "backup_policy": "Not backed up.",
+      "purge_after_days": null,
+      "purge_condition": null
+    }
+  ],
+  "network": {
+    "login": {
+      "hostname_patterns": [
+        "*.stampede3.tacc.utexas.edu"
+      ],
+      "dns_resolution": null,
+      "outbound_https": null,
+      "local_tcp_bind": null,
+      "local_tcp_loopback": null
+    },
+    "compute": {
+      "hostname_patterns": [],
+      "dns_resolution": null,
+      "outbound_https": null,
+      "local_tcp_bind": null,
+      "local_tcp_loopback": null
+    },
+    "login_compute": {
+      "tcp_connect": true,
+      "verified_ports": [
+        30000,
+        30264,
+        31062,
+        31534,
+        32504,
+        32721,
+        33795,
+        33957
+      ],
+      "suggested_port_range": "30000-33999"
+    },
+    "compute_compute": {
+      "tcp_connect": true,
+      "verified_ports": [
+        30000,
+        30663,
+        31185,
+        31660,
+        32463,
+        32728,
+        33430,
+        33558
+      ],
+      "suggested_port_range": "30000-33999"
+    }
+  },
+  "accounting": {
+    "allocation_required": null,
+    "charging_unit": "Service Unit (SU); one unadjusted SU represents one compute node used for one hour (a node-hour).",
+    "charging_model": "Stampede3 SUs billed = number of nodes \u00d7 max(job wall-clock duration in hours, 0.25) \u00d7 charge rate per node-hour.",
+    "filesystem_storage_charged": null
+  },
+  "section_status": {
+    "scheduler": "measured",
+    "submission": "partial",
+    "resources": "documented",
+    "network": "pilot_validated",
+    "storage": "pilot_validated",
+    "accounting": "documented"
+  },
+  "unresolved": [
+    {
+      "field": "/slurm/partitions/skx-dev/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/skx-dev/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/skx/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/skx/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/icx/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/icx/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/spr/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/spr/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/nvdimm/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/nvdimm/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/amd-rtx/maximum_walltime_seconds",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/amd-rtx/maximum_nodes_per_job",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/amd-rtx/shared_nodes",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/amd-rtx/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/amd-rtx/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/amd-rtx/features",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/rtx-small/maximum_walltime_seconds",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/rtx-small/maximum_nodes_per_job",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/rtx-small/shared_nodes",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/rtx-small/gpu_count_per_node",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/rtx-small/gpu_models",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/partitions/rtx-small/features",
+      "reason": "Visible scheduler configuration does not establish enforced policy.",
+      "next_action": "additional_documentation",
+      "action_id": "partition_policy_search"
+    },
+    {
+      "field": "/slurm/options/account/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/slurm/options/cpus-per-task/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/slurm/options/cpus-per-task/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/network/login/dns_resolution",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_dns_resolution"
+    },
+    {
+      "field": "/network/compute/dns_resolution",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_dns_resolution"
+    },
+    {
+      "field": "/network/login/outbound_https",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_outbound_https"
+    },
+    {
+      "field": "/network/compute/outbound_https",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_outbound_https"
+    },
+    {
+      "field": "/network/login/local_tcp_bind",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_local_tcp_bind"
+    },
+    {
+      "field": "/network/compute/local_tcp_bind",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_local_tcp_bind"
+    },
+    {
+      "field": "/network/login/local_tcp_loopback",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_local_tcp_loopback"
+    },
+    {
+      "field": "/network/compute/local_tcp_loopback",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_local_tcp_loopback"
+    },
+    {
+      "field": "/storage/home/purge_after_days",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/storage/home/purge_condition",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/storage/work/purge_after_days",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/storage/work/purge_condition",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/accounting/allocation_required",
+      "reason": "Accounting policy cannot be established by login measurement.",
+      "next_action": "additional_documentation",
+      "action_id": "accounting_policy_search"
+    },
+    {
+      "field": "/accounting/filesystem_storage_charged",
+      "reason": "Accounting policy cannot be established by login measurement.",
+      "next_action": "additional_documentation",
+      "action_id": "accounting_policy_search"
+    }
+  ],
+  "conflicts": [
+    {
+      "field": "/slurm/partitions/h100/maximum_walltime_seconds",
+      "selected_value": 172800,
+      "selected_evidence": "documentation:c4ddd0580f5723ae",
+      "other_evidence": [
+        "measurement:58d8ab2bb4ca323d"
+      ],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": [
+            "measurement:58d8ab2bb4ca323d"
+          ]
+        },
+        {
+          "source": "documentation",
+          "value": 172800,
+          "evidence_ids": [
+            "documentation:c4ddd0580f5723ae"
+          ]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field": "/slurm/partitions/icx/maximum_walltime_seconds",
+      "selected_value": 172800,
+      "selected_evidence": "documentation:722db7175c50a297",
+      "other_evidence": [
+        "measurement:466716d027c4508b"
+      ],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": [
+            "measurement:466716d027c4508b"
+          ]
+        },
+        {
+          "source": "documentation",
+          "value": 172800,
+          "evidence_ids": [
+            "documentation:722db7175c50a297"
+          ]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field": "/slurm/partitions/nvdimm/maximum_walltime_seconds",
+      "selected_value": 172800,
+      "selected_evidence": "documentation:2c36f5e516d8fa97",
+      "other_evidence": [
+        "measurement:f619e5d72a7f7cbf"
+      ],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": [
+            "measurement:f619e5d72a7f7cbf"
+          ]
+        },
+        {
+          "source": "documentation",
+          "value": 172800,
+          "evidence_ids": [
+            "documentation:2c36f5e516d8fa97"
+          ]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field": "/slurm/partitions/pvc/maximum_walltime_seconds",
+      "selected_value": 172800,
+      "selected_evidence": "documentation:2768426ebd076a86",
+      "other_evidence": [
+        "measurement:aea9e37a5180cb4f"
+      ],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": [
+            "measurement:aea9e37a5180cb4f"
+          ]
+        },
+        {
+          "source": "documentation",
+          "value": 172800,
+          "evidence_ids": [
+            "documentation:2768426ebd076a86"
+          ]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field": "/slurm/partitions/skx/maximum_walltime_seconds",
+      "selected_value": 172800,
+      "selected_evidence": "documentation:f11a28e7c74340a2",
+      "other_evidence": [
+        "measurement:a8f13af033a76584"
+      ],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": [
+            "measurement:a8f13af033a76584"
+          ]
+        },
+        {
+          "source": "documentation",
+          "value": 172800,
+          "evidence_ids": [
+            "documentation:f11a28e7c74340a2"
+          ]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    },
+    {
+      "field": "/slurm/partitions/spr/maximum_walltime_seconds",
+      "selected_value": 172800,
+      "selected_evidence": "documentation:f179d23b49ffa1a2",
+      "other_evidence": [
+        "measurement:2eb15ea5aad1724e"
+      ],
+      "evidence_values": [
+        {
+          "source": "measurement",
+          "value": -1,
+          "evidence_ids": [
+            "measurement:2eb15ea5aad1724e"
+          ]
+        },
+        {
+          "source": "documentation",
+          "value": 172800,
+          "evidence_ids": [
+            "documentation:f179d23b49ffa1a2"
+          ]
+        }
+      ],
+      "selection_rule": "documentation_over_measurement_for_walltime_policy",
+      "note": "Measurement reported -1; documentation reported 172800. Documentation is authoritative for the policy limit."
+    }
+  ],
+  "evidence_id": "report-833ded7a-dede-4d30-90b9-acdd595fe30a"
+}

@@ -31,7 +31,7 @@ from evaluate_profile import (
 
 ROOT = Path(__file__).resolve().parents[2]
 EVALUATION = ROOT / "evaluation"
-RESULTS = EVALUATION / "results"
+RESULTS = EVALUATION / "profile-runs"
 OUTPUT = EVALUATION / "rq1"
 TABLES = OUTPUT / "tables"
 FIGURES = OUTPUT / "figures"
@@ -115,8 +115,10 @@ def result_directory(row: dict[str, str]) -> Path:
 
 
 def load_completed_runs() -> list[dict[str, str]]:
-    """Load the 60 successful matrix cases and verify their profile artifacts."""
-    with (EVALUATION / "run-log.csv").open(encoding="utf-8", newline="") as handle:
+    """Load the 108 successful matrix cases and verify their profile artifacts."""
+    with (EVALUATION / "profile-run-log.csv").open(
+        encoding="utf-8", newline=""
+    ) as handle:
         rows = [row for row in csv.DictReader(handle) if row["status"] == "completed"]
 
     unique: dict[tuple[str, str, str, str], dict[str, str]] = {}
@@ -126,8 +128,8 @@ def load_completed_runs() -> list[dict[str, str]]:
         if profile_path.exists():
             unique[key] = row
     completed = list(unique.values())
-    if len(completed) != 60:
-        raise RuntimeError(f"Expected 60 completed profiles, found {len(completed)}")
+    if len(completed) != 108:
+        raise RuntimeError(f"Expected 108 completed profiles, found {len(completed)}")
 
     repeat_counts = Counter(
         (row["site"], row["model"], row["mode"]) for row in completed
@@ -216,7 +218,7 @@ def build_field_comparisons(
             json.loads(
                 (
                     EVALUATION
-                    / "frozen-inputs"
+                    / "site-inputs"
                     / site
                     / "login-measurements.json"
                 ).read_text(encoding="utf-8")
@@ -406,7 +408,7 @@ def build_citation_tables(
     """Validate accepted citations against each site's frozen corpus."""
     corpus_by_site: dict[str, dict[str, dict[str, Any]]] = {}
     for site in GROUND_TRUTH:
-        chunks_path = EVALUATION / "frozen-inputs" / site / "corpus" / "chunks.jsonl"
+        chunks_path = EVALUATION / "site-inputs" / site / "corpus" / "chunks.jsonl"
         corpus_by_site[site] = {
             chunk["chunk_id"]: chunk
             for chunk in (

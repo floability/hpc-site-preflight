@@ -1,0 +1,45 @@
+{
+  "schema_version": "0.1",
+  "status": "complete",
+  "completed_runs": 108,
+  "logged_attempts": 112,
+  "failed_attempts": 4,
+  "sites": {
+    "anvil": {
+      "runs": 36,
+      "corpus_fingerprint": "b4702f0df1926850d6252174ebf22394763b3add5842824b6f1bdd5c05253cde"
+    },
+    "stampede3": {
+      "runs": 36,
+      "corpus_fingerprint": "56bc7f6460e3c1ff8c7fea86724dbd38ff04735d6d58c724e5f8a124177d11b9"
+    },
+    "notre-dame-crc": {
+      "runs": 36,
+      "corpus_fingerprint": "71baf7c3797749fd062834aa457b3b889196c4de933c00cd7efceb89cbef2bdc"
+    }
+  },
+  "models": [
+    "gpt-5-mini",
+    "gpt-5.6-terra",
+    "gemini-3.6-flash",
+    "gemini-3.1-pro-preview"
+  ],
+  "retrieval_modes": [
+    "bm25",
+    "expanded",
+    "full-corpus"
+  ],
+  "repetitions": [
+    1,
+    2,
+    3
+  ],
+  "paths": {
+    "site_inputs": "site-inputs",
+    "ground_truth": "ground-truth",
+    "profiles": "profile-runs",
+    "failed_profiles": "failed-profile-runs",
+    "performance": "performance-runs/profile-matrix",
+    "run_log": "profile-run-log.csv"
+  }
+}

@@ -24,7 +24,7 @@ from weasyprint import HTML
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 RUN_METRICS = ROOT / "evaluation/rq1/tables/run-metrics.csv"
-RUN_LOG = ROOT / "evaluation/run-log.csv"
+RUN_LOG = ROOT / "evaluation/profile-run-log.csv"
 FIGURES = HERE / "figures"
 TABLES = HERE / "tables"
 MARKDOWN = HERE / "rq2-results.md"
@@ -428,19 +428,18 @@ and run-to-run variance.
 
 ## Run configuration
 
-- **60 completed profile builds:** 3 sites × 4 models × 3 retrieval modes,
-  with additional repetitions for the stochastic expanded mode.
+- **108 completed profile builds:** 3 sites × 4 models × 3 retrieval modes
+  × 3 repetitions.
 - **Sites:** Purdue Anvil, TACC Stampede3, and Notre Dame CRC.
 - **Models:** GPT-5 Mini, GPT-5.6 Terra, Gemini Flash, and Gemini Pro.
 - **Retrieval:** BM25, LLM-expanded BM25, and full corpus.
-- **Repetitions:** one BM25 and one full-corpus run per site-model pair; three
-  LLM-expanded BM25 runs per site-model pair.
+- **Repetitions:** three independent runs for every site-model-retrieval
+  configuration.
 - **Frozen inputs:** every run for a site uses the same login measurement,
   pilot result, and documentation corpus. No run performs new discovery,
   measurement, or pilot submission.
-- **Balancing:** BM25 and full corpus have weight one; each expanded repetition
-  has weight one third. Thus every site-model-retrieval configuration has equal
-  aggregate weight.
+- **Balancing:** each repetition has weight one third. Thus every
+  site-model-retrieval configuration has equal aggregate weight.
 - **Cost boundary:** extraction tokens and profile-build latency are compared
   here. One-time corpus-discovery tokens are excluded because the corpus is
   frozen and shared by every run at a site.
@@ -561,8 +560,8 @@ def main() -> None:
         how="inner",
         validate="one_to_one",
     )
-    if len(runs) != 60:
-        raise RuntimeError(f"Expected 60 completed runs, found {len(runs)}")
+    if len(runs) != 108:
+        raise RuntimeError(f"Expected 108 completed runs, found {len(runs)}")
 
     model, retrieval, interaction, variance = build_tables(runs)
     save_tables(model, retrieval, interaction, variance)

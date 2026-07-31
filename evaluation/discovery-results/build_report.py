@@ -39,7 +39,7 @@ MODEL_LABELS = {
 }
 SITE_LABELS = {"anvil": "Anvil", "stampede3": "Stampede3"}
 SITE_COLORS = {"Anvil": "#4472C4", "Stampede3": "#2A9D8F"}
-FROZEN_INPUTS = HERE.parent / "frozen-inputs"
+FROZEN_INPUTS = HERE.parent / "site-inputs"
 INK = "#2F3B45"
 
 

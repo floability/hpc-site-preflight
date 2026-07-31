@@ -1,0 +1,1453 @@
+{
+  "site_id": "notre-dame-crc",
+  "model_mode": "live",
+  "model_provider": "gemini",
+  "model": "gemini-3.6-flash",
+  "web_mode": "live",
+  "context_mode": "bm25",
+  "corpus_fingerprint": "71baf7c3797749fd062834aa457b3b889196c4de933c00cd7efceb89cbef2bdc",
+  "findings": [
+    {
+      "name": "guaranteed_runtime",
+      "value": false,
+      "note": "Borrowing machines owned by other people carries the possibility that jobs may be kicked off and must run elsewhere.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c9:s3",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "Of course, if you are borrowing machines owned by other people, then you must accept the possibility that some jobs may be kicked off and must run elsewhere."
+        }
+      ]
+    },
+    {
+      "name": "preemptible",
+      "value": true,
+      "note": "Jobs running on borrowed machines owned by other people may be kicked off.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c9:s3",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "Of course, if you are borrowing machines owned by other people, then you must accept the possibility that some jobs may be kicked off and must run elsewhere."
+        }
+      ]
+    },
+    {
+      "name": "submission_host",
+      "value": "condorfe.crc.nd.edu",
+      "note": "Users must log into condorfe.crc.nd.edu to submit jobs.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c13:s1",
+          "chunk_id": "doc-resources-condor-html:c13",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "Log into condorfe.crc.nd.edu to submit jobs."
+        }
+      ]
+    },
+    {
+      "name": "machine_requirements_supported",
+      "value": true,
+      "note": "Users submitting jobs to Condor can specify machine requirements such as memory, processor type, or specific cluster.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c9:s1",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "Users that submit jobs to Condor can specify their own requirements on what machines to use."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c9:s2",
+          "chunk_id": "doc-resources-condor-html:c9",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+          "quote": "You can require the use of one particular machine, or any from a particular cluster, or any with a certain amount of memory or processor type."
+        }
+      ]
+    },
+    {
+      "name": "dynamic_slots_enabled",
+      "value": true,
+      "note": "The ND Condor pool is configured to enable dynamic slots.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c34:s1",
+          "chunk_id": "doc-resources-condor-html:c34",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "The condor pool is configured to enable dynamic slots."
+        }
+      ]
+    },
+    {
+      "name": "bulk_submission_supported",
+      "value": true,
+      "note": "Users can modify submit files using the queue command and $(PROCESS) macro to run many jobs at once.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c28:s1",
+          "chunk_id": "doc-resources-condor-html:c28",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "Because you will certainly want to run many jobs at once via Condor, you can easily modify your submit file to run a program with tens or hundreds of variations."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c28:s2",
+          "chunk_id": "doc-resources-condor-html:c28",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "Change the queue command to queue several jobs at once, and the $(PROCESS) macro to modify the parameters with the job number."
+        }
+      ]
+    },
+    {
+      "name": "completion_email_supported",
+      "value": false,
+      "note": "Completion email feature has been disabled at Notre Dame due to email security configuration.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c27:s1",
+          "chunk_id": "doc-resources-condor-html:c27",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "Despite what the Condor manual says, you will NOT receive email when a job is complete."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c27:s2",
+          "chunk_id": "doc-resources-condor-html:c27",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Getting Started With Condor at Notre Dame \uf0c1",
+          "quote": "This feature has been disabled at Notre Dame due to our email security configuration."
+        }
+      ]
+    },
+    {
+      "name": "request_cpus",
+      "syntax": [
+        "request_cpus = 4"
+      ],
+      "requirement": "conditional",
+      "support": "supported",
+      "condition": "When submitting multi-threaded or multicore SMP Condor jobs",
+      "note": "Required when submitting multi-threaded or multicore SMP jobs.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c34:s2",
+          "chunk_id": "doc-resources-condor-html:c34",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "Therefore, if you want to submit multi-threaded or multicore SMP Condor jobs (e.g."
+        },
+        {
+          "span_id": "doc-resources-condor-html:c34:s3",
+          "chunk_id": "doc-resources-condor-html:c34",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "using OpenMP), you can add below lines in your Condor job script:"
+        },
+        {
+          "span_id": "doc-resources-condor-html:c35:s2",
+          "chunk_id": "doc-resources-condor-html:c35",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+          "quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ..."
+        }
+      ]
+    },
+    {
+      "name": "request_gpus",
+      "syntax": [
+        "request_gpus = 1"
+      ],
+      "requirement": "conditional",
+      "support": "supported",
+      "condition": "When running a GPU job",
+      "note": "Specified in submission script template for GPU jobs.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c48:s1",
+          "chunk_id": "doc-resources-condor-html:c48",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+          "quote": "Following is a Condor submission script template for running Amber with 1 GPU:"
+        },
+        {
+          "span_id": "doc-resources-condor-html:c49:s1",
+          "chunk_id": "doc-resources-condor-html:c49",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+          "quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1"
+        }
+      ]
+    },
+    {
+      "name": "universe",
+      "syntax": [
+        "universe = vanilla"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specifies the HTCondor universe.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c29:s1",
+          "chunk_id": "doc-resources-condor-html:c29",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "universe = vanilla executable = /bin/echo arguments = hello $( PROCESS ) output = test.output."
+        }
+      ]
+    },
+    {
+      "name": "executable",
+      "syntax": [
+        "executable = /bin/echo"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specifies the path to the executable.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c29:s1",
+          "chunk_id": "doc-resources-condor-html:c29",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "universe = vanilla executable = /bin/echo arguments = hello $( PROCESS ) output = test.output."
+        }
+      ]
+    },
+    {
+      "name": "should_transfer_files",
+      "syntax": [
+        "should_transfer_files = yes"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specifies whether files should be transferred.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c29:s3",
+          "chunk_id": "doc-resources-condor-html:c29",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "$( PROCESS ) should_transfer_files = yes when_to_transfer_output = on_exit log = test.logfile\nqueue 10"
+        }
+      ]
+    },
+    {
+      "name": "when_to_transfer_output",
+      "syntax": [
+        "when_to_transfer_output = on_exit"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specifies when output files should be transferred back.",
+      "citations": [
+        {
+          "span_id": "doc-resources-condor-html:c29:s3",
+          "chunk_id": "doc-resources-condor-html:c29",
+          "url": "https://docs.crc.nd.edu/resources/condor.html",
+          "title": "HTCondor \u2014 User Documentation  documentation",
+          "heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Submitting Large Numbers of Jobs \uf0c1",
+          "quote": "$( PROCESS ) should_transfer_files = yes when_to_transfer_output = on_exit log = test.logfile\nqueue 10"
+        }
+      ]
+    },
+    {
+      "name": "filesystem_storage_charged",
+      "value": true,
+      "note": "Long term storage and additional storage beyond default allotments are available for a cost.",
+      "citations": [
+        {
+          "span_id": "doc-infrastructure-storage-html:c35:s1",
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "url": "https://docs.crc.nd.edu/infrastructure/storage.html",
+          "title": "Storage \u2014 User Documentation  documentation",
+          "heading": "Storage \u2014 User Documentation  documentation > Storage \uf0c1 > NetApp Storage \uf0c1 > Long term storage (/bluefs and /goldfs) \uf0c1",
+          "quote": "There is no default allotment provided, available upon request for a cost  (for pricing visit Storage Policy )."
+        }
+      ]
+    }
+  ],
+  "rejected": [
+    "storage//users/netid: storage resource is not present in measured site resources",
+    "storage//groups/PI_netid: storage resource is not present in measured site resources",
+    "storage//bluefs/PI_netid: storage resource is not present in measured site resources",
+    "storage//goldfs/PI_netid: storage resource is not present in measured site resources",
+    "storage//tmp: storage resource is not present in measured site resources"
+  ],
+  "unresolved": [
+    "allocation_required",
+    "charging_model",
+    "charging_unit",
+    "manager_worker_connectivity",
+    "outbound_compute",
+    "purge_after_days",
+    "storage_backup_policy",
+    "storage_compute_readable",
+    "storage_compute_visible",
+    "storage_compute_writable",
+    "storage_purge_condition",
+    "storage_shared_across_compute_nodes",
+    "worker_worker_connectivity"
+  ],
+  "selected_chunk_ids": [
+    "doc-resources-condor-html:c48",
+    "doc-resources-condor-html:c31",
+    "doc-resources-condor-html:c9",
+    "doc-infrastructure-storage-html:c58",
+    "doc-resources-condor-html:c34",
+    "doc-resources-condor-html:c28",
+    "doc-resources-condor-html:c27",
+    "doc-resources-condor-html:c14",
+    "doc-resources-condor-html:c53",
+    "doc-resources-condor-html:c13",
+    "doc-infrastructure-storage-html:c55",
+    "doc-resources-condor-html:c35",
+    "doc-resources-condor-html:c44",
+    "doc-resources-condor-html:c32",
+    "doc-resources-condor-html:c10",
+    "doc-resources-condor-html:c24",
+    "doc-new-user-connecting-to-crc-html:c8",
+    "doc-resources-condor-html:c40",
+    "doc-resources-condor-html:c38",
+    "doc-resources-condor-html:c29",
+    "doc-infrastructure-storage-html:c27",
+    "doc-resources-condor-html:c52",
+    "doc-infrastructure-storage-html:c48",
+    "doc-resources-condor-html:c45",
+    "doc-infrastructure-storage-html:c44",
+    "doc-infrastructure-storage-html:c8",
+    "doc-resources-condor-html:c17",
+    "doc-new-user-connecting-to-crc-html:c21",
+    "doc-resources-condor-html:c41",
+    "doc-infrastructure-storage-html:c35",
+    "doc-resources-condor-html:c49",
+    "doc-resources-condor-html:c18",
+    "doc-infrastructure-storage-html:c37",
+    "doc-new-user-connecting-to-crc-html:c23",
+    "doc-new-user-connecting-to-crc-html:c5",
+    "doc-infrastructure-storage-html:c47",
+    "doc-new-user-connecting-to-crc-html:c16",
+    "doc-new-user-connecting-to-crc-html:c6",
+    "doc-infrastructure-storage-html:c18",
+    "doc-infrastructure-storage-html:c51",
+    "doc-new-user-connecting-to-crc-html:c20",
+    "doc-infrastructure-storage-html:c6",
+    "doc-infrastructure-storage-html:c43",
+    "doc-infrastructure-storage-html:c53",
+    "doc-infrastructure-storage-html:c19",
+    "doc-new-user-connecting-to-crc-html:c22",
+    "doc-infrastructure-storage-html:c10",
+    "doc-infrastructure-storage-html:c45",
+    "doc-infrastructure-storage-html:c23",
+    "doc-infrastructure-storage-html:c7",
+    "doc-infrastructure-storage-html:c34",
+    "doc-infrastructure-storage-html:c49",
+    "doc-resources-condor-html:c47",
+    "doc-infrastructure-storage-html:c11",
+    "doc-infrastructure-storage-html:c21",
+    "doc-infrastructure-storage-html:c25",
+    "doc-infrastructure-storage-html:c26",
+    "doc-resources-condor-html:c51"
+  ],
+  "retrieval": [
+    {
+      "field": "allocation_required",
+      "queries": [
+        "allocation project access required job submission",
+        "job submission authorization requirements",
+        "HTCondor submit access permission project accounting group",
+        "Condor pool authorization requirements"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 5.734568,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 4.83072,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": 6.676986,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": 4.119413,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": 5.576248,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": 3.943135,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "guaranteed_runtime",
+      "queries": [
+        "job guaranteed runtime completion",
+        "jobs kicked off must run elsewhere"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": 2.866696,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": 14.454302,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": 2.816048,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 5.217095,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": 2.743346,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": 4.580353,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": 2.393223,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": 4.488079,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "preemptible",
+      "queries": [
+        "jobs preempted evicted kicked off",
+        "borrowed machines jobs must run elsewhere"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": 6.377702,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": 5.351336,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c8",
+          "score": 4.488079,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 5.217095,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": 3.616616,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": 4.580353,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "submission_host",
+      "queries": [
+        "HTCondor login host condor_submit submit jobs",
+        "where to log in to submit Condor jobs"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.029831,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c13",
+          "score": 9.084044,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": 7.255762,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": 7.911869,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": 6.790188,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": 7.696163,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": 6.66726,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 6.880418,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "machine_requirements_supported",
+      "queries": [
+        "HTCondor specify machine cluster memory processor requirements",
+        "Condor machine selection requirements"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c9",
+          "score": 16.734945,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c55",
+          "score": 3.842248,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": 5.075685,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c48",
+          "score": 3.746395,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": 5.019964,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c10",
+          "score": 1.734996,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c17",
+          "score": 4.749713,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "dynamic_slots_enabled",
+      "queries": [
+        "HTCondor pool configured dynamic slots multicore SMP",
+        "dynamic slots request_cpus"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c34",
+          "score": 20.412924,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": 6.732544,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c38",
+          "score": 9.927789,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": 5.566668,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c41",
+          "score": 9.539517,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c52",
+          "score": 3.445546,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": 9.068191,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 2.995402,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "bulk_submission_supported",
+      "queries": [
+        "HTCondor submit many jobs queue PROCESS macro",
+        "Condor bulk submission queue several jobs"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": 16.319913,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": 6.588365,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c29",
+          "score": 10.536598,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c53",
+          "score": 5.520684,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": 5.773388,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c18",
+          "score": 5.056474,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": 5.71784,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 4.765238,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "completion_email_supported",
+      "queries": [
+        "HTCondor completion email disabled site policy",
+        "job complete email notification"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c27",
+          "score": 10.991502,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c32",
+          "score": 5.086564,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": 4.063288,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": 2.968745,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 4.013838,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": 2.866696,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": 3.430933,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c24",
+          "score": 2.816048,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "required_submission_options",
+      "queries": [
+        "required scheduler submission directives job file",
+        "mandatory job submission fields options",
+        "HTCondor submit file condor_submit required attributes",
+        "request_cpus request_memory request_gpus",
+        "multicore SMP request_cpus GPU request_gpus",
+        "universe executable should_transfer_files when_to_transfer_output",
+        "Condor submit description queue",
+        "site-specific mandatory HTCondor submit attributes",
+        "required ClassAd accounting_group requirements +ProjectName"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-resources-condor-html:c14",
+          "score": 7.731744,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 5.734568,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c40",
+          "score": 5.661955,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c35",
+          "score": 6.732544,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": 9.014728,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c45",
+          "score": 23.703852,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c28",
+          "score": 5.200187,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c31",
+          "score": 4.144958,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "manager_worker_connectivity",
+      "queries": [
+        "manager worker connectivity login compute TCP",
+        "compute node connect to login manager"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 14.414114,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 7.784076,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c23",
+          "score": 3.090954,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": 6.57409,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": 2.828933,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": 4.424565,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c20",
+          "score": 4.068108,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 3.667657,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "worker_worker_connectivity",
+      "queries": [
+        "worker compute node to node connectivity TCP",
+        "inter-node application network policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 13.541665,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": 4.063288,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": 4.424565,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 4.013838,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 3.892038,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": 3.32577,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 3.667657,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": 3.106493,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "outbound_compute",
+      "queries": [
+        "outbound compute node internet network egress",
+        "compute nodes access external network"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 12.375597,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 12.435207,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": 5.935426,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": 3.700239,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": 3.413696,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c51",
+          "score": 3.507661,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 3.070129,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c21",
+          "score": 3.021126,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "charging_unit",
+      "queries": [
+        "charging unit service unit node hour core hour",
+        "allocation accounting unit"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 5.991314,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": 5.576248,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": 4.248107,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c5",
+          "score": 3.413696,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 3.070129,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c16",
+          "score": 2.586234,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": 2.409041,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c51",
+          "score": 2.318279,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "charging_model",
+      "queries": [
+        "charging accounting service units credits allocation cost",
+        "job charge cores memory node allocation"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": 5.576248,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 5.991314,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c22",
+          "score": 4.248107,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c48",
+          "score": 5.058302,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 3.655208,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c44",
+          "score": 4.330016,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": 3.611259,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c49",
+          "score": 3.969103,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "filesystem_storage_charged",
+      "queries": [
+        "filesystem storage charged allocation quota cost",
+        "storage usage accounting charge"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c8",
+          "score": 7.64818,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c6",
+          "score": 7.794558,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 5.658116,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": 4.063288,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c34",
+          "score": 5.606414,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 2.706259,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": 5.205809,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": 2.112699,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_visible",
+      "queries": [
+        "storage filesystem visible compute nodes",
+        "home scratch work mounted compute nodes",
+        "home storage filesystem compute visibility"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 17.694142,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 9.245725,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": 4.291222,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": 5.26284,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": 5.083726,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": 3.700239,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": 3.172754,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_readable",
+      "queries": [
+        "storage filesystem readable compute nodes",
+        "compute jobs read home scratch work",
+        "home storage filesystem compute readable"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 17.694142,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": 3.95737,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 5.868621,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": 3.700239,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": 3.185926,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": 2.112699,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": 3.172754,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_writable",
+      "queries": [
+        "storage filesystem writable compute nodes",
+        "compute jobs write home scratch work",
+        "home storage filesystem compute writable"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 17.694142,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c47",
+          "score": 3.95737,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 5.868621,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-new-user-connecting-to-crc-html:c6",
+          "score": 3.700239,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": 3.185926,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": 2.112699,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": 3.172754,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_shared_across_compute_nodes",
+      "queries": [
+        "shared filesystem across compute nodes",
+        "same storage mounted all nodes",
+        "mounts three file systems shared across all nodes home work scratch",
+        "home shared storage all compute nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 14.987883,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c43",
+          "score": 7.654177,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c10",
+          "score": 8.054428,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c37",
+          "score": 11.222307,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": 3.995592,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c49",
+          "score": 7.087508,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": 5.481483,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c25",
+          "score": 5.205809,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_backup_policy",
+      "queries": [
+        "storage filesystem backup policy",
+        "home scratch work backed up",
+        "home storage filesystem backup policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 10.667913,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": 4.446776,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": 6.127077,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 6.016747,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": 3.260023,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c26",
+          "score": 2.112699,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": 3.172754,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "purge_after_days",
+      "queries": [
+        "purge retention deletion expiration scratch policy",
+        "scratch files removed after days",
+        "home storage scratch purge retention days"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 37.82211,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c53",
+          "score": 5.049969,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c45",
+          "score": 6.407811,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c27",
+          "score": 4.063288,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c44",
+          "score": 2.968745,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c35",
+          "score": 4.013838,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": 2.965391,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_purge_condition",
+      "queries": [
+        "storage purge condition inactive files",
+        "scratch retention deletion condition",
+        "home storage scratch purge condition"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c58",
+          "score": 8.658478,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c19",
+          "score": 5.185007,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c23",
+          "score": 4.672049,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c7",
+          "score": 5.083726,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c18",
+          "score": 4.039867,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c21",
+          "score": 4.92326,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-resources-condor-html:c47",
+          "score": 2.965391,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-infrastructure-storage-html:c11",
+          "score": 4.891112,
+          "cited": false
+        }
+      ]
+    }
+  ]
+}

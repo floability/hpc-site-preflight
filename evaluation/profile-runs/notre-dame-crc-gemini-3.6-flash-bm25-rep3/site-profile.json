@@ -1,0 +1,470 @@
+{
+  "schema_version": "0.4",
+  "site_id": "notre-dame-crc",
+  "site_name": "Notre Dame CRC",
+  "aliases": [],
+  "profile_state": "partial",
+  "generated_at": "2026-07-29T16:55:28.489404Z",
+  "scheduler_type": "htcondor",
+  "slurm": null,
+  "htcondor": {
+    "version": "23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167",
+    "submit_command": "condor_submit",
+    "collector_host": "condor-central-mgr.crc.nd.edu",
+    "file_transfer_supported": true,
+    "guaranteed_runtime": false,
+    "preemptible": true,
+    "submission_host": "condorfe.crc.nd.edu",
+    "machine_requirements_supported": true,
+    "dynamic_slots_enabled": true,
+    "bulk_submission_supported": true,
+    "completion_email_supported": false,
+    "maximum_walltime": "not_applicable",
+    "submit_attributes": [
+      {
+        "name": "universe",
+        "syntax": [
+          "universe = vanilla"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": "vanilla",
+        "allowed_values": null
+      },
+      {
+        "name": "executable",
+        "syntax": [
+          "executable = /bin/echo"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": "<executable>",
+        "allowed_values": null
+      },
+      {
+        "name": "request_cpus",
+        "syntax": [
+          "request_cpus = 4"
+        ],
+        "required": null,
+        "support": "supported",
+        "condition": "When submitting multi-threaded or multicore SMP Condor jobs",
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "request_memory",
+        "syntax": [
+          "request_memory = {memory_mib}MB"
+        ],
+        "required": null,
+        "support": "unknown",
+        "condition": null,
+        "example": "1024MB",
+        "allowed_values": null
+      },
+      {
+        "name": "request_gpus",
+        "syntax": [
+          "request_gpus = 1"
+        ],
+        "required": null,
+        "support": "supported",
+        "condition": "When running a GPU job",
+        "example": "1",
+        "allowed_values": null
+      },
+      {
+        "name": "should_transfer_files",
+        "syntax": [
+          "should_transfer_files = yes"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": "yes",
+        "allowed_values": [
+          "yes",
+          "no",
+          "if_needed"
+        ]
+      },
+      {
+        "name": "when_to_transfer_output",
+        "syntax": [
+          "when_to_transfer_output = on_exit"
+        ],
+        "required": false,
+        "support": "supported",
+        "condition": null,
+        "example": "on_exit",
+        "allowed_values": [
+          "on_exit",
+          "on_exit_or_evict"
+        ]
+      }
+    ],
+    "unmapped_submit_attributes": [],
+    "pool_totals": {
+      "machine_count": 390,
+      "cpu_cores": 14242,
+      "memory_mib": 96129306,
+      "advertised_gpus": 310
+    },
+    "cpu_groups": [
+      {
+        "cpu_cores_per_machine": 24,
+        "machine_count": 240,
+        "memory_mib_min": 31591,
+        "memory_mib_max": 256715
+      },
+      {
+        "cpu_cores_per_machine": 64,
+        "machine_count": 97,
+        "memory_mib_min": 256859,
+        "memory_mib_max": 2051122
+      },
+      {
+        "cpu_cores_per_machine": 32,
+        "machine_count": 21,
+        "memory_mib_min": 95783,
+        "memory_mib_max": 256869
+      },
+      {
+        "cpu_cores_per_machine": 16,
+        "machine_count": 9,
+        "memory_mib_min": 63916,
+        "memory_mib_max": 95782
+      },
+      {
+        "cpu_cores_per_machine": 128,
+        "machine_count": 6,
+        "memory_mib_min": 514914,
+        "memory_mib_max": 773052
+      },
+      {
+        "cpu_cores_per_machine": 80,
+        "machine_count": 5,
+        "memory_mib_min": 240928,
+        "memory_mib_max": 257056
+      },
+      {
+        "cpu_cores_per_machine": 4,
+        "machine_count": 4,
+        "memory_mib_min": 15719,
+        "memory_mib_max": 31764
+      },
+      {
+        "cpu_cores_per_machine": 48,
+        "machine_count": 4,
+        "memory_mib_min": 63429,
+        "memory_mib_max": 128205
+      },
+      {
+        "cpu_cores_per_machine": 20,
+        "machine_count": 2,
+        "memory_mib_min": 191512,
+        "memory_mib_max": 191526
+      },
+      {
+        "cpu_cores_per_machine": 2,
+        "machine_count": 1,
+        "memory_mib_min": 3655,
+        "memory_mib_max": 3655
+      },
+      {
+        "cpu_cores_per_machine": 40,
+        "machine_count": 1,
+        "memory_mib_min": 257067,
+        "memory_mib_max": 257067
+      }
+    ],
+    "gpu_groups": [
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 24,
+        "machine_count": 25,
+        "memory_mib_min": 128268,
+        "memory_mib_max": 192580
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 32,
+        "machine_count": 21,
+        "memory_mib_min": 95783,
+        "memory_mib_max": 256869
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 64,
+        "machine_count": 8,
+        "memory_mib_min": 256859,
+        "memory_mib_max": 515220
+      },
+      {
+        "gpu_count_per_machine": 1,
+        "cpu_cores_per_machine": 24,
+        "machine_count": 5,
+        "memory_mib_min": 31591,
+        "memory_mib_max": 31591
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 16,
+        "machine_count": 5,
+        "memory_mib_min": 64010,
+        "memory_mib_max": 95780
+      },
+      {
+        "gpu_count_per_machine": 6,
+        "cpu_cores_per_machine": 80,
+        "machine_count": 5,
+        "memory_mib_min": 240928,
+        "memory_mib_max": 257056
+      },
+      {
+        "gpu_count_per_machine": 3,
+        "cpu_cores_per_machine": 24,
+        "machine_count": 4,
+        "memory_mib_min": 128029,
+        "memory_mib_max": 192579
+      },
+      {
+        "gpu_count_per_machine": 3,
+        "cpu_cores_per_machine": 16,
+        "machine_count": 2,
+        "memory_mib_min": 64010,
+        "memory_mib_max": 95782
+      },
+      {
+        "gpu_count_per_machine": 3,
+        "cpu_cores_per_machine": 20,
+        "machine_count": 2,
+        "memory_mib_min": 191512,
+        "memory_mib_max": 191526
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 48,
+        "machine_count": 2,
+        "memory_mib_min": 94777,
+        "memory_mib_max": 94777
+      },
+      {
+        "gpu_count_per_machine": 1,
+        "cpu_cores_per_machine": 4,
+        "machine_count": 1,
+        "memory_mib_min": 15719,
+        "memory_mib_max": 15719
+      },
+      {
+        "gpu_count_per_machine": 6,
+        "cpu_cores_per_machine": 40,
+        "machine_count": 1,
+        "memory_mib_min": 257067,
+        "memory_mib_max": 257067
+      }
+    ]
+  },
+  "storage": [
+    {
+      "id": "home",
+      "name": "Home",
+      "role": "home",
+      "environment_variables": [
+        "HOME"
+      ],
+      "path_pattern": "/users/{username}",
+      "filesystem_type": "nfs",
+      "login_readable": true,
+      "login_writable": true,
+      "compute_visible": true,
+      "compute_readable": true,
+      "compute_writable": true,
+      "shared_across_compute_nodes": null,
+      "backup_policy": null,
+      "purge_after_days": null,
+      "purge_condition": null
+    }
+  ],
+  "network": {
+    "login": {
+      "hostname_patterns": [
+        "*.crc.nd.edu"
+      ],
+      "dns_resolution": null,
+      "outbound_https": null,
+      "local_tcp_bind": null,
+      "local_tcp_loopback": null
+    },
+    "compute": {
+      "hostname_patterns": [],
+      "dns_resolution": null,
+      "outbound_https": null,
+      "local_tcp_bind": null,
+      "local_tcp_loopback": null
+    },
+    "login_compute": {
+      "tcp_connect": true,
+      "verified_ports": [
+        9000,
+        9800,
+        10274,
+        10551,
+        11082,
+        11219,
+        12320,
+        12569
+      ],
+      "suggested_port_range": "9000-12999"
+    },
+    "compute_compute": {
+      "tcp_connect": true,
+      "verified_ports": [
+        9000,
+        9349,
+        10515,
+        10753,
+        11268,
+        11727,
+        12562,
+        12695
+      ],
+      "suggested_port_range": "9000-12999"
+    }
+  },
+  "accounting": {
+    "allocation_required": null,
+    "charging_unit": null,
+    "charging_model": null,
+    "filesystem_storage_charged": true
+  },
+  "section_status": {
+    "scheduler": "measured",
+    "submission": "partial",
+    "resources": "measured",
+    "network": "pilot_validated",
+    "storage": "pilot_validated",
+    "accounting": "documented"
+  },
+  "unresolved": [
+    {
+      "field": "/htcondor/submit_attributes/request_cpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_memory/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_memory/support",
+      "reason": "Login measurements do not establish site support for this option.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/htcondor/submit_attributes/request_gpus/required",
+      "reason": "Login measurements do not establish whether this option is required.",
+      "next_action": "additional_documentation",
+      "action_id": "submission_policy_search"
+    },
+    {
+      "field": "/network/login/dns_resolution",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_dns_resolution"
+    },
+    {
+      "field": "/network/compute/dns_resolution",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_dns_resolution"
+    },
+    {
+      "field": "/network/login/outbound_https",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_outbound_https"
+    },
+    {
+      "field": "/network/compute/outbound_https",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_outbound_https"
+    },
+    {
+      "field": "/network/login/local_tcp_bind",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_local_tcp_bind"
+    },
+    {
+      "field": "/network/compute/local_tcp_bind",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_local_tcp_bind"
+    },
+    {
+      "field": "/network/login/local_tcp_loopback",
+      "reason": "This login-node network fact was not measured.",
+      "next_action": "login_measurement",
+      "action_id": "login_local_tcp_loopback"
+    },
+    {
+      "field": "/network/compute/local_tcp_loopback",
+      "reason": "Compute-node network behavior requires approved evidence.",
+      "next_action": "run_pilot",
+      "action_id": "compute_local_tcp_loopback"
+    },
+    {
+      "field": "/storage/home/shared_across_compute_nodes",
+      "reason": "Login-node access does not establish compute-node access.",
+      "next_action": "run_pilot",
+      "action_id": "home_shared_across_compute_nodes"
+    },
+    {
+      "field": "/storage/home/backup_policy",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/storage/home/purge_after_days",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/storage/home/purge_condition",
+      "reason": "Storage policy requires authoritative documentation.",
+      "next_action": "additional_documentation",
+      "action_id": "storage_policy_search"
+    },
+    {
+      "field": "/accounting/allocation_required",
+      "reason": "Accounting policy cannot be established by login measurement.",
+      "next_action": "additional_documentation",
+      "action_id": "accounting_policy_search"
+    },
+    {
+      "field": "/accounting/charging_unit",
+      "reason": "Accounting policy cannot be established by login measurement.",
+      "next_action": "additional_documentation",
+      "action_id": "accounting_policy_search"
+    },
+    {
+      "field": "/accounting/charging_model",
+      "reason": "Accounting policy cannot be established by login measurement.",
+      "next_action": "additional_documentation",
+      "action_id": "accounting_policy_search"
+    }
+  ],
+  "conflicts": [],
+  "evidence_id": "report-16dd2259-e200-483d-8a33-e40ba21b0aed"
+}
