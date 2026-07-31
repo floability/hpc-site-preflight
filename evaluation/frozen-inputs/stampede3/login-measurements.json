@@ -1,0 +1,213 @@
+{
+  "schema_version": "0.7",
+  "collected_at": "2026-07-29T22:16:26.696685Z",
+  "evidence_source": "measured",
+  "collector_version": "0.7.0",
+  "detected_schedulers": [
+    "slurm"
+  ],
+  "site_facts": {
+    "site_id": "tacc-stampede3",
+    "site_name": "TACC Stampede3",
+    "aliases": [],
+    "hostname": "login1",
+    "fqdn": "login1.stampede3.tacc.utexas.edu",
+    "dns_suffix": "stampede3.tacc.utexas.edu",
+    "hostname_patterns": [
+      "*.stampede3.tacc.utexas.edu"
+    ],
+    "documentation_domains": [
+      "utexas.edu"
+    ],
+    "preferred_path_tokens": [
+      "stampede3"
+    ],
+    "username": "mislam11",
+    "uid": 901533,
+    "groups": [
+      "G-827953"
+    ],
+    "home_directory": "/home1/10724/mislam11",
+    "working_directory": "/home1/10724/mislam11/preflight/hpc-site-preflight",
+    "os_id": "rocky",
+    "os_version": "9.7",
+    "kernel_release": "5.14.0-611.24.1.el9_7.x86_64",
+    "architecture": "x86_64",
+    "cpu_count": 96,
+    "available_memory_bytes": 209708847104
+  },
+  "storage": {
+    "locations": [
+      {
+        "id": "home",
+        "role": "home",
+        "environment_variables": [
+          "HOME"
+        ],
+        "observed_path": "/home1/10724/mislam11",
+        "path_pattern": "/home1/10724/{username}",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwx------",
+        "filesystem_type": "nfs"
+      },
+      {
+        "id": "scratch",
+        "role": "scratch",
+        "environment_variables": [
+          "SCRATCH"
+        ],
+        "observed_path": "/scratch/10724/mislam11",
+        "path_pattern": "/scratch/10724/{username}",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwx------",
+        "filesystem_type": "nfs"
+      },
+      {
+        "id": "work",
+        "role": "work",
+        "environment_variables": [
+          "WORK"
+        ],
+        "observed_path": "/work2/10724/mislam11/stampede3",
+        "path_pattern": "/work2/10724/{username}/stampede3",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwx------",
+        "filesystem_type": "lustre"
+      }
+    ]
+  },
+  "slurm": {
+    "version": "23.11.11",
+    "available_commands": [
+      "sinfo",
+      "sbatch",
+      "squeue",
+      "sacct"
+    ],
+    "submit_command_available": true,
+    "default_partition": "skx-dev",
+    "partitions": [
+      {
+        "name": "skx-dev",
+        "node_count": 72,
+        "memory_mib_per_node": 191000,
+        "cpus_per_node": 48,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": 7200,
+        "node_states": []
+      },
+      {
+        "name": "skx",
+        "node_count": 1160,
+        "memory_mib_per_node": 191000,
+        "cpus_per_node": 48,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "icx",
+        "node_count": 224,
+        "memory_mib_per_node": 256000,
+        "cpus_per_node": 80,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "spr",
+        "node_count": 616,
+        "memory_mib_per_node": 127000,
+        "cpus_per_node": 112,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "nvdimm",
+        "node_count": 3,
+        "memory_mib_per_node": 4000000,
+        "cpus_per_node": 80,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "h100",
+        "node_count": 24,
+        "memory_mib_per_node": 1031000,
+        "cpus_per_node": 96,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "pvc",
+        "node_count": 18,
+        "memory_mib_per_node": 1031000,
+        "cpus_per_node": 96,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "amd-rtx",
+        "node_count": 4,
+        "memory_mib_per_node": 1500000,
+        "cpus_per_node": 128,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      },
+      {
+        "name": "rtx-small",
+        "node_count": 16,
+        "memory_mib_per_node": 370000,
+        "cpus_per_node": 28,
+        "gres": [],
+        "gpu_count_per_node": null,
+        "gpu_models": [],
+        "available": null,
+        "maximum_walltime_seconds": -1,
+        "node_states": []
+      }
+    ],
+    "visible_accounts": [],
+    "visible_qos": []
+  },
+  "htcondor": null,
+  "networking": null
+}

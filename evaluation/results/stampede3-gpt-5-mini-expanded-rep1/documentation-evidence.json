@@ -1,0 +1,2256 @@
+{
+  "site_id": "tacc-stampede3",
+  "model_mode": "live",
+  "model_provider": "openai",
+  "model": "gpt-5-mini",
+  "web_mode": "live",
+  "context_mode": "llm-expanded-bm25",
+  "corpus_fingerprint": "56bc7f6460e3c1ff8c7fea86724dbd38ff04735d6d58c724e5f8a124177d11b9",
+  "findings": [
+    {
+      "allocation_required": true,
+      "note": "Account/project must be part of a Stampede3 allocation; password rejected may indicate missing allocation; and account option exists for multiple projects.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c60:s1",
+          "chunk_id": "doc-hpc-stampede3:c60",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Account Administration > Allocation Status",
+          "quote": "If your password is rejected while attempting to log in, it's possible your account or project has not been added to a Stampede3 allocation."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c60:s2",
+          "chunk_id": "doc-hpc-stampede3:c60",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Account Administration > Allocation Status",
+          "quote": "You can list and manage your allocations via the TACC Portal ."
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "syntax": [
+        "-A <projectid>",
+        "--account=<projectid>"
+      ],
+      "requirement": "conditional",
+      "support": "supported",
+      "condition": "Only necessary for logins associated with multiple projects.",
+      "note": "Charge job to the specified project/allocation number.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s2",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-A | projectid | Charge job to the specified project/allocation number. This option is only necessary for logins associated with multiple projects."
+        }
+      ]
+    },
+    {
+      "name": "array",
+      "syntax": [
+        "-a <tasklist>",
+        "--array=<tasklist>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Stampede3 supports Slurm job arrays.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s3",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-a or --array | = tasklist | Stampede3 supports Slurm job arrays.  See the Slurm documentation on job arrays for more information."
+        }
+      ]
+    },
+    {
+      "name": "dependency",
+      "syntax": [
+        "-d=<afterok:jobid>",
+        "--dependency=afterok:<jobid>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specifies a dependency; this run will start only after specified job successfully finishes.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s4",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-d= | afterok: jobid | Specifies a dependency: this run will start only after the specified job (jobid) successfully finishes"
+        }
+      ]
+    },
+    {
+      "name": "export",
+      "syntax": [
+        "--export=<spec>"
+      ],
+      "requirement": "optional",
+      "support": "discouraged",
+      "condition": null,
+      "note": "Avoid this option on Stampede3; can interfere with environment propagation.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s5",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-export= | N/A | Avoid this option on Stampede3. Using it is rarely necessary and can interfere with the way the system propagates your environment."
+        }
+      ]
+    },
+    {
+      "name": "gres",
+      "syntax": [
+        "--gres=<resource>"
+      ],
+      "requirement": "optional",
+      "support": "unsupported",
+      "condition": null,
+      "note": "Stampede3 does not support this option; Slurm will reject scripts with this directive.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s6",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "--gres | N/A | Stampede3 does not support this option. Slurm will reject any script with this directive."
+        }
+      ]
+    },
+    {
+      "name": "gpus-per-task",
+      "syntax": [
+        "--gpus-per-task=<count>"
+      ],
+      "requirement": "optional",
+      "support": "unsupported",
+      "condition": null,
+      "note": "Stampede3 does not support this option; Slurm will reject scripts with this directive.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s7",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "--gpus-per-task | N/A | Stampede3 does not support this option. Slurm will reject any script with this directive."
+        }
+      ]
+    },
+    {
+      "name": "partition",
+      "syntax": [
+        "-p <queue_name>",
+        "--partition=<queue_name>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Submits to queue (partition) designated by queue_name.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s8",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-p | queue_name | Submits to queue (partition) designated by queue_name"
+        }
+      ]
+    },
+    {
+      "name": "job-name",
+      "syntax": [
+        "-J <job_name>",
+        "--job-name=<job_name>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Job Name.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s9",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-J | job_name | Job Name"
+        }
+      ]
+    },
+    {
+      "name": "nodes",
+      "syntax": [
+        "-N <total_nodes>",
+        "--nodes=<total_nodes>"
+      ],
+      "requirement": "required",
+      "support": "supported",
+      "condition": "Define resources by specifying either (1) -N and -n ; or (2) -N and -ntasks-per-node.",
+      "note": "Required resource specification.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s10",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-N | total_nodes | Required. Define the resources you need by specifying either: (1) -N and -n ; or (2) -N and -ntasks-per-node ."
+        }
+      ]
+    },
+    {
+      "name": "ntasks",
+      "syntax": [
+        "-n <total_tasks>",
+        "--ntasks=<total_tasks>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Total MPI tasks in job.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s11",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-n | total_tasks | This is total MPI tasks in this job. See -N above for a good way to use this option. When using this option in a non-MPI job, it is usually best to set it to the same value as -N ."
+        }
+      ]
+    },
+    {
+      "name": "ntasks-per-node",
+      "syntax": [
+        "-ntasks-per-node <tasks_per_node>",
+        "--ntasks-per-node=<tasks_per_node>",
+        "-tasks-per-node <tasks_per_node>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "MPI tasks per node; recommended 1 for non-MPI jobs.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s12",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-ntasks-per-node or -tasks-per-node | tasks_per_node | This is MPI tasks per node. See -N above for a good way to use this option. When using this option in a non-MPI job, it is usually best to set -ntasks-per-node to 1."
+        }
+      ]
+    },
+    {
+      "name": "mail-type",
+      "syntax": [
+        "--mail-type=<begin|end|fail|all>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specify when user notifications are sent.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s14",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-mail-type= | begin , end , fail , or all | Specify when user notifications are to be sent (one option per line)."
+        }
+      ]
+    },
+    {
+      "name": "mail-user",
+      "syntax": [
+        "--mail-user=<email_address>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Specify email address for notifications.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s15",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-mail-user= | email_address | Specify the email address to use for notifications. Use with the -mail-type= flag above."
+        }
+      ]
+    },
+    {
+      "name": "output",
+      "syntax": [
+        "-o <output_file>",
+        "--output=<output_file>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Direct job stdout.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s16",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-o | output_file | Direct job standard output to output_file (without -e option error goes to this file)"
+        }
+      ]
+    },
+    {
+      "name": "error",
+      "syntax": [
+        "-e <error_file>",
+        "--error=<error_file>"
+      ],
+      "requirement": "optional",
+      "support": "supported",
+      "condition": null,
+      "note": "Direct job stderr.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s17",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-e | error_file | Direct job error output to error_file"
+        }
+      ]
+    },
+    {
+      "name": "mem",
+      "syntax": [
+        "-mem <N>",
+        "--mem=<N>"
+      ],
+      "requirement": "optional",
+      "support": "unsupported",
+      "condition": null,
+      "note": "Not available; scheduler will not accept jobs using this option.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s18",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-mem | N/A | Not available. If you attempt to use this option, the scheduler will not accept your job."
+        }
+      ]
+    },
+    {
+      "name": "h100",
+      "field": "maximum_walltime_seconds",
+      "value": 172800,
+      "note": "48 hrs = 172800 seconds",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s2",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "h100 | H100 | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 4 SUs"
+        }
+      ]
+    },
+    {
+      "name": "h100",
+      "field": "maximum_nodes_per_job",
+      "value": 4,
+      "note": "4 nodes (384 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s2",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "h100 | H100 | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 4 SUs"
+        }
+      ]
+    },
+    {
+      "name": "h100",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing; nodes dedicated to single user",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "h100",
+      "field": "gpu_count_per_node",
+      "value": 4,
+      "note": "4x NVIDIA H100 SXM5 per H100 node",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c25:s2",
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > H100 nodes > Table 5a. H100 Specifications",
+          "quote": "GPU: | 4x NVIDIA H100 SXM5"
+        }
+      ]
+    },
+    {
+      "name": "h100",
+      "field": "gpu_models",
+      "value": [
+        "NVIDIA H100 SXM5"
+      ],
+      "note": "H100 nodes have NVIDIA H100 SXM5",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c25:s2",
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > H100 nodes > Table 5a. H100 Specifications",
+          "quote": "GPU: | 4x NVIDIA H100 SXM5"
+        }
+      ]
+    },
+    {
+      "name": "h100",
+      "field": "features",
+      "value": [
+        "H100",
+        "Mellanox InfiniBand NDR direct-GPU"
+      ],
+      "note": "Queue name and additional fabric direct-GPU",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s2",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "h100 | H100 | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 4 SUs"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c25:s12",
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > H100 nodes > Table 5a. H100 Specifications",
+          "quote": "Additional Fabric: | Mellanox InfiniBand NDR (split ports 200Gb/s) direct-GPU"
+        }
+      ]
+    },
+    {
+      "name": "pvc",
+      "field": "maximum_walltime_seconds",
+      "value": 172800,
+      "note": "48 hrs",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s5",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "pvc | PVC | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 3 SUs"
+        }
+      ]
+    },
+    {
+      "name": "pvc",
+      "field": "maximum_nodes_per_job",
+      "value": 4,
+      "note": "4 nodes (384 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s5",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "pvc | PVC | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 3 SUs"
+        }
+      ]
+    },
+    {
+      "name": "pvc",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "pvc",
+      "field": "gpu_count_per_node",
+      "value": 4,
+      "note": "4x Intel Data Center GPU Max 1550s per PVC node",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c28:s2",
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes > Table 5b. PVC Specifications",
+          "quote": "GPU: | 4x Intel Data Center GPU Max 1550s (\"Ponte Vecchio\")"
+        }
+      ]
+    },
+    {
+      "name": "pvc",
+      "field": "gpu_models",
+      "value": [
+        "Intel Data Center GPU Max 1550"
+      ],
+      "note": "Ponte Vecchio compute nodes have Intel Max 1550",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c28:s2",
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes > Table 5b. PVC Specifications",
+          "quote": "GPU: | 4x Intel Data Center GPU Max 1550s (\"Ponte Vecchio\")"
+        }
+      ]
+    },
+    {
+      "name": "icx",
+      "field": "maximum_walltime_seconds",
+      "value": 172800,
+      "note": "48 hrs",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s3",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "icx | ICX | 32 nodes (2560 cores) | 48 hrs | 48 | 12 | 20 | 1.5 SUs"
+        }
+      ]
+    },
+    {
+      "name": "icx",
+      "field": "maximum_nodes_per_job",
+      "value": 32,
+      "note": "32 nodes (2560 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s3",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "icx | ICX | 32 nodes (2560 cores) | 48 hrs | 48 | 12 | 20 | 1.5 SUs"
+        }
+      ]
+    },
+    {
+      "name": "icx",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "icx",
+      "field": "features",
+      "value": [
+        "ICX",
+        "NVDIMM (on nvdimm partition)"
+      ],
+      "note": "ICX partition; large memory nodes with NVDIMM exist",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s3",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "icx | ICX | 32 nodes (2560 cores) | 48 hrs | 48 | 12 | 20 | 1.5 SUs"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c16:s7",
+          "chunk_id": "doc-hpc-stampede3:c16",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Ice Lake Large Memory Nodes > Table 1. ICX NVDIMM Specifications",
+          "quote": "RAM: | 4TB NVDIMM"
+        }
+      ]
+    },
+    {
+      "name": "nvdimm",
+      "field": "maximum_walltime_seconds",
+      "value": 172800,
+      "note": "48 hrs",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s4",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "nvdimm | ICX | 1 node (80 cores) | 48 hrs | 1 | 2 | 4 | 4 SUs"
+        }
+      ]
+    },
+    {
+      "name": "nvdimm",
+      "field": "maximum_nodes_per_job",
+      "value": 1,
+      "note": "1 node (80 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s4",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "nvdimm | ICX | 1 node (80 cores) | 48 hrs | 1 | 2 | 4 | 4 SUs"
+        }
+      ]
+    },
+    {
+      "name": "nvdimm",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "nvdimm",
+      "field": "features",
+      "value": [
+        "ICX",
+        "NVDIMM"
+      ],
+      "note": "Large memory nodes",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s4",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "nvdimm | ICX | 1 node (80 cores) | 48 hrs | 1 | 2 | 4 | 4 SUs"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c16:s7",
+          "chunk_id": "doc-hpc-stampede3:c16",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Ice Lake Large Memory Nodes > Table 1. ICX NVDIMM Specifications",
+          "quote": "RAM: | 4TB NVDIMM"
+        }
+      ]
+    },
+    {
+      "name": "skx",
+      "field": "maximum_walltime_seconds",
+      "value": 172800,
+      "note": "48 hrs",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s6",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "skx | SKX | 256 nodes (12288 cores) | 48 hrs | 256 | 40 | 60 | 1 SU"
+        }
+      ]
+    },
+    {
+      "name": "skx",
+      "field": "maximum_nodes_per_job",
+      "value": 256,
+      "note": "256 nodes (12288 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s6",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "skx | SKX | 256 nodes (12288 cores) | 48 hrs | 256 | 40 | 60 | 1 SU"
+        }
+      ]
+    },
+    {
+      "name": "skx",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "skx",
+      "field": "features",
+      "value": [
+        "SKX"
+      ],
+      "note": "Skylake partition",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s6",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "skx | SKX | 256 nodes (12288 cores) | 48 hrs | 256 | 40 | 60 | 1 SU"
+        }
+      ]
+    },
+    {
+      "name": "skx-dev",
+      "field": "maximum_walltime_seconds",
+      "value": 7200,
+      "note": "2 hrs = 7200 seconds",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s7",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "skx-dev | SKX | 16 nodes (768 cores) | 2 hrs | 16 | 2 | 4 | 1 SU"
+        }
+      ]
+    },
+    {
+      "name": "skx-dev",
+      "field": "maximum_nodes_per_job",
+      "value": 16,
+      "note": "16 nodes (768 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s7",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "skx-dev | SKX | 16 nodes (768 cores) | 2 hrs | 16 | 2 | 4 | 1 SU"
+        }
+      ]
+    },
+    {
+      "name": "skx-dev",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "skx-dev",
+      "field": "features",
+      "value": [
+        "SKX-dev"
+      ],
+      "note": "Development partition",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s7",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "skx-dev | SKX | 16 nodes (768 cores) | 2 hrs | 16 | 2 | 4 | 1 SU"
+        }
+      ]
+    },
+    {
+      "name": "spr",
+      "field": "maximum_walltime_seconds",
+      "value": 172800,
+      "note": "48 hrs",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s8",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "spr | SPR | 32 nodes (3584 cores) | 48 hrs | 40 | 24 | 36 | 2 SUs"
+        }
+      ]
+    },
+    {
+      "name": "spr",
+      "field": "maximum_nodes_per_job",
+      "value": 32,
+      "note": "32 nodes (3584 cores)",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s8",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "spr | SPR | 32 nodes (3584 cores) | 48 hrs | 40 | 24 | 36 | 2 SUs"
+        }
+      ]
+    },
+    {
+      "name": "spr",
+      "field": "shared_nodes",
+      "value": false,
+      "note": "TACC does not implement node-sharing",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c132:s1",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "TACC does not implement node-sharing on any compute resource."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c132:s2",
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Each Stampede3 compute node can be assigned to only one user at a time; hence a complete node is dedicated to a user's job and accrues wall-clock time for all the node's cores/GPUs whether or not all cores/GPUs are used."
+        }
+      ]
+    },
+    {
+      "name": "spr",
+      "field": "features",
+      "value": [
+        "SPR",
+        "HBM"
+      ],
+      "note": "Sapphire Rapids partition with HBM2e",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c129:s8",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "spr | SPR | 32 nodes (3584 cores) | 48 hrs | 40 | 24 | 36 | 2 SUs"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c20:s7",
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Sapphire Rapids Compute Nodes > Table 3. SPR Specifications",
+          "quote": "Memory: | 128 GB HBM 2e"
+        }
+      ]
+    },
+    {
+      "name": "time",
+      "syntax": [
+        "-t",
+        "hh:mm:ss"
+      ],
+      "requirement": "required",
+      "support": "supported",
+      "condition": null,
+      "note": "Wall clock time for job; marked Required in Common sbatch Options table.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c147:s13",
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Submitting Batch Jobs with sbatch > Table 9. Common sbatch Options",
+          "quote": "-t | hh:mm:ss | Required. Wall clock time for job."
+        }
+      ]
+    },
+    {
+      "name": "pvc",
+      "field": "features",
+      "value": [
+        "4x Intel Data Center GPU Max 1550s (Ponte Vecchio)",
+        "124 GB per GPU memory",
+        "1TB DDR5 main memory",
+        "3.5 TB /tmp local storage"
+      ],
+      "note": "Features extracted from the PVC specifications table.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c28:s2",
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes > Table 5b. PVC Specifications",
+          "quote": "GPU: | 4x Intel Data Center GPU Max 1550s (\"Ponte Vecchio\")"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c28:s4",
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes > Table 5b. PVC Specifications",
+          "quote": "CPU: | Intel Xeon Platinum 8480 (\"Sapphire Rapids\")"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c28:s9",
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes > Table 5b. PVC Specifications",
+          "quote": "Memory: | 1TB DDR5"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c28:s11",
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > GPU Nodes > Ponte Vecchio Compute Nodes > Table 5b. PVC Specifications",
+          "quote": "Local storage: | 3.5 TB /tmp partition"
+        }
+      ]
+    },
+    {
+      "name": "manager_worker",
+      "available": true,
+      "note": "Users can ssh from a login node to a compute node they own to open a new interactive session (compute node owner may 'connect via ssh').",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c184:s1",
+          "chunk_id": "doc-hpc-stampede3:c184",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Launching Applications > Interactive Sessions > Interactive Sessions using ssh",
+          "quote": "If you have a batch job or interactive session running on a compute node, you \"own the node\": you can connect via ssh to open a new interactive session on that node."
+        }
+      ]
+    },
+    {
+      "name": "worker_worker",
+      "available": true,
+      "note": "The ICX and SKX nodes are fully connected; the SPR and PVC nodes are fully connected with a fat tree topology and no oversubscription.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c30:s3",
+          "chunk_id": "doc-hpc-stampede3:c30",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Network",
+          "quote": "The ICX and SKX nodes are fully connected."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c30:s4",
+          "chunk_id": "doc-hpc-stampede3:c30",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Network",
+          "quote": "The SPR and PVC nodes are fully connected with a fat tree topology with no oversubscription."
+        }
+      ]
+    },
+    {
+      "name": "charging_unit",
+      "value": "One unadjusted Service Unit (SU) = one compute node used for one hour (node-hour)",
+      "note": "Definition of SU as node-hour.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c130:s1",
+          "chunk_id": "doc-hpc-stampede3:c130",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "Like all TACC systems, Stampede3's accounting and allocation system is based on node-hours: one unadjusted Service Unit (SU) represents a single compute node used for one hour (a node-hour)."
+        }
+      ]
+    },
+    {
+      "charging_model": "SUs billed = (# nodes) \u00d7 max(job duration in wall clock hours, 0.25) \u00d7 (charge rate per node-hour). Charge rates vary by queue and may include additional charges or discounts for specialized queues.",
+      "note": "Billing formula and note that queue charge rates determine per-node-hour charge.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c133:s1",
+          "chunk_id": "doc-hpc-stampede3:c133",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting > TACC Charging Policy",
+          "quote": "Stampede3 SUs billed = (# nodes) x max(job duration in wall clock hours,.25) x (charge rate per node-hour)"
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c130:s2",
+          "chunk_id": "doc-hpc-stampede3:c130",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Job Accounting",
+          "quote": "For any given job, the total cost in SUs is the use of one compute node for one hour of wall clock time plus any charges or discounts for the use of specialized queues, e.g."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c129:s2",
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > Running Jobs > Table 8. Production Queues",
+          "quote": "h100 | H100 | 4 nodes (384 cores) | 48 hrs | 4 | 2 | 4 | 4 SUs"
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "field": "backup_policy",
+      "value": "Backed up regularly.",
+      "note": "Table indicates $HOME is backed up regularly.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s2",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$HOME | 15 GB, 300,000 files | Not intended for parallel or high\u2212intensity file operations. Backed up regularly."
+        }
+      ]
+    },
+    {
+      "name": "work",
+      "field": "backup_policy",
+      "value": "Not backed up.",
+      "note": "Table indicates $WORK is not backed up.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s3",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$WORK | 1 TB, 3,000,000 files across all TACC systems Not intended for parallel or high\u2212intensity file operations. See Stockyard system description for more information. | Not backed up."
+        }
+      ]
+    },
+    {
+      "name": "scratch",
+      "field": "backup_policy",
+      "value": "Not backed up.",
+      "note": "Table indicates $SCRATCH is not backed up.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s4",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$SCRATCH | no quota Overall capacity ~10 PB. | Not backed up. Files are subject to purge if access time* is more than 10 days old. See TACC's Scratch File System Purge Policy below."
+        }
+      ]
+    },
+    {
+      "name": "scratch",
+      "field": "purge_after_days",
+      "value": 10,
+      "note": "Files not accessed in ten days are subject to purge.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c37:s2",
+          "chunk_id": "doc-hpc-stampede3:c37",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Scratch File System Purge Policy",
+          "quote": "Files that have not been accessed* in ten days are subject to purge."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c33:s4",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$SCRATCH | no quota Overall capacity ~10 PB. | Not backed up. Files are subject to purge if access time* is more than 10 days old. See TACC's Scratch File System Purge Policy below."
+        }
+      ]
+    },
+    {
+      "name": "scratch",
+      "field": "purge_condition",
+      "value": "Files that have not been accessed in ten days are subject to purge.",
+      "note": "Scratch purge policy based on access time.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c37:s2",
+          "chunk_id": "doc-hpc-stampede3:c37",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > Scratch File System Purge Policy",
+          "quote": "Files that have not been accessed* in ten days are subject to purge."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c33:s4",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$SCRATCH | no quota Overall capacity ~10 PB. | Not backed up. Files are subject to purge if access time* is more than 10 days old. See TACC's Scratch File System Purge Policy below."
+        }
+      ]
+    },
+    {
+      "name": "filesystem_storage_charged",
+      "value": true,
+      "note": "Table lists quotas and backup status; scratch indicates purge policy implying charged/managed storage.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s4",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$SCRATCH | no quota Overall capacity ~10 PB. | Not backed up. Files are subject to purge if access time* is more than 10 days old. See TACC's Scratch File System Purge Policy below."
+        },
+        {
+          "span_id": "doc-hpc-stampede3:c33:s2",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$HOME | 15 GB, 300,000 files | Not intended for parallel or high\u2212intensity file operations. Backed up regularly."
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "field": "compute_readable",
+      "value": true,
+      "note": "Availability implies read access from nodes.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c32:s6",
+          "chunk_id": "doc-hpc-stampede3:c32",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems",
+          "quote": "All three file systems, $HOME , $SCRATCH , and $WORK are available from all Stampede3 nodes."
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "field": "compute_writable",
+      "value": false,
+      "note": "$HOME not intended for parallel or high-intensity file operations; no explicit writable statement; defaulting to not writable is not supported\u2014this is uncertain.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s2",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$HOME | 15 GB, 300,000 files | Not intended for parallel or high\u2212intensity file operations. Backed up regularly."
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "field": "purge_after_days",
+      "value": 0,
+      "note": "No purge for $HOME stated; set to 0 to indicate not purged.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s2",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$HOME | 15 GB, 300,000 files | Not intended for parallel or high\u2212intensity file operations. Backed up regularly."
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "field": "purge_condition",
+      "value": "Not subject to SCRATCH purge; no purge conditions stated",
+      "note": "$HOME entry does not mention purge.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s2",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$HOME | 15 GB, 300,000 files | Not intended for parallel or high\u2212intensity file operations. Backed up regularly."
+        }
+      ]
+    },
+    {
+      "name": "work",
+      "field": "compute_writable",
+      "value": true,
+      "note": "$WORK has quota and is for storage; implied writable.",
+      "citations": [
+        {
+          "span_id": "doc-hpc-stampede3:c33:s3",
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "url": "https://docs.tacc.utexas.edu/hpc/stampede3/",
+          "title": "Stampede3 - TACC HPC Documentation",
+          "heading": "Stampede3 - TACC HPC Documentation > Stampede3 User Guide > System Architecture > File Systems > Table 6. File Systems",
+          "quote": "$WORK | 1 TB, 3,000,000 files across all TACC systems Not intended for parallel or high\u2212intensity file operations. See Stockyard system description for more information. | Not backed up."
+        }
+      ]
+    }
+  ],
+  "rejected": [
+    "submission_options/time: evidence was not retrieved for this field: doc-hpc-stampede3:c267:s1",
+    "partitions/pvc/features: unknown evidence span doc-hpc-stampede3:c28:s12",
+    "network/outbound_compute: false requires explicit negative documentation, not documentation silence",
+    "storage/$HOME/compute_visible: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s6, doc-hpc-stampede3:c114:s1",
+    "storage/$HOME/compute_readable: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1",
+    "storage/$HOME/compute_writable: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1",
+    "storage/$HOME/shared_across_compute_nodes: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1, doc-hpc-stampede3:c32:s6",
+    "storage/$WORK/compute_visible: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s6",
+    "storage/$WORK/compute_readable: evidence was not retrieved for this field: doc-hpc-stampede3:c117:s1",
+    "storage/$WORK/compute_writable: evidence was not retrieved for this field: doc-hpc-stampede3:c117:s1",
+    "storage/$WORK/shared_across_compute_nodes: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1, doc-hpc-stampede3:c32:s6",
+    "storage/$SCRATCH/compute_visible: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s6, doc-hpc-stampede3:c32:s1",
+    "storage/$SCRATCH/compute_readable: evidence was not retrieved for this field: doc-hpc-stampede3:c275:s2, doc-hpc-stampede3:c275:s3",
+    "storage/$SCRATCH/compute_writable: evidence was not retrieved for this field: doc-hpc-stampede3:c275:s2, doc-hpc-stampede3:c275:s3",
+    "storage/$SCRATCH/shared_across_compute_nodes: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1, doc-hpc-stampede3:c32:s6",
+    "after correction: storage/$HOME/compute_visible: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s6",
+    "after correction: storage/$HOME/shared_across_compute_nodes: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1",
+    "after correction: storage/$WORK/compute_visible: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s5",
+    "after correction: storage/$WORK/compute_readable: evidence was not retrieved for this field: doc-hpc-stampede3:c117:s1",
+    "after correction: storage/$WORK/shared_across_compute_nodes: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s6, doc-hpc-stampede3:c114:s1",
+    "after correction: storage/$SCRATCH/compute_visible: evidence was not retrieved for this field: doc-hpc-stampede3:c32:s6",
+    "after correction: storage/$SCRATCH/compute_readable: evidence was not retrieved for this field: doc-hpc-stampede3:c275:s2, doc-hpc-stampede3:c275:s3",
+    "after correction: storage/$SCRATCH/compute_writable: evidence was not retrieved for this field: doc-hpc-stampede3:c275:s2, doc-hpc-stampede3:c275:s3",
+    "after correction: storage/$SCRATCH/shared_across_compute_nodes: evidence was not retrieved for this field: doc-hpc-stampede3:c114:s1, doc-hpc-stampede3:c32:s6"
+  ],
+  "unresolved": [
+    "outbound_compute",
+    "storage_compute_visible",
+    "storage_shared_across_compute_nodes"
+  ],
+  "selected_chunk_ids": [
+    "doc-hpc-stampede3:c147",
+    "doc-hpc-stampede3:c309",
+    "doc-hpc-stampede3:c25",
+    "doc-hpc-stampede3:c28",
+    "doc-hpc-stampede3:c266",
+    "doc-hpc-stampede3:c143",
+    "doc-hpc-stampede3:c129",
+    "doc-hpc-stampede3:c33",
+    "doc-hpc-stampede3:c20",
+    "doc-hpc-stampede3:c179",
+    "doc-hpc-stampede3:c16",
+    "doc-hpc-stampede3:c132",
+    "doc-hpc-stampede3:c60",
+    "doc-hpc-stampede3:c353",
+    "doc-hpc-stampede3:c311",
+    "doc-hpc-stampede3:c299",
+    "doc-hpc-stampede3:c23",
+    "doc-hpc-stampede3:c195",
+    "doc-hpc-stampede3:c134",
+    "doc-hpc-stampede3:c267",
+    "doc-hpc-stampede3:c18",
+    "doc-hpc-stampede3:c22",
+    "doc-hpc-stampede3:c126",
+    "doc-hpc-stampede3:c184",
+    "doc-hpc-stampede3:c30",
+    "doc-hpc-stampede3:c103",
+    "doc-hpc-stampede3:c135",
+    "doc-hpc-stampede3:c39",
+    "doc-hpc-stampede3:c31",
+    "doc-hpc-stampede3:c130",
+    "doc-hpc-stampede3:c133",
+    "doc-hpc-stampede3:c124",
+    "doc-hpc-stampede3:c11",
+    "doc-hpc-stampede3:c37",
+    "doc-hpc-stampede3:c36",
+    "doc-hpc-stampede3:c136",
+    "doc-hpc-stampede3:c117",
+    "doc-hpc-stampede3:c32",
+    "doc-hpc-stampede3:c275",
+    "doc-hpc-stampede3:c114"
+  ],
+  "retrieval": [
+    {
+      "field": "allocation_required",
+      "queries": [
+        "allocation project access required job submission",
+        "job submission authorization requirements",
+        "Slurm allocation account project required job submission",
+        "job submission requires allocation account",
+        "TACC Stampede3 allocation requirement Slurm submit job account needed",
+        "Stampede3 project allocation policy for job submission Slurm account requirement"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 24.980285,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c266",
+          "score": 8.771938,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c309",
+          "score": 11.843649,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c60",
+          "score": 7.000855,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c311",
+          "score": 12.201541,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c195",
+          "score": 11.192712,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "required_submission_options",
+      "queries": [
+        "required scheduler submission directives job file",
+        "mandatory job submission fields options",
+        "required sbatch submission options account partition",
+        "job script account partition time nodes memory",
+        "mandatory SBATCH fields",
+        "must at minimum specify",
+        "account -A --account allocation account",
+        "partition -p showpartitions",
+        "site-specific mandatory SBATCH directives licenses constraint reservation",
+        "additional required #SBATCH options",
+        "common sbatch options unsupported not available avoid",
+        "gres gpus-per-task mem export array dependency mail-type",
+        "Stampede3 mandatory sbatch directives required for submission (e.g., --account, --partition, --time) Slurm policy",
+        "TACC Slurm sbatch options users must include site required fields examples --gres --mail-type --nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 26.81678,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c143",
+          "score": 8.912299,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c179",
+          "score": 8.183019,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 17.828854,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c299",
+          "score": 4.357232,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c134",
+          "score": 5.742875,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "maximum_walltime_seconds",
+      "queries": [
+        "partition maximum walltime time limit",
+        "queue maximum job duration",
+        "amd-rtx h100 icx nvdimm pvc rtx-small skx skx-dev spr partition queue maximum walltime",
+        "Stampede3 partition walltime limits Slurm amd-rtx h100 icx nvdimm pvc rtx-small skx spr",
+        "Maximum job duration per partition on Stampede3 Slurm walltime caps per queue"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c309",
+          "score": 16.413358,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 17.720719,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c16",
+          "score": 23.453182,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 19.264346,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 27.273008,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c267",
+          "score": 9.507957,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "maximum_nodes_per_job",
+      "queries": [
+        "partition queue maximum nodes per job",
+        "job size limit nodes",
+        "amd-rtx h100 icx nvdimm pvc rtx-small skx skx-dev spr partition queue maximum nodes per job",
+        "Stampede3 maximum nodes per job partition limits Slurm amd-rtx h100 icx nvdimm pvc rtx-small skx spr",
+        "Slurm max nodes per job Stampede3 partition job size limits"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 22.733124,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c309",
+          "score": 20.69057,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 80.979782,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c16",
+          "score": 35.380841,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 27.086655,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 19.340628,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "shared_nodes",
+      "queries": [
+        "partition shared nodes whole node",
+        "node sharing policy",
+        "node-sharing complete node dedicated one user",
+        "all GPU nodes are shared shared queues node-exclusive",
+        "amd-rtx h100 icx nvdimm pvc rtx-small skx skx-dev spr partition queue node sharing",
+        "Stampede3 node-sharing policy Slurm are compute nodes shared or exclusive amd-rtx h100 icx",
+        "Stampede3 GPU node sharing vs node-exclusive policy Slurm shared nodes allowed"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 15.805337,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 7.829076,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c132",
+          "score": 19.407378,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 21.919401,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 70.211718,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c18",
+          "score": 20.398467,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "gpu_count_per_node",
+      "queries": [
+        "GPU count per node partition queue",
+        "GPUs per compute node specifications",
+        "each GPU node has GPUs",
+        "amd-rtx h100 icx nvdimm pvc rtx-small skx skx-dev spr partition queue GPUs per node",
+        "Stampede3 GPUs per node amd-rtx h100 icx nvdimm pvc rtx-small skx GPUs per compute node",
+        "Number of GPUs installed per Stampede3 node by partition and model"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 33.205387,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 29.274779,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 16.667767,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 77.990273,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c16",
+          "score": 30.013197,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 37.134047,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "gpu_models",
+      "queries": [
+        "GPU model partition queue specifications",
+        "NVIDIA AMD Intel GPU node type",
+        "amd-rtx h100 icx nvdimm pvc rtx-small skx skx-dev spr partition queue GPU model",
+        "Stampede3 GPU models available H100 RTX AMD per partition mapping",
+        "List of GPU accelerators on Stampede3 nodes (H100, RTX, AMD) partition types"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 27.963658,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 32.266877,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 64.78388,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 15.44362,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c23",
+          "score": 24.107412,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 21.261554,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "features",
+      "queries": [
+        "partition node features architecture",
+        "queue node type hardware features",
+        "amd-rtx h100 icx nvdimm pvc rtx-small skx skx-dev spr partition queue node features",
+        "Stampede3 node features and architectures icx skx spr nvdimm pvc descriptions",
+        "Hardware features per Stampede3 partition CPU types, memory, NVDIMM, persistent memory, GPUs"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 17.085008,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 18.339349,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c16",
+          "score": 27.835552,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c353",
+          "score": 14.720188,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 40.561256,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 16.988078,
+          "cited": true
+        }
+      ]
+    },
+    {
+      "field": "manager_worker_connectivity",
+      "queries": [
+        "manager worker connectivity login compute TCP",
+        "compute node connect to login manager"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c126",
+          "score": 7.67251,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c184",
+          "score": 12.832724,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c103",
+          "score": 6.933272,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 12.805544,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c39",
+          "score": 6.531501,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 12.642045,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "worker_worker_connectivity",
+      "queries": [
+        "worker compute node to node connectivity TCP",
+        "inter-node application network policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 12.805544,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c30",
+          "score": 10.636444,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 12.642045,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c135",
+          "score": 9.643064,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c18",
+          "score": 12.532054,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c31",
+          "score": 8.095469,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "outbound_compute",
+      "queries": [
+        "outbound compute node internet network egress",
+        "compute nodes access external network"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 11.382961,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 10.299551,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 11.237501,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c18",
+          "score": 9.479365,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c31",
+          "score": 8.095469,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c30",
+          "score": 8.963406,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "charging_unit",
+      "queries": [
+        "charging unit service unit node hour core hour",
+        "allocation accounting unit"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c130",
+          "score": 16.192598,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c309",
+          "score": 7.345251,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 14.2043,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 5.270412,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 14.153322,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c136",
+          "score": 4.647495,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "charging_model",
+      "queries": [
+        "charging accounting service units credits allocation cost",
+        "job charge cores memory node allocation"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c130",
+          "score": 12.541867,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 27.110012,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c126",
+          "score": 12.495178,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 20.945724,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c136",
+          "score": 10.132374,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 20.884605,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "filesystem_storage_charged",
+      "queries": [
+        "filesystem storage charged allocation quota cost",
+        "storage usage accounting charge"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 13.262616,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c133",
+          "score": 9.387224,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c11",
+          "score": 8.777212,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c129",
+          "score": 8.975643,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 8.554094,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 8.521623,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_visible",
+      "queries": [
+        "storage filesystem visible compute nodes",
+        "home scratch work mounted compute nodes",
+        "home scratch work storage filesystem compute visibility"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 18.805214,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 25.941723,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 22.853921,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 18.20589,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c117",
+          "score": 17.287814,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 14.483345,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_readable",
+      "queries": [
+        "storage filesystem readable compute nodes",
+        "compute jobs read home scratch work",
+        "home scratch work storage filesystem compute readable"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 18.805214,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 25.941723,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 22.853921,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 18.20589,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c32",
+          "score": 12.934136,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 14.483345,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_compute_writable",
+      "queries": [
+        "storage filesystem writable compute nodes",
+        "compute jobs write home scratch work",
+        "home scratch work storage filesystem compute writable"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 18.805214,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 25.941723,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 22.853921,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 18.20589,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c32",
+          "score": 12.934136,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c22",
+          "score": 14.483345,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_shared_across_compute_nodes",
+      "queries": [
+        "shared filesystem across compute nodes",
+        "same storage mounted all nodes",
+        "mounts three file systems shared across all nodes home work scratch",
+        "home scratch work shared storage all compute nodes"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c103",
+          "score": 12.463464,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 12.741296,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 49.649059,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 25.941723,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c28",
+          "score": 10.299551,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c147",
+          "score": 12.081919,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_backup_policy",
+      "queries": [
+        "storage filesystem backup policy",
+        "home scratch work backed up",
+        "home scratch work storage filesystem backup policy"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c25",
+          "score": 8.554094,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 49.854146,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 25.941723,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c20",
+          "score": 8.521623,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c32",
+          "score": 12.934136,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c114",
+          "score": 11.599085,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "purge_after_days",
+      "queries": [
+        "purge retention deletion expiration scratch policy",
+        "scratch files removed after days",
+        "home scratch work storage scratch purge retention days"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 26.277105,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 13.62394,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c37",
+          "score": 19.167587,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c36",
+          "score": 15.075117,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c275",
+          "score": 8.188788,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c32",
+          "score": 12.934136,
+          "cited": false
+        }
+      ]
+    },
+    {
+      "field": "storage_purge_condition",
+      "queries": [
+        "storage purge condition inactive files",
+        "scratch retention deletion condition",
+        "home scratch work storage scratch purge condition"
+      ],
+      "hits": [
+        {
+          "chunk_id": "doc-hpc-stampede3:c33",
+          "score": 17.009215,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c309",
+          "score": 11.829472,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c124",
+          "score": 25.941723,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c37",
+          "score": 12.36781,
+          "cited": true
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c275",
+          "score": 5.195198,
+          "cited": false
+        },
+        {
+          "chunk_id": "doc-hpc-stampede3:c32",
+          "score": 12.934136,
+          "cited": false
+        }
+      ]
+    }
+  ]
+}

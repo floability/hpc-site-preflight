@@ -1,0 +1,961 @@
+{
+  "artifacts": [
+    {
+      "kind": "performance_report",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap-runs/29711f00-2022-474e-84e0-56fd38df0cba/performance.json"
+    },
+    {
+      "kind": "execution_trace",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap-runs/29711f00-2022-474e-84e0-56fd38df0cba/trace.jsonl"
+    },
+    {
+      "kind": "documentation_corpus",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/corpus/manifest.json"
+    },
+    {
+      "kind": "documentation_corpus",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/corpus/documents.jsonl"
+    },
+    {
+      "kind": "documentation_corpus",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/corpus/chunks.jsonl"
+    },
+    {
+      "kind": "site_profile",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/site-profile.json"
+    },
+    {
+      "kind": "evidence_report",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/evidence-report-29711f00-2022-474e-84e0-56fd38df0cba.json"
+    },
+    {
+      "kind": "documentation_evidence",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/documentation-evidence.json"
+    },
+    {
+      "kind": "pilot_evidence",
+      "path": "evaluation/frozen-inputs/stampede3/bootstrap/pilot-evidence.json"
+    }
+  ],
+  "command": "profile build",
+  "duration_seconds": 91.8934231250023,
+  "ended_at": "2026-07-30T22:37:17.576376Z",
+  "error_message": null,
+  "error_type": null,
+  "mode": "site=simulate, model=live, web=live",
+  "model_usage": {
+    "input_tokens": 56282,
+    "output_tokens": 5094,
+    "requests": 6,
+    "total_tokens": 61376,
+    "usage_available": true
+  },
+  "retries": 0,
+  "run_id": "29711f00-2022-474e-84e0-56fd38df0cba",
+  "schema_version": "0.1",
+  "started_at": "2026-07-30T22:35:45.682708Z",
+  "status": "completed",
+  "steps": [
+    {
+      "duration_seconds": 0.0001449170013074763,
+      "ended_at": "2026-07-30T22:35:45.683431Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_load",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:45.683285Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00016916700406000018,
+      "ended_at": "2026-07-30T22:35:45.683959Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_measurement_validate",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:45.683791Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0023472920001950115,
+      "ended_at": "2026-07-30T22:35:45.687046Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "measurement_profile_build",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:45.684689Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0002124579987139441,
+      "ended_at": "2026-07-30T22:35:45.741364Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_identity",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:45.741136Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 1.3546954999983427,
+      "ended_at": "2026-07-30T22:35:47.096975Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:45.742273Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.1259906250052154,
+      "ended_at": "2026-07-30T22:35:50.224897Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:47.098902Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.2414140830005636,
+      "ended_at": "2026-07-30T22:35:51.468895Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:50.227443Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 2.479961083001399,
+      "ended_at": "2026-07-30T22:35:53.950527Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:51.470535Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 2.5028447920049075,
+      "ended_at": "2026-07-30T22:35:56.455691Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:53.952816Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.2665504579999833,
+      "ended_at": "2026-07-30T22:35:57.724618Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:56.458045Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.356239374996221,
+      "ended_at": "2026-07-30T22:36:01.082757Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:35:57.726499Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 2.549495041996124,
+      "ended_at": "2026-07-30T22:36:03.635876Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:01.086336Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.5714721670010476,
+      "ended_at": "2026-07-30T22:36:07.210140Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:03.638732Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 2.6102487499956624,
+      "ended_at": "2026-07-30T22:36:09.823838Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:07.213541Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.8142187499979627,
+      "ended_at": "2026-07-30T22:36:13.640972Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:09.826722Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.6867508750001434,
+      "ended_at": "2026-07-30T22:36:17.331159Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:13.644359Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.0903604160048417,
+      "ended_at": "2026-07-30T22:36:20.423895Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:17.333498Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.6434404159954283,
+      "ended_at": "2026-07-30T22:36:24.070208Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:20.426742Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.568572750002204,
+      "ended_at": "2026-07-30T22:36:25.642833Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:24.074233Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.552703790999658,
+      "ended_at": "2026-07-30T22:36:27.197154Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:25.644422Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.5215494579970255,
+      "ended_at": "2026-07-30T22:36:27.720760Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:27.199199Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.4567467909946572,
+      "ended_at": "2026-07-30T22:36:28.181118Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:27.724344Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.803789625002537,
+      "ended_at": "2026-07-30T22:36:29.988725Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:28.184922Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.9596207079957821,
+      "ended_at": "2026-07-30T22:36:30.950515Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:29.990885Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.4651921670010779,
+      "ended_at": "2026-07-30T22:36:31.417576Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:30.952376Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.023534917003417,
+      "ended_at": "2026-07-30T22:36:32.443549Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:31.420003Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.29355058299552184,
+      "ended_at": "2026-07-30T22:36:32.739507Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:32.445949Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.25751804200262995,
+      "ended_at": "2026-07-30T22:36:32.998922Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:32.741394Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 3.396034207995399,
+      "ended_at": "2026-07-30T22:36:36.399044Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 1091,
+        "output_tokens": 223,
+        "requests": 1,
+        "total_tokens": 1314,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:33.002993Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 2.2133190410022507,
+      "ended_at": "2026-07-30T22:36:38.617858Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:36.404512Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.34861649999947986,
+      "ended_at": "2026-07-30T22:36:38.970776Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:38.622120Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.5557310830045026,
+      "ended_at": "2026-07-30T22:36:39.528620Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:38.972885Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 0.2517009169969242,
+      "ended_at": "2026-07-30T22:36:39.784057Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_tool",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:39.532334Z",
+      "status": "completed",
+      "tool_calls": 1
+    },
+    {
+      "duration_seconds": 1.9989687089982908,
+      "ended_at": "2026-07-30T22:36:41.784884Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 4083,
+        "output_tokens": 131,
+        "requests": 1,
+        "total_tokens": 4214,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:39.785905Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.007055125002807472,
+      "ended_at": "2026-07-30T22:36:41.794871Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_corpus",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:41.787799Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.3465649999998277,
+      "ended_at": "2026-07-30T22:36:42.142762Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:41.796187Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 17.667305707997002,
+      "ended_at": "2026-07-30T22:36:59.811657Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 15388,
+        "output_tokens": 2921,
+        "requests": 1,
+        "total_tokens": 18309,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:42.144315Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.003062249998038169,
+      "ended_at": "2026-07-30T22:36:59.818655Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:59.815570Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.07519699999829754,
+      "ended_at": "2026-07-30T22:36:59.896603Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:59.821388Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 4.208264957997017,
+      "ended_at": "2026-07-30T22:37:04.106370Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 6093,
+        "output_tokens": 295,
+        "requests": 1,
+        "total_tokens": 6388,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T22:36:59.898102Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0005656659996020608,
+      "ended_at": "2026-07-30T22:37:04.111925Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:04.111307Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.26958279099926585,
+      "ended_at": "2026-07-30T22:37:04.384127Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_context_selection",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:04.114527Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 11.225187666997954,
+      "ended_at": "2026-07-30T22:37:15.610744Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 14794,
+        "output_tokens": 1415,
+        "requests": 1,
+        "total_tokens": 16209,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:04.385535Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0012944170011905953,
+      "ended_at": "2026-07-30T22:37:15.617481Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:15.616138Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 1.9307818329980364,
+      "ended_at": "2026-07-30T22:37:17.551245Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 14833,
+        "output_tokens": 109,
+        "requests": 1,
+        "total_tokens": 14942,
+        "usage_available": true
+      },
+      "name": "structured_model_call",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:15.620452Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00035870900319423527,
+      "ended_at": "2026-07-30T22:37:17.554775Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_evidence_validation",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:17.554386Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.003450125004746951,
+      "ended_at": "2026-07-30T22:37:17.564077Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "documentation_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:17.560615Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.00036870800249744207,
+      "ended_at": "2026-07-30T22:37:17.565609Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "simulated_pilot_load",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:17.565233Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0003027499988093041,
+      "ended_at": "2026-07-30T22:37:17.566873Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "pilot_profile_apply",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:17.566565Z",
+      "status": "completed",
+      "tool_calls": 0
+    },
+    {
+      "duration_seconds": 0.0070112500034156255,
+      "ended_at": "2026-07-30T22:37:17.575079Z",
+      "error_message": null,
+      "error_type": null,
+      "model_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "requests": 0,
+        "total_tokens": 0,
+        "usage_available": true
+      },
+      "name": "profile_artifact_write",
+      "retries": 0,
+      "started_at": "2026-07-30T22:37:17.568053Z",
+      "status": "completed",
+      "tool_calls": 0
+    }
+  ],
+  "tool_calls": 28
+}
