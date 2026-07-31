@@ -1,0 +1,5074 @@
+{
+  "schema_version": "0.1",
+  "report_id": "report-280ae9f5-b2a9-4f54-8a91-383dc63f9dcf",
+  "site_id": "notre-dame-crc",
+  "generated_at": "2026-07-29T16:55:28.489404Z",
+  "evidence": [
+    {
+      "evidence_id": "measurement:c451a18a4611284a",
+      "field_path": "/facts/identity/hostname",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "condorfe",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "hostname_fqdn",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:975a53bc965578ae",
+      "field_path": "/facts/identity/fqdn",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "condorfe.crc.nd.edu",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "hostname_fqdn",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0ef8dddc0ab228c9",
+      "field_path": "/facts/identity/dns_suffix",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "crc.nd.edu",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "derive_dns_suffix",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:e1bbbe1389f124f1",
+      "field_path": "/facts/platform/os_id",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "rhel",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "read_os_release",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:56f149260c54c12c",
+      "field_path": "/facts/platform/os_version",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "9.8",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "read_os_release",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9fc3b6b7cb1cd528",
+      "field_path": "/facts/platform/kernel_release",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "5.14.0-687.26.1.el9_8.x86_64",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "kernel_release",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:495fdfc731a104f0",
+      "field_path": "/facts/platform/architecture",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "x86_64",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "machine_architecture",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0ec66b254bda125b",
+      "field_path": "/facts/user/username",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "mislam5",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "getpass_getuser",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:43e6b561d09cb642",
+      "field_path": "/facts/user/uid",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 241628,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "os_getuid",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:74474a60734c5568",
+      "field_path": "/facts/user/groups",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [],
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "get_group_names",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0422a713792523bb",
+      "field_path": "/facts/user/home_directory",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/users/mislam5",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "HOME",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:22fd18416d0e9dc3",
+      "field_path": "/facts/user/working_directory",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/users/mislam5/preflight",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "os_getcwd",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8e3c9047375852bd",
+      "field_path": "/facts/scheduler/detected_type",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "htcondor",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "detect_scheduler",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9333dd31a689610c",
+      "field_path": "/facts/scheduler/submit_command_available",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "find_submit_command",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6e1730e03c508af4",
+      "field_path": "/facts/storage/filesystems/home/id",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "home",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:1aad52fe97f901f8",
+      "field_path": "/facts/storage/filesystems/home/role",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "home",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0d59105d6d8f7599",
+      "field_path": "/facts/storage/filesystems/home/environment_variables",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        "HOME"
+      ],
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b860370d572a50d6",
+      "field_path": "/facts/storage/filesystems/home/path",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/users/mislam5",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "discover_storage_environment",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:1f71b1dfc1191db0",
+      "field_path": "/facts/storage/filesystems/home/path_pattern",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "/users/{username}",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "derive_storage_path_pattern",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:ccade40576541657",
+      "field_path": "/facts/storage/filesystems/home/filesystem_type",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "nfs",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "filesystem_type",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0a5dc357436cfba4",
+      "field_path": "/facts/storage/filesystems/home/readable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_readable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:377dec64dbd63920",
+      "field_path": "/facts/storage/filesystems/home/writable",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "path_writable",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b0a03ee07cab13db",
+      "field_path": "/facts/scheduler/version",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_version",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:ca84657e8d8353d3",
+      "field_path": "/facts/scheduler/htcondor/collector_host",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "condor-central-mgr.crc.nd.edu",
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_collector_host",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:12a1720530505297",
+      "field_path": "/facts/scheduler/htcondor/file_transfer_supported",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3e88fd5c5cc7a8f0",
+      "field_path": "/facts/scheduler/htcondor/pool_totals/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 390,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3c35aecce70634f8",
+      "field_path": "/facts/scheduler/htcondor/pool_totals/cpu_cores",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 14242,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:69de6c5be9292fd4",
+      "field_path": "/facts/scheduler/htcondor/pool_totals/memory_mib",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 96129306,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:080bc2f234fe4ffe",
+      "field_path": "/facts/scheduler/htcondor/pool_totals/advertised_gpus",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 310,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c2a5ef3aa8907a3c",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/0/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 24,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b519ff7ac9b1400c",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/0/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 240,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:98a710c2a3f4af5f",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/0/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 31591,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7f38c60ac3e5c5bb",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/0/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 256715,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:15878fb191943d47",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/1/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 64,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a500cfd90c6ab374",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/1/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 97,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5fe8bd9523c1af66",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/1/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 256859,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a46db968e26bbe15",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/1/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 2051122,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3cfd00adc5e6edd7",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/2/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 32,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:82c530f79b79ae2f",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/2/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 21,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6eae25152c8a222a",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/2/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 95783,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d28868861c8136c2",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/2/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 256869,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:e7becc56ffc1d4b3",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/3/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 16,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:fe81c944514da937",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/3/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 9,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9fd4ca880552916c",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/3/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 63916,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6970e32771797f45",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/3/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 95782,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:1ad20708852e25f0",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/4/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 128,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f572eb3b2d318531",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/4/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 6,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:c3afec3b979e69d8",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/4/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 514914,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5fcee41ad7f0015a",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/4/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 773052,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b8b360e5b7369269",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/5/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 80,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:cc06e5dcb214bb5b",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/5/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 5,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:51ea7ff4076cc357",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/5/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 240928,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d604c8377619496b",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/5/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 257056,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:0acad9112066d4b6",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/6/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:676c864174ef1c4b",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/6/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7944c83ca81a9c6b",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/6/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 15719,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:417a710e07c38b42",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/6/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 31764,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:13cae189fd84b4c2",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/7/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 48,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3e394976705468cf",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/7/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7a82d0035dcf2376",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/7/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 63429,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:fc8c972b79eb3ac6",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/7/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 128205,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6603967de37b2c07",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/8/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 20,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7459a1e0380e15ef",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/8/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 2,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a23d2ee80f0cd0b1",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/8/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 191512,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3320e9f9380320f5",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/8/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 191526,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:49b951a4e2ef87a6",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/9/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 2,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:69b3e63a885368ea",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/9/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:acfdb6ace823ce18",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/9/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 3655,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d1115ac1a0c34013",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/9/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 3655,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:fb765f2e5cfe11b5",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/10/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 40,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:dda17f3b0cd417ce",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/10/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:2be109b1ad7f963b",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/10/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 257067,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:5feaa2312d7e7516",
+      "field_path": "/facts/scheduler/htcondor/cpu_groups/10/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 257067,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:128bde3ff04841f3",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/0/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a7689e83ef4b8801",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/0/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 24,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:744ccaa16231e24e",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/0/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 25,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b28a8e1d767c7ad6",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/0/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 128268,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:b0be8be4d1e36029",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/0/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 192580,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:cb4cb85581d69b85",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/1/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:48b89a24b09668ce",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/1/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 32,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7723caf72c819eef",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/1/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 21,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:ea7bfcb6cd366493",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/1/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 95783,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7f9c4fc681ad4126",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/1/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 256869,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:e92c7dc21f026d81",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/2/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:43d2523c6d777fa0",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/2/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 64,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:55a01df22643f931",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/2/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 8,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8e57d851b84ad924",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/2/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 256859,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:3631d4aa2ae08aa3",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/2/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 515220,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:47d434af50abcb34",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/3/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:bcd4be6164f6aa92",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/3/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 24,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f81bb16cb54ab32f",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/3/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 5,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:d90c5af95429bb1b",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/3/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 31591,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f4a90a68d7480d6c",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/3/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 31591,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:25334b22fe288605",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/4/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:e61927290f2f4904",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/4/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 16,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f01522f330fc7698",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/4/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 5,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8d80de2efd1291c2",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/4/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 64010,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a5648bc4174b009d",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/4/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 95780,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:31d830a40b56a0b0",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/5/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 6,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6e38e2bc5a510317",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/5/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 80,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:74c4026e149afc82",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/5/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 5,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:001fd02eeaad0c14",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/5/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 240928,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:75d58605ec0d7423",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/5/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 257056,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:055341055e5dbf04",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/6/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 3,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:50a9126f99539324",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/6/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 24,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7bdc8a7bd65d371c",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/6/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:4cb5d9b642fcb887",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/6/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 128029,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:97cb226ae8fa2210",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/6/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 192579,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9799f2df85894bc7",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/7/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 3,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:049a72f23e901aca",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/7/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 16,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6f1c561ff78fe9e7",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/7/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 2,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:7b7ee373eec9b3e7",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/7/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 64010,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:55518730acb6a68e",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/7/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 95782,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f711c0e01ff8e29e",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/8/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 3,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:cb5f20a5d70f5a7e",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/8/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 20,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a5f43cf3406e617a",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/8/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 2,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:83fd55e06a7c6f8e",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/8/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 191512,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f6d7c7f744cb13e6",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/8/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 191526,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:a68698618a6a9492",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/9/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:dc0c2dc363f06b74",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/9/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 48,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:44fe22923e5a9bdf",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/9/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 2,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:18e0ecbf85d7e8ec",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/9/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 94777,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:022b40b8acb352a9",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/9/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 94777,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:e485507120a0437c",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/10/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6b9b3f84520f78ff",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/10/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 4,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8f4528c9ca45ad47",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/10/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:41001ab184b5e52d",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/10/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 15719,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:f2bd7cbc5ddeb736",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/10/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 15719,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:70d3512268fdd236",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/11/gpu_count_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 6,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:8bcd80b5d387ab6e",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/11/cpu_cores_per_machine",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 40,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:80933c4aed6b7271",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/11/machine_count",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 1,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:9f461b1f3ab0c33c",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/11/memory_mib_min",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 257067,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "measurement:6f312d97ed742a8b",
+      "field_path": "/facts/scheduler/htcondor/gpu_groups/11/memory_mib_max",
+      "source_type": "measurement",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": 257067,
+      "observed_at": "2026-07-29T16:55:28.489404Z",
+      "freshness": "per_run",
+      "source_reference": "structured login-measurements.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": "htcondor_machine_ads",
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:3203a98bd33d971d",
+      "field_path": "/htcondor/guaranteed_runtime",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+      "exact_quote": "Of course, if you are borrowing machines owned by other people, then you must accept the possibility that some jobs may be kicked off and must run elsewhere.",
+      "chunk_id": "doc-resources-condor-html:c9",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:a8fb84a168aa41c2",
+      "field_path": "/htcondor/preemptible",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > About Condor \uf0c1",
+      "exact_quote": "Of course, if you are borrowing machines owned by other people, then you must accept the possibility that some jobs may be kicked off and must run elsewhere.",
+      "chunk_id": "doc-resources-condor-html:c9",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:26f7f282e59fd1da",
+      "field_path": "/htcondor/submit_attributes/universe/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "universe = vanilla"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:14da5c449dfde02f",
+      "field_path": "/htcondor/submit_attributes/universe/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "universe = vanilla"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:cb124c28d9d6adac",
+      "field_path": "/htcondor/submit_attributes/universe/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:5147f63550e43133",
+      "field_path": "/htcondor/submit_attributes/universe/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:cf03125410ebc9af",
+      "field_path": "/htcondor/submit_attributes/universe/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:d462757bb1cb5de8",
+      "field_path": "/htcondor/submit_attributes/universe/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:db0bd569050b29d6",
+      "field_path": "/htcondor/submit_attributes/executable/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "executable = Path_to_your_executable_file/executable.sh"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ef4083da8c80f4b3",
+      "field_path": "/htcondor/submit_attributes/executable/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "executable = Path_to_your_executable_file/executable.sh"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:1c7a7cb006f6f03a",
+      "field_path": "/htcondor/submit_attributes/executable/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:994ab2e02ef3b725",
+      "field_path": "/htcondor/submit_attributes/executable/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:bc7fd2ce6f5eeedf",
+      "field_path": "/htcondor/submit_attributes/executable/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:5c54326e253b9b20",
+      "field_path": "/htcondor/submit_attributes/executable/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:316e09399ad6940d",
+      "field_path": "/htcondor/submit_attributes/request_gpus/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "request_gpus = 1"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "Following is a Condor submission script template for running Amber with 1 GPU:",
+      "chunk_id": "doc-resources-condor-html:c48",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ae4e1d616d5fd2a6",
+      "field_path": "/htcondor/submit_attributes/request_gpus/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "request_gpus = 1"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:3aa2515e84888a2c",
+      "field_path": "/htcondor/submit_attributes/request_gpus/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "Following is a Condor submission script template for running Amber with 1 GPU:",
+      "chunk_id": "doc-resources-condor-html:c48",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:cb9d0251a9621659",
+      "field_path": "/htcondor/submit_attributes/request_gpus/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:d97b0631d4a09cb7",
+      "field_path": "/htcondor/submit_attributes/request_gpus/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Submitting a job to a GPU node",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "Following is a Condor submission script template for running Amber with 1 GPU:",
+      "chunk_id": "doc-resources-condor-html:c48",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ebf39c06813faf25",
+      "field_path": "/htcondor/submit_attributes/request_gpus/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Submitting a job to a GPU node",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:3ceda98fbdfd5d2c",
+      "field_path": "/htcondor/submit_attributes/request_cpus/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "request_cpus = 4"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:4df8b6f4cdbdf694",
+      "field_path": "/htcondor/submit_attributes/request_cpus/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "request_cpus = 4"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:37ed5af151dcaecb",
+      "field_path": "/htcondor/submit_attributes/request_cpus/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "request_cpus = 4"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "and then submit your Condor job script with",
+      "chunk_id": "doc-resources-condor-html:c40",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:096b6728c88657e4",
+      "field_path": "/htcondor/submit_attributes/request_cpus/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "request_cpus = 4"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:eb83bfe8e9a8cd5e",
+      "field_path": "/htcondor/submit_attributes/request_cpus/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:bed519d7c2a42925",
+      "field_path": "/htcondor/submit_attributes/request_cpus/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:8a4b2a84bd2bbdcf",
+      "field_path": "/htcondor/submit_attributes/request_cpus/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "and then submit your Condor job script with",
+      "chunk_id": "doc-resources-condor-html:c40",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:01c68017f1968bb4",
+      "field_path": "/htcondor/submit_attributes/request_cpus/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:a56f5ad588cba444",
+      "field_path": "/htcondor/submit_attributes/request_cpus/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Submitting Multicore SMP jobs",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ce0e9998f0d31189",
+      "field_path": "/htcondor/submit_attributes/request_cpus/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Submitting Multicore SMP jobs",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:95fabe5b41f9ace5",
+      "field_path": "/htcondor/submit_attributes/request_cpus/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Submitting Multicore SMP jobs",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "and then submit your Condor job script with",
+      "chunk_id": "doc-resources-condor-html:c40",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2611735c7df49c74",
+      "field_path": "/htcondor/submit_attributes/request_cpus/condition",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "Submitting Multicore SMP jobs",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:ff545bb51f522cae",
+      "field_path": "/htcondor/submit_attributes/should_transfer_files/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "should_transfer_files = yes"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:6e00b2aa59da5e18",
+      "field_path": "/htcondor/submit_attributes/should_transfer_files/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "should_transfer_files = yes"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:c48ba50cc93288fc",
+      "field_path": "/htcondor/submit_attributes/should_transfer_files/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:805f8b89988022db",
+      "field_path": "/htcondor/submit_attributes/should_transfer_files/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:d8c3f39228f148cf",
+      "field_path": "/htcondor/submit_attributes/should_transfer_files/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:c9e33b70804d284b",
+      "field_path": "/htcondor/submit_attributes/should_transfer_files/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:eb1714b6f204e9d8",
+      "field_path": "/htcondor/submit_attributes/when_to_transfer_output/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "when_to_transfer_output = on_exit"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:4c016559be5c0a09",
+      "field_path": "/htcondor/submit_attributes/when_to_transfer_output/syntax",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": [
+        "when_to_transfer_output = on_exit"
+      ],
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:4c1422de4dcd86a1",
+      "field_path": "/htcondor/submit_attributes/when_to_transfer_output/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:692bf1794d85182b",
+      "field_path": "/htcondor/submit_attributes/when_to_transfer_output/support",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "supported",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:e0bd12df6ed38e6b",
+      "field_path": "/htcondor/submit_attributes/when_to_transfer_output/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:7332a5c8e391ca15",
+      "field_path": "/htcondor/submit_attributes/when_to_transfer_output/required",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": false,
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2bb493f1f7c107f5",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "getenv",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:03ea8ac1bcf448ab",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "getenv",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2bb493f1f7c107f5",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "output",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:03ea8ac1bcf448ab",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "output",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2bb493f1f7c107f5",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "error",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:03ea8ac1bcf448ab",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "error",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:2bb493f1f7c107f5",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "log",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting 10 Matlab jobs \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_cpus = 4 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 10",
+      "chunk_id": "doc-resources-condor-html:c45",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:03ea8ac1bcf448ab",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "log",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > Example of Submitting an Amber job to a GPU node \uf0c1",
+      "exact_quote": "universe = vanilla getenv = true executable = Path_to_your_executable_file/executable.sh output = test.output error = test.error request_gpus = 1 should_transfer_files = yes when_to_transfer_output = on_exit log = logfile\nqueue 1",
+      "chunk_id": "doc-resources-condor-html:c49",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:b9055440e860f461",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "environment",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:68b05dc9345913e2",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "environment",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "environment = OMP_NUM_THREADS = 4 ; LD_LIBRARY_PATH = ${ LD_LIBRARY_PATH } request_cpus = 4 ...",
+      "chunk_id": "doc-resources-condor-html:c35",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "documentation:4de076625aa532fe",
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "source_type": "documentation",
+      "scope": "target_site",
+      "trust": "official",
+      "disposition": "accepted",
+      "value": "environment",
+      "observed_at": null,
+      "freshness": "site_change",
+      "source_reference": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_url": "https://docs.crc.nd.edu/resources/condor.html",
+      "documentation_heading": "HTCondor \u2014 User Documentation  documentation > HTCondor \uf0c1 > To Submit Multicore SMP jobs to the ND Condor Pool \uf0c1",
+      "exact_quote": "and then submit your Condor job script with",
+      "chunk_id": "doc-resources-condor-html:c40",
+      "command_id": null,
+      "pilot_id": null,
+      "result": null,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:b9ccfe92a5fe5857",
+      "field_path": "/storage/home/compute_visible",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:41e761ebc7ab54bb",
+      "field_path": "/storage/home/compute_readable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:9b2d2dc7d4e65c86",
+      "field_path": "/storage/home/compute_writable",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:0bdc2f16593c265c",
+      "field_path": "/network/login_compute/tcp_connect",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:541d9fcfa222050d",
+      "field_path": "/network/login_compute/verified_ports",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        9000,
+        9800,
+        10274,
+        10551,
+        11082,
+        11219,
+        12320,
+        12569
+      ],
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": [
+        9000,
+        9800,
+        10274,
+        10551,
+        11082,
+        11219,
+        12320,
+        12569
+      ],
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:9e4a1ce6c1cebdfe",
+      "field_path": "/network/login_compute/suggested_port_range",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "9000-12999",
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": "9000-12999",
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:a3926d1ad772832a",
+      "field_path": "/network/compute_compute/tcp_connect",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": true,
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": true,
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:4a7f0e07bc6e1820",
+      "field_path": "/network/compute_compute/verified_ports",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": [
+        9000,
+        9349,
+        10515,
+        10753,
+        11268,
+        11727,
+        12562,
+        12695
+      ],
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": [
+        9000,
+        9349,
+        10515,
+        10753,
+        11268,
+        11727,
+        12562,
+        12695
+      ],
+      "reason": null
+    },
+    {
+      "evidence_id": "pilot:3491db20c2a83eb6",
+      "field_path": "/network/compute_compute/suggested_port_range",
+      "source_type": "pilot",
+      "scope": "target_site",
+      "trust": "captured",
+      "disposition": "accepted",
+      "value": "9000-12999",
+      "observed_at": "2026-07-30T20:04:39.754836Z",
+      "freshness": "per_run",
+      "source_reference": "/Users/saiful/ai-projects/hpc-site-preflight/evaluation/frozen-inputs/notre-dame-crc/pilot-results.json",
+      "documentation_url": null,
+      "documentation_heading": null,
+      "exact_quote": null,
+      "chunk_id": null,
+      "command_id": null,
+      "pilot_id": "02b217887f7e44608522dd758157fd59",
+      "result": "9000-12999",
+      "reason": null
+    }
+  ],
+  "conflicts": [],
+  "links": [
+    {
+      "profile_field": "/scheduler_type",
+      "evidence_ids": [
+        "measurement:8e3c9047375852bd"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/version",
+      "evidence_ids": [
+        "measurement:b0a03ee07cab13db"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/collector_host",
+      "evidence_ids": [
+        "measurement:ca84657e8d8353d3"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/file_transfer_supported",
+      "evidence_ids": [
+        "measurement:12a1720530505297"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_command",
+      "evidence_ids": [
+        "measurement:9333dd31a689610c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/pool_totals/machine_count",
+      "evidence_ids": [
+        "measurement:3e88fd5c5cc7a8f0"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/pool_totals/cpu_cores",
+      "evidence_ids": [
+        "measurement:3c35aecce70634f8"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/pool_totals/memory_mib",
+      "evidence_ids": [
+        "measurement:69de6c5be9292fd4"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/pool_totals/advertised_gpus",
+      "evidence_ids": [
+        "measurement:080bc2f234fe4ffe"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/0/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:c2a5ef3aa8907a3c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/0/machine_count",
+      "evidence_ids": [
+        "measurement:b519ff7ac9b1400c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/0/memory_mib_min",
+      "evidence_ids": [
+        "measurement:98a710c2a3f4af5f"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/0/memory_mib_max",
+      "evidence_ids": [
+        "measurement:7f38c60ac3e5c5bb"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/1/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:15878fb191943d47"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/1/machine_count",
+      "evidence_ids": [
+        "measurement:a500cfd90c6ab374"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/1/memory_mib_min",
+      "evidence_ids": [
+        "measurement:5fe8bd9523c1af66"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/1/memory_mib_max",
+      "evidence_ids": [
+        "measurement:a46db968e26bbe15"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/2/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:3cfd00adc5e6edd7"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/2/machine_count",
+      "evidence_ids": [
+        "measurement:82c530f79b79ae2f"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/2/memory_mib_min",
+      "evidence_ids": [
+        "measurement:6eae25152c8a222a"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/2/memory_mib_max",
+      "evidence_ids": [
+        "measurement:d28868861c8136c2"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/3/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:e7becc56ffc1d4b3"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/3/machine_count",
+      "evidence_ids": [
+        "measurement:fe81c944514da937"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/3/memory_mib_min",
+      "evidence_ids": [
+        "measurement:9fd4ca880552916c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/3/memory_mib_max",
+      "evidence_ids": [
+        "measurement:6970e32771797f45"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/4/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:1ad20708852e25f0"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/4/machine_count",
+      "evidence_ids": [
+        "measurement:f572eb3b2d318531"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/4/memory_mib_min",
+      "evidence_ids": [
+        "measurement:c3afec3b979e69d8"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/4/memory_mib_max",
+      "evidence_ids": [
+        "measurement:5fcee41ad7f0015a"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/5/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:b8b360e5b7369269"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/5/machine_count",
+      "evidence_ids": [
+        "measurement:cc06e5dcb214bb5b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/5/memory_mib_min",
+      "evidence_ids": [
+        "measurement:51ea7ff4076cc357"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/5/memory_mib_max",
+      "evidence_ids": [
+        "measurement:d604c8377619496b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/6/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:0acad9112066d4b6"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/6/machine_count",
+      "evidence_ids": [
+        "measurement:676c864174ef1c4b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/6/memory_mib_min",
+      "evidence_ids": [
+        "measurement:7944c83ca81a9c6b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/6/memory_mib_max",
+      "evidence_ids": [
+        "measurement:417a710e07c38b42"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/7/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:13cae189fd84b4c2"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/7/machine_count",
+      "evidence_ids": [
+        "measurement:3e394976705468cf"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/7/memory_mib_min",
+      "evidence_ids": [
+        "measurement:7a82d0035dcf2376"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/7/memory_mib_max",
+      "evidence_ids": [
+        "measurement:fc8c972b79eb3ac6"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/8/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:6603967de37b2c07"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/8/machine_count",
+      "evidence_ids": [
+        "measurement:7459a1e0380e15ef"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/8/memory_mib_min",
+      "evidence_ids": [
+        "measurement:a23d2ee80f0cd0b1"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/8/memory_mib_max",
+      "evidence_ids": [
+        "measurement:3320e9f9380320f5"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/9/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:49b951a4e2ef87a6"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/9/machine_count",
+      "evidence_ids": [
+        "measurement:69b3e63a885368ea"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/9/memory_mib_min",
+      "evidence_ids": [
+        "measurement:acfdb6ace823ce18"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/9/memory_mib_max",
+      "evidence_ids": [
+        "measurement:d1115ac1a0c34013"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/10/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:fb765f2e5cfe11b5"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/10/machine_count",
+      "evidence_ids": [
+        "measurement:dda17f3b0cd417ce"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/10/memory_mib_min",
+      "evidence_ids": [
+        "measurement:2be109b1ad7f963b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/cpu_groups/10/memory_mib_max",
+      "evidence_ids": [
+        "measurement:5feaa2312d7e7516"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/0/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:128bde3ff04841f3"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/0/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:a7689e83ef4b8801"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/0/machine_count",
+      "evidence_ids": [
+        "measurement:744ccaa16231e24e"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/0/memory_mib_min",
+      "evidence_ids": [
+        "measurement:b28a8e1d767c7ad6"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/0/memory_mib_max",
+      "evidence_ids": [
+        "measurement:b0be8be4d1e36029"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/1/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:cb4cb85581d69b85"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/1/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:48b89a24b09668ce"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/1/machine_count",
+      "evidence_ids": [
+        "measurement:7723caf72c819eef"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/1/memory_mib_min",
+      "evidence_ids": [
+        "measurement:ea7bfcb6cd366493"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/1/memory_mib_max",
+      "evidence_ids": [
+        "measurement:7f9c4fc681ad4126"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/2/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:e92c7dc21f026d81"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/2/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:43d2523c6d777fa0"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/2/machine_count",
+      "evidence_ids": [
+        "measurement:55a01df22643f931"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/2/memory_mib_min",
+      "evidence_ids": [
+        "measurement:8e57d851b84ad924"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/2/memory_mib_max",
+      "evidence_ids": [
+        "measurement:3631d4aa2ae08aa3"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/3/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:47d434af50abcb34"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/3/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:bcd4be6164f6aa92"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/3/machine_count",
+      "evidence_ids": [
+        "measurement:f81bb16cb54ab32f"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/3/memory_mib_min",
+      "evidence_ids": [
+        "measurement:d90c5af95429bb1b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/3/memory_mib_max",
+      "evidence_ids": [
+        "measurement:f4a90a68d7480d6c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/4/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:25334b22fe288605"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/4/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:e61927290f2f4904"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/4/machine_count",
+      "evidence_ids": [
+        "measurement:f01522f330fc7698"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/4/memory_mib_min",
+      "evidence_ids": [
+        "measurement:8d80de2efd1291c2"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/4/memory_mib_max",
+      "evidence_ids": [
+        "measurement:a5648bc4174b009d"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/5/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:31d830a40b56a0b0"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/5/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:6e38e2bc5a510317"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/5/machine_count",
+      "evidence_ids": [
+        "measurement:74c4026e149afc82"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/5/memory_mib_min",
+      "evidence_ids": [
+        "measurement:001fd02eeaad0c14"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/5/memory_mib_max",
+      "evidence_ids": [
+        "measurement:75d58605ec0d7423"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/6/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:055341055e5dbf04"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/6/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:50a9126f99539324"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/6/machine_count",
+      "evidence_ids": [
+        "measurement:7bdc8a7bd65d371c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/6/memory_mib_min",
+      "evidence_ids": [
+        "measurement:4cb5d9b642fcb887"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/6/memory_mib_max",
+      "evidence_ids": [
+        "measurement:97cb226ae8fa2210"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/7/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:9799f2df85894bc7"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/7/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:049a72f23e901aca"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/7/machine_count",
+      "evidence_ids": [
+        "measurement:6f1c561ff78fe9e7"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/7/memory_mib_min",
+      "evidence_ids": [
+        "measurement:7b7ee373eec9b3e7"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/7/memory_mib_max",
+      "evidence_ids": [
+        "measurement:55518730acb6a68e"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/8/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:f711c0e01ff8e29e"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/8/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:cb5f20a5d70f5a7e"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/8/machine_count",
+      "evidence_ids": [
+        "measurement:a5f43cf3406e617a"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/8/memory_mib_min",
+      "evidence_ids": [
+        "measurement:83fd55e06a7c6f8e"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/8/memory_mib_max",
+      "evidence_ids": [
+        "measurement:f6d7c7f744cb13e6"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/9/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:a68698618a6a9492"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/9/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:dc0c2dc363f06b74"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/9/machine_count",
+      "evidence_ids": [
+        "measurement:44fe22923e5a9bdf"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/9/memory_mib_min",
+      "evidence_ids": [
+        "measurement:18e0ecbf85d7e8ec"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/9/memory_mib_max",
+      "evidence_ids": [
+        "measurement:022b40b8acb352a9"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/10/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:e485507120a0437c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/10/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:6b9b3f84520f78ff"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/10/machine_count",
+      "evidence_ids": [
+        "measurement:8f4528c9ca45ad47"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/10/memory_mib_min",
+      "evidence_ids": [
+        "measurement:41001ab184b5e52d"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/10/memory_mib_max",
+      "evidence_ids": [
+        "measurement:f2bd7cbc5ddeb736"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/11/gpu_count_per_machine",
+      "evidence_ids": [
+        "measurement:70d3512268fdd236"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/11/cpu_cores_per_machine",
+      "evidence_ids": [
+        "measurement:8bcd80b5d387ab6e"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/11/machine_count",
+      "evidence_ids": [
+        "measurement:80933c4aed6b7271"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/11/memory_mib_min",
+      "evidence_ids": [
+        "measurement:9f461b1f3ab0c33c"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/gpu_groups/11/memory_mib_max",
+      "evidence_ids": [
+        "measurement:6f312d97ed742a8b"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/id",
+      "evidence_ids": [
+        "measurement:6e1730e03c508af4"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/role",
+      "evidence_ids": [
+        "measurement:1aad52fe97f901f8"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/environment_variables",
+      "evidence_ids": [
+        "measurement:0d59105d6d8f7599"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/path_pattern",
+      "evidence_ids": [
+        "measurement:1f71b1dfc1191db0",
+        "measurement:0ec66b254bda125b"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/filesystem_type",
+      "evidence_ids": [
+        "measurement:ccade40576541657"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/login_readable",
+      "evidence_ids": [
+        "measurement:0a5dc357436cfba4"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/login_writable",
+      "evidence_ids": [
+        "measurement:377dec64dbd63920"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/guaranteed_runtime",
+      "evidence_ids": [
+        "documentation:3203a98bd33d971d"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/preemptible",
+      "evidence_ids": [
+        "documentation:a8fb84a168aa41c2"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/universe/syntax",
+      "evidence_ids": [
+        "documentation:26f7f282e59fd1da",
+        "documentation:14da5c449dfde02f"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/universe/support",
+      "evidence_ids": [
+        "documentation:cb124c28d9d6adac",
+        "documentation:5147f63550e43133"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/universe/required",
+      "evidence_ids": [
+        "documentation:cf03125410ebc9af",
+        "documentation:d462757bb1cb5de8"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/executable/syntax",
+      "evidence_ids": [
+        "documentation:db0bd569050b29d6",
+        "documentation:ef4083da8c80f4b3"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/executable/support",
+      "evidence_ids": [
+        "documentation:1c7a7cb006f6f03a",
+        "documentation:994ab2e02ef3b725"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/executable/required",
+      "evidence_ids": [
+        "documentation:bc7fd2ce6f5eeedf",
+        "documentation:5c54326e253b9b20"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/request_gpus/syntax",
+      "evidence_ids": [
+        "documentation:316e09399ad6940d",
+        "documentation:ae4e1d616d5fd2a6"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/request_gpus/support",
+      "evidence_ids": [
+        "documentation:3aa2515e84888a2c",
+        "documentation:cb9d0251a9621659"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/request_gpus/condition",
+      "evidence_ids": [
+        "documentation:d97b0631d4a09cb7",
+        "documentation:ebf39c06813faf25"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/request_cpus/syntax",
+      "evidence_ids": [
+        "documentation:3ceda98fbdfd5d2c",
+        "documentation:4df8b6f4cdbdf694",
+        "documentation:37ed5af151dcaecb",
+        "documentation:096b6728c88657e4"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/request_cpus/support",
+      "evidence_ids": [
+        "documentation:eb83bfe8e9a8cd5e",
+        "documentation:bed519d7c2a42925",
+        "documentation:8a4b2a84bd2bbdcf",
+        "documentation:01c68017f1968bb4"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/request_cpus/condition",
+      "evidence_ids": [
+        "documentation:a56f5ad588cba444",
+        "documentation:ce0e9998f0d31189",
+        "documentation:95fabe5b41f9ace5",
+        "documentation:2611735c7df49c74"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/should_transfer_files/syntax",
+      "evidence_ids": [
+        "documentation:ff545bb51f522cae",
+        "documentation:6e00b2aa59da5e18"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/should_transfer_files/support",
+      "evidence_ids": [
+        "documentation:c48ba50cc93288fc",
+        "documentation:805f8b89988022db"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/should_transfer_files/required",
+      "evidence_ids": [
+        "documentation:d8c3f39228f148cf",
+        "documentation:c9e33b70804d284b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/when_to_transfer_output/syntax",
+      "evidence_ids": [
+        "documentation:eb1714b6f204e9d8",
+        "documentation:4c016559be5c0a09"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/when_to_transfer_output/support",
+      "evidence_ids": [
+        "documentation:4c1422de4dcd86a1",
+        "documentation:692bf1794d85182b"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/submit_attributes/when_to_transfer_output/required",
+      "evidence_ids": [
+        "documentation:e0bd12df6ed38e6b",
+        "documentation:7332a5c8e391ca15"
+      ]
+    },
+    {
+      "profile_field": "/htcondor/unmapped_submit_attributes",
+      "evidence_ids": [
+        "documentation:2bb493f1f7c107f5",
+        "documentation:03ea8ac1bcf448ab",
+        "documentation:b9055440e860f461",
+        "documentation:68b05dc9345913e2",
+        "documentation:4de076625aa532fe"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/compute_visible",
+      "evidence_ids": [
+        "pilot:b9ccfe92a5fe5857"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/compute_readable",
+      "evidence_ids": [
+        "pilot:41e761ebc7ab54bb"
+      ]
+    },
+    {
+      "profile_field": "/storage/home/compute_writable",
+      "evidence_ids": [
+        "pilot:9b2d2dc7d4e65c86"
+      ]
+    },
+    {
+      "profile_field": "/network/login_compute/tcp_connect",
+      "evidence_ids": [
+        "pilot:0bdc2f16593c265c"
+      ]
+    },
+    {
+      "profile_field": "/network/login_compute/verified_ports",
+      "evidence_ids": [
+        "pilot:541d9fcfa222050d"
+      ]
+    },
+    {
+      "profile_field": "/network/login_compute/suggested_port_range",
+      "evidence_ids": [
+        "pilot:9e4a1ce6c1cebdfe"
+      ]
+    },
+    {
+      "profile_field": "/network/compute_compute/tcp_connect",
+      "evidence_ids": [
+        "pilot:a3926d1ad772832a"
+      ]
+    },
+    {
+      "profile_field": "/network/compute_compute/verified_ports",
+      "evidence_ids": [
+        "pilot:4a7f0e07bc6e1820"
+      ]
+    },
+    {
+      "profile_field": "/network/compute_compute/suggested_port_range",
+      "evidence_ids": [
+        "pilot:3491db20c2a83eb6"
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "field_path": "/htcondor/submit_attributes/request_cpus/required",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish whether this option is required."
+    },
+    {
+      "field_path": "/htcondor/submit_attributes/request_memory/required",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish whether this option is required."
+    },
+    {
+      "field_path": "/htcondor/submit_attributes/request_memory/support",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish site support for this option."
+    },
+    {
+      "field_path": "/htcondor/submit_attributes/request_gpus/required",
+      "action": "additional_documentation",
+      "action_id": "submission_policy_search",
+      "reason": "Login measurements do not establish whether this option is required."
+    },
+    {
+      "field_path": "/network/login/dns_resolution",
+      "action": "login_measurement",
+      "action_id": "login_dns_resolution",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/dns_resolution",
+      "action": "run_pilot",
+      "action_id": "compute_dns_resolution",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/network/login/outbound_https",
+      "action": "login_measurement",
+      "action_id": "login_outbound_https",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/outbound_https",
+      "action": "run_pilot",
+      "action_id": "compute_outbound_https",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/network/login/local_tcp_bind",
+      "action": "login_measurement",
+      "action_id": "login_local_tcp_bind",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/local_tcp_bind",
+      "action": "run_pilot",
+      "action_id": "compute_local_tcp_bind",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/network/login/local_tcp_loopback",
+      "action": "login_measurement",
+      "action_id": "login_local_tcp_loopback",
+      "reason": "This login-node network fact was not measured."
+    },
+    {
+      "field_path": "/network/compute/local_tcp_loopback",
+      "action": "run_pilot",
+      "action_id": "compute_local_tcp_loopback",
+      "reason": "Compute-node network behavior requires approved evidence."
+    },
+    {
+      "field_path": "/storage/home/shared_across_compute_nodes",
+      "action": "run_pilot",
+      "action_id": "home_shared_across_compute_nodes",
+      "reason": "Login-node access does not establish compute-node access."
+    },
+    {
+      "field_path": "/storage/home/backup_policy",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/storage/home/purge_after_days",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/storage/home/purge_condition",
+      "action": "additional_documentation",
+      "action_id": "storage_policy_search",
+      "reason": "Storage policy requires authoritative documentation."
+    },
+    {
+      "field_path": "/accounting/allocation_required",
+      "action": "additional_documentation",
+      "action_id": "accounting_policy_search",
+      "reason": "Accounting policy cannot be established by login measurement."
+    },
+    {
+      "field_path": "/accounting/charging_unit",
+      "action": "additional_documentation",
+      "action_id": "accounting_policy_search",
+      "reason": "Accounting policy cannot be established by login measurement."
+    },
+    {
+      "field_path": "/accounting/charging_model",
+      "action": "additional_documentation",
+      "action_id": "accounting_policy_search",
+      "reason": "Accounting policy cannot be established by login measurement."
+    },
+    {
+      "field_path": "/accounting/filesystem_storage_charged",
+      "action": "additional_documentation",
+      "action_id": "accounting_policy_search",
+      "reason": "Accounting policy cannot be established by login measurement."
+    },
+    {
+      "field_path": "/htcondor/unmapped_submit_attributes",
+      "action": "admin_confirmation",
+      "action_id": "submission_option_mapping",
+      "reason": "Documented submission option 'getenv' needs a reviewed mapping."
+    }
+  ]
+}

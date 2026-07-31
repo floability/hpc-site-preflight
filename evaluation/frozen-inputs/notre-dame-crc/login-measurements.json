@@ -1,0 +1,336 @@
+{
+  "schema_version": "0.7",
+  "collected_at": "2026-07-29T16:55:28.489404Z",
+  "evidence_source": "measured",
+  "collector_version": "0.7.0",
+  "detected_schedulers": [
+    "htcondor"
+  ],
+  "site_facts": {
+    "site_id": "notre-dame-crc",
+    "site_name": "Notre Dame CRC",
+    "aliases": [],
+    "hostname": "condorfe",
+    "fqdn": "condorfe.crc.nd.edu",
+    "dns_suffix": "crc.nd.edu",
+    "hostname_patterns": [
+      "*.crc.nd.edu"
+    ],
+    "documentation_domains": [
+      "nd.edu"
+    ],
+    "preferred_path_tokens": [
+      "notre-dame-crc",
+      "condor"
+    ],
+    "username": "mislam5",
+    "uid": 241628,
+    "groups": [],
+    "home_directory": "/users/mislam5",
+    "working_directory": "/users/mislam5/preflight",
+    "os_id": "rhel",
+    "os_version": "9.8",
+    "kernel_release": "5.14.0-687.26.1.el9_8.x86_64",
+    "architecture": "x86_64",
+    "cpu_count": 48,
+    "available_memory_bytes": 109540515840
+  },
+  "storage": {
+    "locations": [
+      {
+        "id": "home",
+        "role": "home",
+        "environment_variables": [
+          "HOME"
+        ],
+        "observed_path": "/users/mislam5",
+        "path_pattern": "/users/{username}",
+        "exists": true,
+        "readable": true,
+        "writable": true,
+        "executable": true,
+        "permissions": "drwxr-x---",
+        "filesystem_type": "nfs"
+      }
+    ]
+  },
+  "slurm": null,
+  "htcondor": {
+    "version": "23.7.2 2024-05-16 BuildID: 733409 PackageID: 23.7.2-1 GitSHA: 585ec167",
+    "available_commands": [
+      "condor_status",
+      "condor_submit",
+      "condor_q",
+      "condor_history"
+    ],
+    "submit_command_available": true,
+    "collector_host": "condor-central-mgr.crc.nd.edu",
+    "file_transfer_supported": true,
+    "pool_totals": {
+      "machine_count": 390,
+      "cpu_cores": 14242,
+      "memory_mib": 96129306,
+      "advertised_gpus": 310
+    },
+    "cpu_groups": [
+      {
+        "cpu_cores_per_machine": 24,
+        "machine_count": 240,
+        "memory_mib_min": 31591,
+        "memory_mib_max": 256715,
+        "example_machines": [
+          "cclws22.cse.nd.edu",
+          "cclws23.cse.nd.edu",
+          "cclws25.cse.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 64,
+        "machine_count": 97,
+        "memory_mib_min": 256859,
+        "memory_mib_max": 2051122,
+        "example_machines": [
+          "d32cepyc001.crc.nd.edu",
+          "d32cepyc002.crc.nd.edu",
+          "d32cepyc003.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 32,
+        "machine_count": 21,
+        "memory_mib_min": 95783,
+        "memory_mib_max": 256869,
+        "example_machines": [
+          "qa-a10-001.crc.nd.edu",
+          "qa-a10-002.crc.nd.edu",
+          "qa-a10-003.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 16,
+        "machine_count": 9,
+        "memory_mib_min": 63916,
+        "memory_mib_max": 95782,
+        "example_machines": [
+          "d12chas018.crc.nd.edu",
+          "d12chas019.crc.nd.edu",
+          "qa-2080ti-001.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 128,
+        "machine_count": 6,
+        "memory_mib_min": 514914,
+        "memory_mib_max": 773052,
+        "example_machines": [
+          "d64cepyc002.crc.nd.edu",
+          "d64cepyc010.crc.nd.edu",
+          "d64cepyc012.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 80,
+        "machine_count": 5,
+        "memory_mib_min": 240928,
+        "memory_mib_max": 257056,
+        "example_machines": [
+          "sa-rtx6ka-001.crc.nd.edu",
+          "sa-rtx6ka-002.crc.nd.edu",
+          "sa-rtx6ka-004.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 4,
+        "machine_count": 4,
+        "memory_mib_min": 15719,
+        "memory_mib_max": 31764,
+        "example_machines": [
+          "cclws15.cse.nd.edu",
+          "cclws17.cse.nd.edu",
+          "cclws18.cse.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 48,
+        "machine_count": 4,
+        "memory_mib_min": 63429,
+        "memory_mib_max": 128205,
+        "example_machines": [
+          "d12chas040.crc.nd.edu",
+          "d24cepyc148.crc.nd.edu",
+          "qa-2080ti-006.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 20,
+        "machine_count": 2,
+        "memory_mib_min": 191512,
+        "memory_mib_max": 191526,
+        "example_machines": [
+          "ta-a6k-002.crc.nd.edu",
+          "ta-a6k-003.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 2,
+        "machine_count": 1,
+        "memory_mib_min": 3655,
+        "memory_mib_max": 3655,
+        "example_machines": [
+          "cclvm02.virtual.crc.nd.edu"
+        ]
+      },
+      {
+        "cpu_cores_per_machine": 40,
+        "machine_count": 1,
+        "memory_mib_min": 257067,
+        "memory_mib_max": 257067,
+        "example_machines": [
+          "sa-rtx6ka-003.crc.nd.edu"
+        ]
+      }
+    ],
+    "gpu_groups": [
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 24,
+        "machine_count": 25,
+        "memory_mib_min": 128268,
+        "memory_mib_max": 192580,
+        "example_machines": [
+          "qa-p100-001.crc.nd.edu",
+          "qa-p100-002.crc.nd.edu",
+          "qa-p100-005.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 32,
+        "machine_count": 21,
+        "memory_mib_min": 95783,
+        "memory_mib_max": 256869,
+        "example_machines": [
+          "qa-a10-001.crc.nd.edu",
+          "qa-a10-002.crc.nd.edu",
+          "qa-a10-003.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 64,
+        "machine_count": 8,
+        "memory_mib_min": 256859,
+        "memory_mib_max": 515220,
+        "example_machines": [
+          "qa-a40-011.crc.nd.edu",
+          "qa-h100-004.crc.nd.edu",
+          "qa-h100-005.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 1,
+        "cpu_cores_per_machine": 24,
+        "machine_count": 5,
+        "memory_mib_min": 31591,
+        "memory_mib_max": 31591,
+        "example_machines": [
+          "cclws22.cse.nd.edu",
+          "cclws23.cse.nd.edu",
+          "cclws25.cse.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 16,
+        "machine_count": 5,
+        "memory_mib_min": 64010,
+        "memory_mib_max": 95780,
+        "example_machines": [
+          "qa-2080ti-002.crc.nd.edu",
+          "qa-2080ti-003.crc.nd.edu",
+          "qa-2080ti-004.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 6,
+        "cpu_cores_per_machine": 80,
+        "machine_count": 5,
+        "memory_mib_min": 240928,
+        "memory_mib_max": 257056,
+        "example_machines": [
+          "sa-rtx6ka-001.crc.nd.edu",
+          "sa-rtx6ka-002.crc.nd.edu",
+          "sa-rtx6ka-004.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 3,
+        "cpu_cores_per_machine": 24,
+        "machine_count": 4,
+        "memory_mib_min": 128029,
+        "memory_mib_max": 192579,
+        "example_machines": [
+          "qa-p100-003.crc.nd.edu",
+          "qa-rtx6k-041.crc.nd.edu",
+          "qa-v100-006.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 3,
+        "cpu_cores_per_machine": 16,
+        "machine_count": 2,
+        "memory_mib_min": 64010,
+        "memory_mib_max": 95782,
+        "example_machines": [
+          "qa-2080ti-001.crc.nd.edu",
+          "qa-2080ti-009.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 3,
+        "cpu_cores_per_machine": 20,
+        "machine_count": 2,
+        "memory_mib_min": 191512,
+        "memory_mib_max": 191526,
+        "example_machines": [
+          "ta-a6k-002.crc.nd.edu",
+          "ta-a6k-003.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 4,
+        "cpu_cores_per_machine": 48,
+        "machine_count": 2,
+        "memory_mib_min": 94777,
+        "memory_mib_max": 94777,
+        "example_machines": [
+          "qa-2080ti-006.crc.nd.edu",
+          "qa-2080ti-007.crc.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 1,
+        "cpu_cores_per_machine": 4,
+        "machine_count": 1,
+        "memory_mib_min": 15719,
+        "memory_mib_max": 15719,
+        "example_machines": [
+          "cclws15.cse.nd.edu"
+        ]
+      },
+      {
+        "gpu_count_per_machine": 6,
+        "cpu_cores_per_machine": 40,
+        "machine_count": 1,
+        "memory_mib_min": 257067,
+        "memory_mib_max": 257067,
+        "example_machines": [
+          "sa-rtx6ka-003.crc.nd.edu"
+        ]
+      }
+    ],
+    "unclassified_machine_count": 0,
+    "unclassified_example_machines": []
+  },
+  "networking": null
+}

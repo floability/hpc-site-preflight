@@ -8,9 +8,7 @@ import csv
 import json
 import os
 import re
-import shutil
 import subprocess
-import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -413,10 +411,19 @@ def main() -> int:
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--site", required=True)
+    parser.add_argument("--model", choices=MODELS)
+    parser.add_argument(
+        "--mode",
+        choices=sorted({mode for mode, _, _ in MODE_REPETITIONS}),
+    )
     args = parser.parse_args()
 
     measurements, pilots, corpus, metadata = validate_frozen_inputs(args.site)
     cases = build_cases(args.site)
+    if args.model is not None:
+        cases = [case for case in cases if case.model == args.model]
+    if args.mode is not None:
+        cases = [case for case in cases if case.mode == args.mode]
     done = completed_keys()
     pending = [case for case in cases if case.key not in done]
     print(

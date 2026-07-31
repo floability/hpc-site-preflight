@@ -1,0 +1,107 @@
+{
+  "schema_version": "0.1",
+  "site_id": "notre-dame-crc",
+  "scheduler": "htcondor",
+  "evidence_source": "measured",
+  "pilot_id": "02b217887f7e44608522dd758157fd59",
+  "collected_at": "2026-07-30T20:04:39.754836Z",
+  "status": "completed",
+  "storage_results": [
+    {
+      "name": "home",
+      "path": "/users/mislam5",
+      "visible": true,
+      "readable": true,
+      "writable": true
+    }
+  ],
+  "login_compute_attempts": [
+    {
+      "port": 9000,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 9800,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 10274,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 10551,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 11082,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 11219,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 12320,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 12569,
+      "status": "passed",
+      "error": null
+    }
+  ],
+  "compute_compute_attempts": [
+    {
+      "port": 9000,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 9349,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 10515,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 10753,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 11268,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 11727,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 12562,
+      "status": "passed",
+      "error": null
+    },
+    {
+      "port": 12695,
+      "status": "passed",
+      "error": null
+    }
+  ],
+  "primary_node": "d64cepyc034.crc.nd.edu",
+  "peer_node": "d64cepyc025.crc.nd.edu",
+  "distinct_nodes": true,
+  "errors": [],
+  "source_reference": "examples/simulate/notre-dame-crc/pilot-result.json"
+}
