@@ -234,6 +234,31 @@ def build_parser() -> argparse.ArgumentParser:
     )
     preflight.add_argument("--backpack", type=Path, required=True)
     preflight.add_argument("--site-profile", type=Path, required=True)
-    _set_operation(preflight, "preflight")
+    preflight.add_argument(
+        "--floability-command",
+        required=True,
+        help="Floability run, execute, or workers-start command to adapt; it is never executed.",
+    )
+    preflight.add_argument(
+        "--scheduler-value",
+        action="append",
+        default=[],
+        metavar="NAME=VALUE",
+        help="User-specific scheduler value such as account=my-allocation.",
+    )
+    preflight.add_argument(
+        "--output",
+        type=Path,
+        default=Path("artifacts/preflight-result.json"),
+    )
+    preflight.add_argument(
+        "--explain-with-model",
+        action="store_true",
+        help="Ask a model to narrate the completed deterministic result.",
+    )
+    preflight.add_argument("--model-mode", choices=("live", "simulate"), default="live")
+    preflight.add_argument("--model")
+    preflight.add_argument("--model-recording", type=Path)
+    _set_operation(preflight, "preflight", "preflight")
 
     return parser

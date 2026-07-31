@@ -171,7 +171,15 @@ def test_parser_rejects_retired_mode_options(option: str) -> None:
             "evaluate documentation",
         ),
         (
-            ["preflight", "--backpack", "backpack", "--site-profile", "site.json"],
+            [
+                "preflight",
+                "--backpack",
+                "backpack",
+                "--site-profile",
+                "site.json",
+                "--floability-command",
+                "floability execute --backpack backpack",
+            ],
             "preflight",
         ),
     ],

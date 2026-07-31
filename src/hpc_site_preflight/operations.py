@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
 from typing import cast
 
+from pydantic import ValidationError
+
+from hpc_site_preflight.backpack.loader import load_backpack
 from hpc_site_preflight.documentation.extraction import empty_documentation
 from hpc_site_preflight.documentation.models import (
     ContextMode,
@@ -24,6 +28,11 @@ from hpc_site_preflight.exceptions import (
 from hpc_site_preflight.measurements.base import MeasurementBundle
 from hpc_site_preflight.measurements.live import LiveMeasurementProvider
 from hpc_site_preflight.measurements.simulated import SimulatedMeasurementProvider
+from hpc_site_preflight.preflight.models import (
+    PreflightNarration,
+    PreflightResult,
+)
+from hpc_site_preflight.preflight.planner import plan_preflight
 from hpc_site_preflight.probes.base import PilotInputs, PilotResultBundle
 from hpc_site_preflight.probes.htcondor import HTCondorPilot
 from hpc_site_preflight.probes.live import LivePilotProvider
@@ -31,8 +40,13 @@ from hpc_site_preflight.probes.simulated import SimulatedPilotProvider
 from hpc_site_preflight.probes.slurm import SlurmPilot
 from hpc_site_preflight.profiles.compiler import compile_profile
 from hpc_site_preflight.profiles.documentation import apply_documentation
+from hpc_site_preflight.profiles.models import SiteProfile
 from hpc_site_preflight.profiles.pilots import apply_pilot_results
-from hpc_site_preflight.providers.base import ModelProvider, ModelProviderName
+from hpc_site_preflight.providers.base import (
+    ModelProvider,
+    ModelProviderName,
+    StructuredModelRequest,
+)
 from hpc_site_preflight.providers.recorded import RecordedModelProvider
 from hpc_site_preflight.providers.registry import create_live_model_provider, provider_for_model
 from hpc_site_preflight.reporting.artifacts import write_json
@@ -50,6 +64,83 @@ def run_unimplemented(args: argparse.Namespace, tracker: RunTracker) -> None:
             f"The '{args.command_name}' command is defined but not implemented yet. "
             "Follow MILESTONES.md and implement one milestone at a time."
         )
+
+
+def preflight_workflow(args: argparse.Namespace, tracker: RunTracker) -> None:
+    """Adapt a Floability command and compare it with a supplied site profile."""
+
+    with tracker.stage("workflow_requirement_load"):
+        requirements = load_backpack(args.backpack, args.floability_command)
+    with tracker.stage("site_profile_load"):
+        try:
+            profile = SiteProfile.model_validate_json(args.site_profile.read_text(encoding="utf-8"))
+        except OSError as exc:
+            raise ConfigurationError(f"Could not read site profile: {args.site_profile}") from exc
+        except ValidationError as exc:
+            raise ConfigurationError(
+                f"Site profile failed {exc.error_count()} contract validation(s)."
+            ) from exc
+
+    scheduler_values = _scheduler_values(args.scheduler_value)
+    with tracker.stage("deterministic_preflight"):
+        result = plan_preflight(requirements, profile, scheduler_values)
+
+    if args.explain_with_model:
+        result = _narrate_preflight(args, result, tracker)
+
+    with tracker.stage("preflight_artifact_write"):
+        write_json(args.output, result.model_dump(mode="json"))
+        tracker.add_artifact(kind="preflight_result", path=args.output)
+    if not args.quiet:
+        print(f"Preflight result: {args.output}")
+        print(f"Decision: {result.result}")
+        if result.execution_plan is not None:
+            print(f"Command:  {result.execution_plan.floability_command_text}")
+        for issue in result.issues:
+            print(f"{issue.severity}: {issue.reason}")
+
+
+def _scheduler_values(values: list[str]) -> dict[str, str]:
+    """Parse repeatable NAME=VALUE inputs without interpreting their values."""
+
+    result: dict[str, str] = {}
+    for item in values:
+        name, separator, value = item.partition("=")
+        if not separator or not name.strip() or not value.strip():
+            raise ConfigurationError("--scheduler-value must use NAME=VALUE.")
+        result[name.strip()] = value.strip()
+    return result
+
+
+def _narrate_preflight(
+    args: argparse.Namespace,
+    result: PreflightResult,
+    tracker: RunTracker,
+) -> PreflightResult:
+    """Append optional prose while preventing the model from changing the result."""
+
+    mode = cast(RuntimeMode, args.model_mode)
+    provider: ModelProvider
+    if mode == "simulate":
+        if args.model_recording is None:
+            raise ConfigurationError("Simulated preflight narration requires --model-recording.")
+        provider = RecordedModelProvider.from_path(args.model_recording)
+    else:
+        model = _model_name(mode, args.model)
+        assert model is not None
+        provider = create_live_model_provider(model)
+
+    request = StructuredModelRequest(
+        system_prompt=(
+            "Explain the supplied deterministic HPC preflight result in concise plain language. "
+            "Do not change its status, values, command, issues, or remediation."
+        ),
+        user_prompt=json.dumps(result.model_dump(mode="json"), indent=2),
+        output_name="preflight_narration",
+        output_description="Return a concise human-readable explanation of the fixed result.",
+    )
+    narration = provider.generate_structured(request, PreflightNarration, tracker)
+    return result.model_copy(update={"narrative": narration.message})
 
 
 def build_profile(args: argparse.Namespace, tracker: RunTracker) -> None:

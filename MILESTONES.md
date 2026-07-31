@@ -67,7 +67,7 @@ Run measured or simulated site evidence through live or recorded documentation a
 
 ### Milestone 5 — Abstention and canonical extraction
 
-**Status: Incomplete**
+**Status: Partially completed**
 
 Prevent unsupported findings and make model outputs match the profile contract directly.
 
@@ -147,9 +147,10 @@ Combine measurement, documentation, and pilots without silent conflict resolutio
 
 Compare portable workflow requirements with a validated site profile before submission.
 
-- Check scheduler, submission, resources, storage, software, and networking deterministically.
-- Emit an execution plan, an unknown-policy result, or an early failure with remediation.
-- Never deploy or resubmit a workflow automatically.
+- Floability compute specs and CLI overrides normalize into one portable requirement contract.
+- Scheduler, worker shape, required options, and network settings are checked deterministically.
+- Results are ready, blocked, or unknown; optional model prose cannot alter the decision.
+- Storage/data and software compatibility remain future work; preflight never submits workflows.
 
 **Test:** Cover runnable, remediable, blocked, and unknown-policy workflows.
 

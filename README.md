@@ -208,6 +208,27 @@ hpc-site-preflight evidence run-pilots \
   --approve
 ```
 
+### Preflight a Floability backpack
+
+Preflight reads `compute.yml`, parses but never executes the supplied Floability command, and
+compares the normalized worker request with a validated site profile:
+
+```bash
+hpc-site-preflight preflight \
+  --backpack examples/backpacks/preflight-case-study \
+  --site-profile artifacts/anvil/site-profile.json \
+  --floability-command \
+    "floability execute --backpack examples/backpacks/preflight-case-study" \
+  --scheduler-value account=my-allocation \
+  --output artifacts/preflight-result.json
+```
+
+The structured result is `ready`, `blocked`, or `unknown`. A ready result contains a selected
+resource and modified Floability command. `--explain-with-model --model <model>` adds prose but
+cannot change the deterministic decision. This first implementation checks scheduler type,
+per-worker CPU, memory and GPU shape, required submission options, and TaskVine network settings.
+A requested local-disk amount remains unknown until the site profile contains disk evidence.
+
 ## Performance reporting
 
 Every command creates one tracker and passes it through the pipeline. The tracker aggregates:

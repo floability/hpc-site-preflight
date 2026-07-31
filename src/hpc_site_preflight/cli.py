@@ -15,6 +15,7 @@ from hpc_site_preflight.operations import (
     build_profile,
     capture_login_measurements,
     evaluate_documentation,
+    preflight_workflow,
     run_pilots,
     run_unimplemented,
 )
@@ -45,6 +46,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             evaluate_documentation(args, tracker)
         elif args.operation == "run_pilots":
             run_pilots(args, tracker)
+        elif args.operation == "preflight":
+            preflight_workflow(args, tracker)
         else:
             run_unimplemented(args, tracker)
 
