@@ -1,6 +1,6 @@
 vine_factory_config:
   min-workers: 1
   max-workers: 4
-  cores: 120
-  memory: 1200000
-  gpus: 0
+  cores: 112
+  memory: 128000
+  gpus: 2

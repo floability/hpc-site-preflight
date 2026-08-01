@@ -27,30 +27,28 @@ def test_floability_adapter_applies_cli_precedence() -> None:
     assert requirements.resources.minimum_workers == 2
     assert requirements.resources.maximum_workers == 2
     assert requirements.resources.cores_per_worker == 64
-    assert requirements.resources.memory_mb_per_worker == 1200000
-    assert requirements.resources.gpus_per_worker == 0
+    assert requirements.resources.memory_mb_per_worker == 128000
+    assert requirements.resources.gpus_per_worker == 2
 
 
-def test_case_study_is_ready_on_stampede3() -> None:
+def test_case_study_is_ready_on_anvil() -> None:
     requirements = load_backpack(
         BACKPACK,
         f"floability execute --backpack {BACKPACK}",
     )
 
-    result = plan_preflight(requirements, _profile("stampede3"), {"time": "01:00:00"})
+    result = plan_preflight(requirements, _profile("anvil"), {"account": "paper-allocation"})
 
     assert result.result == "ready"
     assert result.execution_plan is not None
-    assert result.execution_plan.selected_resource.name == "amd-rtx"
+    assert result.execution_plan.selected_resource.name == "gpu"
     assert "--batch-type slurm" in result.execution_plan.floability_command_text
-    assert "--time=01:00:00" in result.execution_plan.scheduler_arguments
-    assert "--nodes=1" in result.execution_plan.scheduler_arguments
-    assert "--ntasks-per-node=1" in result.execution_plan.scheduler_arguments
-    assert "--partition=amd-rtx" in result.execution_plan.scheduler_arguments
-    assert result.execution_plan.settings["manager_ports"] == [30000, 30264]
+    assert "--account=paper-allocation" in result.execution_plan.scheduler_arguments
+    assert "--partition=gpu" in result.execution_plan.scheduler_arguments
+    assert result.execution_plan.settings["manager_ports"] == [30000, 30801]
 
 
-def test_case_study_is_blocked_on_anvil() -> None:
+def test_case_study_is_blocked_on_stampede3() -> None:
     requirements = load_backpack(
         BACKPACK,
         f"floability execute --backpack {BACKPACK}",
@@ -58,8 +56,8 @@ def test_case_study_is_blocked_on_anvil() -> None:
 
     result = plan_preflight(
         requirements,
-        _profile("anvil"),
-        {"account": "paper-allocation"},
+        _profile("stampede3"),
+        {"time": "01:00:00"},
     )
 
     assert result.result == "blocked"
@@ -113,11 +111,11 @@ def test_preflight_cli_writes_structured_result(tmp_path: Path) -> None:
             "--backpack",
             str(BACKPACK),
             "--site-profile",
-            str(ROOT / "artifacts" / "stampede3" / "site-profile.json"),
+            str(ROOT / "artifacts" / "anvil" / "site-profile.json"),
             "--floability-command",
             f"floability execute --backpack {BACKPACK}",
             "--scheduler-value",
-            "time=01:00:00",
+            "account=paper-allocation",
             "--output",
             str(output),
             "--run-dir",
@@ -129,7 +127,7 @@ def test_preflight_cli_writes_structured_result(tmp_path: Path) -> None:
     assert exit_code == 0
     result = json.loads(output.read_text(encoding="utf-8"))
     assert result["result"] == "ready"
-    assert result["execution_plan"]["selected_resource"]["name"] == "amd-rtx"
+    assert result["execution_plan"]["selected_resource"]["name"] == "gpu"
 
 
 def test_optional_recorded_narration_cannot_change_decision(tmp_path: Path) -> None:
@@ -142,7 +140,7 @@ def test_optional_recorded_narration_cannot_change_decision(tmp_path: Path) -> N
                 "responses": [
                     {
                         "output_name": "preflight_narration",
-                        "data": {"message": "The workflow is ready on Stampede3."},
+                        "data": {"message": "The workflow is ready on Anvil."},
                         "response_id": "narration-1",
                         "input_tokens": 10,
                         "output_tokens": 8,
@@ -160,11 +158,11 @@ def test_optional_recorded_narration_cannot_change_decision(tmp_path: Path) -> N
             "--backpack",
             str(BACKPACK),
             "--site-profile",
-            str(ROOT / "artifacts" / "stampede3" / "site-profile.json"),
+            str(ROOT / "artifacts" / "anvil" / "site-profile.json"),
             "--floability-command",
             f"floability execute --backpack {BACKPACK}",
             "--scheduler-value",
-            "time=01:00:00",
+            "account=paper-allocation",
             "--explain-with-model",
             "--model-mode",
             "simulate",
@@ -181,4 +179,4 @@ def test_optional_recorded_narration_cannot_change_decision(tmp_path: Path) -> N
     result = json.loads(output.read_text(encoding="utf-8"))
     assert exit_code == 0
     assert result["result"] == "ready"
-    assert result["narrative"] == "The workflow is ready on Stampede3."
+    assert result["narrative"] == "The workflow is ready on Anvil."

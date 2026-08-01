@@ -1,0 +1,18 @@
+\begin{tabular}{llrrrr}
+\toprule
+Model & Retrieval & Field Accuracy & Tokens & Latency & Run-to-Run SD \\
+\midrule
+GPT-5 mini & BM25 & 0.823 & 62696.333 & 243.987 & 0.041 \\
+GPT-5 mini & LLM-expanded BM25 & 0.843 & 67741.889 & 282.693 & 0.044 \\
+GPT-5 mini & Full corpus & 0.858 & 138100.333 & 559.240 & 0.033 \\
+GPT-5.6 Terra & BM25 & 0.882 & 40943.333 & 36.451 & 0.002 \\
+GPT-5.6 Terra & LLM-expanded BM25 & 0.857 & 40027.000 & 39.444 & 0.021 \\
+GPT-5.6 Terra & Full corpus & 0.860 & 94133.333 & 79.739 & 0.000 \\
+Gemini 3.6 Flash & BM25 & 0.886 & 61068.556 & 89.911 & 0.003 \\
+Gemini 3.6 Flash & LLM-expanded BM25 & 0.873 & 59458.333 & 99.987 & 0.020 \\
+Gemini 3.6 Flash & Full corpus & 0.867 & 140801.222 & 260.595 & 0.011 \\
+Gemini 3.1 Pro & BM25 & 0.882 & 65652.556 & 149.171 & 0.013 \\
+Gemini 3.1 Pro & LLM-expanded BM25 & 0.864 & 63483.889 & 150.758 & 0.020 \\
+Gemini 3.1 Pro & Full corpus & 0.860 & 130305.889 & 363.874 & 0.002 \\
+\bottomrule
+\end{tabular}
