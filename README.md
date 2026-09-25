@@ -26,20 +26,6 @@ One bounded discovery agent uses reviewed web-search and page-download tools, th
 the fetched sources and proposes structured facts. Measurements, pilot scripts, evidence
 validation, reconciliation, and the final preflight decision remain deterministic.
 
-## Project status
-
-The deterministic foundation and replayable documentation pipeline are complete:
-
-- an installable `src/` package;
-- a working CLI and command hierarchy;
-- run-level and step-level performance tracking;
-- typed site, measurement, profile, and evidence contracts;
-- simulated Anvil, Stampede3, and Notre Dame CRC inputs;
-- measurement and documentation-backed partial profile construction;
-- tests;
-- explicit `NotImplementedError` messages for unfinished stages.
-
-See [MILESTONES.md](MILESTONES.md) for the planned sequence of small implementation prompts.
 
 ## Main workflows
 
@@ -267,5 +253,3 @@ The project must not allow an LLM to:
 - directly certify a site policy;
 - approve or launch a real workflow;
 - silently resolve conflicting evidence.
-
-See [AGENTS.md](AGENTS.md) for authoritative implementation rules.
